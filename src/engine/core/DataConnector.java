@@ -38,12 +38,13 @@ public class DataConnector
     //Returns a Connection obj 
     //- connect_string: pass the appropriate connection string
     //- Sql exception is thrown off to handler
-    private void connect()
+    public void connect()
     {
         try
         {
             DriverManager.registerDriver(new org.apache.derby.jdbc.ClientDriver());
-            conn    =   DriverManager.getConnection(connection_url);          
+            conn    =   DriverManager.getConnection(connection_url);
+            conn.setSchema(connection_conifg.getSchema());
             System.out.println("Connected!");
         }
         
@@ -54,18 +55,17 @@ public class DataConnector
         }
     }
     
+    
+    //Returns the DataConnector's active Connection
     public Connection getConnection()
     {
         return conn;
     }
     
+    //Returns the using connection configurations
     public DataConnection getConnectionConfig()
     {
         return connection_conifg;
     }
     
-    public static void main(String[] args)
-    {
-        DataConnector conn  =   new DataConnector();
-    }
 }

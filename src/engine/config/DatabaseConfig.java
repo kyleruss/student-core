@@ -19,6 +19,7 @@ public class DatabaseConfig extends Configuration
     public static final String USER_KEY     =   "user";
     public static final String PASS_KEY     =   "password";
     public static final String DB_KEY       =   "daatabase";
+    public static final String SCHEMA_KEY   =   "schema";
     public static final String DRIVER_KEY   =   "driver";
     //-------------------------------------------------------
     
@@ -29,7 +30,7 @@ public class DatabaseConfig extends Configuration
         super();
     }
     
-    //Creates a db config with custom params
+    //Creates a db config with custom /
     public DatabaseConfig(Properties config)
     {
         super(config);
@@ -44,6 +45,7 @@ public class DatabaseConfig extends Configuration
         add(USER_KEY, "kyleruss"); //database server username
         add(PASS_KEY, "fgsmg2"); //database server password
         add(DB_KEY, "School"); //active using database
+        add(SCHEMA_KEY, "App"); //The db schema being used
         add(DRIVER_KEY, "jdbc:derby"); //db connection driver
     }
     

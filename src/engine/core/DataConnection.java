@@ -20,6 +20,7 @@ public class DataConnection
     private String db_pass;//database password
     private String db_database; //the apps database 
     private String db_driver; //databases driver
+    private String db_schema;
     private Properties attributes; //connection properties
     
     //Creates a DataConnection with default Database configurations
@@ -37,7 +38,7 @@ public class DataConnection
        db_pass              =   db_conf.getProperty(DatabaseConfig.PASS_KEY);
        db_database          =   db_conf.getProperty(DatabaseConfig.DB_KEY);
        db_driver            =   db_conf.getProperty(DatabaseConfig.DRIVER_KEY);
-   
+       db_schema            =   db_conf.getProperty(DatabaseConfig.SCHEMA_KEY);
     }
     
     //Creates a DataConnection with custom config & additional attributes
@@ -113,6 +114,12 @@ public class DataConnection
     public String getDriver()
     {
         return db_driver;
+    }
+    
+    //Returns the dbs using schema
+    public String getSchema()
+    {
+        return db_schema;
     }
     
     //Returns active attributes 
