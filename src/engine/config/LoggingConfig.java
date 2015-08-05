@@ -8,25 +8,25 @@ package engine.config;
 
 import java.util.Properties;
 
-public class LoggingConfig extends Configuration 
+public class LoggingConfig extends Configuration
 {
+    //--------------------------------------------------------------------
+    //                          CONFIG KEYS
+    //--------------------------------------------------------------------
+    public static final String ENABLE_AUTH_LOG_KEY     =   "auth_logging";
+    public static final String ENABLE_ADMIN_LOG_KEY    =   "admin_logging";
+    public static final String ENABLE_DATA_LOG_KEY     =   "data_logging";
+    public static final String LOG_SIZE_KEY            =   "log_size";
+    public static final String LOG_PATH_KEY            =   "log_path";
+    public static final String LOG_FILE_COUNT_KEY      =   "log_count";
+    //--------------------------------------------------------------------
     
-    //-----------------------------------------------------------
-    //                  LOG CONFIG KEYS
-    //-----------------------------------------------------------
-    public static final String AUTH_KEY     =   "auth_log";
-    public static final String ADMIN_KEY    =   "admin_log";
-    public static final String DATA_KEY     =   "data_log";
-    //-----------------------------------------------------------
     
-    
-    //Create default config
     public LoggingConfig()
     {
         super();
     }
     
-   //Create custom configs 
     public LoggingConfig(Properties config)
     {
         super(config);
@@ -35,23 +35,32 @@ public class LoggingConfig extends Configuration
     @Override
     protected void initConfig()
     {
-        //Enables/disables logging of all admin activities in system
-        add(ADMIN_KEY, true); 
+        //enables/disables logging of all admin activities in system
+        add(ENABLE_AUTH_LOG_KEY, true);
         
-        //Enables/disables logging of user authentications and access
-        add(AUTH_KEY, true);
+        //enables/disables logging of user authentication and access
+        add(ENABLE_ADMIN_LOG_KEY, true);
         
-        //Enables/disables logging of all database queries from server
-        add(DATA_KEY, true);
+        //enables/disable logging of all database queries from server
+        add(ENABLE_DATA_LOG_KEY, true);
+        
+        //set the max size in bytes for each log file
+        add(LOG_SIZE_KEY, "5242880");
+        
+        //set the logs directory
+        add(LOG_PATH_KEY, "logs/");
+        
+        //set the max number of log files created after hitting max size
+        add(LOG_FILE_COUNT_KEY, "5");
     }
     
-    //Factory => returns default logging config
+    //factory => default logging config
     public static LoggingConfig config()
     {
         return new LoggingConfig();
     }
     
-    //Factory => returns logging config with custom params
+    //factory => logging config with custom params
     public static LoggingConfig config(Properties config)
     {
         return new LoggingConfig(config);
