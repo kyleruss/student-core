@@ -18,56 +18,58 @@ import java.util.logging.SimpleFormatter;
 public abstract class AbstractLogger implements Logging
 {
     protected String log_file;
-    protected Handler log_handler;
     protected SimpleFormatter log_formatter;
     
-    public AbstractLogger(String log_file) throws IOException, NumberFormatException, SecurityException
+    public AbstractLogger(String log_file)
     {
         this
         (
-            MainLogger.formatLogName(log_file), 
-            new FileHandler
-            (
-                MainLogger.formatLogName(log_file), 
-                Integer.parseInt(LoggingConfig.config().get(LoggingConfig.LOG_SIZE_KEY)), 
-                Integer.parseInt(LoggingConfig.config().get(LoggingConfig.LOG_FILE_COUNT_KEY))
-            ), 
+            MainLogger.formatLogName(log_file) + "_%u%g" + LoggingConfig.config().get(LoggingConfig.LOG_EXTENSION), 
             new SimpleFormatter()
         );
     }
     
     
-    public AbstractLogger(String log_file, Handler log_handler, SimpleFormatter log_formatter)
+    public AbstractLogger(String log_file, SimpleFormatter log_formatter)
     {     
         this.log_file       =   log_file;
-        this.log_handler    =   log_handler;
         this.log_formatter  =   log_formatter;
     }
     
-    public static String test()
+    //Returns the loggers file handler
+    //handler must be flushed and closed when finished
+    @Override
+    public Handler getHandler() throws IOException, SecurityException
     {
-        return "";
+        Handler fh =  new FileHandler
+        (
+                log_file, //Log file name
+                Integer.parseInt(LoggingConfig.config().get(LoggingConfig.LOG_SIZE_KEY)), //Log max file size
+                Integer.parseInt(LoggingConfig.config().get(LoggingConfig.LOG_FILE_COUNT_KEY)), //Max number of logs created after max size
+                true //Allow appending to existing logs
+        );
+        
+        //SimpleFormatter should be used over XMLFormatter
+        fh.setFormatter(log_formatter);
+        return fh;
     }
     
+    //Returns the logs path 
     @Override
     public String getLogFile() 
     {
         return log_file;
     }
 
-    @Override
-    public Handler getHandler()
-    {
-        log_handler.setFormatter(log_formatter);
-        return log_handler;
-    }
-
+    //Returns the logs formatter
     @Override
     public SimpleFormatter getFormatter()
     {
         return log_formatter;
     }
 
+    //Returns the output of the lag at date log_date
+    //Returns the latest log if log of log_date !exists
     @Override
     public String outputLog(Date log_date) 
     {

@@ -19,6 +19,7 @@ public class LoggingConfig extends Configuration
     public static final String LOG_SIZE_KEY            =   "log_size";
     public static final String LOG_PATH_KEY            =   "log_path";
     public static final String LOG_FILE_COUNT_KEY      =   "log_count";
+    public static final String LOG_EXTENSION           =   "log_ext";
     //--------------------------------------------------------------------
     
     
@@ -51,7 +52,10 @@ public class LoggingConfig extends Configuration
         add(LOG_PATH_KEY, "logs/");
         
         //set the max number of log files created after hitting max size
-        add(LOG_FILE_COUNT_KEY, "5");
+        add(LOG_FILE_COUNT_KEY, "1");
+        
+        //set the default log extension
+        add(LOG_EXTENSION, ".log");
     }
     
     //factory => default logging config
