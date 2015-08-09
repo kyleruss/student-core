@@ -8,9 +8,10 @@ package engine.core;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-public class DataConnector 
+public class DataConnector implements AutoCloseable
 {  
     
     private Connection conn;
@@ -54,6 +55,22 @@ public class DataConnector
         }
     }
     
+    public void insert(String table, String[] data)
+    {
+        try
+        {
+            PreparedStatement statement =  conn.prepareStatement("INSERT INTO " + table + " VALUES (?, ?)");
+            statement.setInt(1, Integer.parseInt(data[0]));
+            statement.setString(2, data[1]);
+            statement.executeUpdate();
+        }
+        
+        catch(SQLException e)
+        {
+            System.out.println("sql exception: " + e.getMessage());
+        }
+    }
+    
     public Connection getConnection()
     {
         return conn;
@@ -63,9 +80,10 @@ public class DataConnector
     {
         return connection_conifg;
     }
-    
-    public static void main(String[] args)
+
+    @Override
+    public void close() throws Exception 
     {
-        DataConnector conn  =   new DataConnector();
+        conn.close();
     }
 }

@@ -20,6 +20,7 @@ public class DatabaseConfig extends Configuration
     public static final String PASS_KEY     =   "password";
     public static final String DB_KEY       =   "daatabase";
     public static final String DRIVER_KEY   =   "driver";
+    public static final String SCHEMA_KEY   =   "schema";
     //-------------------------------------------------------
     
     
@@ -45,6 +46,7 @@ public class DatabaseConfig extends Configuration
         add(PASS_KEY, "fgsmg2"); //database server password
         add(DB_KEY, "School"); //active using database
         add(DRIVER_KEY, "jdbc:derby"); //db connection driver
+        add(SCHEMA_KEY, "app");
     }
     
     //factory => default db config
