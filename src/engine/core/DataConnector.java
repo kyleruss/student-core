@@ -6,6 +6,8 @@
 
 package engine.core;
 
+import engine.core.database.Query;
+import engine.core.loggers.MainLogger;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -55,21 +57,28 @@ public class DataConnector implements AutoCloseable
         }
     }
     
-    public void insert(String table, String[] data)
+    public boolean execute(String query) throws SQLException
     {
-        try
-        {
-            PreparedStatement statement =  conn.prepareStatement("INSERT INTO " + table + " VALUES (?, ?)");
-            statement.setInt(1, Integer.parseInt(data[0]));
-            statement.setString(2, data[1]);
-            statement.executeUpdate();
-        }
-        
-        catch(SQLException e)
-        {
-            System.out.println("sql exception: " + e.getMessage());
-        }
+        return execute(conn.prepareStatement(query));
     }
+    
+    public boolean execute(PreparedStatement statement) throws SQLException
+    {
+        boolean exec_status =   statement.execute();
+        MainLogger.log(statement.toString(), connection_url);
+        return exec_status;
+    }
+    
+    public boolean execute(Query query)
+    {
+        return true;
+    }
+    
+    public boolean executeBatch(Query[] queries)
+    {
+        return true;
+    }
+    
     
     public Connection getConnection()
     {
@@ -82,8 +91,16 @@ public class DataConnector implements AutoCloseable
     }
 
     @Override
-    public void close() throws Exception 
+    public void close()
     {
-        conn.close();
+        try
+        {
+            conn.close();
+        }
+        
+        catch(SQLException e)
+        {
+            System.out.println("[CONNECTION CLOSE EXCEPTION] " + e.getMessage());
+        }
     }
 }

@@ -6,9 +6,9 @@
 
 package engine.Models;
 
-import java.util.ArrayList;
+import engine.core.database.QueryBuilder;
 import java.util.List;
-import java.util.Map;
+
 
 public abstract class Model 
 {
@@ -35,53 +35,23 @@ public abstract class Model
         
     }
     
- /*(   public boolean insert(List<String> values)
+    public String getTableName()
     {
-        
+        return table;
     }
     
-    public boolean insert(List<String> columns, List<String> values)
+    public String getPrimaryKey()
     {
-        
+        return primary_key;
     }
-    
-    public boolean update(Map<String, String> changes)
-    {
-        
-    }
-    
-    public boolean delete(Map<String, String> conditions)
-    {
-        
-    }
-    
-    public Model search(String id)
-    {
-        
-    }
-    
-    public String colVal(String column)
-    {
-        
-    }
-    
-    public QueryBuilder where()
-    {
-        
-    }
-    
+
     public QueryBuilder builder()
     {
-        return 
+        return new QueryBuilder(table);
     }
     
-    public QueryBuilder get()
+    public static QueryBuilder builder(String table_name)
     {
-        return get(columns);
+        return new QueryBuilder(table_name);
     }
-    
-    public QueryBuilder get(List<String> columns)
-    {
-        
-    } */
 }

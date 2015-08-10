@@ -45,17 +45,18 @@ public class MainLogger
     
     //Commits a log messsage* into logger*
     //Log level is set to FINE for all logging
-    public static void log(String message, String logger)
+    public static void log(String message, String logger_name)
     {
         Handler fh      =   null;
         Logger current  =   null;
         AbstractLogger core_logger;
         
+        LoggingConfig.config().get(logger_name);
         try
         {
-            core_logger  =   create(logger);
+            core_logger  =   create(logger_name);
             fh           =   core_logger.getHandler();
-            current      =   Logger.getLogger(logger);
+            current      =   Logger.getLogger(logger_name);
             
             if(current == null || fh == null) throw new IOException();
             else
@@ -92,7 +93,7 @@ public class MainLogger
     public static String formatLogName(String file)
     {
         final char delimiter            =   '_';
-        final String folder             =   LoggingConfig.config().get(LoggingConfig.LOG_PATH_KEY);
+        final String folder             =   (String) LoggingConfig.config().get(LoggingConfig.LOG_PATH_KEY);
         Date time                       =   new Date();
         SimpleDateFormat date_format    =   new SimpleDateFormat("dd-MM-yyyy");
         String date                     =   date_format.format(time);

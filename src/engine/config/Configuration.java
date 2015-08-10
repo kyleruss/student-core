@@ -40,9 +40,9 @@ public abstract class Configuration
     
     //Returns a configs value
     //care - can return null
-    public String get(String config_name)
+    public Object get(String config_name)
     {
-        return config.getProperty(config_name);
+        return config.get(config_name);//.getProperty(config_name);
     }   
     
     //Adds a new config setting

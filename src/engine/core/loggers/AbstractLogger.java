@@ -44,8 +44,8 @@ public abstract class AbstractLogger implements Logging
         Handler fh =  new FileHandler
         (
                 log_file, //Log file name
-                Integer.parseInt(LoggingConfig.config().get(LoggingConfig.LOG_SIZE_KEY)), //Log max file size
-                Integer.parseInt(LoggingConfig.config().get(LoggingConfig.LOG_FILE_COUNT_KEY)), //Max number of logs created after max size
+                Integer.parseInt((String) LoggingConfig.config().get(LoggingConfig.LOG_SIZE_KEY)), //Log max file size
+                Integer.parseInt((String) LoggingConfig.config().get(LoggingConfig.LOG_FILE_COUNT_KEY)), //Max number of logs created after max size
                 true //Allow appending to existing logs
         );
         

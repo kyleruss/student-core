@@ -21,6 +21,11 @@ public class DatabaseConfig extends Configuration
     public static final String DB_KEY       =   "daatabase";
     public static final String DRIVER_KEY   =   "driver";
     public static final String SCHEMA_KEY   =   "schema";
+    
+    //-------------------------------------------------------
+    //                  MODEL KEYS
+    //-------------------------------------------------------
+    public static final String DEFAULT_PRIMARY  =   "id";
     //-------------------------------------------------------
     
     
@@ -47,6 +52,7 @@ public class DatabaseConfig extends Configuration
         add(DB_KEY, "School"); //active using database
         add(DRIVER_KEY, "jdbc:derby"); //db connection driver
         add(SCHEMA_KEY, "app");
+        add(DEFAULT_PRIMARY, "id");
     }
     
     //factory => default db config

@@ -6,6 +6,7 @@
 
 package engine.config;
 
+import engine.core.loggers.MainLogger;
 import java.util.Properties;
 
 public class LoggingConfig extends Configuration
@@ -13,9 +14,9 @@ public class LoggingConfig extends Configuration
     //--------------------------------------------------------------------
     //                          CONFIG KEYS
     //--------------------------------------------------------------------
-    public static final String ENABLE_AUTH_LOG_KEY     =   "auth_logging";
-    public static final String ENABLE_ADMIN_LOG_KEY    =   "admin_logging";
-    public static final String ENABLE_DATA_LOG_KEY     =   "data_logging";
+    public static final String ENABLE_AUTH_LOG_KEY     =   MainLogger.AUTH_LOGGER;
+    public static final String ENABLE_ADMIN_LOG_KEY    =   MainLogger.ADMIN_LOGGER;
+    public static final String ENABLE_DATA_LOG_KEY     =   MainLogger.DATA_LOGGER;
     public static final String LOG_SIZE_KEY            =   "log_size";
     public static final String LOG_PATH_KEY            =   "log_path";
     public static final String LOG_FILE_COUNT_KEY      =   "log_count";
