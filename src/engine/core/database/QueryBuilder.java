@@ -8,12 +8,6 @@ import java.text.MessageFormat;
 
 public class QueryBuilder 
 {
-    public static final String TABLE_KEY    =   "table";
-    public static final String TYPE_KEY     =   "query_type";
-    public static final String WHERE_KEY    =   "conditions";
-    public static final String JOIN_KEY     =   "joins";
-    public static final String SELECT_KEY   =   "filters";
-    
     private final Query query;
     
     
@@ -83,6 +77,13 @@ public class QueryBuilder
         return this;
     }
     
+    public QueryBuilder groupBy(String column)
+    {
+        String groupFormat  =   MessageFormat.format("GROUP BY {0}", column);
+        query.addExtra(groupFormat);
+        return this;
+    }
+    
     public QueryBuilder first()
     {
         return limit(1);
@@ -142,18 +143,5 @@ public class QueryBuilder
         
         ResultSet results   =   conn.getResults();
         return results;
-        
-        
-       /* catch(SQLException e)
-        {
-            System.out.println("[SQL EXCEPTION ON EXECUTE] " + e.getMessage());
-            return null;
-        } */
-    }
-    
-    public static void main(String[] args)
-    {
-        QueryBuilder q  =   new QueryBuilder("dasd");
-        q.where(TYPE_KEY, TYPE_KEY, TYPE_KEY).where(TYPE_KEY, TYPE_KEY, TYPE_KEY);
     }
 }
