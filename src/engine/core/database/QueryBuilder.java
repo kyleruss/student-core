@@ -2,6 +2,7 @@
 package engine.core.database;
 
 import engine.core.DataConnector;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.MessageFormat;
 
@@ -18,8 +19,7 @@ public class QueryBuilder
     
     public QueryBuilder(String table)
     {
-        query  =   new Query(table);
-     //   query.addSelections(new String[] {"name", "email", "date"});
+        this(new Query(table));
     }
     
     public QueryBuilder(Query query)
@@ -69,6 +69,32 @@ public class QueryBuilder
         return query.getJson();
     }
     
+    public QueryBuilder offset(int offset)
+    {
+        String offsetFormat  =   MessageFormat.format("OFFSET {0} ROWS", offset);
+        query.addExtra(offsetFormat);
+        return this;
+    }
+    
+    public QueryBuilder orderBy(String column)
+    {
+        String orderFormat  =   MessageFormat.format("ORDER BY {0}", column);
+        query.addExtra(orderFormat);
+        return this;
+    }
+    
+    public QueryBuilder first()
+    {
+        return limit(1);
+    }
+    
+    public QueryBuilder limit(int rowLimit)
+    {
+        String limitFormat  =    MessageFormat.format("FETCH FIRST {0} ROWS ONLY", rowLimit);
+        query.addExtra(limitFormat);
+        return this;
+    }
+    
     private String buildSelect()
     {
         String query_str    =   MessageFormat.format("SELECT {0} FROM {1}", query.formatSelections(), query.getTable());
@@ -80,11 +106,17 @@ public class QueryBuilder
         return query.formatConditionals();
     }
     
+    private String buildExtras()
+    {
+        return query.formatExtras();
+    }
+    
     public String build()
     {
         String query_raw;
         String db_operation =   "";
-        String conditionals =   "";
+        String conditionals =   buildConditionals();
+        String extras       =   buildExtras();
         
         switch(query.getType())
         {
@@ -95,25 +127,28 @@ public class QueryBuilder
             case DELETE:
         }
         
-        query_raw   =   MessageFormat.format("{0} {1}", db_operation, conditionals);
+        query_raw   =   MessageFormat.format("{0} {1} {2}", db_operation, conditionals, extras);
         return query_raw;
     }
     
     
-    public boolean execute()
+    public ResultSet execute() throws SQLException
     {
         String query_str    =   build();
-        try(DataConnector conn =   new DataConnector())
-        {
-            conn.execute(query_str);
-            return true;
-        }
+        DataConnector conn  =   new DataConnector();
         
-        catch(SQLException e)
+        conn.execute(query_str);
+        conn.close();
+        
+        ResultSet results   =   conn.getResults();
+        return results;
+        
+        
+       /* catch(SQLException e)
         {
             System.out.println("[SQL EXCEPTION ON EXECUTE] " + e.getMessage());
-            return false;
-        }
+            return null;
+        } */
     }
     
     public static void main(String[] args)

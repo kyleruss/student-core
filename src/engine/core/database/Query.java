@@ -28,6 +28,9 @@ public class Query
     @SerializedName("select")
     private final List<Selection> selections;
     
+    @SerializedName("extras")
+    private final List<String> extras;
+    
     @SerializedName("table_name")
     private final String table;
     
@@ -38,8 +41,9 @@ public class Query
         joins                =       new ArrayList<>();
         conditionals         =       new ArrayList<>();
         selections           =       new ArrayList<>();
-        this.table           =       "test";
-        type                 =       null;
+        extras               =       new ArrayList<>();
+        this.table           =       table;
+        type                 =       QueryType.SELECT;
     }
     
     public List<Join> getJoins()
@@ -57,32 +61,50 @@ public class Query
         return selections;
     }
     
+    public List<String> getExtras()
+    {
+        return extras;
+    }
+    
     public String formatSelections()
     {
-        String formatted_selections   =   "";
-        for(Selection selection : selections)
-            formatted_selections += selection + ", ";
+        //Add default selection if no selections added
+        if(selections.isEmpty()) 
+            selections.add(new Selection()); 
         
-        return formatted_selections;
+        String formattedSelections   =   "";
+        for(int selectionIndex = 0; selectionIndex < selections.size(); selectionIndex++)
+            formattedSelections += selections.get(selectionIndex) + ((selectionIndex != selections.size() - 1)? ", " : "");
+        
+        return formattedSelections;
     }
     
     public String formatConditionals()
     {
         final String conjunction    =   " AND ";
         final String disjunction    =   " OR ";
-        String formatted_conditions =   "";
+        String formattedConditions =   "";
         
-        for(Conditional condition : conditionals)
+        for(int condIndex = 0; condIndex < conditionals.size(); condIndex++)
         {
-            formatted_conditions += condition;
+            Conditional condition =   conditionals.get(condIndex);
+            formattedConditions += condition;
             
             //Add conjunctions/disjunctions to conditionals if more than
             //one where clause in the query
-            if(conditionals.size() > 1)
-                formatted_conditions += (condition.isConjunction())? conjunction : disjunction;
+            if(conditionals.size() > 1 && condIndex != conditionals.size() - 1)
+                formattedConditions += (condition.isConjunction())? conjunction : disjunction;
         }
         
-        return formatted_conditions;
+        return formattedConditions;
+    }
+    
+    public String formatExtras()
+    {
+        String formattedExtras  =   "";
+        for(String extra : extras)
+            formattedExtras += extra + " ";
+        return formattedExtras;
     }
     
     public String getTable()
@@ -109,6 +131,11 @@ public class Query
     {
         for(Selection select : selections)
             this.selections.add(select);
+    }
+    
+    public void addExtra(String extra)
+    {
+        extras.add(extra);
     }
     
     public QueryType getType()

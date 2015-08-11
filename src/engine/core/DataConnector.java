@@ -11,6 +11,7 @@ import engine.core.loggers.MainLogger;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class DataConnector implements AutoCloseable
@@ -19,6 +20,7 @@ public class DataConnector implements AutoCloseable
     private Connection conn;
     private DataConnection connection_conifg;
     private String connection_url;
+    private ResultSet results;
     
     //Creates a DataConnector with default config
     public DataConnector()
@@ -46,7 +48,7 @@ public class DataConnector implements AutoCloseable
         try
         {
             DriverManager.registerDriver(new org.apache.derby.jdbc.ClientDriver());
-            conn    =   DriverManager.getConnection(connection_url);          
+            conn    =   DriverManager.getConnection(connection_url);
             System.out.println("Connected!");
         }
         
@@ -57,16 +59,22 @@ public class DataConnector implements AutoCloseable
         }
     }
     
-    public boolean execute(String query) throws SQLException
+    public void execute(String query) throws SQLException
     {
-        return execute(conn.prepareStatement(query));
+        this.execute(createStatement(query));
     }
     
-    public boolean execute(PreparedStatement statement) throws SQLException
+    public void execute(PreparedStatement statement) throws SQLException
     {
-        boolean exec_status =   statement.execute();
-        MainLogger.log(statement.toString(), connection_url);
-        return exec_status;
+        MainLogger.log(statement.toString(), MainLogger.DATA_LOGGER);
+        ResultSet execStatus    =   statement.executeQuery();
+        results                 =   execStatus;
+    }
+    
+    public PreparedStatement createStatement(String query) throws SQLException
+    {
+        System.out.println(query);
+        return conn.prepareStatement(query);
     }
     
     public boolean execute(Query query)
@@ -88,6 +96,11 @@ public class DataConnector implements AutoCloseable
     public DataConnection getConnectionConfig()
     {
         return connection_conifg;
+    }
+    
+    public ResultSet getResults()
+    {
+        return results;
     }
 
     @Override

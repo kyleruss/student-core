@@ -51,7 +51,7 @@ public class MainLogger
         Logger current  =   null;
         AbstractLogger core_logger;
         
-        LoggingConfig.config().get(logger_name);
+     //   LoggingConfig.config().get(logger_name);
         try
         {
             core_logger  =   create(logger_name);
@@ -61,6 +61,7 @@ public class MainLogger
             if(current == null || fh == null) throw new IOException();
             else
             {
+                
                 //set logger params and attach handler
                 current.setLevel(Level.FINE);
                 current.setUseParentHandlers(false);

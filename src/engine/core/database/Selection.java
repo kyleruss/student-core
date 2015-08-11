@@ -9,6 +9,14 @@ public class Selection
     
     private String column_alias;
     
+    public static final String DEFAULT_SELECT   =   "*";
+    
+    //Default selects all columns
+    public Selection()
+    {
+        this(DEFAULT_SELECT);
+    }
+    
     public Selection(String column_name)
     {
         this(column_name, null);
@@ -28,6 +36,7 @@ public class Selection
     public String getAlias()
     {
         return column_alias;
+    
     }
     
     @Override

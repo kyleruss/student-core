@@ -31,8 +31,8 @@ public class DatabaseConfigTest
     public void testGet() 
     {
        DatabaseConfig conf  =   new DatabaseConfig();
-       String real          =   conf.get("server"); //test existing entry
-       String fake          =   conf.get("bogus"); //test bogus entry
+       String real          =   (String) conf.get("server"); //test existing entry
+       String fake          =   (String) conf.get("bogus"); //test bogus entry
        assertNotNull(real);
        assertNull(fake);
     }
