@@ -24,7 +24,14 @@ public class QueryBuilder
     
     public QueryBuilder where(String column, String operator, String value)
     {
+        return where(column, operator, value, false);
+    }
+    
+    public QueryBuilder where(String column, String operator, String value, boolean isLiteral)
+    {
         Conditional condition   =   new Conditional(column, operator, value);
+        if(isLiteral) condition.literal();
+        
         query.addConditional(condition);
         return this;
     }
@@ -80,9 +87,12 @@ public class QueryBuilder
     
     public QueryBuilder groupBy(String column)
     {
-        String groupFormat  =   MessageFormat.format("GROUP BY {0}", column);
+        if(query.getSelections().isEmpty()) return null;
+     
+        String selections   =   query.formatSelections().replace(column + ",", "").replace(", " + column, "");
+        String groupFormat  =   MessageFormat.format("GROUP BY {0}, {1}", column, selections);
         query.addExtra(groupFormat);
-        return this;
+        return orderBy(column);
     }
     
     public QueryBuilder first()
@@ -146,7 +156,6 @@ public class QueryBuilder
         DataConnector conn  =   new DataConnector();
         
         conn.execute(query_str);
-        conn.close();
         
         ResultSet results   =   conn.getResults();
         return results;

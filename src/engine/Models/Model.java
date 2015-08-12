@@ -41,7 +41,6 @@ public abstract class Model
         data    =   new HashMap<>();
         columns =   new ArrayList<>();
         initTable();
-        initColumns();
     }
     
     //Create model with id (find)

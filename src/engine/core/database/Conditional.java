@@ -14,6 +14,8 @@ public class Conditional
     
     private boolean isConjunction;
     
+    private boolean isLiteral;
+    
     public Conditional(String column, String operator, String value)
     {
         this(column, operator, value, true);
@@ -25,6 +27,7 @@ public class Conditional
         this.operator       =   operator;
         this.value          =   value;
         this.isConjunction  =   isConjunction;
+        isLiteral           =   false;
     }
     
     public String getColumn()
@@ -47,10 +50,27 @@ public class Conditional
         return isConjunction;
     }
     
+    public boolean isLiteral()
+    {
+        return isLiteral;
+    }
+    
+    public void literal()
+    {
+        isLiteral   =   true;
+    }
+    
+    public static String makeLiteral(String value)
+    {
+        String literalFormat    =   MessageFormat.format("''{0}''", value);
+        return literalFormat;
+    }
+    
     @Override
     public String toString()
     {
-       String output    =   MessageFormat.format("WHERE {0} {1} {2}", column, operator, value);
+       String outVal        =   (isLiteral)? makeLiteral(value) : value;
+       String output        =   MessageFormat.format("WHERE {0} {1} {2}", column, operator, outVal);
        return output;
     }
 }

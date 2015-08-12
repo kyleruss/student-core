@@ -9,19 +9,14 @@ package engine.core.database;
 import com.google.gson.JsonArray;
 import engine.Models.Model;
 import engine.Models.User;
+import engine.Parsers.JsonParser;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import org.junit.After;
-import org.junit.AfterClass;
 import static org.junit.Assert.*;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
 
-/**
- *
- * @author kyle
- */
+import org.junit.Test;
+import utilities.TestUtilities;
+
 public class QueryBuilderTest 
 {
     private final Model testModel;
@@ -34,33 +29,36 @@ public class QueryBuilderTest
     @Test
     public void testWhere() 
     {
-        try
+        TestUtilities.formatHeader("TEST WHERE");
+        try(ResultSet results       =   testModel.builder().where("name", "=", "test", true).execute())
         {
-            ResultSet results       =   testModel.builder().where("name", "=", "kyle").execute();
             assertNotNull(results);
             assertTrue(results.next());
         }
         
         catch(SQLException e)
         {
+            System.out.println(e.getMessage());
             fail(e.getMessage());
         }
     }
 
-    public  void testGet()
+    @Test
+    public void testGet()
     {
         try
         {
+            TestUtilities.formatHeader("TEST GET");
             JsonArray results   =   testModel.builder().get();
             assertNotNull(results);
             assertTrue(results.size() > 0);
             
-            System.out.println("[TEST GET] " + results);
+            System.out.println(JsonParser.parsePretty(results));
         }
         
         catch(SQLException e)
         {
-            System.out.println("[SQL EXCEPTION] Failed to get - " + e.getMessage());
+            System.out.println(e.getMessage());
             fail(e.getMessage());
         }
     }
@@ -71,42 +69,46 @@ public class QueryBuilderTest
     {
        try
        {
+           TestUtilities.formatHeader("TEST SELECT SINGLE");
            JsonArray resultsAll         =   testModel.builder().get();
            JsonArray resultsLimited     =   testModel.builder().select("name").get();
            assertNotNull(resultsAll);
            assertNotNull(resultsLimited);
            
-           System.out.println("[TEST SELECT] Results all - " + resultsAll);
-           System.out.println("[TEST SELECT] Results limited - " + resultsLimited);
+           TestUtilities.formatSubHeader("ALL", JsonParser.parsePretty(resultsAll));
+           TestUtilities.formatSubHeader("LIMITED", JsonParser.parsePretty(resultsLimited));
        }
        
        catch(SQLException e)
        {
-           System.out.println("[SQL EXCEPTION] Failed to select - " + e.getMessage());
+           System.out.println(e.getMessage());
            fail(e.getMessage());
        }
     }
 
+    
     @Test
     public void testSelectByArray()
     {
         try
         {
-            String[] columns    =   { "name", "description" };
+            TestUtilities.formatHeader("TEST SELECT ARRAY");
+            String[] columns    =   { "name", "age" };
             JsonArray results   =   testModel.builder().select(columns).get();
             assertNotNull(results);
             assertTrue(results.size() > 0);
             
-            System.out.println(results);
+            System.out.println(JsonParser.parsePretty(results));
         }
         
         catch(SQLException e)
         {
-            System.out.println("[SQL EXCEPTION] Failed to select by array - " + e.getMessage());
+            System.out.println(e.getMessage());
             fail(e.getMessage());
         }
     }
     
+    /*
     @Test
     public void testJoin()
     {
@@ -119,37 +121,45 @@ public class QueryBuilderTest
         
     }
 
-    /**
-     * Test of offset method, of class QueryBuilder.
-     */
+    */
+    
+   
+
     @Test
     public void testOffset()
     {
-        final int offset    =   1;
+        final int OFFSET    =   2;
         try
         {
-            JsonArray results   =   testModel.builder().offset(1).get();
-            System.out.println(results.get(0));
+            TestUtilities.formatHeader("TEST OFFSET");
+            JsonArray results   =   testModel.builder().offset(OFFSET).get();
+            int id              =   results.get(0).getAsJsonObject().get("ID").getAsInt();
+            assertTrue(id > OFFSET);
+            
+            System.out.println(JsonParser.parsePretty(results));
         }
         
         catch(SQLException e)
         {
-            System.out.println("[SQL EXCEPTION] Failed to set offset of: " + offset + "; Error: " + e.getMessage());
+            System.out.println(e.getMessage());
             fail(e.getMessage());
         }
     }
+    
+    
 
     @Test
     public void testOrderBy()
     {
         try
         {
+            TestUtilities.formatHeader("TEST ORDER BY");
             JsonArray results   =   testModel.builder().orderBy("name").get();
             
             for(int resultIndex = 1; resultIndex < results.size(); resultIndex++)
             {
-                String namePrev    =   results.get(resultIndex - 1).getAsJsonObject().get("name").getAsString();
-                String nameNext     =   results.get(resultIndex).getAsJsonObject().get("name").getAsString();
+                String namePrev    =   results.get(resultIndex - 1).getAsJsonObject().get("NAME").getAsString();
+                String nameNext     =   results.get(resultIndex).getAsJsonObject().get("NAME").getAsString();
                 
                 assertTrue(namePrev.compareToIgnoreCase(nameNext) < 0);
             }
@@ -157,30 +167,48 @@ public class QueryBuilderTest
         
         catch(SQLException e)
         {
-            System.out.println("[SQL EXCEPTION] Failed to order results - " + e.getMessage());
+            System.out.println(e.getMessage());
             fail(e.getMessage());
         }
-        
     }
 
-    /**
-     * Test of groupBy method, of class QueryBuilder.
-     */
+    
     @Test
     public void testGroupBy() 
     {
-        
+       try
+       {
+           TestUtilities.formatHeader("TEST GROUP BY");
+           JsonArray genderGroup    =   testModel.builder().select(new String[] {"name", "gender"}).groupBy("gender").get();
+           JsonArray ageGroup       =   testModel.builder().select(new String[] {"name", "age"}).groupBy("age").get();
+           
+           assertNotNull(genderGroup);
+           assertNotNull(ageGroup);
+           
+           TestUtilities.formatSubHeader("GENDER GROUP", JsonParser.parsePretty(genderGroup));
+           TestUtilities.formatSubHeader("AGE GROUP", JsonParser.parsePretty(ageGroup));
+       }
+       
+       catch(SQLException e)
+       {
+           System.out.println(e.getMessage());
+           fail(e.getMessage());
+       }
     }
 
+    
     @Test
     public void testFirst()
     {
         try
         {
+            TestUtilities.formatHeader("TEST FETCH FIRST");
             final int FIRST_ID  =   1;
             JsonArray results   =   testModel.builder().first().get();
+            
             assertNotNull(results);
             assertTrue(results.size() <= 1);
+            System.out.println(JsonParser.parsePretty(results));
             
             int id  =   results.get(0).getAsJsonObject().get("ID").getAsInt();
             assertEquals(id, FIRST_ID);
@@ -188,54 +216,71 @@ public class QueryBuilderTest
         
         catch(SQLException e)
         {
-            System.out.println("[SQL EXCEPTION] Failed to fetch first - " + e.getMessage());
+            System.out.println(e.getMessage());
             fail(e.getMessage());
         }
     }
 
-    /**
-     * Test of limit method, of class QueryBuilder.
-     */
+    
     @Test
-    public void testLimit() {
-        System.out.println("limit");
-        int rowLimit = 0;
-        QueryBuilder instance = null;
-        QueryBuilder expResult = null;
-        QueryBuilder result = instance.limit(rowLimit);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+    public void testLimit() 
+    {
+        try
+        {
+            TestUtilities.formatHeader("TEST RESULT LIMIT");
+            final int LIMIT             =   2;
+            JsonArray limitedResults    =   testModel.builder().limit(LIMIT).get();
+            
+            assertNotNull(limitedResults);
+            assertTrue(limitedResults.size() <= LIMIT);
+            System.out.println(JsonParser.parsePretty(limitedResults));
+        }
+        
+        catch(SQLException e)
+        {
+            System.out.println(e.getMessage());
+            fail(e.getMessage());
+        }
     }
 
-    /**
-     * Test of build method, of class QueryBuilder.
-     */
+    
+    
+    
     @Test
     public void testBuild()
     {
+        TestUtilities.formatHeader("TEST RAW QUERY STRINGS");
         String queryWithSelect   =   testModel.builder().select("name").build();
-        String queryWithCond     =   testModel.builder().where("name", "=", "kyle").build();
+        String queryWithCond     =   testModel.builder().where("name", "=", "kyle", true).build();
         String queryWithOrder    =   testModel.builder().orderBy("name").build();
         String queryWithLimit    =   testModel.builder().limit(4).build();
-        String queryWithGroup    =   testModel.builder().groupBy("name").build();
+        String queryWithGroup    =   testModel.builder().select("name").groupBy("name").build();
         
-        System.out.println("## SELECT QUERY ##\n" + queryWithSelect);
+        TestUtilities.formatSubHeader("SELECT QUERY", queryWithSelect);
+        TestUtilities.formatSubHeader("CONDITION QUERY", queryWithCond);
+        TestUtilities.formatSubHeader("ORDER QUERY", queryWithOrder);
+        TestUtilities.formatSubHeader("LIMIT QUERY", queryWithLimit);
+        TestUtilities.formatSubHeader("GROUP QUERY", queryWithGroup);
         
     }
 
-    /**
-     * Test of execute method, of class QueryBuilder.
-     */
+
+    
     @Test
-    public void testExecute() throws Exception {
-        System.out.println("execute");
-        QueryBuilder instance = null;
-        ResultSet expResult = null;
-        ResultSet result = instance.execute();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
+    public void testExecute()
+    {
+        TestUtilities.formatHeader("TEST QUERY EXECUTE");
+        try(ResultSet results   =   testModel.builder().execute())
+        {
+            assertNotNull(results);
+            assertTrue(results.next());
+        }
+        
+        catch(SQLException e)
+        {
+            System.out.println(e.getMessage());
+            fail(e.getMessage());
+        }
+    } 
     
 }

@@ -2,7 +2,10 @@
 
 package engine.Parsers;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
@@ -20,7 +23,6 @@ public class JsonParser
             //Iterate through resulting rows
             while(results.next())
             {
-                System.out.println("row");
                 JsonObject currentRow    =   new JsonObject();
                 
                 //Add column data to json
@@ -37,5 +39,11 @@ public class JsonParser
             System.out.println("[SQL EXCEPTION] Failed to parse result set - " + e.getMessage());
             return null;
         }
+    }
+    
+    public static String parsePretty(JsonElement json)
+    {
+        Gson gson   =   new GsonBuilder().setPrettyPrinting().create();
+        return gson.toJson(json);
     }
 }
