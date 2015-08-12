@@ -19,29 +19,6 @@ import org.junit.Test;
 public class DataConnectorTest 
 {
     
-  /*  @Test
-    public void testGetConnection() {
-        System.out.println("getConnection");
-        DataConnector instance = new DataConnector();
-        Connection expResult = null;
-        Connection result = instance.getConnection();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-
-    @Test
-    public void testGetConnectionConfig() {
-        System.out.println("getConnectionConfig");
-        DataConnector instance = new DataConnector();
-        DataConnection expResult = null;
-        DataConnection result = instance.getConnectionConfig();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    } */
-    
     @Test
     public void testConnect()
     {
@@ -60,19 +37,7 @@ public class DataConnectorTest
         }
     }
     
-    @Test
-    public void testInsert()
-    {
-        try(DataConnector conn  =   new DataConnector())
-        {
-            conn.insert("App.TestTable", new String[] {"1", "Kyle"});
-        }
-        
-        catch(Exception e)
-        {
-            System.out.println("test exception - " + e.getMessage());
-        }
-    }
+
     
     
 }

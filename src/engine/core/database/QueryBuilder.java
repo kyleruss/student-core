@@ -1,6 +1,8 @@
 
 package engine.core.database;
 
+import com.google.gson.JsonArray;
+import engine.Parsers.JsonParser;
 import engine.core.DataConnector;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -8,9 +10,8 @@ import java.text.MessageFormat;
 
 public class QueryBuilder 
 {
-    private final Query query;
-    
-    
+    private Query query;
+        
     public QueryBuilder(String table)
     {
         this(new Query(table));
@@ -58,9 +59,9 @@ public class QueryBuilder
         return this;
     }
     
-    public String get()
+    public JsonArray get() throws SQLException
     {
-        return query.getJson();
+        return JsonParser.resultsToJson(execute());
     }
     
     public QueryBuilder offset(int offset)
@@ -130,6 +131,12 @@ public class QueryBuilder
         
         query_raw   =   MessageFormat.format("{0} {1} {2}", db_operation, conditionals, extras);
         return query_raw;
+    }
+    
+    @Override
+    public String toString()
+    {
+        return build();
     }
     
     
