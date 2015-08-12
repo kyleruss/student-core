@@ -51,42 +51,46 @@ public class MainLogger
         Logger current  =   null;
         AbstractLogger core_logger;
         
-     //   LoggingConfig.config().get(logger_name);
-        try
+        boolean loggingEnabled =  (boolean) LoggingConfig.config().get(logger_name);
+        
+        if(loggingEnabled)
         {
-            core_logger  =   create(logger_name);
-            fh           =   core_logger.getHandler();
-            current      =   Logger.getLogger(logger_name);
-            
-            if(current == null || fh == null) throw new IOException();
-            else
+            try
             {
-                
-                //set logger params and attach handler
-                current.setLevel(Level.FINE);
-                current.setUseParentHandlers(false);
-                current.addHandler(fh);
-                
-                //commit log
-                current.fine(message);
-                
+                core_logger  =   create(logger_name);
+                fh           =   core_logger.getHandler();
+                current      =   Logger.getLogger(logger_name);
+
+                if(current == null || fh == null) throw new IOException();
+                else
+                {
+
+                    //set logger params and attach handler
+                    current.setLevel(Level.FINE);
+                    current.setUseParentHandlers(false);
+                    current.addHandler(fh);
+
+                    //commit log
+                    current.fine(message);
+
+                }
+            }
+
+            catch(IOException | SecurityException e)
+            {
+                System.out.println("Failed to commit log");
+            }
+
+            //flush and close handlers
+            finally
+            {
+                if(fh != null && current != null)
+                {
+                    fh.flush();
+                    fh.close();
+                }
             }
         }
-        
-        catch(IOException | SecurityException e)
-        {
-            System.out.println("Failed to commit log");
-        }
-        
-        //flush and close handlers
-        finally
-        {
-            if(fh != null && current != null)
-            {
-                fh.flush();
-                fh.close();
-            }
-        } 
     }
     
     //Returns the correct formatting including path of log file

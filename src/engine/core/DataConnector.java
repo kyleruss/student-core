@@ -61,19 +61,18 @@ public class DataConnector implements AutoCloseable
     
     public void execute(String query) throws SQLException
     {
-        this.execute(createStatement(query));
+        this.execute(createStatement(query), query);
     }
     
-    public void execute(PreparedStatement statement) throws SQLException
+    public void execute(PreparedStatement statement, String query) throws SQLException
     {
-        MainLogger.log(statement.toString(), MainLogger.DATA_LOGGER);
-        ResultSet execStatus    =   statement.executeQuery();
-        results                 =   execStatus;
+        MainLogger.log(query, MainLogger.DATA_LOGGER);
+        ResultSet rs    =   statement.executeQuery();
+        results         =   rs;
     }
     
     public PreparedStatement createStatement(String query) throws SQLException
     {
-        System.out.println(query);
         return conn.prepareStatement(query);
     }
     
