@@ -19,6 +19,8 @@ import utilities.TestUtilities;
 
 public class QueryBuilderTest 
 {
+    //Default testing model
+    //Features typical columns types and limited rows
     private final Model testModel;
     
     public QueryBuilderTest()
@@ -26,6 +28,9 @@ public class QueryBuilderTest
         testModel   =   new User();
     }
   
+    
+    //Tests QueryBuilder's where function
+    //Tests a simple where clause with literal
     @Test
     public void testWhere() 
     {
@@ -43,6 +48,9 @@ public class QueryBuilderTest
         }
     }
 
+    //Tests QueryBuilder get functions
+    //Test should return expected output
+    //to built query 
     @Test
     public void testGet()
     {
@@ -63,7 +71,8 @@ public class QueryBuilderTest
         }
     }
     
-    
+    //Tests QueryBuilder select functions
+    //Tests default selects and filtering
     @Test
     public void testSelect()
     {
@@ -87,6 +96,8 @@ public class QueryBuilderTest
     }
 
     
+    //Tests QueryBuilder's select by array
+    //That accepts String[] and iteratively adds selects
     @Test
     public void testSelectByArray()
     {
@@ -95,6 +106,9 @@ public class QueryBuilderTest
             TestUtilities.formatHeader("TEST SELECT ARRAY");
             String[] columns    =   { "name", "age" };
             JsonArray results   =   testModel.builder().select(columns).get();
+            
+            //Check for non-empty table before test
+            //Otherwise check output
             assertNotNull(results);
             assertTrue(results.size() > 0);
             
@@ -125,6 +139,8 @@ public class QueryBuilderTest
     
    
 
+    //Tests SQL offsetting
+    //Test checks numeric ID's in test table are after offset
     @Test
     public void testOffset()
     {
@@ -133,6 +149,8 @@ public class QueryBuilderTest
         {
             TestUtilities.formatHeader("TEST OFFSET");
             JsonArray results   =   testModel.builder().offset(OFFSET).get();
+            
+            //numeric ID's should be follow after the offset 
             int id              =   results.get(0).getAsJsonObject().get("ID").getAsInt();
             assertTrue(id > OFFSET);
             
@@ -147,7 +165,8 @@ public class QueryBuilderTest
     }
     
     
-
+    //Tests QueryBuilder SQL orderby function
+    //Pass test if results are in order
     @Test
     public void testOrderBy()
     {
@@ -156,6 +175,8 @@ public class QueryBuilderTest
             TestUtilities.formatHeader("TEST ORDER BY");
             JsonArray results   =   testModel.builder().orderBy("name").get();
             
+            //Check that results are in order
+            //Test fails if results are not in ascending order
             for(int resultIndex = 1; resultIndex < results.size(); resultIndex++)
             {
                 String namePrev    =   results.get(resultIndex - 1).getAsJsonObject().get("NAME").getAsString();
