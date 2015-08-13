@@ -9,6 +9,7 @@ package engine.core.database;
 import com.google.gson.JsonArray;
 import engine.Parsers.JsonParser;
 import engine.core.DataConnector;
+import engine.core.database.Join.JoinType;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.MessageFormat;
@@ -84,23 +85,23 @@ public class QueryBuilder
     }
     
     
-    //Adds a join to the query
+    //Adds a joinType join to the query
     //Join specifies a link between tables table_from and table_to
     //Joins can be chained to achieve multiple join levels
     //Joins use the default column ID names as the FK to join
-    public QueryBuilder join(String table_from, String table_to)
+    public QueryBuilder join(String table_from, String table_to, JoinType joinType)
     {
-        Join join   =   new Join(table_from, table_to);
+        Join join   =   new Join(table_from, table_to, joinType);
         query.addJoin(join);
         return this;
     }
     
-    //Adds a join to the query
+    //Adds a joinType join to the query
     //If either tables don't use default FK and PK column names
     //then pass their join from and join to FK column names 
-    public QueryBuilder join(String table_from, String table_to, String from_pk, String to_pk)
+    public QueryBuilder join(String table_from, String table_to, String from_pk, String to_pk, JoinType joinType)
     {
-        Join join   =   new Join(table_from, table_to, from_pk, to_pk);
+        Join join   =   new Join(table_from, table_to, from_pk, to_pk, joinType);
         query.addJoin(join);
         return this;
     }
