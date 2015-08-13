@@ -13,14 +13,17 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 
-public class DataConnector implements AutoCloseable
+public class DataConnector extends Thread implements AutoCloseable
 {  
     
     private Connection conn;
     private DataConnection connection_conifg;
     private String connection_url;
     private ResultSet results;
+    private volatile boolean active =   true;
+    private PreparedStatement p;
     
     //Creates a DataConnector with default config
     public DataConnector()
@@ -34,8 +37,34 @@ public class DataConnector implements AutoCloseable
         this.connection_conifg      =   db_config;
         this.connection_url         =   db_config.getConnectionString();
         connect();
+        
     }
     
+    
+    
+    @Override
+    public void run()
+    {
+        while(active)
+        {
+            connect();
+            
+            if(p != null)
+            {
+                try
+                {
+                    p.executeQuery();
+                    p = null;
+                    active = false;
+                }
+                
+                catch(SQLException e)
+                {
+                    System.out.println(e.getMessage());
+                }
+            }
+        }
+    }
     
     //-----------------------------
     //       CONNECT TO DB
@@ -45,17 +74,20 @@ public class DataConnector implements AutoCloseable
     //- Sql exception is thrown off to handler
     private void connect()
     {
-        try
+        if(conn == null)
         {
-            DriverManager.registerDriver(new org.apache.derby.jdbc.ClientDriver());
-            conn    =   DriverManager.getConnection(connection_url);
-            System.out.println("Connected!");
-        }
-        
-        catch(SQLException e)
-        {
-            System.out.println(e.getMessage());
-            System.out.println("Failed to connect to DB, conn string: " + connection_url);
+            try
+            {
+                DriverManager.registerDriver(new org.apache.derby.jdbc.ClientDriver());
+                conn    =   DriverManager.getConnection(connection_url);
+                System.out.println("Connected!");
+            }
+
+            catch(SQLException e)
+            {
+                System.out.println(e.getMessage());
+                System.out.println("Failed to connect to DB, conn string: " + connection_url);
+            }            
         }
     }
     
@@ -66,9 +98,11 @@ public class DataConnector implements AutoCloseable
     
     public void execute(PreparedStatement statement, String query) throws SQLException
     {
+        p               =   statement;
+        active          =   true;
         MainLogger.log(query, MainLogger.DATA_LOGGER);
-        ResultSet rs    =   statement.executeQuery();
-        results         =   rs;
+        //ResultSet rs    =   statement.executeQuery();
+        //results         =   rs;
     }
     
     public PreparedStatement createStatement(String query) throws SQLException
@@ -108,6 +142,8 @@ public class DataConnector implements AutoCloseable
         try
         {
             conn.close();
+            active  =   false;
+            interrupt();
         }
         
         catch(SQLException e)

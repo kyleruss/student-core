@@ -11,8 +11,8 @@ import com.google.gson.JsonObject;
 import engine.Parsers.JsonParser;
 import engine.config.DatabaseConfig;
 import engine.core.DataConnector;
+import engine.core.database.Conditional;
 import engine.core.database.QueryBuilder;
-import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.text.MessageFormat;
@@ -147,8 +147,8 @@ public abstract class Model
                 Iterator<String> colIter    =   columns.iterator();
                 while(colIter.hasNext())
                 {
-                    /*String column   =   */ System.out.println("COL: " + colIter.next().toUpperCase());
-                   // data.put(column, entry.get(column).getAsString());
+                    String column   =   colIter.next().toUpperCase();
+                    data.put(column, entry.get(column).getAsString());
                 }
             }
             
@@ -161,6 +161,29 @@ public abstract class Model
             System.out.println("[SQL EXCEPTION] Failed to select first record - " + e.getMessage());
             return null;
         }
+    }
+    
+    public String buildUpdate()
+    {
+        String updateStr =   "";
+        Iterator<Map.Entry<String, Object>> setData =  data.entrySet().iterator();
+        
+        if(setData.hasNext()) updateStr += "SET ";
+        else return "";
+        
+        while(setData.hasNext())
+        {
+            Map.Entry<String, Object> column    =   setData.next();
+            
+            boolean isLiteral                   =   column.getValue() instanceof String;
+            String colName                      =   column.getKey();
+            String colValue                     =   (isLiteral)? (String) column.getValue() : column.getValue().toString();
+            
+            updateStr += MessageFormat.format("SET {0} = {1}", colName, (isLiteral)? Conditional.makeLiteral(colValue) : colValue);
+        }
+        
+        System.out.println(updateStr);
+        return updateStr;
     }
     
     
@@ -189,7 +212,21 @@ public abstract class Model
     
     public boolean update()
     {
-        return true;
+        String changes      =   buildUpdate();
+        String id           =   data.get(primaryKey).toString();
+        String updateQuery  =   MessageFormat.format("UPDATE {0} {1} WHERE {2} = {3}", table, changes, primaryKey, id);
+        
+        try(DataConnector conn   =   new DataConnector())
+        {
+            conn.execute(updateQuery);
+            return true;
+        }
+        
+        catch(SQLException e)
+        {
+            System.out.println("[SQL EXCEPTION] Failed to update record - " + e.getMessage());
+            return false;
+        }
     }
     
     

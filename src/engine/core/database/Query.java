@@ -136,6 +136,15 @@ public class Query
         return formattedConditions;
     }
     
+    public String formatJoins()
+    {
+        String joinFormatted    =   "";
+        for(Join join : joins)
+            joinFormatted += join + " ";
+        
+        return joinFormatted;
+    }
+    
     //Format the queries extra statements
     //Extras are built last
     public String formatExtras()

@@ -19,6 +19,8 @@ import utilities.TestUtilities;
 
 public class QueryBuilderTest 
 {
+    
+    
     //Default testing model
     //Features typical columns types and limited rows
     private final Model testModel;
@@ -28,7 +30,6 @@ public class QueryBuilderTest
         testModel   =   new TestModel();
     }
   
-    
     //Tests QueryBuilder's where function
     //Tests a simple where clause with literal
     @Test
@@ -122,22 +123,25 @@ public class QueryBuilderTest
         }
     }
     
-    /*
+    
     @Test
     public void testJoin()
     {
+        final String joinTable    =   "users";
+        try
+        {
+            TestUtilities.formatHeader("TEST JOINS");
+            JsonArray results   =   testModel.builder().join(testModel.getTableName(), joinTable, Join.JoinType.INNERR_JOIN).get();
+            
+            System.out.println(JsonParser.parsePretty(results));
+        }
         
+        catch(SQLException e)
+        {
+            System.out.println(e.getMessage());
+        }
     }
-
-    @Test
-    public void testJoinWithIds()
-    {
-        
-    }
-
-    */
     
-   
 
     //Tests SQL offsetting
     //Test checks numeric ID's in test table are after offset
@@ -266,7 +270,6 @@ public class QueryBuilderTest
 
     
     
-    
     @Test
     public void testBuild()
     {
@@ -276,13 +279,14 @@ public class QueryBuilderTest
         String queryWithOrder    =   testModel.builder().orderBy("name").build();
         String queryWithLimit    =   testModel.builder().limit(4).build();
         String queryWithGroup    =   testModel.builder().select("name").groupBy("name").build();
+        String queryWithJoin     =   testModel.builder().join("testtable", "users", Join.JoinType.INNERR_JOIN).build();
         
         TestUtilities.formatSubHeader("SELECT QUERY", queryWithSelect);
         TestUtilities.formatSubHeader("CONDITION QUERY", queryWithCond);
         TestUtilities.formatSubHeader("ORDER QUERY", queryWithOrder);
         TestUtilities.formatSubHeader("LIMIT QUERY", queryWithLimit);
         TestUtilities.formatSubHeader("GROUP QUERY", queryWithGroup);
-        
+        TestUtilities.formatSubHeader("JOIN QUERY", queryWithJoin);
     }
 
 

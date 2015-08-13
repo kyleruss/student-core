@@ -180,6 +180,11 @@ public class QueryBuilder
         return query.formatExtras();
     }
     
+    private String buildJoins()
+    {
+        return query.formatJoins();
+    }
+    
     //Builds and returns the raw query of the QueryBuilder
     //Building can resume but cannot be chaned after
     public String build()
@@ -188,6 +193,7 @@ public class QueryBuilder
         String db_operation =   "";
         String conditionals =   buildConditionals();
         String extras       =   buildExtras();
+        String joins        =   buildJoins();
         
         switch(query.getType())
         {
@@ -198,9 +204,9 @@ public class QueryBuilder
             case DELETE:
         }
         
-        //Builds order: Db operations => conditionals => extras
+        //Builds order: Db operations => conditionals => joins => extras
         
-        query_raw   =   MessageFormat.format("{0} {1} {2}", db_operation, conditionals, extras);
+        query_raw   =   MessageFormat.format("{0} {1} {2} {3}", db_operation, conditionals, joins, extras);
         return query_raw;
     }
     
