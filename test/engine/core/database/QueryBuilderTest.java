@@ -1,14 +1,14 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+//####################################
+//  KYLE RUSSELL
+//  13831056
+//  PDC Project
+//####################################
 
 package engine.core.database;
 
 import com.google.gson.JsonArray;
 import engine.Models.Model;
-import engine.Models.User;
+import engine.Models.TestModel;
 import engine.Parsers.JsonParser;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -25,7 +25,7 @@ public class QueryBuilderTest
     
     public QueryBuilderTest()
     {
-        testModel   =   new User();
+        testModel   =   new TestModel();
     }
   
     

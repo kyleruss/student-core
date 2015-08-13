@@ -1,8 +1,12 @@
+//####################################
+//  KYLE RUSSELL
+//  13831056
+//  PDC Project
+//####################################
 
 package engine.core.database;
 
 import java.text.MessageFormat;
-
 
 //-------------------------------
 //          SELECTION
@@ -11,6 +15,7 @@ import java.text.MessageFormat;
 // for QueryBuilder/Query
 //- Can create with/without column alias
 //- table prefixes need to be used if joining
+
 public class Selection 
 {
     //Default selects all columns in the table

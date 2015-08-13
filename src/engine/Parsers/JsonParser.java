@@ -5,7 +5,6 @@ package engine.Parsers;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
@@ -41,7 +40,7 @@ public class JsonParser
         }
     }
     
-    public static String parsePretty(JsonElement json)
+    public static String parsePretty(Object json)
     {
         Gson gson   =   new GsonBuilder().setPrettyPrinting().create();
         return gson.toJson(json);
