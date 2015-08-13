@@ -1,4 +1,8 @@
-
+//####################################
+//  KYLE RUSSELL
+//  13831056
+//  PDC Project
+//####################################
 
 package engine.Parsers;
 
@@ -10,8 +14,21 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 
+
+//---------------------------------
+//          JSON PARSER
+//---------------------------------
+//- Handles conversion to JSON of DB objects
+//- Support conversion of ResultSet to JSON
+//- utility parsePretty() converts obj to JSON in format
+
+
 public class JsonParser 
 {
+    
+    //Takes a ResultSet and parses it as a JSON array
+    //Column data is stored in a JsonObject 
+    //While the entire ResultSet is returned as JsonArray
     public static JsonArray resultsToJson(ResultSet results)
     {
         try
@@ -40,6 +57,7 @@ public class JsonParser
         }
     }
     
+    //Takes a object and parses it as JSON in clear format 
     public static String parsePretty(Object json)
     {
         Gson gson   =   new GsonBuilder().setPrettyPrinting().create();
