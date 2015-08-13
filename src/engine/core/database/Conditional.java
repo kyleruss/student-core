@@ -4,10 +4,21 @@ package engine.core.database;
 import java.text.MessageFormat;
 
 
+//-----------------------------------
+//             CONDITIONAL
+//-----------------------------------
+//- Represents WHERE clause in query
+//- Supports all operators
+//- Allows for and identifies literals
+
 public class Conditional 
 {
+    //Conditionals column name
+    //The querying column
     private String column;
     
+    //The conditionals operator
+    //Supports all operators including wildcards
     private String operator;
     
     private String value;

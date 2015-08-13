@@ -12,7 +12,6 @@ import engine.Parsers.JsonParser;
 import engine.config.DatabaseConfig;
 import engine.core.DataConnector;
 import engine.core.database.QueryBuilder;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
@@ -24,18 +23,33 @@ import java.util.List;
 import java.util.Map;
 
 
+//------------------------------------------
+//                  MODEL
+//------------------------------------------
+//- Model object class 
+//- Maps database tables to objects
+//- Model entity represent tables in the database
+//- Model objects represent rows/records
+//- Model behavior coresponds to it's table counterpart
 public abstract class Model 
 {
-    
+    //The models mapping table
     protected String table;
     
+    //The table's primary key column name
+    //For default see DatabaseConfig - typically "ID" column
     protected String primaryKey = (String) DatabaseConfig.config().get("DEFAULT_PRIMARY");
     
+    //The columns in the table
+    //Columns are fetched on initialization by initColumns()
     protected List<String> columns;
     
+    //The table's row data
+    //Allows for mutation such as insertion, deletion and editing
     private final Map<String, Object> data;
     
-    //Create new model
+    //Create a new model that does not identify a row
+    //Data will be empty and records must be added to model before mutation
     public Model()
     {
         data    =   new HashMap<>();
@@ -43,7 +57,9 @@ public abstract class Model
         initTable();
     }
     
-    //Create model with id (find)
+    //Create model that maps to an existing row
+    //Pass the row primary key value
+    //Row data fills the model's data
     public Model(String id)
     {
         data    =   new HashMap<>();
@@ -52,22 +68,25 @@ public abstract class Model
         initColumns();
     }
     
+    //Initializes the tables mapping properties
+    //Implementation should initialize table name
+    //and optionally override table properties here
     protected abstract void initTable();
             
       
+    //Initializes the model's mapping to column names
+    //Fetches and fills the model's columns collection
+    //with all column names of the respective mapping table
     protected void initColumns()
     {    
         try
         {
-            ResultSet results   =   builder().first().execute();
+            ResultSetMetaData meta   =   builder().first().execute().getMetaData();
 
             columns.clear();
-            ResultSetMetaData meta  =   results.getMetaData();
             int columnCount         =   meta.getColumnCount();
-
             for(int colIndex = 1; colIndex <= columnCount; colIndex++)
                 columns.add(meta.getColumnName(colIndex));
-
         } 
         
         catch(SQLException e)
@@ -76,11 +95,16 @@ public abstract class Model
         }
     }
     
+    //Sets a models column value
+    //Entries in Models table correspond to table columns
     public void set(String colName, Object value)
     {
         data.put(table, value);
     }
     
+    //Returns the current columns in models data
+    //Don't confuse with model's column names (meta)
+    //This is the active Model instance data column names
     private String getDataColumns()
     {
         String columnNames          =   "";
@@ -91,7 +115,7 @@ public abstract class Model
         return columnNames;
     }
     
-    
+    //Returns the current Models column value in data
     private String getDataValues()
     {
         String columnValues         =   "";
@@ -102,9 +126,13 @@ public abstract class Model
         return columnValues;
     }
     
+    
+    //Finds an existing record in the mapping table
+    //If a record is found, adds entries to models data
+    //Is called if init by ID (find)
     public String fetchExisting(String id)
     {
-        QueryBuilder qBuilder   =   builder(table).where(primaryKey, "=", id);
+        QueryBuilder qBuilder   =   builder().where(primaryKey, "=", id);
         String query            =    qBuilder.build();
         
         try(DataConnector conn =   new DataConnector())
@@ -135,6 +163,11 @@ public abstract class Model
         }
     }
     
+    
+    //Saves the current Model
+    //Inserts the Model data values corresponding to data column names
+    //Into the Model mapping table
+    //Returns true if the insertion was successful
     public boolean save()
     {
         String columnNames      =   getDataColumns();
@@ -159,23 +192,22 @@ public abstract class Model
         return true;
     }
     
+    
+    //Returns the Model's mapping table name
     public String getTableName()
     {
         return table;
     }
     
+    //Returns the Model's table primary key
     public String getPrimaryKey()
     {
         return primaryKey;
     }
 
+    //Returns a QueryBuilder instance for the Model
     public QueryBuilder builder()
     {
         return new QueryBuilder(table);
-    }
-    
-    public static QueryBuilder builder(String table_name)
-    {
-        return new QueryBuilder(table_name);
     }
 }
