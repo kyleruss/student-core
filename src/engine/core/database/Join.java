@@ -128,8 +128,8 @@ public class Join
     public String toString()
     {
         //Format columns to include table prefixes
-        String colFrom   =   MessageFormat.format("{0}.{1}", fromTable, fromFK); 
-        String colTo     =   MessageFormat.format("{0}.{1}", toTable, toPK);
+        String colFrom      =   MessageFormat.format("{0}.{1}", fromTable, fromFK); 
+        String colTo        =   MessageFormat.format("{0}.{1}", toTable, toPK);
         
         //Format: JOIN TYPE [toTable] ON fromTable.fromFK = toTable.toPK
         String syntax    =   MessageFormat.format("{0} {1} ON {2} = {3}", joinType.getJoinSyntax(), toTable, colFrom, colTo);

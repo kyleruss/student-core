@@ -110,7 +110,7 @@ public class QueryBuilder
     //of the query results if any
     public JsonArray get() throws SQLException
     {
-        return JsonParser.resultsToJson(execute());
+        return execute();
     }
     
     //Set the query results offset
@@ -222,17 +222,20 @@ public class QueryBuilder
     //Building ends here and may no longer be chained
     //Save the query and create new instance if necessary
     //Use get() if you need a JSON response
-    public ResultSet execute() throws SQLException
+    public JsonArray execute() throws SQLException
     {
         //Build query
         String query_str    =   build();
         
         //Connect and execute query
-        DataConnector conn  =   new DataConnector();
-        conn.execute(query_str);
+        try(DataConnector conn  =   new DataConnector())
+        {
+            conn.execute(query_str);
+
+            //Return results
+            ResultSet results   =   conn.getResults();
+            return JsonParser.resultsToJson(results);
+        }
         
-        //Return results
-        ResultSet results   =   conn.getResults();
-        return results;
     }
 }  

@@ -10,6 +10,7 @@ import com.google.gson.JsonArray;
 import engine.Models.Model;
 import engine.Models.TestModel;
 import engine.Parsers.JsonParser;
+import engine.core.DataConnector;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import static org.junit.Assert.*;
@@ -20,7 +21,7 @@ import utilities.TestUtilities;
 public class QueryBuilderTest 
 {
     
-    
+  
     //Default testing model
     //Features typical columns types and limited rows
     private final Model testModel;
@@ -29,17 +30,19 @@ public class QueryBuilderTest
     {
         testModel   =   new TestModel();
     }
-  
+
+    
     //Tests QueryBuilder's where function
     //Tests a simple where clause with literal
     @Test
     public void testWhere() 
     {
         TestUtilities.formatHeader("TEST WHERE");
-        try(ResultSet results       =   testModel.builder().where("name", "=", "test", true).execute())
+        try
         {
+            JsonArray results       =   testModel.builder().where("name", "=", "test", true).execute();
             assertNotNull(results);
-            assertTrue(results.next());
+            assertTrue(results.size() > 0);
         }
         
         catch(SQLException e)
@@ -123,24 +126,26 @@ public class QueryBuilderTest
         }
     }
     
-    
-    @Test
+  
+    //Tests an inner join of 2 tables
+    //Test tables are users and testtable
+   @Test
     public void testJoin()
     {
-        final String joinTable    =   "users";
+        final String JOINTABLE    =   "users";
         try
         {
             TestUtilities.formatHeader("TEST JOINS");
-            JsonArray results   =   testModel.builder().join(testModel.getTableName(), joinTable, Join.JoinType.INNERR_JOIN).get();
+            JsonArray results = testModel.builder().join(testModel.getTableName(), JOINTABLE, Join.JoinType.INNERR_JOIN).get();
             
-            System.out.println(JsonParser.parsePretty(results));
+           System.out.println(JsonParser.parsePretty(results));
         }
         
-        catch(SQLException e)
-        {
+       catch(SQLException e)
+       {
             System.out.println(e.getMessage());
-        }
-    }
+       }
+    }  
     
 
     //Tests SQL offsetting
@@ -155,7 +160,7 @@ public class QueryBuilderTest
             JsonArray results   =   testModel.builder().offset(OFFSET).get();
             
             //numeric ID's should be follow after the offset 
-            int id              =   results.get(0).getAsJsonObject().get("ID").getAsInt();
+            int id              =   results.get(1).getAsJsonObject().get("ID").getAsInt();
             assertTrue(id > OFFSET);
             
             System.out.println(JsonParser.parsePretty(results));
@@ -181,7 +186,7 @@ public class QueryBuilderTest
             
             //Check that results are in order
             //Test fails if results are not in ascending order
-            for(int resultIndex = 1; resultIndex < results.size(); resultIndex++)
+            for(int resultIndex = 2; resultIndex < results.size(); resultIndex++)
             {
                 String namePrev    =   results.get(resultIndex - 1).getAsJsonObject().get("NAME").getAsString();
                 String nameNext     =   results.get(resultIndex).getAsJsonObject().get("NAME").getAsString();
@@ -232,10 +237,10 @@ public class QueryBuilderTest
             JsonArray results   =   testModel.builder().first().get();
             
             assertNotNull(results);
-            assertTrue(results.size() <= 1);
+            assertTrue(results.size() <= 2);
             System.out.println(JsonParser.parsePretty(results));
             
-            int id  =   results.get(0).getAsJsonObject().get("ID").getAsInt();
+            int id  =   results.get(1).getAsJsonObject().get("ID").getAsInt();
             assertEquals(id, FIRST_ID);
         }
         
@@ -257,7 +262,7 @@ public class QueryBuilderTest
             JsonArray limitedResults    =   testModel.builder().limit(LIMIT).get();
             
             assertNotNull(limitedResults);
-            assertTrue(limitedResults.size() <= LIMIT);
+            assertTrue(limitedResults.size() <= LIMIT + 1);
             System.out.println(JsonParser.parsePretty(limitedResults));
         }
         
@@ -295,10 +300,11 @@ public class QueryBuilderTest
     public void testExecute()
     {
         TestUtilities.formatHeader("TEST QUERY EXECUTE");
-        try(ResultSet results   =   testModel.builder().execute())
+        try
         {
+            JsonArray results   =   testModel.builder().execute();
             assertNotNull(results);
-            assertTrue(results.next());
+            assertTrue(results.size() > 0);
         }
         
         catch(SQLException e)
@@ -306,6 +312,6 @@ public class QueryBuilderTest
             System.out.println(e.getMessage());
             fail(e.getMessage());
         }
-    } 
+    }  
     
 }

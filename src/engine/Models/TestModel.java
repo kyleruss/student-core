@@ -6,12 +6,16 @@
 
 package engine.Models;
 
+
+import engine.core.database.QueryBuilder;
+
 //---------------------------------
 //          TEST MODEL
 //--------------------------------
 //- Dummy model used in unit testing
 //- Basic example of bare model
 //- Not used in core - only tests
+
 public class TestModel extends Model
 {
     
@@ -36,5 +40,10 @@ public class TestModel extends Model
     {
         table       =   "app.testtable";
         primaryKey  =   "id";
+    }
+    
+    public static QueryBuilder model()
+    {
+        return new TestModel().builder();
     }
 }

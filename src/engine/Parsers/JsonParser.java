@@ -10,6 +10,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
@@ -33,8 +34,22 @@ public class JsonParser
     {
         try
         {
+            if(results == null) return null;
+            
             JsonArray data           =   new JsonArray();
             ResultSetMetaData meta   =   results.getMetaData();
+             
+            
+            //Add result meta data to results
+            JsonObject metaData      =   new JsonObject();
+            JsonArray columnNames     =   new JsonArray();      
+            
+            for(int i = 1; i <= meta.getColumnCount(); i++)
+                columnNames.add(new JsonPrimitive(meta.getColumnName(i)));
+            
+            metaData.add("columnNames", columnNames); //Column names
+            metaData.addProperty("columCount", meta.getColumnCount()); //Number of columns
+            data.add(metaData); //Add meta data to front of returning JsonArray
             
             //Iterate through resulting rows
             while(results.next())

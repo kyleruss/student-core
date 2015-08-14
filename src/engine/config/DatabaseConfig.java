@@ -51,7 +51,7 @@ public class DatabaseConfig extends Configuration
         add(PASS_KEY, "fgsmg2"); //database server password
         add(DB_KEY, "School"); //active using database
         add(DRIVER_KEY, "jdbc:derby"); //db connection driver
-        add(SCHEMA_KEY, "app");
+        add(SCHEMA_KEY, "APP");
         add(DEFAULT_PRIMARY, "id");
     }
     

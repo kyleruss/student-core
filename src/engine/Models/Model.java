@@ -79,9 +79,9 @@ public abstract class Model
     //with all column names of the respective mapping table
     protected void initColumns()
     {    
-        try
+     /*   try
         {
-            ResultSetMetaData meta   =   builder().first().execute().getMetaData();
+            JsonArray meta   =   builder().first().execute();
 
             columns.clear();
             int columnCount         =   meta.getColumnCount();
@@ -92,7 +92,7 @@ public abstract class Model
         catch(SQLException e)
         {
             System.out.println("[SQL EXCEPTION] Failed to init columns - " + e.getMessage());
-        }
+        } */
     }
     
     //Sets a models column value
