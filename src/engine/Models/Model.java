@@ -79,20 +79,21 @@ public abstract class Model
     //with all column names of the respective mapping table
     protected void initColumns()
     {    
-     /*   try
+        try
         {
-            JsonArray meta   =   builder().first().execute();
-
+            JsonObject metaData   =   builder().first().execute().get(0).getAsJsonObject();
+            JsonArray colNames    =   metaData.get("columNames").getAsJsonArray();
+            int numColumns        =   metaData.get("columnCount").getAsInt();
+            
             columns.clear();
-            int columnCount         =   meta.getColumnCount();
-            for(int colIndex = 1; colIndex <= columnCount; colIndex++)
-                columns.add(meta.getColumnName(colIndex));
+            for(int colIndex = 1; colIndex <= numColumns; colIndex++)
+                columns.add(colNames.get(colIndex).getAsString());
         } 
         
         catch(SQLException e)
         {
             System.out.println("[SQL EXCEPTION] Failed to init columns - " + e.getMessage());
-        } */
+        } 
     }
     
     //Sets a models column value
