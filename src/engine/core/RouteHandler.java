@@ -6,6 +6,7 @@
 
 package engine.core;
 
+import engine.Views.View;
 import java.lang.reflect.Method;
 import java.lang.reflect.InvocationTargetException;
 import java.text.MessageFormat;
@@ -26,17 +27,13 @@ public class RouteHandler
     //Routes that the handler can access
     //Routes need to be initialized otherwise 
     //they will be unrecognized when called
-    private final Routes routes;
+    private static final Routes routes = new Routes();
     
-    public RouteHandler()
-    {
-        routes  =   new Routes();
-    }
     
     //Pass the routes path or url
     //Path must be valid for redirection
     //Params are stripped if url
-    public void go(String route)
+    public static View go(String route)
     {
         try
         {
@@ -50,46 +47,50 @@ public class RouteHandler
             //If a route name is passed and has params
             //call go(String, String[]) 
             String[] params     =   (Router.isPathName(route))? new String[] {} : getParamsFromUrl(route, urlPattern);
-            go(pathName, params);
+            return go(pathName, params);
         }
         
         catch(NoSuchMethodException e)
         {
             System.out.println("Path was not found");
+            return null;
         }
     }
     
     //Calls a controllers method with params
     //The number of params must match the routes 
     //controller method number of params
-    public void go(String routeName, String[] params)
+    public static View go(String routeName, String[] params)
     {
         Path foundPath  =   routes.getPath(routeName);   
         try
         {
             if(foundPath == null) throw new NoSuchMethodException();
             else           
-                call(foundPath, params);
+                return call(foundPath, params);
         }
         
         catch(ClassNotFoundException | NoSuchMethodException | IllegalAccessException | InvocationTargetException | InstantiationException e)
         {
             System.out.println("Path not found");
+            return null;
         }
     }
     
     //Creates and calls the routes controller method
     //Controller and method of querying route must exist
     //Further redirection must be handled by the called controller
-    public void call(Path path, String[] params) 
+    public static View call(Path path, String[] params) 
     throws ClassNotFoundException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException
     {
         String controllerName    =   MessageFormat.format("{0}.{1}", CONTROLLER_PACKAGE, path.getController());
         String controllerMethod  =   path.getControllerMethod();
         
         Class<?> controller      =   Class.forName(controllerName);
+        
         Method method            =   controller.getMethod(controllerMethod);
-        method.invoke(controller.newInstance(), (Object[]) params);
+        View calledView          =   (View) method.invoke(controller.newInstance(), (Object[]) params);
+        return calledView;
     }
     
     //Fetches params from a routes url
