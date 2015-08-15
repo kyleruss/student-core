@@ -1,3 +1,8 @@
+//####################################
+//  KYLE RUSSELL
+//  13831056
+//  PDC Project
+//####################################
 
 package engine.core;
 
@@ -5,9 +10,22 @@ import java.lang.reflect.Method;
 import java.lang.reflect.InvocationTargetException;
 import java.text.MessageFormat;
 
+
+//------------------------------------------
+//             ROUTE HANDLER
+//------------------------------------------
+//- Provides the bridge between controllers and routes
+//- Redirects valid routes to controllers
+//- Supports route names and urls
+
 public class RouteHandler 
 {
+    //The frameworks controller package
     private static final String CONTROLLER_PACKAGE  =   "engine.Controllers";
+    
+    //Routes that the handler can access
+    //Routes need to be initialized otherwise 
+    //they will be unrecognized when called
     private final Routes routes;
     
     public RouteHandler()
@@ -15,26 +33,43 @@ public class RouteHandler
         routes  =   new Routes();
     }
     
-    public void go(String url)
+    //Pass the routes path or url
+    //Path must be valid for redirection
+    //Params are stripped if url
+    public void go(String route)
     {
-        Path path           =   routes.getPath(url);
-        String pathName     =   path.getName();
-        String urlPattern   =   path.getLocation();
+        try
+        {
+            //Path must be valid and created in Routes.initRoutes()
+            Path path           =   routes.getPath(route);
+            if(path == null) throw new NoSuchMethodException();
+            
+            String pathName     =   path.getName();
+            String urlPattern   =   path.getLocation();
+
+            //If a route name is passed and has params
+            //call go(String, String[]) 
+            String[] params     =   (Router.isPathName(route))? new String[] {} : getParamsFromUrl(route, urlPattern);
+            go(pathName, params);
+        }
         
-        String[] params     =   getParamsFromUrl(url, urlPattern);
-        go(pathName, params);
+        catch(NoSuchMethodException e)
+        {
+            System.out.println("Path was not found");
+        }
     }
     
+    //Calls a controllers method with params
+    //The number of params must match the routes 
+    //controller method number of params
     public void go(String routeName, String[] params)
     {
         Path foundPath  =   routes.getPath(routeName);   
         try
         {
             if(foundPath == null) throw new NoSuchMethodException();
-            else
-            {
-                buildCall(foundPath, params);
-            }
+            else           
+                call(foundPath, params);
         }
         
         catch(ClassNotFoundException | NoSuchMethodException | IllegalAccessException | InvocationTargetException | InstantiationException e)
@@ -43,7 +78,10 @@ public class RouteHandler
         }
     }
     
-    public static void buildCall(Path path, String[] params) 
+    //Creates and calls the routes controller method
+    //Controller and method of querying route must exist
+    //Further redirection must be handled by the called controller
+    public void call(Path path, String[] params) 
     throws ClassNotFoundException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException
     {
         String controllerName    =   MessageFormat.format("{0}.{1}", CONTROLLER_PACKAGE, path.getController());
@@ -54,9 +92,13 @@ public class RouteHandler
         method.invoke(controller.newInstance(), (Object[]) params);
     }
     
+    //Fetches params from a routes url
+    //Runs comparisons on the routes url pattern against the url to 
+    //extract params and returns them
+    //- url:  the url without placeholders
+    //- urlPattern: the Routes url with placeholders
     public static String[] getParamsFromUrl(String url, String urlPattern)
     {
-        
         String[] patternMatches =   urlPattern.split("/");
         String[] urlMatches     =   url.split("/");
         
@@ -68,7 +110,7 @@ public class RouteHandler
             String patternParam =   patternMatches[matchIndex];
             String urlParam     =   urlMatches[matchIndex];
             
-            
+            //Check for and eliminate param declorations in url
             if(!patternParam.equalsIgnoreCase(urlParam))
             {
                 String[] assigns    =   urlParam.split("=");
@@ -79,12 +121,5 @@ public class RouteHandler
         }
             
         return params;
-    }
-    
-    public static void main(String[] args)
-    {
-        Path path   =   new Path("home", "BaseController", "getHome", "/");
-        RouteHandler handler    =   new RouteHandler();
-        handler.go("home");
     }
 }
