@@ -3,6 +3,8 @@ package engine.core;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 public abstract class Router
@@ -32,6 +34,19 @@ public abstract class Router
         
         namedPaths.put(routeName, path);
         urlPaths.put(location, path);
+    }
+    
+    public boolean isPathName(String name)
+    {
+        Pattern pattern =   Pattern.compile("[a-z]+", Pattern.CASE_INSENSITIVE);
+        Matcher match   =   pattern.matcher(name);
+        return match.find();
+    }
+    
+    public Path getPath(String name)
+    {
+        if(isPathName(name)) return namedPaths.get(name);
+        else return urlPaths.get(name);
     }
     
     public Map<String, Path> getNamedPaths()
