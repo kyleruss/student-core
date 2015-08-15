@@ -36,7 +36,7 @@ public abstract class Router
         urlPaths.put(location, path);
     }
     
-    public boolean isPathName(String name)
+    public static boolean isPathName(String name)
     {
         Pattern pattern =   Pattern.compile("[a-z]+", Pattern.CASE_INSENSITIVE);
         Matcher match   =   pattern.matcher(name);

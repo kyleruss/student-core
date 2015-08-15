@@ -2,14 +2,18 @@
 package engine.core;
 
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.lang.reflect.InvocationTargetException;
+import java.text.MessageFormat;
 
 public class RouteHandler 
 {
-    private Routes routes;
+    private static final String CONTROLLER_PACKAGE  =   "engine.Controllers";
+    private final Routes routes;
+    
+    public RouteHandler()
+    {
+        routes  =   new Routes();
+    }
     
     public void go(String url)
     {
@@ -23,17 +27,31 @@ public class RouteHandler
     
     public void go(String routeName, String[] params)
     {
-        Path foundPath  =   routes.getPath(routeName);
+        Path foundPath  =   routes.getPath(routeName);   
+        try
+        {
+            if(foundPath == null) throw new NoSuchMethodException();
+            else
+            {
+                buildCall(foundPath, params);
+            }
+        }
         
+        catch(ClassNotFoundException | NoSuchMethodException | IllegalAccessException | InvocationTargetException | InstantiationException e)
+        {
+            System.out.println("Path not found");
+        }
     }
     
-    private Method buildCall(Path path) throws ClassNotFoundException, NoSuchMethodException
+    public static void buildCall(Path path, String[] params) 
+    throws ClassNotFoundException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException
     {
-        String controllerName    =   path.getController();
+        String controllerName    =   MessageFormat.format("{0}.{1}", CONTROLLER_PACKAGE, path.getController());
         String controllerMethod  =   path.getControllerMethod();
         
         Class<?> controller      =   Class.forName(controllerName);
-        return controller.getMethod(controllerMethod);
+        Method method            =   controller.getMethod(controllerMethod);
+        method.invoke(controller.newInstance(), (Object[]) params);
     }
     
     public static String[] getParamsFromUrl(String url, String urlPattern)
@@ -65,8 +83,8 @@ public class RouteHandler
     
     public static void main(String[] args)
     {
-        String url        =   "user/{username}/messages/{message_id}";
-        String withParams = "user/name=kyleruss/messages/message=1";
-        getParamsFromUrl(withParams, url);
+        Path path   =   new Path("home", "BaseController", "getHome", "/");
+        RouteHandler handler    =   new RouteHandler();
+        handler.go("home");
     }
 }
