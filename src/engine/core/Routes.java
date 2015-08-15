@@ -2,7 +2,7 @@
 package engine.core;
 
 
-public class Routes extends Routing 
+public class Routes extends Router 
 {
     public Routes()
     {
