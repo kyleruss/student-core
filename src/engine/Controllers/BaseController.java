@@ -6,10 +6,13 @@
 
 package engine.Controllers;
 
+import engine.Views.View;
+import engine.Views.cui.Home;
+
 public class BaseController 
 {
-    public void getHome()
+    public View getHome()
     {
-        System.out.println("success!");
+        return new Home();
     }
 }

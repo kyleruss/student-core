@@ -3,6 +3,7 @@ package engine.core;
 import engine.Views.View;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Scanner;
 
 public class Agent
 {
@@ -66,9 +67,18 @@ public class Agent
         }
     }
     
-    public void setContext(Context context)
+    public void switchContext(Context context)
     {
         this.activeContext  =   context;
+    }
+    
+    public boolean isAgentContext(String command)
+    {
+        if(command == null || command.length() == 0 || activeContext == Context.AGENT) return true;
+        
+        String[] params =   command.split(" ");
+        String trigger  =   Context.AGENT.getTrigger();
+        return (params[0].equalsIgnoreCase(trigger + ":"));
     }
     
     public void fire(String command)
@@ -76,7 +86,25 @@ public class Agent
         
     }
     
+    public void processCommand()
+    {
+        final String FINISHED   =   "exit";
+        Scanner input           =   new Scanner(System.in);
+        String command;
+        
+        while(!(command = input.nextLine()).equals(FINISHED))
+        {
+            if(isAgentContext(command))
+                fire(command);
+            
+            else if(activeView != null)
+                activeView.fire(command);
+        }
+    }
+   
+    
     public static void main(String[] args)
     {
+        Agent agent =   new Agent();
     }
 }
