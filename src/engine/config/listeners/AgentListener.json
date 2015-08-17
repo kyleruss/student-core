@@ -1,0 +1,13 @@
+{
+    "commands": 
+    {
+        "test":
+        {
+            "commandName": "test",
+            "params": ["String"],
+            "className": "engine.core.Agent",
+            "methodName": "testAgentContext"
+        }
+    }
+    
+}

@@ -14,6 +14,7 @@ public class CUITextTools
     public final static int GREEN   = 32;
     public final static int BLUE    = 34;
     public final static int YELLOW  = 33;
+    public final static int PLAIN   = 0;
     
     
     public static String drawButton(String buttonText)
@@ -29,7 +30,7 @@ public class CUITextTools
         return button;
     }
     
-    public static String drawLargeHeader(String headerText, String headerDescription, int borderColour)
+    public static String drawLargeHeader(String headerText, String headerDescription, int borderColour, int textColour)
     {
         String header;
         final int maxLength     =   25;
@@ -41,9 +42,23 @@ public class CUITextTools
         int lengthBeforeFormat       =   horizontalFrame.length();
         horizontalFrame              =   horizontalFrame.replace("* ", changeColour("* ", borderColour));
 
+        String test =   changeColour(headerText, CYAN);
+        
+        System.out.println(headerText.length());
+        System.out.println(test.length());
+        
+        String titleColoured        =   (textColour != PLAIN)? changeColour(headerText, textColour) : headerText;
+        String descColoured         =   (textColour != PLAIN)? changeColour(headerDescription, textColour) : headerDescription;
+        
+        int colorOverflowTitle          =   titleColoured.length() - headerText.length();
+        int colourOverflowDesc          =   descColoured.length() - headerDescription.length();
+        
+        String extraSpaceTitle          =   new String(new char[colorOverflowTitle]).replace("\0", " ");
+        String extraSpacesDesc          =   new String(new char[colourOverflowDesc]).replace("\0", " ");
+        
         header  =   horizontalFrame + "\n" + changeColour("*", borderColour) + spacesOuter  + changeColour("*", borderColour) + "\n";
-        header  +=  changeColour("*", borderColour) + StringUtils.center(headerText, lengthBeforeFormat - 3) + changeColour("*", borderColour) +"\n";
-        header  +=  changeColour("*", borderColour) + StringUtils.center(headerDescription, lengthBeforeFormat - 3) + changeColour("*", borderColour) + "\n";
+        header  +=  changeColour("*", borderColour) + StringUtils.center(titleColoured, lengthBeforeFormat - 3) + extraSpaceTitle +  changeColour("*", borderColour) +"\n";
+        header  +=  changeColour("*", borderColour) + StringUtils.center(descColoured, lengthBeforeFormat - 3) + extraSpacesDesc + changeColour("*", borderColour) + "\n";
         header  +=  changeColour("*", borderColour) + spacesOuter  + changeColour("*", borderColour) + "\n" + horizontalFrame;
        
         return header;
@@ -79,12 +94,5 @@ public class CUITextTools
     public static String drawTable(List<String> columnNames, int width)
     {
         return "";
-    }
-    
-    public static void main(String[] args)
-    {   
-        String s = drawLargeHeader("Helasdasdlo", "this ", CUITextTools.GREEN);
-        System.out.println(s);
-      //  System.out.println(changeColour("Hello", CUITextTools.RED));
     }
 }

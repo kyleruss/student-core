@@ -1,8 +1,8 @@
 package engine.Views;
 
-public interface View 
+import engine.core.CommandInterpreter;
+
+public interface View extends CommandInterpreter
 {
     public void display();
-    
-    public void fire(String command);
 }

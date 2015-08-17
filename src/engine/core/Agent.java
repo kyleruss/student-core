@@ -1,11 +1,12 @@
 package engine.core;
 
 import engine.Views.View;
+import engine.Views.cui.Utilities.CUITextTools;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Scanner;
 
-public class Agent
+public class Agent implements CommandInterpreter
 {
     public enum Context
     {
@@ -33,6 +34,8 @@ public class Agent
     private View activeView;
     private Context activeContext;
     private List<View> viewTree;
+    private Thread agentThread;
+    private List<Command> commands;
     
     public Agent()
     {
@@ -45,6 +48,14 @@ public class Agent
         final String startRoute   =   "home";
         setView(RouteHandler.go(startRoute));
         viewContext();
+        processCommand();
+    }
+    
+    @Override
+    public void initCommands()
+    {
+        String listenerFile     =   getCommandsFile();
+        commands                =   (List<Command>) CommandListener.loadFactory(listenerFile).getCommands();
     }
     
     public void agentContext()
@@ -81,25 +92,68 @@ public class Agent
         return (params[0].equalsIgnoreCase(trigger + ":"));
     }
     
-    public void fire(String command)
+    public void testAgentContext(String message)
+    {
+        System.out.println("AGENT: Message " + message);
+    }
+    
+    @Override
+    public void unrecognizedCommand(String command)
+    {
+        int errorColour =   CUITextTools.RED;
+        String message  =   "Command: " + command  + " is not recognized!";
+        message         =   CUITextTools.changeColour(message, errorColour);
+        
+        System.out.println(message);
+    }
+    
+    @Override
+    public String getCommandsFile()
+    {
+        return "/engine/config/listeners/AgentListener.json";
+    }
+    
+    @Override
+    public void showCommands()
     {
         
     }
     
+    @Override
+    public void fire(String command)
+    {
+        String[] params     =  command.split(" ");
+        String commandCall  =   params[1];   
+        switch(commandCall)
+        {
+            case "test": testAgentContext("D");
+                break;
+            default: unrecognizedCommand(commandCall);
+        }
+    }
+    
     public void processCommand()
     {
-        final String FINISHED   =   "exit";
-        Scanner input           =   new Scanner(System.in);
-        String command;
-        
-        while(!(command = input.nextLine()).equals(FINISHED))
+        agentThread  =   new Thread(() ->
         {
-            if(isAgentContext(command))
-                fire(command);
+            final String FINISHED   =   "exit";
+            Scanner input           =   new Scanner(System.in);
+            String command;
             
-            else if(activeView != null)
-                activeView.fire(command);
-        }
+            while(!(command = input.nextLine()).equals(FINISHED))
+            {
+                if(isAgentContext(command))
+                {
+                    String commandStr   =   command.replace("agent: ", "");
+                    fire(command);
+                }
+                
+                else if(activeView != null)
+                    activeView.fire(command);     
+            }
+        });
+        
+        agentThread.start();
     }
    
     
