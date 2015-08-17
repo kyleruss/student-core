@@ -9,14 +9,14 @@ import java.text.MessageFormat;
 public class Command 
 {
     private String commandName;
-    private String[] params;
+    private String[] paramTypes;
     private String className;
     private String methodName;
     
-    public Command(String commandName, String[] params, String className, String methodName)
+    public Command(String commandName, String[] paramTypes, String className, String methodName)
     {
         this.commandName    =   commandName;
-        this.params         =   params;
+        this.paramTypes         =   paramTypes;
         this.className      =   className;
         this.methodName     =   methodName;
     }
@@ -26,9 +26,9 @@ public class Command
         return commandName;
     }
     
-    public String[] getParams()
+    public String[] getParamTypes()
     {
-        return params;
+        return paramTypes;
     }
     
     public String getClassName()
@@ -46,9 +46,9 @@ public class Command
         this.commandName    =   commandName;
     }
     
-    public void setParams(String[] params)
+    public void setParamTypes(String[] paramTypes)
     {
-        this.params =   params;
+        this.paramTypes =   paramTypes;
     }
     
     public void setClassName(String className)
@@ -65,14 +65,16 @@ public class Command
     {
         try
         {
+            if(params.length > paramTypes.length || params.length < paramTypes.length) throw new NoSuchMethodException();
+            
             Class<?> viewClass  =   Class.forName(className);
-            Method listenMethod =   viewClass.getMethod(methodName, Class.forName(params[0]));
+            Method listenMethod =   viewClass.getMethod(methodName, Class.forName(paramTypes[0]));
             return listenMethod.invoke(viewClass.newInstance(), (Object[]) params);
         }
         
         catch(ClassNotFoundException | NoSuchMethodException | IllegalAccessException | InvocationTargetException | InstantiationException e)
         {
-            System.out.println("error: " + e.getMessage());
+            System.out.println("Listener method was not found, or the paramaters do not match: " + e.getMessage());
             return null;
         }
     }
@@ -81,7 +83,7 @@ public class Command
     @Override
     public String toString()
     {
-        String output   =   MessageFormat.format("Command: {0}\nCommand class: {1}\nCommand method: {2}\nMethod param count: {3}\n", commandName, className, methodName, params[0]);
+        String output   =   MessageFormat.format("Command: {0}\nCommand class: {1}\nCommand method: {2}\nMethod param count: {3}\n", commandName, className, methodName, paramTypes[0]);
         return output;
     }
 }

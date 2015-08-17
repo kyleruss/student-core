@@ -41,11 +41,7 @@ public class CUITextTools
         String spacesOuter           =   new String(new char[horizontalFrame.length() - 3]).replace("\0", " ");
         int lengthBeforeFormat       =   horizontalFrame.length();
         horizontalFrame              =   horizontalFrame.replace("* ", changeColour("* ", borderColour));
-
-        String test =   changeColour(headerText, CYAN);
         
-        System.out.println(headerText.length());
-        System.out.println(test.length());
         
         String titleColoured        =   (textColour != PLAIN)? changeColour(headerText, textColour) : headerText;
         String descColoured         =   (textColour != PLAIN)? changeColour(headerDescription, textColour) : headerDescription;

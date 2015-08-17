@@ -72,7 +72,9 @@ public class RouteHandler
         
         catch(ClassNotFoundException | NoSuchMethodException | IllegalAccessException | InvocationTargetException | InstantiationException e)
         {
-            System.out.println("Path not found");
+            e.printStackTrace();
+            System.out.println("Path not found: " + e.getMessage());
+            System.out.println(foundPath);
             return null;
         }
     }

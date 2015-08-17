@@ -65,4 +65,10 @@ public class Path
     {
         return location;
     }
+    
+    @Override
+    public String toString()
+    {
+        return "Name: " + name + " controller: " + controller + " method: " + controllerMethod + " location: " + location;
+    }
 }

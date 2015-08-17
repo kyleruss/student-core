@@ -6,7 +6,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Scanner;
 
-public class Agent implements CommandInterpreter
+public class Agent extends CommandInterpreter
 {
     public enum Context
     {
@@ -41,6 +41,7 @@ public class Agent implements CommandInterpreter
     {
         viewTree        =   new LinkedList<>();
         begin();
+        initCommands();
     }
     
     private void begin()
@@ -48,15 +49,9 @@ public class Agent implements CommandInterpreter
         final String startRoute   =   "home";
         setView(RouteHandler.go(startRoute));
         viewContext();
-        processCommand();
+        listen();
     }
     
-    @Override
-    public void initCommands()
-    {
-        String listenerFile     =   getCommandsFile();
-        commands                =   (List<Command>) CommandListener.loadFactory(listenerFile).getCommands();
-    }
     
     public void agentContext()
     {
@@ -97,15 +92,6 @@ public class Agent implements CommandInterpreter
         System.out.println("AGENT: Message " + message);
     }
     
-    @Override
-    public void unrecognizedCommand(String command)
-    {
-        int errorColour =   CUITextTools.RED;
-        String message  =   "Command: " + command  + " is not recognized!";
-        message         =   CUITextTools.changeColour(message, errorColour);
-        
-        System.out.println(message);
-    }
     
     @Override
     public String getCommandsFile()
@@ -113,13 +99,8 @@ public class Agent implements CommandInterpreter
         return "/engine/config/listeners/AgentListener.json";
     }
     
-    @Override
-    public void showCommands()
-    {
-        
-    }
     
-    @Override
+  /*  @Override
     public void fire(String command)
     {
         String[] params     =  command.split(" ");
@@ -130,9 +111,9 @@ public class Agent implements CommandInterpreter
                 break;
             default: unrecognizedCommand(commandCall);
         }
-    }
+    } */
     
-    public void processCommand()
+    public void listen()
     {
         agentThread  =   new Thread(() ->
         {
@@ -145,7 +126,7 @@ public class Agent implements CommandInterpreter
                 if(isAgentContext(command))
                 {
                     String commandStr   =   command.replace("agent: ", "");
-                    fire(command);
+                    fire(commandStr);
                 }
                 
                 else if(activeView != null)

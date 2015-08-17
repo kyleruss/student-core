@@ -6,13 +6,12 @@ import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.util.Collection;
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-public class CommandListener 
+public class CommandListener
 {
     public Map<String, Command> commands;
     
@@ -21,9 +20,14 @@ public class CommandListener
         commands    =   new HashMap<>();
     }
     
-    public Collection<Command> getCommands()
+    public Map<String, Command> getCommands()
     {
-        return commands.values();
+        return commands;
+    }
+    
+    public List<Command> getCommandList()
+    {
+        return new ArrayList<>(commands.values());
     }
     
     public CommandListener load(String listenerFile)
@@ -58,9 +62,7 @@ public class CommandListener
     public static void main(String[] args)
     {
         CommandListener listener    =   CommandListener.loadFactory("/engine/config/listeners/AgentListener.json");
-        Iterator it =   listener.getCommands().iterator();
         Command c = listener.get("test");
-        System.out.println(c);
         c.call(new String[] {"HELLO!"});
     }
 }
