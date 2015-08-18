@@ -39,9 +39,9 @@ public class Agent extends CommandInterpreter
     
     public Agent()
     {
+        super();
         viewTree        =   new LinkedList<>();
         begin();
-        initCommands();
     }
     
     private void begin()
@@ -99,22 +99,9 @@ public class Agent extends CommandInterpreter
         return "/engine/config/listeners/AgentListener.json";
     }
     
-    
-  /*  @Override
-    public void fire(String command)
-    {
-        String[] params     =  command.split(" ");
-        String commandCall  =   params[1];   
-        switch(commandCall)
-        {
-            case "test": testAgentContext("D");
-                break;
-            default: unrecognizedCommand(commandCall);
-        }
-    } */
-    
     public void listen()
     {
+        Agent agentInstance =   this;
         agentThread  =   new Thread(() ->
         {
             final String FINISHED   =   "exit";
@@ -126,11 +113,11 @@ public class Agent extends CommandInterpreter
                 if(isAgentContext(command))
                 {
                     String commandStr   =   command.replace("agent: ", "");
-                    fire(commandStr);
+                    fire(commandStr, agentInstance);
                 }
                 
                 else if(activeView != null)
-                    activeView.fire(command);     
+                    activeView.fire(command, activeView);     
             }
         });
         

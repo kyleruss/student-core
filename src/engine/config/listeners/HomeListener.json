@@ -1,3 +1,13 @@
 {
+    "commands": 
+    {
+        "viewTest":
+        {
+            "commandName": "viewTest",
+            "paramTypes": ["java.lang.String"],
+            "className": "engine.Views.cui.Home",
+            "methodName": "viewTest"
+        }
+    }
     
 }

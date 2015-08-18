@@ -61,7 +61,7 @@ public class Command
         this.methodName =   methodName;
     }
     
-    public Object call(String[] params)
+    public Object call(String[] params, Object instance)
     {
         try
         {
@@ -69,10 +69,10 @@ public class Command
             
             Class<?> viewClass  =   Class.forName(className);
             Method listenMethod =   viewClass.getMethod(methodName, Class.forName(paramTypes[0]));
-            return listenMethod.invoke(viewClass.newInstance(), (Object[]) params);
+            return listenMethod.invoke(instance, (Object[]) params);
         }
         
-        catch(ClassNotFoundException | NoSuchMethodException | IllegalAccessException | InvocationTargetException | InstantiationException e)
+        catch(ClassNotFoundException | NoSuchMethodException | IllegalAccessException | InvocationTargetException e)
         {
             System.out.println("Listener method was not found, or the paramaters do not match: " + e.getMessage());
             return null;

@@ -11,8 +11,13 @@ public abstract class CommandInterpreter implements CommandExecute
 {
     protected Map<String, Command>commands;
     
+    public CommandInterpreter()
+    {
+        initCommands();
+    }
+    
     @Override
-    public void fire(String commandRaw)
+    public void fire(String commandRaw, Object instance)
     {
         List<String> paramList  =   new ArrayList<>(Arrays.asList(commandRaw.split("\\s")));
         String userCommand      =   paramList.get(0);
@@ -24,7 +29,7 @@ public abstract class CommandInterpreter implements CommandExecute
         {
             paramList.remove(0);
             String[] params =   paramList.toArray(new String[paramList.size()]);
-            command.call(params);
+            command.call(params, instance);
         }
     }
     
@@ -45,7 +50,7 @@ public abstract class CommandInterpreter implements CommandExecute
     protected abstract String getCommandsFile();
     
     
-    public void initCommands()
+    protected void initCommands()
     {
         String listenerFile     =   getCommandsFile();
         commands                =   CommandListener.loadFactory(listenerFile).getCommands();
