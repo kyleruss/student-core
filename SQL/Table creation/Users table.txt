@@ -1,0 +1,17 @@
+CREATE TABLE users
+(
+    username varchar(16) NOT NULL PRIMARY KEY,
+    password varchar(32) NOT NULL,
+    firstname varchar(35) NOT NULL,
+    lastname varchar(35) NOT NULL,
+    gender  SMALLINT DEFAULT 1,
+    birthdate DATE,
+    contact_ph varchar(20),
+    contact_email varchar(45),
+    created_date DATE DEFAULT CURRENT DATE,
+    ethnicity varchar(255),
+    role_id INTEGER,
+    medical_id INTEGER,
+    FOREIGN KEY(role_id) REFERENCES role(id) ON DELETE CASCADE,
+    FOREIGN KEY(medical_id) REFERENCES medical(id) ON DELETE SET NULL
+);

@@ -1,0 +1,9 @@
+CREATE TABLE emergency_contact
+(
+    id INTEGER NOT NULL PRIMARY KEY GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),
+    firstname varchar(25),
+    lastname varchar(30),
+    contact_ph varchar(15),
+    contact_email varchar(40),
+    relationship varchar(80)
+);

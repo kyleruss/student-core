@@ -1,0 +1,7 @@
+CREATE TABLE role
+(
+    id integer NOT NULL PRIMARY KEY GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),
+    name varchar(25),
+    description varchar(50),
+    permission_level integer
+);
