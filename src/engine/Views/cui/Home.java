@@ -10,9 +10,11 @@ public class Home extends CommandInterpreter implements View
     @Override
     public void display() 
     {
-       String header    =   "Welcome to Student core!";
-       String desc      =   "Explore a great DMS";
-       System.out.println(CUITextTools.drawLargeHeader(header, desc, CUITextTools.GREEN, CUITextTools.CYAN));
+       String header        =   "Welcome to Student core!";
+       String desc          =   "Explore a great DMS";
+       String headerMain    =   CUITextTools.drawLargeHeader(header, desc, CUITextTools.GREEN, CUITextTools.CYAN);
+       String cmdSubheader  =   CUITextTools.drawSubHeader("Commands", CUITextTools.PLAIN, CUITextTools.GREEN, "=");
+       System.out.println(headerMain + "\n\n" + cmdSubheader + "\n" + showCommands());
     }
     
     public void viewTest(String message)

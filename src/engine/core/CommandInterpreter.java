@@ -4,6 +4,7 @@ package engine.core;
 import engine.Views.cui.Utilities.CUITextTools;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -42,9 +43,29 @@ public abstract class CommandInterpreter implements CommandExecute
         System.out.println(message);
     }
     
-    public void showCommands()
+    public String showCommands()
     {
-        
+        Iterator<Command> commIter  =   commands.values().iterator();
+        int colCount                =   0;
+        final int MAX_COLS          =   3;
+        String commandText          =   "\n";
+        while(commIter.hasNext())
+        {
+            Command command         =   commIter.next();
+            String commandName      =   CUITextTools.changeColour(command.getCommandName(), CUITextTools.MAGENTA);
+            String commandDesc      =   CUITextTools.changeColour(command.getCommandDescription(), CUITextTools.PLAIN);
+            String commandDisp      =   CUITextTools.keyText(commandName, commandDesc);
+            
+            commandText += commandDisp + "\t";
+            colCount++;
+            
+            if(colCount == MAX_COLS)
+            {
+                commandText += "\n";
+                colCount = 0;
+            }
+        }
+        return commandText;
     }
     
     protected abstract String getCommandsFile();

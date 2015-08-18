@@ -15,6 +15,7 @@ public class CUITextTools
     public final static int BLUE    = 34;
     public final static int YELLOW  = 33;
     public final static int PLAIN   = 0;
+    public final static int MAGENTA = 35;
     
     
     public static String drawButton(String buttonText)
@@ -60,6 +61,21 @@ public class CUITextTools
         return header;
     }
     
+    public static String drawSubHeader(String headerText, int borderColour, int textColour, String pattern)
+    {
+        final int padding           =   5;
+        final int maxLength         =   12;
+        final int horizontalLength  =   Math.max(headerText.length(), maxLength) + (padding * 2);
+       
+        String headerColoured           =   (textColour != PLAIN)? changeColour(headerText, textColour) : headerText;
+        int colorOverflowTitle          =   headerColoured.length() - headerText.length();
+        String extraSpaceTitle          =   new String(new char[colorOverflowTitle]).replace("\0", " ");
+        
+        String horizontalFrame  =   new String(new char[horizontalLength]).replace("\0", pattern + " ");
+        String header           =   MessageFormat.format("{0}\n{1}\n{2}", horizontalFrame, StringUtils.center(headerColoured, horizontalFrame.length() + extraSpaceTitle.length()), horizontalFrame);
+        return header;
+    }
+    
     public static String underline(String text)
     {
         String underlinedText;
@@ -70,7 +86,7 @@ public class CUITextTools
         return underlinedText;
     }
     
-    public static String keyText(String text, String key)
+    public static String keyText(String key, String text)
     {
         String keyText  =   MessageFormat.format("<{0}> {1}", key, text);
         return keyText;
@@ -90,5 +106,10 @@ public class CUITextTools
     public static String drawTable(List<String> columnNames, int width)
     {
         return "";
+    }
+    
+    public static void main(String[] args)
+    {
+        System.out.println(drawSubHeader("Commands", PLAIN, GREEN, "="));
     }
 }

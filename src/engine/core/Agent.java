@@ -1,7 +1,6 @@
 package engine.core;
 
 import engine.Views.View;
-import engine.Views.cui.Utilities.CUITextTools;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Scanner;
@@ -35,11 +34,9 @@ public class Agent extends CommandInterpreter
     private Context activeContext;
     private List<View> viewTree;
     private Thread agentThread;
-    private List<Command> commands;
     
     public Agent()
     {
-        super();
         viewTree        =   new LinkedList<>();
         begin();
     }

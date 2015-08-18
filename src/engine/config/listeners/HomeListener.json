@@ -6,8 +6,42 @@
             "commandName": "viewTest",
             "paramTypes": ["java.lang.String"],
             "className": "engine.Views.cui.Home",
-            "methodName": "viewTest"
+            "methodName": "viewTest",
+            "commandDescription": "test view method"
+        },
+        "viewTest1":
+        {
+            "commandName": "viewTest1",
+            "paramTypes": ["java.lang.String"],
+            "className": "engine.Views.cui.Home",
+            "methodName": "viewTest",
+            "commandDescription": "test view method"
+        },
+                "viewTest2":
+        {
+            "commandName": "viewTest2",
+            "paramTypes": ["java.lang.String"],
+            "className": "engine.Views.cui.Home",
+            "methodName": "viewTest",
+            "commandDescription": "test view method"
+        },
+                "viewTest3":
+        {
+            "commandName": "viewTest3",
+            "paramTypes": ["java.lang.String"],
+            "className": "engine.Views.cui.Home",
+            "methodName": "viewTest",
+            "commandDescription": "test view method"
+        },
+        "viewTest4":
+        {
+            "commandName": "viewTest4",
+            "paramTypes": ["java.lang.String"],
+            "className": "engine.Views.cui.Home",
+            "methodName": "viewTest",
+            "commandDescription": "test view method"
         }
+        
     }
     
 }

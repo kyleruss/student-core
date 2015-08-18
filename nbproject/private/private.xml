@@ -6,12 +6,12 @@
             <file>file:/root/workspace/PDC/pdc-project/src/engine/Views/cui/Home.java</file>
             <file>file:/root/workspace/PDC/pdc-project/src/engine/core/Agent.java</file>
             <file>file:/root/workspace/PDC/pdc-project/src/engine/core/CommandListener.java</file>
-            <file>file:/root/workspace/PDC/pdc-project/src/engine/core/Path.java</file>
             <file>file:/root/workspace/PDC/pdc-project/src/engine/core/CommandInterpreter.java</file>
             <file>file:/root/workspace/PDC/pdc-project/src/engine/core/CommandExecute.java</file>
             <file>file:/root/workspace/PDC/pdc-project/src/engine/core/Command.java</file>
-            <file>file:/root/workspace/PDC/pdc-project/src/engine/core/RouteHandler.java</file>
+            <file>file:/root/workspace/PDC/pdc-project/src/engine/config/listeners/HomeListener.json</file>
             <file>file:/root/workspace/PDC/pdc-project/src/engine/config/listeners/AgentListener.json</file>
+            <file>file:/root/workspace/PDC/pdc-project/src/engine/Views/cui/Utilities/CUITextTools.java</file>
         </group>
     </open-files>
 </project-private>

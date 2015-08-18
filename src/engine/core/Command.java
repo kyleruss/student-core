@@ -12,18 +12,25 @@ public class Command
     private String[] paramTypes;
     private String className;
     private String methodName;
+    private String commandDescription;
     
-    public Command(String commandName, String[] paramTypes, String className, String methodName)
+    public Command(String commandName, String[] paramTypes, String className, String methodName, String commandDescription)
     {
-        this.commandName    =   commandName;
+        this.commandName        =   commandName;
         this.paramTypes         =   paramTypes;
-        this.className      =   className;
-        this.methodName     =   methodName;
+        this.className          =   className;
+        this.methodName         =   methodName;
+        this.commandDescription =    commandDescription;
     }
     
     public String getCommandName()
     {
         return commandName;
+    }
+    
+    public String getCommandDescription()
+    {
+        return commandDescription;
     }
     
     public String[] getParamTypes()
@@ -44,6 +51,11 @@ public class Command
     public void setCommandName(String commandName)
     {
         this.commandName    =   commandName;
+    }
+    
+    public void setCommandDescription(String commandDescription)
+    {
+        this.commandDescription =   commandDescription;
     }
     
     public void setParamTypes(String[] paramTypes)
