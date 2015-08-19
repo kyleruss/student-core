@@ -137,7 +137,7 @@ public abstract class Model
         Iterator<Column> valIter    =   data.values().iterator();
         
         while(valIter.hasNext())
-            columnValues += valIter.next() + ((valIter.hasNext())? ", " : "");
+            columnValues += valIter.next().getColumnValue() + ((valIter.hasNext())? ", " : "");
         return columnValues;
     }
     
@@ -195,13 +195,12 @@ public abstract class Model
         {
             Map.Entry<String, Column> column    =   setData.next();
             
-            boolean isLiteral      =   column.getValue().isLiteral();
             String colName         =   column.getKey();
-            String colValue        =   (isLiteral)? (String) column.getValue().getColumnValue() : column.getValue().getColumnValue().toString();
+            String colValue        =   column.getValue().getColumnValue().toString();
             
             if(!colName.equalsIgnoreCase(primaryKey))
                 updateStr += MessageFormat.format("{0} = {1}{2} ", 
-                             colName, (isLiteral)? makeLiteral(colValue) : colValue, (setData.hasNext())? "," : "");
+                             colName, colValue, (setData.hasNext())? "," : "");
         }
         
         return updateStr;
@@ -218,6 +217,7 @@ public abstract class Model
         String columnValues     =   getDataValues();
         String insertQuery      =   MessageFormat.format("INSERT INTO {0} ({1}) VALUES ({2})", table, columnNames, columnValues);
         
+        System.out.println(insertQuery);
         try(DataConnector conn  =   new DataConnector())
         {
             conn.setQueryMutator();
@@ -237,7 +237,7 @@ public abstract class Model
         String changes      =   buildUpdate();
         Column column       =   data.get(primaryKey.toUpperCase());
         String id           =   column.getColumnValue().toString();
-        id                  =   (column.isLiteral())? makeLiteral(id) : id;
+       // id                  =   (column.isLiteral())? makeLiteral(id) : id;
         String updateQuery  =   MessageFormat.format("UPDATE {0} {1} WHERE {2} = {3}", table, changes, primaryKey, id);
         System.out.println(updateQuery);
         

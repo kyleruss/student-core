@@ -1,6 +1,8 @@
 
 package engine.core;
 
+import engine.models.Model;
+
 public class Column
 {
     private String columnName;
@@ -44,7 +46,7 @@ public class Column
     
     public Object getColumnValue()
     {
-        return columnValue;
+        return (isLiteral)? Model.makeLiteral(columnValue.toString()) : columnValue;
     }
     
     public boolean isLiteral()

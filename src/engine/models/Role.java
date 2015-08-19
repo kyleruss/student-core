@@ -23,11 +23,10 @@ public class Role extends Model
     
     public static void main(String[] args)
     {
-        Role role   =   new Role("" + 1);
-        System.out.println(role.get("ID").isLiteral());
-        role.set("name", "Test");
-        if(role.update());
-            System.out.println("updated!"); 
+        Role role   =   new Role("3");
+        role.set("name", "bla");
+        if(role.update()) System.out.println("updated!");
+
     }
     
 }
