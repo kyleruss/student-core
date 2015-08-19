@@ -4,7 +4,7 @@
 //  PDC Project
 //####################################
 
-package engine.Models;
+package engine.models;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -102,6 +102,11 @@ public abstract class Model
         data.put(table, value);
     }
     
+    public Object get(String colName)
+    {
+        return data.get(colName);
+    }
+    
     //Returns the current columns in models data
     //Don't confuse with model's column names (meta)
     //This is the active Model instance data column names
@@ -158,7 +163,7 @@ public abstract class Model
         
         catch(SQLException e)
         {
-            System.out.println("[SQL EXCEPTION] Failed to select first record - " + e.getMessage());
+            System.out.println("[SQL EXCEPTION] Failed to find this model - " + e.getMessage());
             return null;
         }
     }
