@@ -22,7 +22,7 @@ import java.text.MessageFormat;
 public class RouteHandler 
 {
     //The frameworks controller package
-    private static final String CONTROLLER_PACKAGE  =   "engine.Controllers";
+    private static final String CONTROLLER_PACKAGE  =   "engine.controllers";
     
     //Routes that the handler can access
     //Routes need to be initialized otherwise 

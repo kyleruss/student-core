@@ -7,6 +7,25 @@
             "paramTypes": ["java.lang.String"],
             "className": "engine.core.Agent",
             "methodName": "testAgentContext"
+        },
+        
+        
+        "login":
+        {
+            "commandName": "login",
+            "paramTypes": [],
+            "className": "engine.core.Agent",
+            "methodName": "loginAttempt",
+            "commandDescription": "Login with account"
+        },
+        
+        "register":
+        {
+            "commandName": "register",
+            "paramTypes": [],
+            "className": "engine.core.Agent",
+            "methodName": "registerAttempt",
+            "commandDescription": "Create an account"
         }
     }
     

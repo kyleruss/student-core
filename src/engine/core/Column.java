@@ -49,6 +49,11 @@ public class Column
         return (isLiteral)? Model.makeLiteral(columnValue.toString()) : columnValue;
     }
     
+    public Object getNonLiteralValue()
+    {
+        return columnValue;
+    }
+    
     public boolean isLiteral()
     {
         return isLiteral;

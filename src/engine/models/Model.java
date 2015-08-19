@@ -62,7 +62,7 @@ public abstract class Model
     //Create model that maps to an existing row
     //Pass the row primary key value
     //Row data fills the model's data
-    public Model(String id)
+    public Model(Object id)
     {
         this();
         fetchExisting(id);
@@ -145,10 +145,12 @@ public abstract class Model
     //Finds an existing record in the mapping table
     //If a record is found, adds entries to models data
     //Is called if init by ID (find)
-    public String fetchExisting(String id)
+    public String fetchExisting(Object id)
     {
-        QueryBuilder qBuilder   =   builder().where(primaryKey, "=", id);
+        String idLiteral        =   (id instanceof String)? makeLiteral(id.toString()) : id.toString();
+        QueryBuilder qBuilder   =   builder().where(primaryKey, "=", idLiteral);
         String query            =    qBuilder.build();
+        System.out.println(query);
         
         try(DataConnector conn =   new DataConnector())
         {
@@ -167,7 +169,9 @@ public abstract class Model
                 {
                     String column   =   columns.get(columnIndex);
                     String typeName =   meta.getColumnClassName(columnIndex + 1);
-                    set(column, JsonParser.castElementToObj(entry.get(column), typeName));
+                    
+                    if(entry.get(column) == null || entry.get(column).getAsString().equals("null")) continue;
+                    else set(column, JsonParser.castElementToObj(entry.get(column), typeName));
                 }
 
             }

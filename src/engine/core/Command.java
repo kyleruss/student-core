@@ -80,8 +80,20 @@ public class Command
             if(params.length > paramTypes.length || params.length < paramTypes.length) throw new NoSuchMethodException();
             
             Class<?> viewClass  =   Class.forName(className);
-            Method listenMethod =   viewClass.getMethod(methodName, Class.forName(paramTypes[0]));
-            return listenMethod.invoke(instance, (Object[]) params);
+            Method listenMethod;
+            
+            if(params.length > 0 && paramTypes.length > 0)
+            {
+                listenMethod =   viewClass.getMethod(methodName, Class.forName(paramTypes[0]));
+                return listenMethod.invoke(instance, (Object[]) params);
+            }
+            
+            else
+            {
+                listenMethod    =   viewClass.getDeclaredMethod(methodName, new Class[]{});
+               // listenMethod.getReturnType()
+                return listenMethod.invoke(instance);
+            }
         }
         
         catch(ClassNotFoundException | NoSuchMethodException | IllegalAccessException | InvocationTargetException e)

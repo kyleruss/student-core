@@ -39,4 +39,11 @@ public class Crypto
         String prefix  =   (String) AuthConfig.config().get(AuthConfig.SALT_PREFIX_KEY);
         return prefix + postfix;
     }
+    
+    public static void main(String[] args)
+    {
+        String salt =   salt("kyleruss");
+        String hash =   makeHash(salt, "kyleruss123");
+        System.out.println(hash);
+    }
 }

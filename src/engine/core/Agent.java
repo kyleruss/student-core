@@ -43,9 +43,9 @@ public class Agent extends CommandInterpreter
     
     private void begin()
     {
-        final String startRoute   =   "home";
+        final String startRoute   =   "getLogin";
         setView(RouteHandler.go(startRoute));
-        viewContext();
+        agentContext();
         listen();
     }
     
@@ -68,6 +68,16 @@ public class Agent extends CommandInterpreter
             this.activeView =   view;
             view.display(); 
         }
+    }
+    
+    public void loginAttempt()
+    {
+        System.out.println("Login attempt!");
+    }
+    
+    public void registerAttempt()
+    {
+        System.out.println("Register attempt");
     }
     
     public void switchContext(Context context)

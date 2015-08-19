@@ -28,6 +28,7 @@ public class Routes extends Router
     @Override
     protected void initRoutes()
     {
-        add("home", "BaseController", "getHome", "/");
+        add("getLogin", "UserController", "getLogin", "/");
+        add("home", "BaseController", "getHome", "/home");
     }
 }

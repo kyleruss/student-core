@@ -101,6 +101,7 @@ public class DataConnector extends Thread implements AutoCloseable
 
         catch(SQLException e)
         {
+            e.printStackTrace();
 
             System.out.println(e.getMessage());
             System.out.println("Failed to connect to database");
@@ -158,13 +159,22 @@ public class DataConnector extends Thread implements AutoCloseable
     }
     
     //Creates a statement from connection
-    public PreparedStatement createStatement(String query) throws SQLException
+    public PreparedStatement createStatement(String query)
     {
-        //Logs the attempted query
-        //Logging config is checked in log()
-        MainLogger.log(query, MainLogger.DATA_LOGGER);
+        try
+        {
+            //Logs the attempted query
+            //Logging config is checked in log()
+            MainLogger.log(query, MainLogger.DATA_LOGGER);
+
+            return conn.prepareStatement(query);
+        }
         
-        return conn.prepareStatement(query);
+        catch(SQLException e)
+        {
+            e.printStackTrace();
+            return null;
+        }
     }
     
     //Executes a batch of queries

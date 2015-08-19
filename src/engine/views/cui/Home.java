@@ -15,6 +15,7 @@ public class Home extends CommandInterpreter implements View
        String headerMain    =   CUITextTools.drawLargeHeader(header, desc, CUITextTools.GREEN, CUITextTools.CYAN);
        String cmdSubheader  =   CUITextTools.drawSubHeader("Commands", CUITextTools.PLAIN, CUITextTools.GREEN, "=");
        System.out.println(headerMain + "\n\n" + cmdSubheader + "\n" + showCommands());
+       
     }
     
     public void viewTest(String message)
@@ -28,4 +29,10 @@ public class Home extends CommandInterpreter implements View
     {
         return "/engine/config/listeners/HomeListener.json";
     } 
+    
+    @Override
+    public int getAccessLevel()
+    {
+        return 0;
+    }
 }

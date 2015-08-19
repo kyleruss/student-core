@@ -20,13 +20,4 @@ public class Role extends Model
         table       =   "role";
         primaryKey  =   "id";   
     }
-    
-    public static void main(String[] args)
-    {
-        Role role   =   new Role("3");
-        role.set("name", "bla");
-        if(role.update()) System.out.println("updated!");
-
-    }
-    
 }
