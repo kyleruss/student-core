@@ -3,6 +3,12 @@ package engine.core.authentication;
 import engine.config.AuthConfig;
 import engine.core.security.Input;
 import engine.models.User;
+import java.io.UnsupportedEncodingException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.Base64;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 public class Auth 
@@ -43,5 +49,31 @@ public class Auth
             System.out.println("Login failed, please try again\nError: " + e.getMessage());
             return false;
         }
+    }
+    
+    public static String hash(String message)
+    {
+        try 
+        {
+            String hash;
+            MessageDigest enc   =   MessageDigest.getInstance("SHA-1");
+            enc.update(message.getBytes("UTF-8"));
+            byte[] digested     =   enc.digest();
+     
+            hash    = Base64.getEncoder().encodeToString(digested);
+            return hash;
+            //hash                =   digested.toString(16);
+        } 
+        
+        catch (NoSuchAlgorithmException | UnsupportedEncodingException ex)
+        {
+            System.out.println(ex.getMessage());
+            return null;
+        }
+    }
+    
+    public static void main(String[] args)
+    {
+        System.out.println(hash("fgsmg2asdsadsada" + "asdsd%@#$#$dASDs5352"));
     }
 }
