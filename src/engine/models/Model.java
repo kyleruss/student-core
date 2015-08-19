@@ -104,12 +104,12 @@ public abstract class Model
     //Entries in Models table correspond to table columns
     public void set(String colName, Object value)
     {
-        data.put(colName, new Column(colName, value));
+        data.put(colName.toUpperCase(), new Column(colName.toUpperCase(), value));
     }
     
     public void set(String colName, Object value, String columnType)
     {
-        data.put(colName, new Column(colName, value, columnType));
+        data.put(colName.toUpperCase(), new Column(colName.toUpperCase(), value, columnType));
     }
     
     public Column get(String colName)
@@ -188,6 +188,9 @@ public abstract class Model
         String updateStr =   "";
         Iterator<Map.Entry<String, Column>> setData =  data.entrySet().iterator();     
         
+        if(setData.hasNext()) updateStr += "SET ";
+        else return updateStr;
+        
         while(setData.hasNext())
         {
             Map.Entry<String, Column> column    =   setData.next();
@@ -196,10 +199,11 @@ public abstract class Model
             String colName         =   column.getKey();
             String colValue        =   (isLiteral)? (String) column.getValue().getColumnValue() : column.getValue().getColumnValue().toString();
             
-            updateStr += MessageFormat.format("SET {0} = {1} ", colName, (isLiteral)? makeLiteral(colValue) : colValue);
+            if(!colName.equalsIgnoreCase(primaryKey))
+                updateStr += MessageFormat.format("{0} = {1}{2} ", 
+                             colName, (isLiteral)? makeLiteral(colValue) : colValue, (setData.hasNext())? "," : "");
         }
         
-        System.out.println(updateStr);
         return updateStr;
     }
     
@@ -231,7 +235,9 @@ public abstract class Model
     public boolean update()
     {
         String changes      =   buildUpdate();
-        String id           =   data.get(primaryKey.toUpperCase()).toString();
+        Column column       =   data.get(primaryKey.toUpperCase());
+        String id           =   column.getColumnValue().toString();
+        id                  =   (column.isLiteral())? makeLiteral(id) : id;
         String updateQuery  =   MessageFormat.format("UPDATE {0} {1} WHERE {2} = {3}", table, changes, primaryKey, id);
         System.out.println(updateQuery);
         

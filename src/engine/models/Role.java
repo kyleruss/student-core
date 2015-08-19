@@ -25,9 +25,9 @@ public class Role extends Model
     {
         Role role   =   new Role("" + 1);
         System.out.println(role.get("ID").isLiteral());
-      /*  role.set("name", "Teacher");
+        role.set("name", "Test");
         if(role.update());
-            System.out.println("updated!"); */
+            System.out.println("updated!"); 
     }
     
 }

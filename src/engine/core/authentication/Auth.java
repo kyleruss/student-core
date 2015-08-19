@@ -27,7 +27,7 @@ public class Auth
             if(attempt.get(userCol) == null || attempt.get(passCol) == null) throw new Exception("Account was not found");
             else
             {
-                String passwordAuth =   (String) attempt.get(passCol);
+                String passwordAuth =   (String) attempt.get(passCol).getColumnValue();
                 //hash passed password and compare
                 if(password.equals(passwordAuth)) System.out.println("Successfully logged in!");
                 else throw new Exception("Invalid password");
