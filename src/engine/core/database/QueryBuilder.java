@@ -7,7 +7,7 @@
 package engine.core.database;
 
 import com.google.gson.JsonArray;
-import engine.Parsers.JsonParser;
+import engine.parsers.JsonParser;
 import engine.core.DataConnector;
 import engine.core.database.Join.JoinType;
 import java.sql.ResultSet;
@@ -190,22 +190,13 @@ public class QueryBuilder
     public String build()
     {
         String query_raw;
-        String db_operation =   "";
+        String db_operation =   buildSelect();
         String conditionals =   buildConditionals();
         String extras       =   buildExtras();
         String joins        =   buildJoins();
         
-        switch(query.getType())
-        {
-            case INSERT:
-            case SELECT: 
-                db_operation = buildSelect();
-                break;
-            case DELETE:
-        }
         
         //Builds order: Db operations => conditionals => joins => extras
-        
         query_raw   =   MessageFormat.format("{0} {1} {2} {3}", db_operation, conditionals, joins, extras);
         return query_raw;
     }

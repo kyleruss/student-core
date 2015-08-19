@@ -24,7 +24,14 @@ public class Auth
             String passCol  =   (String) AuthConfig.config().get(AuthConfig.PASSWORD_COL_KEY);
             
             User attempt    =   new User(username);
-            if(attempt.get(userCol) == null || attempt.get(passCol) == null) throw new Exception("Invalid info");
+            if(attempt.get(userCol) == null || attempt.get(passCol) == null) throw new Exception("Account was not found");
+            else
+            {
+                String passwordAuth =   (String) attempt.get(passCol);
+                //hash passed password and compare
+                if(password.equals(passwordAuth)) System.out.println("Successfully logged in!");
+                else throw new Exception("Invalid password");
+            }
             
             
             

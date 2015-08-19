@@ -4,10 +4,10 @@
 //  PDC Project
 //####################################
 
-package engine.Controllers;
+package engine.controllers;
 
-import engine.Views.View;
-import engine.Views.cui.Home;
+import engine.views.View;
+import engine.views.cui.Home;
 
 public class BaseController 
 {

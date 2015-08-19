@@ -17,12 +17,18 @@ import java.sql.SQLException;
 
 public class DataConnector extends Thread implements AutoCloseable
 {  
+    public enum QueryType
+    {
+        MUTATOR,
+        ACCESSOR
+    }
     
     private Connection conn;
     private DataConnection connection_conifg;
     private String connection_url;
     private ResultSet results;
     private volatile PreparedStatement activeQuery;
+    private QueryType queryType;
     
     //Creates a DataConnector with default config
     public DataConnector()
@@ -35,6 +41,7 @@ public class DataConnector extends Thread implements AutoCloseable
     {
         this.connection_conifg      =   db_config;
         this.connection_url         =   db_config.getConnectionString();
+        this.queryType              =   QueryType.ACCESSOR;
         connect();
         
     }
@@ -61,6 +68,7 @@ public class DataConnector extends Thread implements AutoCloseable
         
         catch(InterruptedException | SQLException e)
         {
+            e.printStackTrace();
             System.out.println("exception " + e.getMessage());
             close();
         } 
@@ -87,8 +95,8 @@ public class DataConnector extends Thread implements AutoCloseable
             //Sets the active schema
             conn.setSchema((String) DatabaseConfig.config().get(DatabaseConfig.SCHEMA_KEY));
             
-            System.out.println("Connected!");
             start();
+            System.out.println("Connected!");
         }
 
         catch(SQLException e)
@@ -101,11 +109,33 @@ public class DataConnector extends Thread implements AutoCloseable
         
     }
     
+    public void setQueryAccessor()
+    {
+        queryType   =   QueryType.ACCESSOR;
+    }
+    
+    public void setQueryMutator()
+    {
+        queryType   =   QueryType.MUTATOR;
+    }
+    
+    public QueryType getQueryType()
+    {
+        return queryType;
+    }
+    
     //Executes the active query
     //Resets activeQuery after
     private synchronized void onExecute() throws SQLException
     {
-        results = activeQuery.executeQuery();
+        if(queryType == QueryType.ACCESSOR) 
+            results = activeQuery.executeQuery();      
+        else
+        {
+            results = null;
+            activeQuery.execute();
+        }
+        
         activeQuery = null;
     }
     
@@ -113,16 +143,13 @@ public class DataConnector extends Thread implements AutoCloseable
     //Converted to PreparedStatement then executed
     public void execute(String query) throws SQLException
     {
-        this.execute(createStatement(query), query);
+        this.execute(createStatement(query));
     }
     
     //Executes and logs a passed query
     //Execution is handled by run and onExecute()
-    public void execute(PreparedStatement statement, String query) throws SQLException
+    public void execute(PreparedStatement statement) throws SQLException
     {  
-        //Logs the attempted query
-        //Logging config is checked in log()
-        MainLogger.log(query, MainLogger.DATA_LOGGER);
         synchronized(this)
         {
             activeQuery     =   statement; //Set active query to be next executed
@@ -133,6 +160,10 @@ public class DataConnector extends Thread implements AutoCloseable
     //Creates a statement from connection
     public PreparedStatement createStatement(String query) throws SQLException
     {
+        //Logs the attempted query
+        //Logging config is checked in log()
+        MainLogger.log(query, MainLogger.DATA_LOGGER);
+        
         return conn.prepareStatement(query);
     }
     
@@ -182,12 +213,13 @@ public class DataConnector extends Thread implements AutoCloseable
     {
         try
         {
+            join();
             interrupt();
             if(conn != null) conn.close();
             if(results != null) results.close();
         }
         
-        catch(NullPointerException  | SQLException e)
+        catch(NullPointerException | InterruptedException | SQLException e)
         {
             System.out.println("[CONNECTION CLOSE EXCEPTION] " + e.getMessage());
         } 

@@ -7,7 +7,7 @@
 package engine.core.database;
 
 import com.google.gson.annotations.SerializedName;
-import engine.Parsers.JsonParser;
+import engine.parsers.JsonParser;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,14 +21,6 @@ import java.util.List;
 
 public class Query 
 {
-    public enum QueryType
-    {
-        INSERT, 
-        DELETE, 
-        UPDATE, 
-        SELECT
-    }
-    
     //Query joins
     //Include inner, self, left, outer joins
     @SerializedName("table_joins")
@@ -53,9 +45,6 @@ public class Query
     @SerializedName("table_name")
     private final String table;
     
-    //Query underlying operation type
-    private QueryType type;
-    
     //Creates a query that maps to table
     //Defaults type to select
     //query components default empty, add by builder or directly
@@ -66,7 +55,6 @@ public class Query
         selections           =       new ArrayList<>();
         extras               =       new ArrayList<>();
         this.table           =       table;
-        type                 =       QueryType.SELECT;
     }
     
     //Returns the queries joins
@@ -191,18 +179,6 @@ public class Query
     public void addExtra(String extra)
     {
         extras.add(extra);
-    }
-    
-    //Returns the query operation type
-    public QueryType getType()
-    {
-        return type;
-    }
-    
-    //Set the query operation type
-    public void setType(QueryType type)
-    {
-        this.type   =   type;
     }
     
     //Returns a JSON representation of the query

@@ -6,7 +6,7 @@
 
 package engine.core;
 
-import engine.Views.View;
+import engine.views.View;
 import java.lang.reflect.Method;
 import java.lang.reflect.InvocationTargetException;
 import java.text.MessageFormat;

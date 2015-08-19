@@ -1,4 +1,4 @@
-package engine.Views;
+package engine.views;
 
 import engine.core.CommandExecute;
 

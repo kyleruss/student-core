@@ -6,6 +6,7 @@
 
 package engine.core.database;
 
+import engine.models.Model;
 import java.text.MessageFormat;
 
 
@@ -95,20 +96,13 @@ public class Conditional
         isLiteral   =   true;
     }
     
-    //Makes the value a literal
-    //Literals in SQL must be enclosed in single quotes
-    public static String makeLiteral(String value)
-    {
-        String literalFormat    =   MessageFormat.format("''{0}''", value);
-        return literalFormat;
-    }
     
     //Returns the conditional SQL formatted
     //Connectives are added at later build states
     @Override
     public String toString()
     {
-       String outVal        =   (isLiteral)? makeLiteral(value) : value;
+       String outVal        =   (isLiteral)? Model.makeLiteral(value) : value;
        String output        =   MessageFormat.format("WHERE {0} {1} {2}", column, operator, outVal);
        return output;
     }

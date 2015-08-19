@@ -4,11 +4,12 @@
 //  PDC Project
 //####################################
 
-package engine.Parsers;
+package engine.parsers;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import java.sql.ResultSet;
@@ -71,6 +72,19 @@ public class JsonParser
         {
             System.out.println("[SQL EXCEPTION] Failed to parse result set - " + e.getMessage());
             return null;
+        }
+    }
+    
+    public static Object castElementToObj(JsonElement element, String className)
+    {
+        switch(className)
+        {
+            case "java.lang.String": return element.getAsString();
+            case "java.lang.Integer": return element.getAsBigInteger();
+            case "java.lang.Double": return element.getAsDouble();
+            case "java.lang.Boolean": return element.getAsBoolean();
+            case "java.lang.Character": return element.getAsCharacter();
+            default: return null;
         }
     }
     

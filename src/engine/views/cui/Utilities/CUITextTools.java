@@ -1,5 +1,5 @@
 
-package engine.Views.cui.Utilities;
+package engine.views.cui.Utilities;
 
 import java.text.MessageFormat;
 import java.util.List;

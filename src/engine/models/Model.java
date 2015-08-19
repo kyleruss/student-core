@@ -8,16 +8,17 @@ package engine.models;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import engine.Parsers.JsonParser;
+import engine.parsers.JsonParser;
 import engine.config.DatabaseConfig;
+import engine.core.Column;
 import engine.core.DataConnector;
-import engine.core.database.Conditional;
 import engine.core.database.QueryBuilder;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.text.MessageFormat;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -30,6 +31,7 @@ import java.util.Map;
 //- Model entity represent tables in the database
 //- Model objects represent rows/records
 //- Model behavior coresponds to it's table counterpart
+
 public abstract class Model 
 {
     //The models mapping table
@@ -45,15 +47,16 @@ public abstract class Model
     
     //The table's row data
     //Allows for mutation such as insertion, deletion and editing
-    private final Map<String, Object> data;
+    protected final Map<String, Column> data;
     
     //Create a new model that does not identify a row
     //Data will be empty and records must be added to model before mutation
     public Model()
     {
-        data    =   new HashMap<>();
+        data    =   new LinkedHashMap<>();
         columns =   new ArrayList<>();
         initTable();
+        initColumns();
     }
     
     //Create model that maps to an existing row
@@ -61,10 +64,8 @@ public abstract class Model
     //Row data fills the model's data
     public Model(String id)
     {
-        data    =   new HashMap<>();
-        columns =   new ArrayList<>();
-        initTable();
-        initColumns();
+        this();
+        fetchExisting(id);
     }
     
     //Initializes the tables mapping properties
@@ -81,12 +82,9 @@ public abstract class Model
         try
         {
             JsonObject metaData   =   builder().first().execute().get(0).getAsJsonObject();
-            JsonArray colNames    =   metaData.get("columNames").getAsJsonArray();
-            int numColumns        =   metaData.get("columnCount").getAsInt();
+            JsonArray colNames    =   metaData.get("columnNames").getAsJsonArray();
             
-            columns.clear();
-            for(int colIndex = 1; colIndex <= numColumns; colIndex++)
-                columns.add(colNames.get(colIndex).getAsString());
+            initColumns(colNames);
         } 
         
         catch(SQLException e)
@@ -95,14 +93,26 @@ public abstract class Model
         } 
     }
     
+    protected void initColumns(JsonArray resultColumns)
+    {
+        columns.clear();
+        for(int colIndex = 0; colIndex < resultColumns.size(); colIndex++)
+            columns.add(resultColumns.get(colIndex).getAsString());        
+    }
+    
     //Sets a models column value
     //Entries in Models table correspond to table columns
     public void set(String colName, Object value)
     {
-        data.put(table, value);
+        data.put(colName, new Column(colName, value));
     }
     
-    public Object get(String colName)
+    public void set(String colName, Object value, String columnType)
+    {
+        data.put(colName, new Column(colName, value, columnType));
+    }
+    
+    public Column get(String colName)
     {
         return data.get(colName);
     }
@@ -116,7 +126,7 @@ public abstract class Model
         Iterator<String> nameIter   =   data.keySet().iterator();
         
         while(nameIter.hasNext())
-            columnNames += nameIter.next() + ", ";
+            columnNames += nameIter.next() + ((nameIter.hasNext())? ", " : "");
         return columnNames;
     }
     
@@ -124,10 +134,10 @@ public abstract class Model
     private String getDataValues()
     {
         String columnValues         =   "";
-        Iterator<Object> valIter    =   data.values().iterator();
+        Iterator<Column> valIter    =   data.values().iterator();
         
         while(valIter.hasNext())
-            columnValues += valIter.next() + ", ";
+            columnValues += valIter.next() + ((valIter.hasNext())? ", " : "");
         return columnValues;
     }
     
@@ -143,18 +153,23 @@ public abstract class Model
         try(DataConnector conn =   new DataConnector())
         {
             conn.execute(query);    
-            JsonArray results = JsonParser.resultsToJson(conn.getResults());
+            JsonArray results       =   JsonParser.resultsToJson(conn.getResults());
+            JsonArray columnNames   =   results.get(0).getAsJsonObject().get("columnNames").getAsJsonArray();
+            ResultSetMetaData meta  =   conn.getResults().getMetaData();
             
+            System.out.println(results);
+            initColumns(columnNames);
             if(results.size() > 0)
             {
-                JsonObject entry            =   results.get(0).getAsJsonObject();
+                JsonObject entry            =   results.get(1).getAsJsonObject();
                 
-                Iterator<String> colIter    =   columns.iterator();
-                while(colIter.hasNext())
+                for(int columnIndex = 0; columnIndex < columns.size(); columnIndex++)
                 {
-                    String column   =   colIter.next().toUpperCase();
-                    data.put(column, entry.get(column).getAsString());
+                    String column   =   columns.get(columnIndex);
+                    String typeName =   meta.getColumnClassName(columnIndex + 1);
+                    set(column, JsonParser.castElementToObj(entry.get(column), typeName));
                 }
+
             }
             
             return results.toString();
@@ -171,20 +186,17 @@ public abstract class Model
     public String buildUpdate()
     {
         String updateStr =   "";
-        Iterator<Map.Entry<String, Object>> setData =  data.entrySet().iterator();
-        
-        if(setData.hasNext()) updateStr += "SET ";
-        else return "";
+        Iterator<Map.Entry<String, Column>> setData =  data.entrySet().iterator();     
         
         while(setData.hasNext())
         {
-            Map.Entry<String, Object> column    =   setData.next();
+            Map.Entry<String, Column> column    =   setData.next();
             
-            boolean isLiteral                   =   column.getValue() instanceof String;
-            String colName                      =   column.getKey();
-            String colValue                     =   (isLiteral)? (String) column.getValue() : column.getValue().toString();
+            boolean isLiteral      =   column.getValue().isLiteral();
+            String colName         =   column.getKey();
+            String colValue        =   (isLiteral)? (String) column.getValue().getColumnValue() : column.getValue().getColumnValue().toString();
             
-            updateStr += MessageFormat.format("SET {0} = {1}", colName, (isLiteral)? Conditional.makeLiteral(colValue) : colValue);
+            updateStr += MessageFormat.format("SET {0} = {1} ", colName, (isLiteral)? makeLiteral(colValue) : colValue);
         }
         
         System.out.println(updateStr);
@@ -200,10 +212,11 @@ public abstract class Model
     {
         String columnNames      =   getDataColumns();
         String columnValues     =   getDataValues();
-        String insertQuery      =   MessageFormat.format("INSERT INTO {0} ({1}) VALUES ({2});", table, columnNames, columnValues);
+        String insertQuery      =   MessageFormat.format("INSERT INTO {0} ({1}) VALUES ({2})", table, columnNames, columnValues);
         
         try(DataConnector conn  =   new DataConnector())
         {
+            conn.setQueryMutator();
             conn.execute(insertQuery);
             return true;
         }
@@ -218,11 +231,13 @@ public abstract class Model
     public boolean update()
     {
         String changes      =   buildUpdate();
-        String id           =   data.get(primaryKey).toString();
+        String id           =   data.get(primaryKey.toUpperCase()).toString();
         String updateQuery  =   MessageFormat.format("UPDATE {0} {1} WHERE {2} = {3}", table, changes, primaryKey, id);
+        System.out.println(updateQuery);
         
         try(DataConnector conn   =   new DataConnector())
         {
+            conn.setQueryMutator();
             conn.execute(updateQuery);
             return true;
         }
@@ -234,6 +249,14 @@ public abstract class Model
         }
     }
     
+    //Makes the value a literal
+    //Literals in SQL must be enclosed in single quotes
+    //Make sure to clean value before making literal
+    public static String makeLiteral(String value)
+    {
+        String literalFormat    =   MessageFormat.format("''{0}''", value);
+        return literalFormat;
+    }    
     
     //Returns the Model's mapping table name
     public String getTableName()

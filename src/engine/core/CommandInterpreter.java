@@ -1,7 +1,7 @@
 
 package engine.core;
 
-import engine.Views.cui.Utilities.CUITextTools;
+import engine.views.cui.Utilities.CUITextTools;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;

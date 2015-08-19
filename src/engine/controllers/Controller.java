@@ -4,7 +4,7 @@
 //  PDC Project
 //####################################
 
-package engine.Controllers;
+package engine.controllers;
 
 public interface Controller
 {

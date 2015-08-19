@@ -1,7 +1,7 @@
-package engine.Views.cui;
+package engine.views.cui;
 
-import engine.Views.View;
-import engine.Views.cui.Utilities.CUITextTools;
+import engine.views.View;
+import engine.views.cui.Utilities.CUITextTools;
 import engine.core.CommandInterpreter;
 
 public class Home extends CommandInterpreter implements View

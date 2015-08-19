@@ -9,7 +9,7 @@ package engine.core.database;
 import com.google.gson.JsonArray;
 import engine.Models.Model;
 import engine.Models.TestModel;
-import engine.Parsers.JsonParser;
+import engine.parsers.JsonParser;
 import engine.core.DataConnector;
 import java.sql.ResultSet;
 import java.sql.SQLException;
