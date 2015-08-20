@@ -1,16 +1,27 @@
 
 package engine.views.cui;
 
+import engine.controllers.ControllerMessage;
 import engine.core.Agent;
 import static engine.core.Agent.commandFinished;
-import engine.core.CommandInterpreter;
 import engine.core.authentication.Auth;
+import engine.views.AbstractView;
 import engine.views.View;
 import engine.views.cui.Utilities.CUITextTools;
 import java.util.Scanner;
 
-public class Login extends CommandInterpreter implements View
+public class Login extends AbstractView implements View
 {
+    
+    public Login()
+    {
+        super();
+    }
+    
+    public Login(ControllerMessage messages)
+    {
+        super(messages);
+    }
 
     @Override
     public void display()

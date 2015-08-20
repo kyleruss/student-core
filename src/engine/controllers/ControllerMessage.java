@@ -51,4 +51,9 @@ public class ControllerMessage
     {
         return JsonParser.parsePretty(messages);
     }
+    
+    public boolean hasMessages()
+    {
+        return !messages.isEmpty();
+    }
 }
