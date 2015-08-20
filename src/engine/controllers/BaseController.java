@@ -7,12 +7,12 @@
 package engine.controllers;
 
 import engine.views.View;
-import engine.views.cui.Home;
+import engine.views.cui.HomeView;
 
 public class BaseController 
 {
     public View getHome()
     {
-        return new Home();
+        return new HomeView();
     }
 }

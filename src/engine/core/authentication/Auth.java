@@ -34,12 +34,9 @@ public class Auth
                 //hash passed password and compare
                 if(passHash.equals(passStored)) 
                 {
-                    System.out.println("You have successfully logged in " + username + "!");
-                    
                     String logMessage   =   MessageFormat.format("User {0} has logged in", username);
                     Agent.setActiveSession(new Session(attempt));
                     MainLogger.log(logMessage, MainLogger.AUTH_LOGGER);
-                    
                     
                     return new Session(attempt);
                 }
@@ -51,7 +48,7 @@ public class Auth
         
         catch(Exception e)
         {
-            System.out.println("Login failed, please try again\nError: " + e.getMessage());
+            System.out.println(e.getMessage());
             return null;
         }
     }

@@ -4,21 +4,22 @@ package engine.views.cui;
 import engine.controllers.ControllerMessage;
 import engine.core.Agent;
 import static engine.core.Agent.commandFinished;
+import engine.core.RouteHandler;
 import engine.core.authentication.Auth;
 import engine.views.AbstractView;
 import engine.views.View;
 import engine.views.cui.Utilities.CUITextTools;
 import java.util.Scanner;
 
-public class Login extends AbstractView implements View
+public class LoginView extends AbstractView implements View
 {
     
-    public Login()
+    public LoginView()
     {
         super();
     }
     
-    public Login(ControllerMessage messages)
+    public LoginView(ControllerMessage messages)
     {
         super(messages);
     }
@@ -52,9 +53,14 @@ public class Login extends AbstractView implements View
             System.out.println(passwordText);
             enteredPassword =   inputScan.nextLine();
 
-            Auth.login(enteredUsername, enteredPassword);
-            System.out.println("ACTIVE USER: " + Agent.getActiveSession().getUser().get(("username").toUpperCase()).getColumnValue());
             
+            ControllerMessage postData   =   new ControllerMessage();
+            postData.add("loginUsername", enteredUsername);
+            postData.add("loginPassword", enteredPassword);
+            
+            ResponseDataView response   =   (ResponseDataView) RouteHandler.go("postLogin", postData);
+            
+            System.out.println(response.getResponseMessage());
             commandFinished();
          
     }
@@ -62,7 +68,7 @@ public class Login extends AbstractView implements View
         
     public void registerAttempt()
     {
-        System.out.println("Register attempt");
+        Agent.setView("getRegister");
     }
 
     @Override

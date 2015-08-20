@@ -56,4 +56,5 @@ public class ControllerMessage
     {
         return !messages.isEmpty();
     }
+    
 }

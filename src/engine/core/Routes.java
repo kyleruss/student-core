@@ -30,5 +30,7 @@ public class Routes extends Router
     {
         add("getLogin", "UserController", "getLogin", "/");
         add("home", "BaseController", "getHome", "/home");
+        add("postLogin", "UserController", "postLogin", "/postlogin");
+        add("getRegister", "UserController", "getRegister", "/register");
     }
 }

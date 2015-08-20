@@ -1,10 +1,9 @@
 package engine.views.cui;
 
-import engine.views.View;
 import engine.views.cui.Utilities.CUITextTools;
-import engine.core.CommandInterpreter;
+import engine.views.AbstractView;
 
-public class Home extends CommandInterpreter implements View
+public class HomeView extends AbstractView
 {
 
     @Override

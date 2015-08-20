@@ -1,5 +1,6 @@
 package engine.core;
 
+import engine.controllers.ControllerMessage;
 import engine.core.authentication.Auth;
 import engine.core.authentication.Session;
 import engine.views.View;
@@ -33,9 +34,9 @@ public class Agent extends CommandInterpreter
         }
     }
     
-    private View activeView;
-    private Context activeContext;
-    private List<View> viewTree;
+    private static View activeView;
+    private static Context activeContext;
+    private static List<View> viewTree;
     private static Session activeSession;
     private static Thread agentThread;
     private static volatile boolean waitingOnCommand = false;
@@ -51,7 +52,7 @@ public class Agent extends CommandInterpreter
     private void begin()
     {
         final String startRoute   =   "/";
-        setView(RouteHandler.go(startRoute));
+        setView(startRoute);
         viewContext();
         agentThread.start();
     }
@@ -61,6 +62,15 @@ public class Agent extends CommandInterpreter
         synchronized(agentThread)
         {
             waitingOnCommand = false;
+            agentThread.notify();
+        }
+    }
+    
+    public static void commandInProgress()
+    {
+        synchronized(agentThread)
+        {
+            waitingOnCommand = true;
             agentThread.notify();
         }
     }
@@ -94,14 +104,29 @@ public class Agent extends CommandInterpreter
         return activeSession;
     }
     
-    public void setView(View view)
+    public static void setView(View view)
     {
-        if(view == null) return;
-        else
+        synchronized(agentThread)
         {
-            this.activeView =   view;
-            view.display(); 
+            if(view == null) return;
+            else
+            {
+                activeView =   view;
+                view.display(); 
+                agentThread.notify();
+            }
         }
+    }
+    
+    public static void setView(String route)
+    {
+        setView(route, null);
+    }
+    
+    public static void setView(String route, ControllerMessage data)
+    {
+        View controllerView =   RouteHandler.go(route, data);
+        setView(controllerView);
     }
     
     
@@ -134,7 +159,6 @@ public class Agent extends CommandInterpreter
     
     Runnable listen =   () -> 
     {
-        Agent agentInstance     =   Agent.this;
         Scanner input           =   new Scanner(System.in);
         String command;
         
@@ -155,7 +179,11 @@ public class Agent extends CommandInterpreter
                     }
 
                     else if(activeView != null)
-                        activeView.fire(command, activeView); 
+                    {
+                        System.out.println("Firing on view");
+                        activeView.fire(command, activeView);
+                    }
+                    
                 }
             }
             

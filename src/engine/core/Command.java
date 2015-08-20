@@ -98,6 +98,7 @@ public class Command
         
         catch(ClassNotFoundException | NoSuchMethodException | IllegalAccessException | InvocationTargetException e)
         {
+            e.printStackTrace();
             System.out.println("Listener method was not found, or the paramaters do not match: " + e.getMessage());
             System.out.println("method: " + methodName);
             System.out.println("class: " + className);
