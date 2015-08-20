@@ -1,14 +1,6 @@
 {
     "commands": 
     {
-        "test":
-        {
-            "commandName": "test",
-            "paramTypes": ["java.lang.String"],
-            "className": "engine.core.Agent",
-            "methodName": "testAgentContext"
-        },
-        
         "exit":
         {
             "commandName": "exit",

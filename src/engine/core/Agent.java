@@ -142,13 +142,7 @@ public class Agent extends CommandInterpreter
         String[] params =   command.split(" ");
         String trigger  =   Context.AGENT.getTrigger();
         return (params[0].equalsIgnoreCase(trigger + ":")) || commands.containsKey(params[0]);
-    }
-    
-    public void testAgentContext(String message)
-    {
-        System.out.println("message: " + message);
-    }
-    
+    } 
     
     @Override
     public String getCommandsFile()
