@@ -1,6 +1,24 @@
 {
     "commands": 
     {
+        
+        "login":
+        {
+            "commandName": "login",
+            "paramTypes": [],
+            "className": "engine.views.cui.Login",
+            "methodName": "loginAttempt",
+            "commandDescription": "Login with account"
+        },
+        
+        "register":
+        {
+            "commandName": "register",
+            "paramTypes": [],
+            "className": "engine.views.cui.Login",
+            "methodName": "registerAttempt",
+            "commandDescription": "Create an account"
+        }
     }
     
 }

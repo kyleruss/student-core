@@ -1,21 +1,17 @@
 package engine.core.authentication;
 
 import engine.config.AuthConfig;
+import engine.core.loggers.MainLogger;
 import engine.core.security.Crypto;
 import engine.core.security.Input;
 import engine.models.User;
+import java.text.MessageFormat;
 
 
 public class Auth 
 {
-    private Session activeSession;
     
-    public Auth()
-    {
-        
-    }
-    
-    public static boolean login(String username, String password)
+    public static Session login(String username, String password)
     {
         try
         {
@@ -35,20 +31,24 @@ public class Auth
                 String passHash     =   Crypto.makeHash(salt, password);
                 
                 //hash passed password and compare
-                if(passHash.equals(passStored)) System.out.println("Successfully logged in!");
+                if(passHash.equals(passStored)) 
+                {
+                    System.out.println("Successfully logged in!");
+                    
+                    String logMessage   =   MessageFormat.format("User {0} has logged in", username);
+                    MainLogger.log(logMessage, MainLogger.AUTH_LOGGER);
+                    return new Session(attempt);
+                }
+                
                 else throw new Exception("Invalid password");
             }
-            
-            
-            
-            return true;
+           
         }
         
         catch(Exception e)
         {
-            e.printStackTrace();
             System.out.println("Login failed, please try again\nError: " + e.getMessage());
-            return false;
+            return null;
         }
     }
     

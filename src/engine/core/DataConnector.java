@@ -96,18 +96,13 @@ public class DataConnector extends Thread implements AutoCloseable
             conn.setSchema((String) DatabaseConfig.config().get(DatabaseConfig.SCHEMA_KEY));
             
             start();
-            System.out.println("Connected!");
         }
 
         catch(SQLException e)
         {
-            e.printStackTrace();
-
-            System.out.println(e.getMessage());
-            System.out.println("Failed to connect to database");
+            System.out.println("Failed to connect to server, please try again\nError: " + e.getMessage());      
             close();
-        }            
-        
+        }                 
     }
     
     public void setQueryAccessor()

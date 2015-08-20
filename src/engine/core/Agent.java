@@ -1,13 +1,12 @@
 package engine.core;
 
 import engine.core.authentication.Auth;
+import engine.core.authentication.Session;
 import engine.views.View;
 import engine.views.cui.Utilities.CUITextTools;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Scanner;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class Agent extends CommandInterpreter
 {
@@ -37,7 +36,8 @@ public class Agent extends CommandInterpreter
     private View activeView;
     private Context activeContext;
     private List<View> viewTree;
-    public static Thread agentThread;
+    private static Session activeSession;
+    private static Thread agentThread;
     private static volatile boolean waitingOnCommand = false;
     private static volatile boolean serving = true;
     
@@ -52,7 +52,7 @@ public class Agent extends CommandInterpreter
     {
         final String startRoute   =   "/";
         setView(RouteHandler.go(startRoute));
-        agentContext();
+        viewContext();
         agentThread.start();
     }
     
@@ -60,11 +60,8 @@ public class Agent extends CommandInterpreter
     {
         synchronized(agentThread)
         {
-            System.out.println("notify");
-
             waitingOnCommand = false;
             agentThread.notify();
-            System.out.println("state: " + agentThread.getState().toString());
         }
     }
     
@@ -97,7 +94,7 @@ public class Agent extends CommandInterpreter
         }
     }
     
-    public void loginAttempt()
+   /* public void loginAttempt()
     {
         Scanner inputScan   =   new Scanner(System.in);
         
@@ -116,7 +113,7 @@ public class Agent extends CommandInterpreter
 
             commandFinished();
          
-    }
+    } */
     
     public void exitApp()
     {
@@ -125,10 +122,13 @@ public class Agent extends CommandInterpreter
         stopServing();
     }
     
+    /*
+    
     public void registerAttempt()
     {
         System.out.println("Register attempt");
     }
+    */
     
     public void switchContext(Context context)
     {
@@ -141,7 +141,7 @@ public class Agent extends CommandInterpreter
         
         String[] params =   command.split(" ");
         String trigger  =   Context.AGENT.getTrigger();
-        return (params[0].equalsIgnoreCase(trigger + ":"));
+        return (params[0].equalsIgnoreCase(trigger + ":")) || commands.containsKey(params[0]);
     }
     
     public void testAgentContext(String message)
@@ -158,8 +158,7 @@ public class Agent extends CommandInterpreter
     
     Runnable listen =   () -> 
     {
-        Agent agentInstance =   Agent.this;
-        final String FINISHED   =   "exit";
+        Agent agentInstance     =   Agent.this;
         Scanner input           =   new Scanner(System.in);
         String command;
         
@@ -176,7 +175,7 @@ public class Agent extends CommandInterpreter
                     if(isAgentContext(command))
                     {
                         String commandStr   =   command.replace("agent: ", "");
-                        fire(commandStr, agentInstance);
+                        fire(commandStr, Agent.this);
                     }
 
                     else if(activeView != null)
