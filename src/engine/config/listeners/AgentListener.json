@@ -26,6 +26,15 @@
             "className": "engine.core.Agent",
             "methodName": "registerAttempt",
             "commandDescription": "Create an account"
+        },
+        
+        "exit":
+        {
+            "commandName": "exit",
+            "paramTypes": [],
+            "className": "engine.core.Agent",
+            "methodName": "exitApp",
+            "commandDescription": "Exit application"
         }
     }
     

@@ -150,7 +150,6 @@ public abstract class Model
         String idLiteral        =   (id instanceof String)? makeLiteral(id.toString()) : id.toString();
         QueryBuilder qBuilder   =   builder().where(primaryKey, "=", idLiteral);
         String query            =    qBuilder.build();
-        System.out.println(query);
         
         try(DataConnector conn =   new DataConnector())
         {
@@ -159,7 +158,6 @@ public abstract class Model
             JsonArray columnNames   =   results.get(0).getAsJsonObject().get("columnNames").getAsJsonArray();
             ResultSetMetaData meta  =   conn.getResults().getMetaData();
             
-            System.out.println(results);
             initColumns(columnNames);
             if(results.size() > 0)
             {

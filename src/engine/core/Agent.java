@@ -37,22 +37,45 @@ public class Agent extends CommandInterpreter
     private View activeView;
     private Context activeContext;
     private List<View> viewTree;
-    private Thread agentThread;
+    public static Thread agentThread;
+    private static volatile boolean waitingOnCommand = false;
+    private static volatile boolean serving = true;
     
     public Agent()
     {
         viewTree        =   new LinkedList<>();
+        agentThread     =   new Thread(listen);
         begin();
     }
     
     private void begin()
     {
-        final String startRoute   =   "getLogin";
+        final String startRoute   =   "/";
         setView(RouteHandler.go(startRoute));
         agentContext();
-        listen();
+        agentThread.start();
     }
     
+    public static void commandFinished()
+    {
+        synchronized(agentThread)
+        {
+            System.out.println("notify");
+
+            waitingOnCommand = false;
+            agentThread.notify();
+            System.out.println("state: " + agentThread.getState().toString());
+        }
+    }
+    
+    public static void stopServing()
+    {
+        synchronized(agentThread)
+        {
+            serving =   false;
+            agentThread.notify();
+        }
+    }
     
     public void agentContext()
     {
@@ -76,27 +99,30 @@ public class Agent extends CommandInterpreter
     
     public void loginAttempt()
     {
-        try(Scanner inputScan   =   new Scanner(System.in))
-        {
-        String usernameText =   CUITextTools.changeColour("Please enter your username", CUITextTools.RED);
-        String passwordText =   CUITextTools.changeColour("Please enter your password", CUITextTools.RED);
-        String enteredUsername;
-        String enteredPassword;
+        Scanner inputScan   =   new Scanner(System.in);
         
-        System.out.println(usernameText);
-        enteredUsername =   inputScan.nextLine();
-        System.out.println(enteredUsername);
-        System.out.println(passwordText);
-        enteredPassword =   inputScan.nextLine();
-        System.out.println(enteredPassword);
-        
-        Auth.login(enteredUsername, enteredPassword);
-        
-        synchronized(agentThread)
-        {
-            agentThread.notify();
-        }
-        } 
+            String usernameText =   CUITextTools.changeColour("Please enter your username", CUITextTools.RED);
+            String passwordText =   CUITextTools.changeColour("Please enter your password", CUITextTools.RED);
+            String enteredUsername;
+            String enteredPassword;
+
+            System.out.println(usernameText);
+            enteredUsername =   inputScan.nextLine();
+
+            System.out.println(passwordText);
+            enteredPassword =   inputScan.nextLine();
+
+            Auth.login(enteredUsername, enteredPassword);
+
+            commandFinished();
+         
+    }
+    
+    public void exitApp()
+    {
+        String exitText =   CUITextTools.changeColour("Thanks for trying out Student core by Kyle Russell!", CUITextTools.GREEN);
+        System.out.println(exitText);
+        stopServing();
     }
     
     public void registerAttempt()
@@ -130,41 +156,55 @@ public class Agent extends CommandInterpreter
         return "/engine/config/listeners/AgentListener.json";
     }
     
-    public void listen()
+    Runnable listen =   () -> 
     {
-        Agent agentInstance =   this;
-        agentThread  =   new Thread(() ->
-        {
-            final String FINISHED   =   "exit";
-            Scanner input           =   new Scanner(System.in);
-            String command;
-            
-            
-            while(!(command = input.nextLine()).equals(FINISHED))
+        Agent agentInstance =   Agent.this;
+        final String FINISHED   =   "exit";
+        Scanner input           =   new Scanner(System.in);
+        String command;
+        
+        synchronized(agentThread)
+        {     
+            try
             {
-                System.out.println("comamnd: " + command);
-                
-                synchronized(this)
+                while(serving)
                 {
+                    while(waitingOnCommand)
+                        agentThread.wait();
+                
+                    command = input.nextLine();
                     if(isAgentContext(command))
                     {
-                        try {
-                            String commandStr   =   command.replace("agent: ", "");
-                            fire(commandStr, agentInstance);
-                            wait();
-                        } catch (InterruptedException ex) {
-                            Logger.getLogger(Agent.class.getName()).log(Level.SEVERE, null, ex);
-                        }
+                        String commandStr   =   command.replace("agent: ", "");
+                        fire(commandStr, agentInstance);
                     }
-                
+
                     else if(activeView != null)
-                        activeView.fire(command, activeView);  
-                }   
+                        activeView.fire(command, activeView); 
+                }
             }
-        });
-        
-        agentThread.start();
-    }
+            
+            catch(InterruptedException e)
+            {
+                e.printStackTrace();
+            }     
+                
+                
+                
+           /* while(!(command = input.nextLine()).equals(FINISHED))
+            {
+
+                if(isAgentContext(command))
+                {
+                    String commandStr   =   command.replace("agent: ", "");
+                    fire(commandStr, agentInstance);
+                }
+
+                else if(activeView != null)
+                    activeView.fire(command, activeView); 
+            } */
+        }
+    };
    
     
     public static void main(String[] args)
