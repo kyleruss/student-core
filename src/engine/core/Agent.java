@@ -1,9 +1,13 @@
 package engine.core;
 
+import engine.core.authentication.Auth;
 import engine.views.View;
+import engine.views.cui.Utilities.CUITextTools;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Agent extends CommandInterpreter
 {
@@ -72,7 +76,27 @@ public class Agent extends CommandInterpreter
     
     public void loginAttempt()
     {
-        System.out.println("Login attempt!");
+        try(Scanner inputScan   =   new Scanner(System.in))
+        {
+        String usernameText =   CUITextTools.changeColour("Please enter your username", CUITextTools.RED);
+        String passwordText =   CUITextTools.changeColour("Please enter your password", CUITextTools.RED);
+        String enteredUsername;
+        String enteredPassword;
+        
+        System.out.println(usernameText);
+        enteredUsername =   inputScan.nextLine();
+        System.out.println(enteredUsername);
+        System.out.println(passwordText);
+        enteredPassword =   inputScan.nextLine();
+        System.out.println(enteredPassword);
+        
+        Auth.login(enteredUsername, enteredPassword);
+        
+        synchronized(agentThread)
+        {
+            agentThread.notify();
+        }
+        } 
     }
     
     public void registerAttempt()
@@ -96,7 +120,7 @@ public class Agent extends CommandInterpreter
     
     public void testAgentContext(String message)
     {
-        System.out.println("AGENT: Message " + message);
+        System.out.println("message: " + message);
     }
     
     
@@ -115,16 +139,27 @@ public class Agent extends CommandInterpreter
             Scanner input           =   new Scanner(System.in);
             String command;
             
+            
             while(!(command = input.nextLine()).equals(FINISHED))
             {
-                if(isAgentContext(command))
-                {
-                    String commandStr   =   command.replace("agent: ", "");
-                    fire(commandStr, agentInstance);
-                }
+                System.out.println("comamnd: " + command);
                 
-                else if(activeView != null)
-                    activeView.fire(command, activeView);     
+                synchronized(this)
+                {
+                    if(isAgentContext(command))
+                    {
+                        try {
+                            String commandStr   =   command.replace("agent: ", "");
+                            fire(commandStr, agentInstance);
+                            wait();
+                        } catch (InterruptedException ex) {
+                            Logger.getLogger(Agent.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
+                
+                    else if(activeView != null)
+                        activeView.fire(command, activeView);  
+                }   
             }
         });
         

@@ -3,9 +3,12 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+            <file>file:/C:/Users/kyle/Documents/NetBeansProjects/pdc-project/src/engine/core/CommandInterpreter.java</file>
+            <file>file:/C:/Users/kyle/Documents/NetBeansProjects/pdc-project/src/engine/core/DataConnector.java</file>
             <file>file:/C:/Users/kyle/Documents/NetBeansProjects/pdc-project/src/engine/core/Agent.java</file>
             <file>file:/C:/Users/kyle/Documents/NetBeansProjects/pdc-project/src/engine/config/DatabaseConfig.java</file>
             <file>file:/C:/Users/kyle/Documents/NetBeansProjects/pdc-project/src/engine/models/User.java</file>
+            <file>file:/C:/Users/kyle/Documents/NetBeansProjects/pdc-project/src/engine/core/Command.java</file>
             <file>file:/C:/Users/kyle/Documents/NetBeansProjects/pdc-project/src/engine/models/Model.java</file>
             <file>file:/C:/Users/kyle/Documents/NetBeansProjects/pdc-project/src/engine/core/security/Input.java</file>
             <file>file:/C:/Users/kyle/Documents/NetBeansProjects/pdc-project/src/engine/config/AuthConfig.java</file>
