@@ -84,6 +84,16 @@ public class Agent extends CommandInterpreter
         activeContext   =   Context.VIEW;
     }
     
+    public static void setActiveSession(Session activeSession)
+    {
+        Agent.activeSession   =   activeSession;
+    }
+    
+    public static Session getActiveSession()
+    {
+        return activeSession;
+    }
+    
     public void setView(View view)
     {
         if(view == null) return;
@@ -94,26 +104,6 @@ public class Agent extends CommandInterpreter
         }
     }
     
-   /* public void loginAttempt()
-    {
-        Scanner inputScan   =   new Scanner(System.in);
-        
-            String usernameText =   CUITextTools.changeColour("Please enter your username", CUITextTools.RED);
-            String passwordText =   CUITextTools.changeColour("Please enter your password", CUITextTools.RED);
-            String enteredUsername;
-            String enteredPassword;
-
-            System.out.println(usernameText);
-            enteredUsername =   inputScan.nextLine();
-
-            System.out.println(passwordText);
-            enteredPassword =   inputScan.nextLine();
-
-            Auth.login(enteredUsername, enteredPassword);
-
-            commandFinished();
-         
-    } */
     
     public void exitApp()
     {
@@ -121,14 +111,6 @@ public class Agent extends CommandInterpreter
         System.out.println(exitText);
         stopServing();
     }
-    
-    /*
-    
-    public void registerAttempt()
-    {
-        System.out.println("Register attempt");
-    }
-    */
     
     public void switchContext(Context context)
     {

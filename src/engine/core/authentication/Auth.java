@@ -1,6 +1,7 @@
 package engine.core.authentication;
 
 import engine.config.AuthConfig;
+import engine.core.Agent;
 import engine.core.loggers.MainLogger;
 import engine.core.security.Crypto;
 import engine.core.security.Input;
@@ -33,10 +34,13 @@ public class Auth
                 //hash passed password and compare
                 if(passHash.equals(passStored)) 
                 {
-                    System.out.println("Successfully logged in!");
+                    System.out.println("You have successfully logged in " + username + "!");
                     
                     String logMessage   =   MessageFormat.format("User {0} has logged in", username);
+                    Agent.setActiveSession(new Session(attempt));
                     MainLogger.log(logMessage, MainLogger.AUTH_LOGGER);
+                    
+                    
                     return new Session(attempt);
                 }
                 

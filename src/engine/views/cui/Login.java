@@ -1,6 +1,7 @@
 
 package engine.views.cui;
 
+import engine.core.Agent;
 import static engine.core.Agent.commandFinished;
 import engine.core.CommandInterpreter;
 import engine.core.authentication.Auth;
@@ -29,8 +30,8 @@ public class Login extends CommandInterpreter implements View
     {
         Scanner inputScan   =   new Scanner(System.in);
         
-            String usernameText =   CUITextTools.changeColour("Please enter your username", CUITextTools.RED);
-            String passwordText =   CUITextTools.changeColour("Please enter your password", CUITextTools.RED);
+            String usernameText =   CUITextTools.changeColour("Please enter your username", CUITextTools.GREEN);
+            String passwordText =   CUITextTools.changeColour("Please enter your password", CUITextTools.GREEN);
             String enteredUsername;
             String enteredPassword;
 
@@ -41,7 +42,8 @@ public class Login extends CommandInterpreter implements View
             enteredPassword =   inputScan.nextLine();
 
             Auth.login(enteredUsername, enteredPassword);
-
+            System.out.println("ACTIVE USER: " + Agent.getActiveSession().getUser().get(("username").toUpperCase()).getColumnValue());
+            
             commandFinished();
          
     }
