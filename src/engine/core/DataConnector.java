@@ -11,18 +11,15 @@ import engine.config.DatabaseConfig;
 import engine.core.database.Query;
 import engine.core.loggers.MainLogger;
 import engine.models.EmergencyContactModel;
-import engine.models.Model;
-import engine.parsers.JsonParser;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
-public class DataConnector extends Thread implements AutoCloseable
+
+public class DataConnector implements AutoCloseable//extends Thread implements AutoCloseable
 {  
     public enum QueryType
     {
@@ -35,7 +32,10 @@ public class DataConnector extends Thread implements AutoCloseable
     private String connection_url;
     private ResultSet results;
     private volatile PreparedStatement activeQuery;
+    private volatile boolean running = true;
+    private volatile boolean fetchingResults = false;
     private QueryType queryType;
+    private int i = 0;
     
     //Creates a DataConnector with default config
     public DataConnector()
@@ -56,42 +56,32 @@ public class DataConnector extends Thread implements AutoCloseable
     
     //Thread is synced, waits for queries to be added before execution
     //Queries can be added by execute() calls that assign activeQuery and notify
-    @Override
+    /*@Override
     public void run()
     {  
-        try
+        synchronized(this)
         {
-            synchronized(this)
-            {
-              
-               //Wait for query to be added 
-               while(activeQuery == null)
-                   this.wait();
-               
-               //Execute the active query
-                onExecute();
-            }
+          try
+          {
+              while(running)
+              {
+
+                //Execute the active query
+                 if(activeQuery != null) onExecute();
+                 else if(fetchingResults != true) wait();
+             }
         }
-        
+
         catch(InterruptedException e)
         {
             e.printStackTrace();
             System.out.println("exception " + e.getMessage());
             
-            try
-            {
-                if(!conn.getAutoCommit())
-                    conn.rollback();
-            }
-            
-            catch(SQLException ex)
-            {
-                System.out.println("[SQL Exception] Failed to rollback, error: " + ex.getMessage());
-            }
-            
-            close();
+           // closeConnection();
         } 
     }
+        
+    }*/
     
     //-----------------------------
     //       CONNECT TO DB
@@ -114,7 +104,7 @@ public class DataConnector extends Thread implements AutoCloseable
             //Sets the active schema
             conn.setSchema((String) DatabaseConfig.config().get(DatabaseConfig.SCHEMA_KEY));
             
-            start();
+           // start();
         }
 
         catch(SQLException e)
@@ -135,10 +125,47 @@ public class DataConnector extends Thread implements AutoCloseable
     
     public void commitTransaction()
     {
-        try { conn.commit(); }
+        try
+        {
+            if(!conn.isClosed())
+                conn.commit(); 
+        
+        }
         catch(SQLException e)
         {
             System.out.println("[SQL exception] Failed to commit transaction, error: " + e.getMessage());
+        }
+    }
+    
+    public void rollbackTransaction()
+    {
+        try 
+        { 
+            if(!conn.isClosed() && !conn.getAutoCommit()) 
+                conn.rollback(); 
+        }
+        
+        catch(SQLException e)
+        {
+            System.out.println("[SQL exception] Failed to rollback transaction, error: " + e.getMessage());
+        }
+    }
+    
+    public void finish()
+    {
+        synchronized(this)
+        {
+            running = false;
+            notify();
+        }
+    }
+    
+    public void fetchResults()
+    {
+        synchronized(this)
+        {
+            fetchingResults = true;
+            notify();
         }
     }
     
@@ -159,12 +186,16 @@ public class DataConnector extends Thread implements AutoCloseable
     
     //Executes the active query
     //Resets activeQuery after
-    private synchronized void onExecute()
+    private synchronized boolean onExecute()
     {
+        if(activeQuery == null) return false;
+        
         try
         {
-            if(queryType == QueryType.ACCESSOR) 
+            if(queryType == QueryType.ACCESSOR)
+            
                 results = activeQuery.executeQuery();      
+            
             else
             {
                 activeQuery.executeUpdate();
@@ -172,30 +203,35 @@ public class DataConnector extends Thread implements AutoCloseable
             }
 
             activeQuery = null;
+            return true;
         }
         
         catch(SQLException e)
         {
             System.out.println("SQL EXCEPTION: " + e.getMessage());
+            closeConnection();
+            return false;
         }
     }
     
     //Executes a query that is passed
     //Converted to PreparedStatement then executed
-    public void execute(String query) throws SQLException
+    public boolean execute(String query)
     {
-        this.execute(createStatement(query));
+        return execute(createStatement(query));
     }
     
     //Executes and logs a passed query
     //Execution is handled by run and onExecute()
-    public void execute(PreparedStatement statement) throws SQLException
+    public boolean execute(PreparedStatement statement)
     {  
-        synchronized(this)
+       /* synchronized(this)
         {
             activeQuery     =   statement; //Set active query to be next executed
-            this.notify(); //continue - query executed in run by onExecuted()
-        }
+            notify(); //continue - query executed in run by onExecuted()
+        }*/
+        activeQuery =   statement;
+        return onExecute();
     }
     
     //Creates a statement from connection
@@ -207,25 +243,16 @@ public class DataConnector extends Thread implements AutoCloseable
             //Logging config is checked in log()
             MainLogger.log(query, MainLogger.DATA_LOGGER);
       
-            return conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+            PreparedStatement statement = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+            return statement;
         }
         
         catch(SQLException e)
         {
-            e.printStackTrace();
+            System.out.println("error in create statement");
             
-            try
-            {
-                if(!conn.getAutoCommit())
-                    conn.rollback();
-            }
-            
-            catch(SQLException ex)
-            {
-                System.out.println("[SQL Exception] Failed to rollback, error: " + ex.getMessage());
-            }
-            
-            close();
+         //   interrupt();
+            closeConnection();
             return null;
         }
     }
@@ -254,17 +281,24 @@ public class DataConnector extends Thread implements AutoCloseable
     //Handling of results must be used before closure
     public ResultSet getResults()
     {
+        //Finish running queries/connections
+        //join();
+        return results;
+    }
+    
+    public void closeConnection()
+    {
         try
         {
-            //Finish running queries/connections
-            join();
-            return results;
+            rollbackTransaction();
+            if(conn != null && !conn.isClosed()) conn.close();
+            if(results != null && !results.isClosed()) results.close();
         }
         
-        catch(InterruptedException e)
+        catch(NullPointerException | SQLException e)
         {
-            return null;
-        }
+            System.out.println("[CONNECTION CLOSE EXCEPTION] " + e.getMessage());
+        } 
     }
 
     //Closes the DataConnector
@@ -274,32 +308,33 @@ public class DataConnector extends Thread implements AutoCloseable
     @Override
     public void close()
     {
-        try
-        {
-            join();
-            interrupt();
-            if(conn != null) conn.close();
-            if(results != null) results.close();
-        }
-        
-        catch(NullPointerException | InterruptedException | SQLException e)
-        {
-            System.out.println("[CONNECTION CLOSE EXCEPTION] " + e.getMessage());
-            
-            try
-            {
-                if(!conn.getAutoCommit())
-                    conn.rollback();
-            }
-            
-            catch(SQLException ex)
-            {
-                System.out.println("[SQL Exception] Failed to rollback, error: " + ex.getMessage());
-            }
-        } 
+        closeConnection();
     }
     
     public static void main(String[] args)
     {
+        
+       /* EmergencyContactModel emergencyContact  =   new EmergencyContactModel();
+            emergencyContact.set("firstname", "test");
+            emergencyContact.set("lastname", "test2");
+            emergencyContact.set("contact_ph", "asdasdrw43434");
+            emergencyContact.set("contact_email", "dasdasd@mgial.com");
+            emergencyContact.set("relationship", "test"); */
+        
+        try(DataConnector conn  =   new DataConnector())
+        {
+            conn.setQueryMutator();
+            conn.execute("INSERT INTO medical (DESCRIPTION, CONTACT_ID) VALUES ('dsfsdfye', 1)");
+            ResultSet rs = conn.getResults();
+            System.out.println("Next: " + rs.next());
+            System.out.println(rs.getInt(1));
+            //conn.finish();
+            conn.execute("INSERT INTO medical (DESCRIPTION, CONTACT_ID) VALUES ('TEST', 1)");
+        }
+        
+        catch(SQLException e)
+       {
+            e.printStackTrace();
+        }
     }
 }

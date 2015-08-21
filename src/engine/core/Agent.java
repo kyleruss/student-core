@@ -8,6 +8,8 @@ import engine.views.cui.Utilities.CUITextTools;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Agent extends CommandInterpreter
 {
@@ -135,6 +137,26 @@ public class Agent extends CommandInterpreter
         String exitText =   CUITextTools.changeColour("Thanks for trying out Student core by Kyle Russell!", CUITextTools.GREEN);
         System.out.println(exitText);
         stopServing();
+    }
+    
+    public void sessionLogout()
+    {
+        if(activeSession == null)
+        {
+            System.out.println(CUITextTools.changeColour("You aren't logged in!", CUITextTools.RED));
+            return;
+        }
+        
+        System.out.println("\n" + CUITextTools.changeColour("You have been logged out", CUITextTools.RED) + "\n");
+        System.out.println("Redirecting in 5 seconds..");
+        
+        try { Thread.sleep(5000); } 
+        catch (InterruptedException ex) 
+        {
+            System.out.println(ex.getMessage());
+        }
+        
+        setView("logout");
     }
     
     public void switchContext(Context context)

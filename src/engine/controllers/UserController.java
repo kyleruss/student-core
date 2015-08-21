@@ -1,11 +1,19 @@
 
 package engine.controllers;
 
+import engine.core.Agent;
+import engine.core.DataConnector;
 import engine.core.authentication.Auth;
+import engine.core.security.Crypto;
+import engine.models.EmergencyContactModel;
+import engine.models.MedicalModel;
+import engine.models.User;
 import engine.views.View;
 import engine.views.cui.LoginView;
 import engine.views.cui.RegisterView;
 import engine.views.cui.ResponseDataView;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 
 public class UserController extends Controller
@@ -27,6 +35,12 @@ public class UserController extends Controller
     
     public View getLogin()
     {
+        return new LoginView();
+    }
+    
+    public View logout()
+    {
+        Agent.setActiveSession(null);
         return new LoginView();
     }
     
@@ -54,5 +68,102 @@ public class UserController extends Controller
     public View getRegister()
     {
         return new RegisterView();
+    }
+    
+    public View postRegister()
+    {
+        final String invalidInputMesage         =   "Invalid information, please check your fields";
+        final String failedMessage              =   "Failed to complete registration, please try again";
+        final String successMessage             =   "Account has been successfully created, you can now login";
+        
+        String[] expectedInput  =   
+        { 
+            "registerUsername", "registerPassword", "registerFirstname", "registerLastname",
+            "registerGender", "registerBirth", "registerPhone", "registerEmail", "registerEthnicity",
+            "registerContactFirstname", "registerContactLastname", "registerContactPhone",
+            "registerContactEmail", "registerMedicalDescription"
+        };
+        
+        if(!validatePostData(expectedInput))
+            return new ResponseDataView(invalidInputMesage, false);
+        else
+        {
+            EmergencyContactModel emergencyContact  =   new EmergencyContactModel();
+            emergencyContact.set("firstname", postData.getMessage("registerContactFirstname"));
+            emergencyContact.set("lastname", postData.getMessage("registerContactLastname"));
+            emergencyContact.set("contact_ph", postData.getMessage("registerContactPhone"));
+            emergencyContact.set("contact_email", postData.getMessage("registerContactEmail"));
+            emergencyContact.set("relationship", "Doctor");
+            
+            MedicalModel medical    =  new MedicalModel();
+            medical.set("description", postData.getMessage("registerMedicalDescription"));
+            
+            User user       =   new User();
+            int gender      =   postData.getMessage("registerGender").equalsIgnoreCase("male")? 1 : 0;
+            String passSalt =   Crypto.salt(postData.getMessage("registerUsername"));
+            String passHash =   Crypto.makeHash(passSalt, postData.getMessage("registerPassword"));
+                    
+            user.set("username", postData.getMessage("registerUsername"));
+            user.set("password", passHash);
+            user.set("firstname", postData.getMessage("registerFirstname"));
+            user.set("lastname", postData.getMessage("registerLastname"));
+            user.set("gender", gender);
+            user.set("birthdate", postData.getMessage("registerBirth"));
+            user.set("contact_ph", postData.getMessage("registerPhone"));
+            user.set("contact_email", postData.getMessage("registerEmail"));
+            user.set("ethnicity", postData.getMessage("registerEthnicity"));
+            user.set("role_id", 1);
+            
+                try(DataConnector conn  =   new DataConnector())
+                {
+                    try
+                    {
+                        conn.startTransaction();
+                        conn.setQueryMutator();
+                        
+                        //Create contact
+                        emergencyContact.setActiveConnection(conn);
+                        emergencyContact.save();
+                        ResultSet rs1    =   conn.getResults();
+                        if(rs1.next()) System.out.println("next!");
+                        long emergContactId =   rs1.getLong(1);
+                        
+
+                        //Create medical
+                        medical.setActiveConnection(conn);
+                        medical.set("contact_id", emergContactId);
+                        medical.save();
+                        ResultSet rs2 =   conn.getResults();
+                        if(rs2.next()) System.out.println("next!");
+                        long medicalId  =   rs2.getLong(1);
+                        
+                        //Create user and commit
+                        System.out.println("starting user create");
+                        user.setActiveConnection(conn);
+                        user.set("medical_id", medicalId);
+                        
+                        if(user.save())
+                        {
+                            conn.commitTransaction();
+                            return new ResponseDataView(successMessage, true);
+                        }
+
+                        else
+                        {
+                            conn.rollbackTransaction();
+                            return new ResponseDataView(failedMessage, false);
+                        }
+                    }
+                    
+                    catch(SQLException e)
+                    {
+                        e.printStackTrace();
+                        System.out.println("[SQL Exception] " + e.getMessage());
+                        conn.rollbackTransaction();
+                        conn.closeConnection();
+                        return new ResponseDataView(failedMessage, false);
+                    }
+                }
+        }
     }
 }

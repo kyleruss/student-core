@@ -32,9 +32,10 @@ public class LoginView extends AbstractView implements View
        String headerMain    =   CUITextTools.drawLargeHeader(header, desc, CUITextTools.GREEN, CUITextTools.CYAN);
        String breadcrumb    =   CUITextTools.underline(CUITextTools.changeColour("Location: ", CUITextTools.CYAN) + "/login/");
        String cmdSubheader  =   CUITextTools.drawSubHeader("Commands", CUITextTools.PLAIN, CUITextTools.GREEN, ".");
-       System.out.println(headerMain + "\n\n" + breadcrumb + "\n\n" + cmdSubheader + "\n" + showCommands());
+       System.out.println(headerMain + "\n\n" + breadcrumb + "\n\n" + cmdSubheader + "\n");
+       showCommands();
        
-       System.out.println("\n\n" + CUITextTools.changeColour("Please login or register an account", CUITextTools.YELLOW));
+       System.out.println("\n\n" + CUITextTools.changeColour("Please login or create an account", CUITextTools.YELLOW));
     }
     
     
@@ -60,7 +61,22 @@ public class LoginView extends AbstractView implements View
             
             ResponseDataView response   =   (ResponseDataView) RouteHandler.go("postLogin", postData);
             
-            System.out.println(response.getResponseMessage());
+            System.out.println("\n" + response.getResponseMessage());
+            
+            if(response.getResponseStatus())
+            {
+               System.out.println("Redirecting in 5 seconds..");
+        
+                try { Thread.sleep(5000); } 
+                catch (InterruptedException ex) 
+                {
+                    System.out.println(ex.getMessage());
+                }
+                
+                Agent.setView("getHome");
+            }
+            
+            
             commandFinished();
          
     }

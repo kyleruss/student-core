@@ -9,7 +9,7 @@ package engine.controllers;
 import engine.views.View;
 import engine.views.cui.HomeView;
 
-public class BaseController 
+public class GeneralController 
 {
     public View getHome()
     {

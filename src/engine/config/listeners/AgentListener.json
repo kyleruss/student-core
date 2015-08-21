@@ -8,6 +8,15 @@
             "className": "engine.core.Agent",
             "methodName": "exitApp",
             "commandDescription": "Exit application"
+        },
+        
+        "logout":
+        {
+            "commandName": "logout",
+            "paramTypes": [],
+            "className": "engine.core.Agent",
+            "methodName": "sessionLogout",
+            "commandDescription": "Logout of account"
         }
     }
     

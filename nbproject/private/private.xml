@@ -10,8 +10,8 @@
             <file>file:/root/workspace/PDC/pdc-project/src/engine/core/Routes.java</file>
             <file>file:/root/workspace/PDC/pdc-project/src/engine/core/Command.java</file>
             <file>file:/root/workspace/PDC/pdc-project/src/engine/views/cui/RegisterView.java</file>
+            <file>file:/root/workspace/PDC/pdc-project/src/engine/views/cui/HomeView.java</file>
             <file>file:/root/workspace/PDC/pdc-project/src/engine/controllers/ControllerMessage.java</file>
-            <file>file:/root/workspace/PDC/pdc-project/src/engine/views/cui/ResponseDataView.java</file>
             <file>file:/root/workspace/PDC/pdc-project/src/engine/views/DataView.java</file>
         </group>
     </open-files>

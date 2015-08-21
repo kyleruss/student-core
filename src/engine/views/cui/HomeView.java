@@ -9,11 +9,12 @@ public class HomeView extends AbstractView
     @Override
     public void display() 
     {
-       String header        =   "Welcome to Student core!";
-       String desc          =   "Explore a great DMS";
+       String header        =   "Home";
+       String desc          =   "Manage personal profile, administration and more";
        String headerMain    =   CUITextTools.drawLargeHeader(header, desc, CUITextTools.GREEN, CUITextTools.CYAN);
        String cmdSubheader  =   CUITextTools.drawSubHeader("Commands", CUITextTools.PLAIN, CUITextTools.GREEN, "=");
-       System.out.println(headerMain + "\n\n" + cmdSubheader + "\n" + showCommands());
+      System.out.println("\n\n" + headerMain + "\n\n" + cmdSubheader + "\n");
+      showCommands();
        
     }
     

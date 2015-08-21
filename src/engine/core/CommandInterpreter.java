@@ -1,9 +1,11 @@
 
 package engine.core;
 
+import com.bethecoder.ascii_table.ASCIITable;
 import engine.views.cui.Utilities.CUITextTools;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -43,7 +45,7 @@ public abstract class CommandInterpreter implements CommandExecute
         System.out.println(message);
     }
     
-    public String showCommands()
+   /* public String showCommands1()
     {
         Iterator<Command> commIter  =   commands.values().iterator();
         int colCount                =   0;
@@ -66,6 +68,34 @@ public abstract class CommandInterpreter implements CommandExecute
             }
         }
         return commandText;
+    } */
+    
+    public void showCommands()
+    {
+        List<Command> commandCol            =   new ArrayList<>(commands.values());
+        final int maxCols                   =   3;
+        int numRows                         =   Math.max(commandCol.size() / maxCols, 1);
+        int numCols                         =   Math.min(maxCols, commandCol.size());
+        
+        String[] headers                    =   {};
+        String[][] data                     =   new String[numRows][numCols];
+        int commandIndex                    =   0;
+        
+        for(int row = 0; row < numRows; row++)
+        {
+            for(int col = 0; col < numCols; col++)
+            {
+                Command current         =   commandCol.get(commandIndex);
+                String commandName      =   current.getCommandName();
+                String commandDesc      =   current.getCommandDescription();
+                String commandDisp      =   CUITextTools.keyTextBrackets(commandDesc, commandName);
+                
+                data[row][col] = commandDisp;
+                commandIndex++;
+            }
+        }
+       
+        ASCIITable.getInstance().printTable(headers, data);
     }
     
     protected abstract String getCommandsFile();

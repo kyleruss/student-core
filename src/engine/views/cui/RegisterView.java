@@ -38,6 +38,15 @@ public class RegisterView extends AbstractView implements View
         ControllerMessage postData  =   new ControllerMessage().addAll(accDetails).addAll(contactDetails).addAll(medicalDetails);
         ResponseDataView response   =   (ResponseDataView) RouteHandler.go("postRegister", postData);
         
+        System.out.println(response.getResponseMessage());
+        
+        if(response.getResponseStatus())
+        {
+        //    System.out.println("\n" + CUITextTools.Login now? [Y/N]");
+            Scanner is  =   new Scanner(System.in);
+            
+        }
+        
         Agent.commandFinished();
     }
     
@@ -96,6 +105,7 @@ public class RegisterView extends AbstractView implements View
        fieldTitles.add(createFormField("First name", "Your legal first name"));
        fieldTitles.add(createFormField("Last name", "Your legel last name/surname"));
        fieldTitles.add(createFormField("Gender/Sex", "What is your gender/sex? [Male/Female]"));
+       fieldTitles.add(createFormField("Birth date", "When were you born? yyyy-mm-dd"));
        fieldTitles.add(createFormField("Contact phone", "What is your contact phone number? 7-12 digits"));
        fieldTitles.add(createFormField("Contact email", "What is your contact email address, may be used for verification"));
        fieldTitles.add(createFormField("Ethnicity", "What is your recognized ethnicity?"));
@@ -107,11 +117,12 @@ public class RegisterView extends AbstractView implements View
        inputKeys.add("registerFirstname");
        inputKeys.add("registerLastname");
        inputKeys.add("registerGender");
+       inputKeys.add("registerBirth");
        inputKeys.add("registerPhone");
        inputKeys.add("registerEmail");
        inputKeys.add("registerEthnicity");
        
-       String[] headers =   { "Username", "Password", "First name", "Last name", "Gender", "Phone", "Email", "Ethnicity" };
+       String[] headers =   { "Username", "Password", "First name", "Last name", "Gender", "Birthdate", "Phone", "Email", "Ethnicity" };
        
        return getFormInput(fieldTitles, inputKeys, headers);
     }

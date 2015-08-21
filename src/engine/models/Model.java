@@ -220,38 +220,29 @@ public abstract class Model
     //Inserts the Model data values corresponding to data column names
     //Into the Model mapping table
     //Returns true if the insertion was successful
-    public boolean save()
+    public boolean save() throws SQLException
     {
         String columnNames      =   getDataColumns();
         String columnValues     =   getDataValues();
         String insertQuery      =   MessageFormat.format("INSERT INTO {0} ({1}) VALUES ({2})", table, columnNames, columnValues);
         
         System.out.println(insertQuery);
-        try
-        {
+
             if(activeConnection == null)
             {
                 try(DataConnector conn  =   new DataConnector())
                 {
                     conn.setQueryMutator();
-                    conn.execute(insertQuery);
+                    return conn.execute(insertQuery);
                 }
             }
             
             else
             {
                 activeConnection.setQueryMutator();
-                activeConnection.execute(insertQuery);
+                return activeConnection.execute(insertQuery);
             }
-            
-            return true;
-        }
         
-        catch(SQLException e)
-        {
-            System.out.println("[SQL EXCEPTION] Failed to save record - " + e.getMessage());
-            return false;
-        }
     }
     
     public boolean update()
@@ -270,11 +261,11 @@ public abstract class Model
             return true;
         }
         
-        catch(SQLException e)
+        /*catch(SQLException e)
         {
             System.out.println("[SQL EXCEPTION] Failed to update record - " + e.getMessage());
             return false;
-        }
+        } */
     }
     
     //Makes the value a literal

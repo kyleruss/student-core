@@ -3,6 +3,8 @@ package engine.views.cui.Utilities;
 
 import java.text.MessageFormat;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.apache.commons.lang3.StringUtils;
 
 
@@ -98,18 +100,39 @@ public class CUITextTools
         return keyText;
     }
     
+    public static void printDelayedText(String message)
+    {
+        Thread textThread   =   new Thread(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                for(int i = 0; i < message.length(); i++)
+                {
+                    System.out.print(message.charAt(i));
+
+                    synchronized(this)
+                    {
+                        try { wait(300); }
+                        catch(InterruptedException e)
+                        {
+                            System.out.println(e.getMessage());
+                        }
+                    }
+                }
+            }
+        });
+        textThread.start();
+    }
+    
     public static String changeColour(String text, int colour)
     {
         return ((char)27 + "[" + colour + "m"  + text + (char)27 + "[0m");
     }
     
-    public static String drawTable(List<String> columnNames, int width)
-    {
-        return "";
-    }
-    
     public static void main(String[] args)
     {
-        System.out.println(drawSubHeader("Commands", PLAIN, GREEN, "="));
+        printDelayedText("Hello world!");
     }
+    
 }
