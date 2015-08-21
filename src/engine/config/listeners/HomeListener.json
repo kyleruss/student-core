@@ -5,7 +5,7 @@
         {
             "commandName": "admincp",
             "paramTypes": [],
-            "className": "engine.view.cui.HomeView",
+            "className": "engine.views.cui.HomeView",
             "methodName": "goAdmincp",
             "commandDescription": "Go to admin CP"
         }

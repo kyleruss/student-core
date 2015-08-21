@@ -11,6 +11,7 @@ import engine.views.View;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Type;
 import java.text.MessageFormat;
 
 
@@ -48,8 +49,14 @@ public class RouteHandler
 
             //If a route name is passed and has params
             //call go(String, String[]) 
-            String[] params     =   (Router.isPathName(route))? new String[] {} : getParamsFromUrl(route, urlPattern);
-            return go(pathName, params, data);
+            String[] params         =   (Router.isPathName(route))? new String[] {} : getParamsFromUrl(route, urlPattern);
+            Class<?>[] paramTypes   =   new Class<?>[params.length];
+            
+            if(params.length > 0)
+                for(int i = 0; i < params.length; i++)
+                    paramTypes[i] = String.class;
+            
+            return go(pathName, params, paramTypes, data);
         }
         
         catch(NoSuchMethodException e)
@@ -62,14 +69,14 @@ public class RouteHandler
     //Calls a controllers method with params
     //The number of params must match the routes 
     //controller method number of params
-    public static View go(String routeName, String[] params, ControllerMessage data)
+    public static View go(String routeName, String[] params, Class<?>[] paramTypes, ControllerMessage data)
     {
         Path foundPath  =   routes.getPath(routeName);   
         try
         {
             if(foundPath == null) throw new NoSuchMethodException();
             else           
-                return call(foundPath, params, data);
+                return call(foundPath, params, paramTypes, data);
         }
         
         catch(ClassNotFoundException | NoSuchMethodException | IllegalAccessException | InvocationTargetException | InstantiationException e)
@@ -84,14 +91,14 @@ public class RouteHandler
     //Creates and calls the routes controller method
     //Controller and method of querying route must exist
     //Further redirection must be handled by the called controller
-    public static View call(Path path, String[] params, ControllerMessage data) 
+    public static View call(Path path, String[] params, Class<?>[] paramTypes, ControllerMessage data) 
     throws ClassNotFoundException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException
     {
         String controllerName    =   MessageFormat.format("{0}.{1}", CONTROLLER_PACKAGE, path.getController());
         String controllerMethod  =   path.getControllerMethod();
         
         Class<?> controller      =   Class.forName(controllerName);
-        Method method            =   controller.getMethod(controllerMethod);      
+        Method method            =   controller.getDeclaredMethod(controllerMethod, paramTypes);      
         Object instance;
         
         if(data == null)

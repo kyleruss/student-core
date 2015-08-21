@@ -1,8 +1,9 @@
 
-package engine.views;
+package engine.views.cui;
 
 import engine.controllers.ControllerMessage;
 import engine.core.Agent;
+import engine.views.AbstractView;
 
 
 public class AdminControlPanelView extends AbstractView
@@ -21,6 +22,16 @@ public class AdminControlPanelView extends AbstractView
                 "Manage user accounts, student grades and more", 
                 "/" + Agent.getActiveSession().getUser().get("USERNAME").getNonLiteralValue() + "/admincp/"
         );
+    }
+    
+    public void showStudents()
+    {
+        Agent.setView("getStudents");
+    }
+    
+    public void showHouses()
+    {
+        System.out.println("houses!");
     }
     
     @Override

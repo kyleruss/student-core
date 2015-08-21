@@ -1,0 +1,50 @@
+{
+    "commands": 
+    {
+        "delete":
+        {
+            "commandName": "delete",
+            "paramTypes": [],
+            "className": "engine.views.cui.AdminControlPanelView",
+            "methodName": "deleteStudent",
+            "commandDescription": "Remove a student"
+        },
+        
+        "modify":
+        {
+            "commandName": "modify",
+            "paramTypes": [],
+            "className": "engine.views.cui.AdminControlPanelView",
+            "methodName": "modifyStudent",
+            "commandDescription": "Modify a student"
+        },
+        
+        "search":
+        {
+            "commandName": "search",
+            "paramTypes": [],
+            "className": "engine.views.cui.AdminControlPanelView",
+            "methodName": "findStudent",
+            "commandDescription": "Find a student"
+        },
+        
+        "nextPage":
+        {
+            "commandName": "nextPage",
+            "paramTypes": [],
+            "className": "engine.views.cui.AdminControlPanelView",
+            "methodName": "nextPage",
+            "commandDescription": "Go to next page in list"
+        },
+        
+        "prevPage":
+        {
+            "commandName": "prevPage",
+            "paramTypes": [],
+            "className": "engine.views.cui.AdminControlPanelView",
+            "methodName": "prevPage",
+            "commandDescription": "Go to previous page in list"
+        }
+    }
+    
+}
