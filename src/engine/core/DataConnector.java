@@ -14,6 +14,8 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class DataConnector extends Thread implements AutoCloseable
 {  
@@ -103,6 +105,15 @@ public class DataConnector extends Thread implements AutoCloseable
             System.out.println("Failed to connect to server, please try again\nError: " + e.getMessage());      
             close();
         }                 
+    }
+    
+    public void startTransaction()
+    {
+        try{ conn.setAutoCommit(false); } 
+        catch (SQLException ex) 
+        {
+            System.out.println("[SQL exception] Failed to start transaction, error: " + ex.getMessage());
+        }
     }
     
     public void setQueryAccessor()

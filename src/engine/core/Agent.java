@@ -179,10 +179,8 @@ public class Agent extends CommandInterpreter
                     }
 
                     else if(activeView != null)
-                    {
-                        System.out.println("Firing on view");
                         activeView.fire(command, activeView);
-                    }
+                    
                     
                 }
             }

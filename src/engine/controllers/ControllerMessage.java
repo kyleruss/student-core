@@ -27,6 +27,12 @@ public class ControllerMessage
         return this;
     }
     
+    public ControllerMessage addAll(Map<String, String> other)
+    {
+        messages.putAll(other);
+        return this;
+    }
+    
     public String getMessage(String name)
     {
         return messages.get(name);
