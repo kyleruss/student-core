@@ -1,14 +1,14 @@
 {
     "commands": 
     {
-        "viewTest":
+        "admincp":
         {
-            "commandName": "viewTest",
-            "paramTypes": ["java.lang.String"],
-            "className": "engine.Views.cui.HomeView",
-            "methodName": "viewTest",
-            "commandDescription": "test view method"
-        } 
+            "commandName": "admincp",
+            "paramTypes": [],
+            "className": "engine.view.cui.HomeView",
+            "methodName": "goAdmincp",
+            "commandDescription": "Go to admin CP"
+        }
     }
     
 }

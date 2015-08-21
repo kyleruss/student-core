@@ -5,7 +5,6 @@ import engine.controllers.ControllerMessage;
 import engine.core.Agent;
 import static engine.core.Agent.commandFinished;
 import engine.core.RouteHandler;
-import engine.core.authentication.Auth;
 import engine.views.AbstractView;
 import engine.views.View;
 import engine.views.cui.Utilities.CUITextTools;
@@ -16,26 +15,19 @@ public class LoginView extends AbstractView implements View
     
     public LoginView()
     {
-        super();
+        this(new ControllerMessage());
     }
     
     public LoginView(ControllerMessage messages)
     {
-        super(messages);
+        super(messages, "Welcome to Student core!", "Explore a great DMS", "/login/");
     }
 
     @Override
     public void display()
     {
-       String header        =   "Welcome to Student core!";
-       String desc          =   "Explore a great DMS";
-       String headerMain    =   CUITextTools.drawLargeHeader(header, desc, CUITextTools.GREEN, CUITextTools.CYAN);
-       String breadcrumb    =   CUITextTools.underline(CUITextTools.changeColour("Location: ", CUITextTools.CYAN) + "/login/");
-       String cmdSubheader  =   CUITextTools.drawSubHeader("Commands", CUITextTools.PLAIN, CUITextTools.GREEN, ".");
-       System.out.println(headerMain + "\n\n" + breadcrumb + "\n\n" + cmdSubheader + "\n");
-       showCommands();
-       
-       System.out.println("\n\n" + CUITextTools.changeColour("Please login or create an account", CUITextTools.YELLOW));
+        super.display();
+        System.out.println("\n\n" + CUITextTools.changeColour("Please login or create an account", CUITextTools.YELLOW));
     }
     
     

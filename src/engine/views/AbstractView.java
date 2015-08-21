@@ -73,6 +73,10 @@ public abstract class AbstractView extends CommandInterpreter implements View
     {
        String headerMain    =   CUITextTools.drawLargeHeader(viewName, viewDescription, CUITextTools.GREEN, CUITextTools.CYAN);
        String cmdSubheader  =   CUITextTools.drawSubHeader("Commands", CUITextTools.PLAIN, CUITextTools.GREEN, "=");
+       String breadcrumb    =   CUITextTools.underline(CUITextTools.changeColour("Location: ", CUITextTools.CYAN) + viewLocation);
+      
+       System.out.println("\n\n" + headerMain + "\n\n" + breadcrumb + "\n\n" + cmdSubheader + "\n");
+       showCommands();
     }
     
     @Override

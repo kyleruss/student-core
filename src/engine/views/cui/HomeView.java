@@ -1,26 +1,36 @@
 package engine.views.cui;
 
-import engine.views.cui.Utilities.CUITextTools;
+import engine.controllers.ControllerMessage;
+import engine.core.Agent;
 import engine.views.AbstractView;
 
 public class HomeView extends AbstractView
 {
-
+    public HomeView()
+    {
+        this(new ControllerMessage());
+    }
+    
+    public HomeView(ControllerMessage message)
+    {
+        super
+        (
+                message,
+                "Home", 
+                "Manage personal profile, administration and more", 
+                "/"  + Agent.getActiveSession().getUser().get("USERNAME").getNonLiteralValue() + "/home/"
+        );
+    }
+    
     @Override
     public void display() 
     {
-       String header        =   "Home";
-       String desc          =   "Manage personal profile, administration and more";
-       String headerMain    =   CUITextTools.drawLargeHeader(header, desc, CUITextTools.GREEN, CUITextTools.CYAN);
-       String cmdSubheader  =   CUITextTools.drawSubHeader("Commands", CUITextTools.PLAIN, CUITextTools.GREEN, "=");
-      System.out.println("\n\n" + headerMain + "\n\n" + cmdSubheader + "\n");
-      showCommands();
-       
+        super.display();  
     }
     
-    public void viewTest(String message)
+    public void goAdmincp()
     {
-        System.out.println("View message " + message);
+        Agent.setView("getAdmincp");
     }
     
     

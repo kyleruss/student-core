@@ -37,7 +37,7 @@ public class Agent extends CommandInterpreter
     }
     
     private static View activeView;
-    private static Context activeContext;
+    private static Context activeContext; 
     private static List<View> viewTree;
     private static Session activeSession;
     private static Thread agentThread;

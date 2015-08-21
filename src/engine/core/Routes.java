@@ -34,5 +34,8 @@ public class Routes extends Router
         add("getRegister", "UserController", "getRegister", "/register");
         add("postRegister", "UserController", "postRegister", "/postregister");
         add("logout", "UserController", "logout", "/logout");
+        
+        //Admin panel
+        add("getAdmincp", "AdminController", "getAdmincp", "/admincp");
     }
 }
