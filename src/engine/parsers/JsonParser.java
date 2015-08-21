@@ -39,7 +39,6 @@ public class JsonParser
             
             JsonArray data           =   new JsonArray();
             ResultSetMetaData meta   =   results.getMetaData();
-             
             
             //Add result meta data to results
             //Meta data will be the first element in data
@@ -64,7 +63,7 @@ public class JsonParser
                     currentRow.addProperty(meta.getColumnName(columnIndex), "" + results.getObject(columnIndex));
                 data.add(currentRow);
             }
-            
+           
             return data;
         }
         

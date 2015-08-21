@@ -6,14 +6,19 @@
 
 package engine.core;
 
+import com.google.gson.JsonArray;
 import engine.config.DatabaseConfig;
 import engine.core.database.Query;
 import engine.core.loggers.MainLogger;
+import engine.models.EmergencyContactModel;
+import engine.models.Model;
+import engine.parsers.JsonParser;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -68,10 +73,22 @@ public class DataConnector extends Thread implements AutoCloseable
             }
         }
         
-        catch(InterruptedException | SQLException e)
+        catch(InterruptedException e)
         {
             e.printStackTrace();
             System.out.println("exception " + e.getMessage());
+            
+            try
+            {
+                if(!conn.getAutoCommit())
+                    conn.rollback();
+            }
+            
+            catch(SQLException ex)
+            {
+                System.out.println("[SQL Exception] Failed to rollback, error: " + ex.getMessage());
+            }
+            
             close();
         } 
     }
@@ -109,10 +126,19 @@ public class DataConnector extends Thread implements AutoCloseable
     
     public void startTransaction()
     {
-        try{ conn.setAutoCommit(false); } 
+        try { conn.setAutoCommit(false); } 
         catch (SQLException ex) 
         {
             System.out.println("[SQL exception] Failed to start transaction, error: " + ex.getMessage());
+        }
+    }
+    
+    public void commitTransaction()
+    {
+        try { conn.commit(); }
+        catch(SQLException e)
+        {
+            System.out.println("[SQL exception] Failed to commit transaction, error: " + e.getMessage());
         }
     }
     
@@ -133,17 +159,25 @@ public class DataConnector extends Thread implements AutoCloseable
     
     //Executes the active query
     //Resets activeQuery after
-    private synchronized void onExecute() throws SQLException
+    private synchronized void onExecute()
     {
-        if(queryType == QueryType.ACCESSOR) 
-            results = activeQuery.executeQuery();      
-        else
+        try
         {
-            results = null;
-            activeQuery.execute();
+            if(queryType == QueryType.ACCESSOR) 
+                results = activeQuery.executeQuery();      
+            else
+            {
+                activeQuery.executeUpdate();
+                results =   activeQuery.getGeneratedKeys();
+            }
+
+            activeQuery = null;
         }
         
-        activeQuery = null;
+        catch(SQLException e)
+        {
+            System.out.println("SQL EXCEPTION: " + e.getMessage());
+        }
     }
     
     //Executes a query that is passed
@@ -169,16 +203,29 @@ public class DataConnector extends Thread implements AutoCloseable
     {
         try
         {
-            //Logs the attempted query
+            //Logs the attempted query 
             //Logging config is checked in log()
             MainLogger.log(query, MainLogger.DATA_LOGGER);
-
-            return conn.prepareStatement(query);
+      
+            return conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
         }
         
         catch(SQLException e)
         {
             e.printStackTrace();
+            
+            try
+            {
+                if(!conn.getAutoCommit())
+                    conn.rollback();
+            }
+            
+            catch(SQLException ex)
+            {
+                System.out.println("[SQL Exception] Failed to rollback, error: " + ex.getMessage());
+            }
+            
+            close();
             return null;
         }
     }
@@ -238,6 +285,21 @@ public class DataConnector extends Thread implements AutoCloseable
         catch(NullPointerException | InterruptedException | SQLException e)
         {
             System.out.println("[CONNECTION CLOSE EXCEPTION] " + e.getMessage());
+            
+            try
+            {
+                if(!conn.getAutoCommit())
+                    conn.rollback();
+            }
+            
+            catch(SQLException ex)
+            {
+                System.out.println("[SQL Exception] Failed to rollback, error: " + ex.getMessage());
+            }
         } 
+    }
+    
+    public static void main(String[] args)
+    {
     }
 }
