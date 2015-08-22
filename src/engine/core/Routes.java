@@ -41,6 +41,6 @@ public class Routes extends Router
         add("getStudentList", "AdminController", "getStudentList", "/students/list/page={page}/numresults={numResults}");
         add("postRemoveStudent", "AdminController", "postRemoveStudent", "/students/remove");
         add("postModifyStudent", "AdminController", "postModifyStudent", "/students/modify");
-        add("getSearchStudent", "AdminController", "getSearchStudent", "/students/search");
+        add("postSearchStudent", "AdminController", "postSearchStudent", "/students/search");
     }
 }

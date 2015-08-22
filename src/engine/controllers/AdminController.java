@@ -60,8 +60,8 @@ public class AdminController extends Controller
     public View postRemoveStudent()
     {
         final String invalidInputMesage         =   "Invalid information, please check your fields";
-        final String failedMessage              =   "Invalid username or password";
-        final String successMessage             =   "Successfully logged in";
+        final String failedMessage              =   "Failed to remove user";
+        final String successMessage             =   "Successfully removed user";
         
         if(!validatePostData(new String[]{"removeUsername"})) return new ResponseDataView(invalidInputMesage, false); 
         else
@@ -77,13 +77,54 @@ public class AdminController extends Controller
      
     public View postModifyStudent()
     {
-        return null;
+        final String invalidInputMesage         =   "Invalid information, please check your fields";
+        final String failedMessage              =   "Failed to modify user";
+        final String successMessage             =   "Successfully modified user";
+        
+        if(!validatePostData(new String[]{"modifyUsername", "modifyAttribute", "modifyValue"})) return new ResponseDataView(invalidInputMesage, false); 
+        else
+        {
+            String username =   postData.getMessage("modifyUsername");
+            String attr     =   postData.getMessage("modifyAttribute");
+            String value    =   postData.getMessage("modifyValue");
+            
+            User user       =   new User(username);
+            if(!user.hasColumn(attr)) return new ResponseDataView(invalidInputMesage, false);
+            else
+            {
+                user.set(attr, value);
+                if(user.update()) return new ResponseDataView(successMessage, true); 
+                else return new ResponseDataView(failedMessage, false); 
+            }
+        }
     }
     
     
-    public View getSearchStudent()
+    public View postSearchStudent()
     {
-        return null;
+        final String invalidInputMesage         =   "Invalid information, please check your fields";
+        final String failedMessage              =   "Failed to search for user(s)";
+        final String successMessage             =   "Successfully found";
+        
+       if(!validatePostData(new String[]{"searchAttribute", "searchValue", "searchOperator"})) return new ResponseDataView(invalidInputMesage, false);
+       else
+       {
+           String searchAttribute   =  postData.getMessage("searchAttribute");
+           String searchValue       =  postData.getMessage("searchValue");
+           String searchOperator    =   postData.getMessage("searchOperator");
+           
+           try
+           {
+                JsonArray results = new User().builder().where(searchAttribute, searchOperator, searchValue).get();
+                ControllerMessage data  =   new ControllerMessage(results);
+                return new ResponseDataView(successMessage + " " + results.size() + " users", true, data, 5);
+           }
+           
+           catch(SQLException e)
+           {
+               return new ResponseDataView(failedMessage, false);
+           }
+       }
     }
     
 }

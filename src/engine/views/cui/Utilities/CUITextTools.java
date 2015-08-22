@@ -1,8 +1,12 @@
 
 package engine.views.cui.Utilities;
 
+import com.bethecoder.ascii_table.ASCIITable;
 import java.text.MessageFormat;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.commons.lang3.StringUtils;
@@ -128,6 +132,62 @@ public class CUITextTools
     public static String changeColour(String text, int colour)
     {
         return ((char)27 + "[" + colour + "m"  + text + (char)27 + "[0m");
+    }
+    
+    public static Map<String, String> getFormInput(List<String> fieldTitles, List<String> inputKeys, String[] headers)
+    {
+        Map<String, String> form    =   new LinkedHashMap<>();
+        
+        Thread inputThread  =   new Thread(() ->
+        {
+            boolean formInProgress  =   true;
+            Scanner inputScan       =   new Scanner(System.in);
+            
+            while(formInProgress)
+            {
+                for(int inputIndex = 0; inputIndex < inputKeys.size(); inputIndex++)
+                {
+                    System.out.println(fieldTitles.get(inputIndex));
+                    form.put(inputKeys.get(inputIndex), inputScan.nextLine());
+                }
+                
+                formInProgress = !confirmForm(form, headers, inputScan);
+            }
+        });
+        
+        inputThread.start();
+        
+        try{ inputThread.join(); }   
+        catch(InterruptedException e)
+        {
+            System.out.println("Error: " + e.getMessage());
+        }
+        
+        return form;
+    }
+    
+    public static boolean confirmForm(Map<String, String> form, String[] headers, Scanner scanner)
+    {
+        System.out.println("\n" + CUITextTools.changeColour("Please verify that the following details are correct before proceeding\n", CUITextTools.YELLOW) + "\n");
+        
+        String[][] data      =   new String[1][form.size()];
+        data[0]              =   (String[]) form.values().toArray(new String[form.size()]);
+
+        ASCIITable.getInstance().printTable(headers, data);
+
+        System.out.println("\n" + CUITextTools.changeColour("Continue? [Y/N]", CUITextTools.GREEN) + "\n");
+        String continueAnswer   =   scanner.nextLine();
+        return continueAnswer.equalsIgnoreCase("y");
+    }
+    
+    public static String createFormField(String title, String description)
+    {
+        String formField    =   "";
+        formField += "\n" + CUITextTools.drawSubHeader(title, CUITextTools.PLAIN, CUITextTools.CYAN, "#") + "\n";
+        formField += CUITextTools.changeColour(description, CUITextTools.YELLOW) + "\n";
+        formField += CUITextTools.changeColour("Enter " + title + ":\n", CUITextTools.GREEN);
+        
+        return formField;
     }
     
     public static void main(String[] args)

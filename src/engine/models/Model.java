@@ -152,6 +152,11 @@ public abstract class Model
         return columnValues;
     }
     
+    public boolean hasColumn(String columnName)
+    {
+        return columns.contains(columnName);
+    }
+    
     
     //Finds an existing record in the mapping table
     //If a record is found, adds entries to models data
