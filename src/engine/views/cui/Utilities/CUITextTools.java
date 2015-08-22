@@ -2,6 +2,8 @@
 package engine.views.cui.Utilities;
 
 import com.bethecoder.ascii_table.ASCIITable;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import java.text.MessageFormat;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -188,6 +190,31 @@ public class CUITextTools
         formField += CUITextTools.changeColour("Enter " + title + ":\n", CUITextTools.GREEN);
         
         return formField;
+    }
+    
+    public static void responseToTable(JsonArray response)
+    {
+            JsonArray columns   =   response.get(0).getAsJsonObject().get("columnNames").getAsJsonArray();
+            
+            String[][] data     =   new String[response.size() - 1][columns.size()];
+            String[] headers    =   new String[columns.size()];
+            
+            for(int colIndex = 0; colIndex < headers.length; colIndex++)
+                headers[colIndex] = columns.get(colIndex).getAsString();
+            
+            for(int rowIndex = 1; rowIndex <= data.length; rowIndex++)
+            {
+                JsonObject userRow  =   response.get(rowIndex).getAsJsonObject();
+                
+                for(int colIndex = 0; colIndex < headers.length; colIndex++)
+                {
+                    String colName  =   headers[colIndex];
+                    String userCol  =   userRow.get(colName).getAsString();
+                    data[rowIndex - 1][colIndex] = userCol;
+                }
+            }
+            
+            ASCIITable.getInstance().printTable(headers, data);
     }
     
     public static void main(String[] args)

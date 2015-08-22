@@ -16,6 +16,13 @@ public class Column
         this.isLiteral      =   (columnValue instanceof String);
     }
     
+    public Column(String columnName, String dbColumnType)
+    {
+        this.columnName =   columnName;
+        isLiteral       =   dbColumnType.equalsIgnoreCase("java.lang.String");
+        columnValue     =   null;
+    }
+    
     public Column(String columnName, Object columnValue, String dbColumnType)
     {
         this.columnName     =   columnName;
@@ -72,6 +79,18 @@ public class Column
     public void setColumnValue(String columnValue)
     {
         this.columnValue    =   columnValue;
+    }
+    
+    @Override
+    public boolean equals(Object other)
+    {
+        if(other instanceof Column)
+        {
+            Column otherColumn  =   (Column) other;
+            return this.columnName.equalsIgnoreCase(otherColumn.getColumnName());
+        }
+        
+        else return false;
     }
    
 }

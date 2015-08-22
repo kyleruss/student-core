@@ -44,7 +44,7 @@ public abstract class Model
     
     //The columns in the table
     //Columns are fetched on initialization by initColumns()
-    protected List<String> columns;
+    protected Map<String, Column> columns;
     
     //The table's row data
     //Allows for mutation such as insertion, deletion and editing
@@ -57,7 +57,7 @@ public abstract class Model
     public Model()
     {
         data    =   new LinkedHashMap<>();
-        columns =   new ArrayList<>();
+        columns =   new LinkedHashMap<>();
         initTable();
         initColumns();
     }
@@ -89,8 +89,9 @@ public abstract class Model
             
             JsonObject metaData     =   metaDataTemp.get(0).getAsJsonObject();
             JsonArray colNames      =   metaData.get("columnNames").getAsJsonArray();
+            JsonArray colTypes      =   metaData.get("columnTypes").getAsJsonArray();
             
-            initColumns(colNames);
+            initColumns(colNames, colTypes);
         } 
         
         catch(SQLException e)
@@ -99,11 +100,15 @@ public abstract class Model
         } 
     }
     
-    protected void initColumns(JsonArray resultColumns)
+    protected void initColumns(JsonArray resultColumns, JsonArray colTypes)
     {
         columns.clear();
         for(int colIndex = 0; colIndex < resultColumns.size(); colIndex++)
-            columns.add(resultColumns.get(colIndex).getAsString());        
+        {
+            String colName  =   resultColumns.get(colIndex).getAsString();
+            String colType  =   colTypes.get(colIndex).getAsString();
+            columns.put(colName, new Column(colName, colType));      
+        }
     }
     
     public void setActiveConnection(DataConnector liveConnection)
@@ -126,6 +131,11 @@ public abstract class Model
     public Column get(String colName)
     {
         return data.get(colName);
+    }
+    
+    public Column getColumn(String colName)
+    {
+        return columns.get(colName);
     }
     
     //Returns the current columns in models data
@@ -154,7 +164,7 @@ public abstract class Model
     
     public boolean hasColumn(String columnName)
     {
-        return columns.contains(columnName);
+        return columns.containsKey(columnName.toUpperCase());
     }
     
     
@@ -173,22 +183,28 @@ public abstract class Model
             JsonArray results       =   JsonParser.resultsToJson(conn.getResults());
             if(results == null) return null;
             
-            JsonArray columnNames   =   results.get(0).getAsJsonObject().get("columnNames").getAsJsonArray();
+            JsonObject colMeta      =   results.get(0).getAsJsonObject();
+            if(colMeta == null) return null;
+            
+            JsonArray columnNames   =   colMeta.get("columnNames").getAsJsonArray();
+            JsonArray colTypes      =   colMeta.get("columnTypes").getAsJsonArray();
+            
             ResultSetMetaData meta  =   conn.getResults().getMetaData();
             //System.out.println(results);
             
-            initColumns(columnNames);
+            initColumns(columnNames, colTypes);
             if(results.size() > 0)
             {
                 JsonObject entry            =   results.get(1).getAsJsonObject();
                 
                 for(int columnIndex = 0; columnIndex < columns.size(); columnIndex++)
                 {
-                    String column   =   columns.get(columnIndex);
-                    String typeName =   meta.getColumnClassName(columnIndex + 1);
+                    
+                    String columnName   =   columnNames.get(columnIndex).getAsString();
+                    String typeName     =   meta.getColumnClassName(columnIndex + 1);
 
-                    if(entry.get(column) == null || entry.get(column).getAsString().equals("null")) continue;
-                    else set(column, JsonParser.castElementToObj(entry.get(column), typeName));
+                    if(entry.get(columnName) == null || entry.get(columnName).getAsString().equals("null")) continue;
+                    else set(columnName, JsonParser.castElementToObj(entry.get(columnName), typeName));
                 }
 
             }

@@ -61,26 +61,8 @@ public class StudentListView extends AbstractView
             
             JsonArray response  =   results.getResponseData().getData();
             if(response == null) return;
-            JsonArray columns   =   response.get(0).getAsJsonObject().get("columnNames").getAsJsonArray();
             
-            String[][] data     =   new String[response.size() - 1][columns.size()];
-            String[] headers    =   new String[columns.size()];
-            for(int colIndex = 0; colIndex < headers.length; colIndex++)
-                headers[colIndex] = columns.get(colIndex).getAsString();
-            
-            for(int rowIndex = 1; rowIndex <= data.length; rowIndex++)
-            {
-                JsonObject userRow  =   response.get(rowIndex).getAsJsonObject();
-                
-                for(int colIndex = 0; colIndex < headers.length; colIndex++)
-                {
-                    String colName  =   headers[colIndex];
-                    String userCol  =   userRow.get(colName).getAsString();
-                    data[rowIndex - 1][colIndex] = userCol;
-                }
-            }
-            
-            ASCIITable.getInstance().printTable(headers, data);
+            CUITextTools.responseToTable(response);
         }
         
         else System.out.println(results.getResponseMessage());
@@ -127,12 +109,13 @@ public class StudentListView extends AbstractView
         
         ResponseDataView response   =   (ResponseDataView) RouteHandler.go("postModifyStudent", postData);
         
-        System.out.println(response.getResponseMessage());
+        if(response != null)
+            System.out.println(response.getResponseMessage());
     }
     
-    public void findStudent(String username, String attribute, Object value)
+    public void findStudent()
     {
-        List<String> fieldTitles    =   new ArrayList<>();
+       List<String> fieldTitles    =   new ArrayList<>();
         fieldTitles.add(CUITextTools.createFormField("Search attribute", "What is the attribute you want to search for?"));
         fieldTitles.add(CUITextTools.createFormField("Search operator", "What is the operator condition?"));
         fieldTitles.add(CUITextTools.createFormField("Search value", "The attributes value you are searching for"));
@@ -144,14 +127,16 @@ public class StudentListView extends AbstractView
         
         
         String[] headers    =   { "Search attribute", "Search value", "Search operator" };
-        Map<String, String> inputData   =   CUITextTools.getFormInput(fieldTitles, fieldKeys, headers);
+        Map<String, String> inputData   =   CUITextTools.getFormInput(fieldTitles, fieldKeys, headers); 
         
         ControllerMessage postData      =   new ControllerMessage();
         postData.addAll(inputData);
-        
+             
         ResponseDataView response   =   (ResponseDataView) RouteHandler.go("postSearchStudent", postData);
-        
         System.out.println(response.getResponseMessage());
+        
+        JsonArray responseData  =   response.getResponseData().getData();
+        CUITextTools.responseToTable(responseData);
     }
     
     public void nextPage()
@@ -165,7 +150,7 @@ public class StudentListView extends AbstractView
     
     public void prevPage()
     {
-        if(currentPage > 0)
+        if(currentPage > 1)
             showList(currentPage--, null);
         else
             System.out.println(CUITextTools.changeColour("You are already on the first page", CUITextTools.RED));
@@ -181,9 +166,9 @@ public class StudentListView extends AbstractView
     {
       //  ResponseDataView results = (ResponseDataView) RouteHandler.go("getStudentList", new Object[] { 1 }, new Class<?>[] { Integer.class }, null);
         StudentListView view    =   new StudentListView();
-        view.display();
-        view.nextPage();
-      //  view.modifyStudent("test5");
+        //view.display();
+        //view.findStudent();
+      view.deleteStudent();
     }
     
 }

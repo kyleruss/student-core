@@ -230,6 +230,9 @@ public class DataConnector implements AutoCloseable//extends Thread implements A
             activeQuery     =   statement; //Set active query to be next executed
             notify(); //continue - query executed in run by onExecuted()
         }*/
+        
+        if(statement  == null) return false;
+        
         activeQuery =   statement;
         return onExecute();
     }
@@ -249,9 +252,8 @@ public class DataConnector implements AutoCloseable//extends Thread implements A
         
         catch(SQLException e)
         {
-            System.out.println("error in create statement");
-            
-         //   interrupt();
+            e.printStackTrace();
+            System.out.println("[SQL Exception] Error creating query - " + e.getMessage());
             closeConnection();
             return null;
         }

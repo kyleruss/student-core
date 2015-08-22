@@ -3,6 +3,7 @@ package engine.controllers;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import engine.models.Model;
 import engine.models.User;
 import engine.views.cui.AdminControlPanelView;
 import engine.views.View;
@@ -89,7 +90,12 @@ public class AdminController extends Controller
             String value    =   postData.getMessage("modifyValue");
             
             User user       =   new User(username);
-            if(!user.hasColumn(attr)) return new ResponseDataView(invalidInputMesage, false);
+            if(!user.hasColumn(attr))
+            {
+                System.out.println("doesnt have column");
+                return new ResponseDataView(invalidInputMesage, false);
+                
+            }
             else
             {
                 user.set(attr, value);
@@ -115,13 +121,22 @@ public class AdminController extends Controller
            
            try
            {
-                JsonArray results = new User().builder().where(searchAttribute, searchOperator, searchValue).get();
+                User user           =   new User();
+                boolean isLiteral   =   user.getColumn(searchAttribute.toUpperCase()).isLiteral();
+                searchValue         =   (isLiteral)? Model.makeLiteral(searchValue) : searchValue;
+                
+                JsonArray results   = user.builder().where(searchAttribute, searchOperator, searchValue).get();
+                if(results == null) return new ResponseDataView(failedMessage, false);
+                
                 ControllerMessage data  =   new ControllerMessage(results);
-                return new ResponseDataView(successMessage + " " + results.size() + " users", true, data, 5);
+
+                int numResultsFound =   results.size() - 1;
+                return new ResponseDataView(successMessage + " " + numResultsFound + " user(s)", true, data, 5);
            }
            
            catch(SQLException e)
            {
+               e.printStackTrace();
                return new ResponseDataView(failedMessage, false);
            }
        }

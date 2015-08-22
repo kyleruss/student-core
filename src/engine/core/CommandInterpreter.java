@@ -81,15 +81,20 @@ public abstract class CommandInterpreter implements CommandExecute
         String[][] data                     =   new String[numRows][numCols];
         int commandIndex                    =   0;
         
+        rowLoop:
         for(int row = 0; row < numRows; row++)
         {
             for(int col = 0; col < numCols; col++)
             {
-                if((col * (row + 1)) >= numCols)
+                
+                if((col * (row + 1)) >= numCols || commandIndex >= commandCol.size())
                 {
                     data[row][col] = "";
                     continue;
                 }
+                
+               // else if(commandIndex >= 2) break rowLoop;
+               
                 
                 Command current         =   commandCol.get(commandIndex);
                 String commandName      =   current.getCommandName();
@@ -111,5 +116,10 @@ public abstract class CommandInterpreter implements CommandExecute
     {
         String listenerFile     =   getCommandsFile();
         commands                =   CommandListener.loadFactory(listenerFile).getCommands();
+    }
+    
+    public static void main(String[] args)
+    {
+        RouteHandler.go("getStudents", null).display();
     }
 }

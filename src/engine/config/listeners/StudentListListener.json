@@ -5,7 +5,7 @@
         {
             "commandName": "delete",
             "paramTypes": [],
-            "className": "engine.views.cui.AdminControlPanelView",
+            "className": "engine.views.cui.StudentListView",
             "methodName": "deleteStudent",
             "commandDescription": "Remove a student"
         },
@@ -14,7 +14,7 @@
         {
             "commandName": "modify",
             "paramTypes": [],
-            "className": "engine.views.cui.AdminControlPanelView",
+            "className": "engine.views.cui.StudentListView",
             "methodName": "modifyStudent",
             "commandDescription": "Modify a student"
         },
@@ -23,7 +23,7 @@
         {
             "commandName": "search",
             "paramTypes": [],
-            "className": "engine.views.cui.AdminControlPanelView",
+            "className": "engine.views.cui.StudentListView",
             "methodName": "findStudent",
             "commandDescription": "Find a student"
         },
@@ -32,7 +32,7 @@
         {
             "commandName": "nextPage",
             "paramTypes": [],
-            "className": "engine.views.cui.AdminControlPanelView",
+            "className": "engine.views.cui.StudentListView",
             "methodName": "nextPage",
             "commandDescription": "Get next page"
         },
@@ -41,7 +41,7 @@
         {
             "commandName": "prevPage",
             "paramTypes": [],
-            "className": "engine.views.cui.AdminControlPanelView",
+            "className": "engine.views.cui.StudentListView",
             "methodName": "prevPage",
             "commandDescription": "Get previous page"
         }

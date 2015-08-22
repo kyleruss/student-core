@@ -35,7 +35,8 @@ public class JsonParser
     {
         try
         {
-            if(results == null) return null;
+            if(results == null) 
+                return null;
             
             JsonArray data           =   new JsonArray();
             ResultSetMetaData meta   =   results.getMetaData();
@@ -43,14 +44,19 @@ public class JsonParser
             //Add result meta data to results
             //Meta data will be the first element in data
             //Results will follow after meta data
-            JsonObject metaData      =   new JsonObject();
-            JsonArray columnNames     =   new JsonArray();      
+            JsonObject metaData     =   new JsonObject();
+            JsonArray columnNames   =   new JsonArray();  
+            JsonArray columnTypes   =   new JsonArray();
             
             for(int i = 1; i <= meta.getColumnCount(); i++)
+            {
+                columnTypes.add(new JsonPrimitive(meta.getColumnClassName(i)));
                 columnNames.add(new JsonPrimitive(meta.getColumnName(i)));
+            }
             
             metaData.add("columnNames", columnNames); //Column names
             metaData.addProperty("columnCount", meta.getColumnCount()); //Number of columns
+            metaData.add("columnTypes", columnTypes);
             data.add(metaData); //Add meta data to front of returning JsonArray
             
             //Iterate through resulting rows
