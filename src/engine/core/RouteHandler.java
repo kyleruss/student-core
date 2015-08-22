@@ -69,7 +69,7 @@ public class RouteHandler
     //Calls a controllers method with params
     //The number of params must match the routes 
     //controller method number of params
-    public static View go(String routeName, String[] params, Class<?>[] paramTypes, ControllerMessage data)
+    public static View go(String routeName, Object[] params, Class<?>[] paramTypes, ControllerMessage data)
     {
         Path foundPath  =   routes.getPath(routeName);   
         try
@@ -91,7 +91,7 @@ public class RouteHandler
     //Creates and calls the routes controller method
     //Controller and method of querying route must exist
     //Further redirection must be handled by the called controller
-    public static View call(Path path, String[] params, Class<?>[] paramTypes, ControllerMessage data) 
+    public static View call(Path path, Object[] params, Class<?>[] paramTypes, ControllerMessage data) 
     throws ClassNotFoundException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException
     {
         String controllerName    =   MessageFormat.format("{0}.{1}", CONTROLLER_PACKAGE, path.getController());

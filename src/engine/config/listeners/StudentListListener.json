@@ -34,7 +34,7 @@
             "paramTypes": [],
             "className": "engine.views.cui.AdminControlPanelView",
             "methodName": "nextPage",
-            "commandDescription": "Go to next page in list"
+            "commandDescription": "Get next page"
         },
         
         "prevPage":
@@ -43,7 +43,7 @@
             "paramTypes": [],
             "className": "engine.views.cui.AdminControlPanelView",
             "methodName": "prevPage",
-            "commandDescription": "Go to previous page in list"
+            "commandDescription": "Get previous page"
         }
     }
     

@@ -38,7 +38,7 @@ public class Routes extends Router
         //Admin panel
         add("getAdmincp", "AdminController", "getAdmincp", "/admincp");
         add("getStudents", "AdminController", "getStudents", "/students");
-        add("getStudentList", "AdminController", "getStudentList", "/students/list/page={page}");
+        add("getStudentList", "AdminController", "getStudentList", "/students/list/page={page}/numresults={numResults}");
         add("postRemoveStudent", "AdminController", "postRemoveStudent", "/students/remove");
         add("postModifyStudent", "AdminController", "postModifyStudent", "/students/modify");
         add("getSearchStudent", "AdminController", "getSearchStudent", "/students/search");

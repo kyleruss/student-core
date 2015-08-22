@@ -74,7 +74,7 @@ public abstract class CommandInterpreter implements CommandExecute
     {
         List<Command> commandCol            =   new ArrayList<>(commands.values());
         final int maxCols                   =   3;
-        int numRows                         =   Math.max(commandCol.size() / maxCols, 1);
+        int numRows                         =   Math.max(commandCol.size() % maxCols, 1);
         int numCols                         =   Math.min(maxCols, commandCol.size());
         
         String[] headers                    =   {};
@@ -85,6 +85,13 @@ public abstract class CommandInterpreter implements CommandExecute
         {
             for(int col = 0; col < numCols; col++)
             {
+                if((col * (row + 1)) >= numCols)
+                {
+                    System.out.println(col * (row + 1));
+                    data[row][col] = "";
+                    continue;
+                }
+                
                 Command current         =   commandCol.get(commandIndex);
                 String commandName      =   current.getCommandName();
                 String commandDesc      =   current.getCommandDescription();
