@@ -5,11 +5,16 @@ import com.google.gson.JsonArray;
 import engine.core.Agent;
 import engine.core.DataConnector;
 import engine.core.authentication.Auth;
+import engine.core.database.Conditional;
+import engine.core.database.Join;
 import engine.core.security.Crypto;
 import engine.models.ClassEnrolmentsModel;
+import engine.models.DepartmentModel;
 import engine.models.EmergencyContactModel;
 import engine.models.MedicalModel;
+import engine.models.StaffModel;
 import engine.models.User;
+import engine.parsers.JsonParser;
 import engine.views.View;
 import engine.views.cui.DepartmentView;
 import engine.views.cui.LoginView;
@@ -86,13 +91,23 @@ public class UserController extends Controller
         }
     }
     
-    public View getMyDepartment()
+   /* public View getMyDepartment()
     {
-        User user       =   Agent.getActiveSession().getUser();
-        String username =   user.get("username").getColumnValue().toString();
+        User user            =   Agent.getActiveSession().getUser();
+        String username      =   user.get("username").getColumnValue().toString();
+        int deptId           =   (int) new StaffModel(username).get("dept_id").getColumnValue();
         
+        try
+        {
+            JsonArray dept  =   new DepartmentModel().builder().where("id", username, username)
+        }
+        
+        catch(SQLException e)
+        {
+            
+        }
         return new DepartmentView();
-    }
+    } */
     
     public View getRegister()
     {
@@ -193,6 +208,24 @@ public class UserController extends Controller
                         return new ResponseDataView(failedMessage, false);
                     }
                 }
+        }
+    }
+    
+    public static void main(String[] args)
+    {
+        try
+        {
+            JsonArray results   =   new User().builder()
+                    .join(new Join("users", "staff", "username", "user_id", Join.JoinType.INNERR_JOIN).filter(new Conditional("username", "=", "kyleruss").literal()))
+                    .select("staff.*").get();
+                  //  .join("staff", "department", "dept_id", "id", Join.JoinType.INNERR_JOIN).select("department.*")
+                 //   .where("username", "=", "'kyleruss'").get();
+            System.out.println(JsonParser.parsePretty(results));
+        }
+        
+        catch(SQLException e)
+        {
+            System.out.println(e.getMessage());
         }
     }
 }

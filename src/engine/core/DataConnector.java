@@ -242,6 +242,7 @@ public class DataConnector implements AutoCloseable//extends Thread implements A
     {
         try
         {
+            System.out.println(query);
             //Logs the attempted query 
             //Logging config is checked in log()
             MainLogger.log(query, MainLogger.DATA_LOGGER);

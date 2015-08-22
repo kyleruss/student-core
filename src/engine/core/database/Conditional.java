@@ -91,9 +91,10 @@ public class Conditional
     
     //Set the conditionals value to literal
     //value will be transformed when formatted for raw query
-    public void literal()
+    public Conditional literal()
     {
         isLiteral   =   true;
+        return this;
     }
     
     

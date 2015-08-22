@@ -106,6 +106,12 @@ public class QueryBuilder
         return this;
     }
     
+    public QueryBuilder join(Join join)
+    {
+        query.addJoin(join);
+        return this;
+    }
+    
     //Executes and returns a JSON representation
     //of the query results if any
     public JsonArray get() throws SQLException
@@ -171,7 +177,7 @@ public class QueryBuilder
     //Builds the queries conditional (where clauses)
     private String buildConditionals()
     {
-        return query.formatConditionals();
+        return query.formatConditionals(query.getConditionals());
     }
     
     //Builds any query extras

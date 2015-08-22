@@ -8,6 +8,8 @@ package engine.core.database;
 
 import engine.config.DatabaseConfig;
 import java.text.MessageFormat;
+import java.util.ArrayList;
+import java.util.List;
 
 
 //--------------------------------
@@ -58,6 +60,9 @@ public class Join
     //The PK of the linking table 
     private String toPK;
     
+    private List<Conditional> joinConditionals;
+   
+    
     //The join type
     //Default to inner join 
     private final JoinType joinType;
@@ -92,11 +97,12 @@ public class Join
     //Creates a join with non-default key names and specific join type
     public Join(String fromTable, String toTable, String fromPK, String toPK, JoinType joinType)
     {
-        this.fromTable  =   fromTable;
-        this.toTable    =   toTable;
-        this.fromFK    =   fromPK;
-        this.toPK      =   toPK;    
-        this.joinType  =   joinType;
+        this.fromTable          =   fromTable;
+        this.toTable            =   toTable;
+        this.fromFK             =   fromPK;
+        this.toPK               =   toPK;    
+        this.joinType           =   joinType;
+        this.joinConditionals   =   new ArrayList<>();
     }
     
     //Returns the joins join from table
@@ -123,6 +129,13 @@ public class Join
         return toPK;
     }
     
+    public Join filter(Conditional condition)
+    {
+        joinConditionals.add(condition);
+        
+        return this;
+    }
+    
     //Builds and returns the syntax for join ready for query
     @Override
     public String toString()
@@ -130,9 +143,10 @@ public class Join
         //Format columns to include table prefixes
         String colFrom      =   MessageFormat.format("{0}.{1}", fromTable, fromFK); 
         String colTo        =   MessageFormat.format("{0}.{1}", toTable, toPK);
+        String conditionals =   (joinConditionals.size() > 0)? Query.formatConditionals(joinConditionals) : "";
         
         //Format: JOIN TYPE [toTable] ON fromTable.fromFK = toTable.toPK
-        String syntax    =   MessageFormat.format("{0} {1} ON {2} = {3}", joinType.getJoinSyntax(), toTable, colFrom, colTo);
+        String syntax    =   MessageFormat.format("{0} {1} ON {2} = {3} {4}", joinType.getJoinSyntax(), toTable, colFrom, colTo, conditionals);
         return syntax;
     }
 }

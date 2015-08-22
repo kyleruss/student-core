@@ -103,21 +103,21 @@ public class Query
     //Connects multiple conditionals
     //by their respective connective type
     
-    public String formatConditionals()
+    public static String formatConditionals(List<Conditional> conditions)
     {
         final String conjunction    =   " AND "; // isConjunction
         final String disjunction    =   " OR "; // !isConjunction
         String formattedConditions =   "";
         
         //Format: WHERE column operator value [AND/OR] .. WHERE column operator value..
-        for(int condIndex = 0; condIndex < conditionals.size(); condIndex++)
+        for(int condIndex = 0; condIndex < conditions.size(); condIndex++)
         {
-            Conditional condition =   conditionals.get(condIndex);
+            Conditional condition =   conditions.get(condIndex);
             formattedConditions += condition;
             
             //Add conjunctions/disjunctions to conditionals if more than
             //one where clause in the query
-            if(conditionals.size() > 1 && condIndex != conditionals.size() - 1)
+            if(conditions.size() > 1 && condIndex != conditions.size() - 1)
                 formattedConditions += (condition.isConjunction())? conjunction : disjunction;
         }
         
