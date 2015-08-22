@@ -46,7 +46,7 @@ public class AdminController extends Controller
     {
         try
         {
-            JsonArray users         = new User().builder().get();
+            JsonArray users         = new User().builder().setPage(page, numResults).get();
             ControllerMessage data  =   new ControllerMessage(users);
             return new ResponseDataView("Users have been fetched successfully", true, data, 5);
         }
@@ -59,7 +59,19 @@ public class AdminController extends Controller
     
     public View postRemoveStudent()
     {
-        return null;
+        final String invalidInputMesage         =   "Invalid information, please check your fields";
+        final String failedMessage              =   "Invalid username or password";
+        final String successMessage             =   "Successfully logged in";
+        
+        if(!validatePostData(new String[]{"removeUsername"})) return new ResponseDataView(invalidInputMesage, false); 
+        else
+        {
+            String username =   postData.getMessage("removeUsername");
+            User user       =   new User(username);
+            
+            if(user.delete()) return new ResponseDataView(successMessage, true);
+            else return new ResponseDataView(failedMessage, false);
+        }
     }
     
      

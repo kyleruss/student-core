@@ -185,6 +185,41 @@ public class QueryBuilder
         return query.formatJoins();
     }
     
+    public int getNumPages(int numResults)
+    {
+        try
+        {
+            JsonArray results   =   get();
+            if(results == null) return 0;
+            
+            int totalResults   =   results.size() - 1;
+            if(totalResults > 0) return totalResults / numResults;
+            else return 0;
+        }
+        
+        catch(SQLException e)
+        {
+            System.out.println(e.getMessage());
+            return 0;
+        }
+    }
+    
+    private int getPageOffset(int pageNum, int numResults, int numPages)
+    {
+        if(pageNum > numPages) pageNum = numPages;
+        
+        int index   =   (pageNum > 0)? (pageNum - 1) : 0;
+        int offset  =   numResults * index;
+        return offset;
+    }
+    
+    public QueryBuilder setPage(int page, int numResults) throws SQLException
+    {
+        int numPages    =   getNumPages(numResults);
+        int offset      =   getPageOffset(page, numResults, numPages);
+        return offset(offset).limit(numResults);
+    }
+    
     //Builds and returns the raw query of the QueryBuilder
     //Building can resume but cannot be chaned after
     public String build()

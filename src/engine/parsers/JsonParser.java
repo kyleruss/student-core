@@ -61,6 +61,8 @@ public class JsonParser
                 //Add column data to json
                 for(int columnIndex = 1; columnIndex <= meta.getColumnCount(); columnIndex++)
                     currentRow.addProperty(meta.getColumnName(columnIndex), "" + results.getObject(columnIndex));
+                
+                
                 data.add(currentRow);
             }
            
@@ -83,6 +85,7 @@ public class JsonParser
             case "java.lang.Double": return element.getAsDouble();
             case "java.lang.Boolean": return element.getAsBoolean();
             case "java.lang.Character": return element.getAsCharacter();
+            case "java.sql.Date": return element.getAsString();
             default: return null;
         }
     }

@@ -7,6 +7,7 @@
 package engine.models;
 
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import engine.parsers.JsonParser;
 import engine.config.DatabaseConfig;
@@ -83,8 +84,11 @@ public abstract class Model
     {    
         try
         {
-            JsonObject metaData   =   builder().first().execute().get(0).getAsJsonObject();
-            JsonArray colNames    =   metaData.get("columnNames").getAsJsonArray();
+            JsonArray metaDataTemp   =   builder().first().execute();
+            if(metaDataTemp == null) return;
+            
+            JsonObject metaData     =   metaDataTemp.get(0).getAsJsonObject();
+            JsonArray colNames      =   metaData.get("columnNames").getAsJsonArray();
             
             initColumns(colNames);
         } 
@@ -162,8 +166,11 @@ public abstract class Model
         {
             conn.execute(query);    
             JsonArray results       =   JsonParser.resultsToJson(conn.getResults());
+            if(results == null) return null;
+            
             JsonArray columnNames   =   results.get(0).getAsJsonObject().get("columnNames").getAsJsonArray();
             ResultSetMetaData meta  =   conn.getResults().getMetaData();
+            //System.out.println(results);
             
             initColumns(columnNames);
             if(results.size() > 0)
@@ -174,7 +181,7 @@ public abstract class Model
                 {
                     String column   =   columns.get(columnIndex);
                     String typeName =   meta.getColumnClassName(columnIndex + 1);
-                    
+
                     if(entry.get(column) == null || entry.get(column).getAsString().equals("null")) continue;
                     else set(column, JsonParser.castElementToObj(entry.get(column), typeName));
                 }
@@ -205,7 +212,10 @@ public abstract class Model
             Map.Entry<String, Column> column    =   setData.next();
             
             String colName         =   column.getKey();
-            String colValue        =   column.getValue().getColumnValue().toString();
+            Object colValue        =   column.getValue().getColumnValue();
+            //System.out.println(colValue);
+            colValue               =   (colValue == null)? "null" : colValue.toString();
+            //System.out.println(colValue.toString());
             
             if(!colName.equalsIgnoreCase(primaryKey))
                 updateStr += MessageFormat.format("{0} = {1}{2} ", 
@@ -226,7 +236,7 @@ public abstract class Model
         String columnValues     =   getDataValues();
         String insertQuery      =   MessageFormat.format("INSERT INTO {0} ({1}) VALUES ({2})", table, columnNames, columnValues);
         
-        System.out.println(insertQuery);
+       // System.out.println(insertQuery);
 
             if(activeConnection == null)
             {
@@ -249,10 +259,11 @@ public abstract class Model
     {
         String changes      =   buildUpdate();
         Column column       =   data.get(primaryKey.toUpperCase());
+        if(column == null) return false;
+        
         String id           =   column.getColumnValue().toString();
-       // id                  =   (column.isLiteral())? makeLiteral(id) : id;
         String updateQuery  =   MessageFormat.format("UPDATE {0} {1} WHERE {2} = {3}", table, changes, primaryKey, id);
-        System.out.println(updateQuery);
+       // System.out.println(updateQuery);
         
         try(DataConnector conn   =   new DataConnector())
         {
@@ -260,12 +271,24 @@ public abstract class Model
             conn.execute(updateQuery);
             return true;
         }
-        
-        /*catch(SQLException e)
+    }
+    
+    public boolean delete()
+    {
+        Column idCol   =   data.get(primaryKey.toUpperCase());
+        if(idCol == null) return false;
+        else
         {
-            System.out.println("[SQL EXCEPTION] Failed to update record - " + e.getMessage());
-            return false;
-        } */
+            String id           =   idCol.getColumnValue().toString();
+            String deleteQuery  =   MessageFormat.format("DELETE FROM {0} WHERE {1} = {2}", table, primaryKey, id);
+            
+            try(DataConnector conn  =   new DataConnector())
+            {
+                conn.setQueryMutator();
+                conn.execute(deleteQuery);
+                return true;
+            }
+        }
     }
     
     //Makes the value a literal

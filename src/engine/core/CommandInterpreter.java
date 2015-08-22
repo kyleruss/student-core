@@ -87,7 +87,6 @@ public abstract class CommandInterpreter implements CommandExecute
             {
                 if((col * (row + 1)) >= numCols)
                 {
-                    System.out.println(col * (row + 1));
                     data[row][col] = "";
                     continue;
                 }
