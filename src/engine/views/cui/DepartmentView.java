@@ -2,6 +2,7 @@ package engine.views.cui;
 
 import engine.controllers.ControllerMessage;
 import engine.core.Agent;
+import engine.core.RouteHandler;
 import engine.views.AbstractView;
 
 
@@ -18,9 +19,9 @@ public class DepartmentView extends AbstractView
         super
         (
                 message,
-                "Department", 
+                message.getData().get(1).getAsJsonObject().get("name".toUpperCase()).getAsString() + " Department", 
                 "Access and manage your staff department", 
-                "/"  + Agent.getActiveSession().getUser().get("USERNAME").getNonLiteralValue() + "/department/"
+                "/"  + "department"//Agent.getActiveSession().getUser().get("USERNAME").getNonLiteralValue() + "/department/"
         );
     }
     
@@ -28,6 +29,7 @@ public class DepartmentView extends AbstractView
     public void display()
     {
         super.display();
+        
     }
 
     @Override
@@ -36,4 +38,9 @@ public class DepartmentView extends AbstractView
         return "/engine/config/listeners/DepartmentListener.json";
     }
     
+    
+    public static void main(String[] args)
+    {
+        RouteHandler.go("getMyDepartment", null).display();
+    }
 }

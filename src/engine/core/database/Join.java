@@ -61,6 +61,7 @@ public class Join
     private String toPK;
     
     private List<Conditional> joinConditionals;
+    
    
     
     //The join type
@@ -143,7 +144,7 @@ public class Join
         //Format columns to include table prefixes
         String colFrom      =   MessageFormat.format("{0}.{1}", fromTable, fromFK); 
         String colTo        =   MessageFormat.format("{0}.{1}", toTable, toPK);
-        String conditionals =   (joinConditionals.size() > 0)? Query.formatConditionals(joinConditionals) : "";
+        String conditionals =   (joinConditionals.size() > 0)? Query.formatConditionals(joinConditionals).replace("AND", "").replace("WHERE", " and ") : "";
         
         //Format: JOIN TYPE [toTable] ON fromTable.fromFK = toTable.toPK
         String syntax    =   MessageFormat.format("{0} {1} ON {2} = {3} {4}", joinType.getJoinSyntax(), toTable, colFrom, colTo, conditionals);

@@ -1,22 +1,13 @@
 {
     "commands": 
     {
-        "admincp":
+        "classPage":
         {
-            "commandName": "admincp",
+            "commandName": "classPage",
             "paramTypes": [],
-            "className": "engine.views.cui.HomeView",
-            "methodName": "goAdmincp",
-            "commandDescription": "Go to admin CP"
-        },
-        
-        "classes":
-        {
-            "commandName": "classes",
-            "paramTypes": [],
-            "className": "engine.views.cui.HomeView",
-            "methodName": "showMyClasses",
-            "commandDescription": "Show classes"     
+            "className": "engine.views.cui.MyClassesView",
+            "methodName": "showClassInfo",
+            "commandDescription": "Get class page"
         }
     }
     

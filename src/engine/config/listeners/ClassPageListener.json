@@ -1,0 +1,23 @@
+{
+    "commands": 
+    {
+        "students":
+        {
+            "commandName": "students",
+            "paramTypes": [],
+            "className": "engine.views.cui.ClassPageView",
+            "methodName": "showClassStudents",
+            "commandDescription": "Show students in class"
+        },
+        
+        "teacher":
+        {
+            "commandName": "teacher",
+            "paramTypes": [],
+            "className": "engine.views.cui.ClassPageView",
+            "methodName": "showTeacherContact",
+            "commandDescription": "Teacher contact info"
+        }
+    }
+    
+}

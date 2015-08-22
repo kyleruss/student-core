@@ -72,6 +72,15 @@ public class QueryBuilder
         return this;
     }
     
+    public QueryBuilder select(String selection, String selectionAlias)
+    {
+        if(selectionAlias.split("\\s").length > 1)
+            selectionAlias  = "\"" + selectionAlias + "\"";
+            
+        query.addSelection(new Selection(selection, selectionAlias));
+        return this;
+    }
+    
     //Adds selections.length many selections to the query
     //Query resolves concatinationa and multiple selects
     //Pass an array of columns you want to select

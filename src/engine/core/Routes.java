@@ -38,6 +38,7 @@ public class Routes extends Router
         //home-personal
         add("getMyClasses", "UserController", "getMyClasses", "/myclasses");
         add("getMyDepartment", "UserController", "getMyDepartment", "/department");
+        add("getClassPage", "UserController", "getClassPage", "/class/class={classId}");
         
         //Admin panel
         add("getAdmincp", "AdminController", "getAdmincp", "/admincp");
