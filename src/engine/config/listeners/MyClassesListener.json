@@ -17,15 +17,6 @@
             "className": "engine.views.cui.HomeView",
             "methodName": "showMyClasses",
             "commandDescription": "Show classes"     
-        },
-        
-        "department":
-        {
-            "commandName": "department",
-            "paramTypes": [],
-            "className": "engine.views.cui.HomeView",
-            "methodName": "showDepartment",
-            "commandDescription": "Show department"
         }
     }
     

@@ -1,15 +1,19 @@
 
 package engine.controllers;
 
+import com.google.gson.JsonArray;
 import engine.core.Agent;
 import engine.core.DataConnector;
 import engine.core.authentication.Auth;
 import engine.core.security.Crypto;
+import engine.models.ClassEnrolmentsModel;
 import engine.models.EmergencyContactModel;
 import engine.models.MedicalModel;
 import engine.models.User;
 import engine.views.View;
+import engine.views.cui.DepartmentView;
 import engine.views.cui.LoginView;
+import engine.views.cui.MyClassesView;
 import engine.views.cui.RegisterView;
 import engine.views.cui.ResponseDataView;
 import java.sql.ResultSet;
@@ -63,6 +67,31 @@ public class UserController extends Controller
                 return new ResponseDataView(invalidAttemptMessage, false);
         }
             
+    }
+    
+    public View getMyClasses()
+    {
+        User user       =   Agent.getActiveSession().getUser();
+        String username =   user.get("username").getColumnValue().toString();
+        try
+        {
+            JsonArray classList =   new ClassEnrolmentsModel().builder().where("user_id", "=", username).get();
+            return new MyClassesView(new ControllerMessage(classList)); 
+        }
+        
+        catch(SQLException e)
+        {
+            System.out.println("[SQL Exception] " + e.getMessage());
+            return null;
+        }
+    }
+    
+    public View getMyDepartment()
+    {
+        User user       =   Agent.getActiveSession().getUser();
+        String username =   user.get("username").getColumnValue().toString();
+        
+        return new DepartmentView();
     }
     
     public View getRegister()

@@ -130,7 +130,7 @@ public abstract class Model
     
     public Column get(String colName)
     {
-        return data.get(colName);
+        return data.get(colName.toUpperCase());
     }
     
     public Column getColumn(String colName)

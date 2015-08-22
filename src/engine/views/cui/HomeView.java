@@ -33,6 +33,15 @@ public class HomeView extends AbstractView
         Agent.setView("getAdmincp");
     }
     
+    public void showMyClasses()
+    {
+        Agent.setView("getMyClasses");
+    }
+    
+    public void showDepartment()
+    {
+        Agent.setView("getMyDepartment");
+    }
     
     @Override
     public String getCommandsFile()

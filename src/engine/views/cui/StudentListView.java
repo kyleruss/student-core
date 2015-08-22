@@ -5,6 +5,7 @@ import com.bethecoder.ascii_table.ASCIITable;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import engine.controllers.ControllerMessage;
+import engine.core.Agent;
 import engine.core.RouteHandler;
 import engine.models.User;
 import engine.views.AbstractView;
@@ -33,7 +34,7 @@ public class StudentListView extends AbstractView
                 messages, 
                 "Students", 
                 "Find, remove, modify students in the school", 
-                "/" + "students"//Agent.getActiveSession().getUser().get("USERNAME").getNonLiteralValue() + "/students/"
+                "/" + Agent.getActiveSession().getUser().get("USERNAME").getNonLiteralValue() + "/students/"
         );
         
         currentPage =   1;

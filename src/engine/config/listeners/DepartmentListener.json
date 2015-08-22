@@ -1,0 +1,14 @@
+{
+    "commands": 
+    {
+        "deptstaff":
+        {
+            "commandName": "deptstaff",
+            "paramTypes": [],
+            "className": "engine.views.cui.DepartmentView",
+            "methodName": "showDeptStaff",
+            "commandDescription": "Show department staff"
+        }
+    }
+    
+}
