@@ -45,30 +45,6 @@ public abstract class CommandInterpreter implements CommandExecute
         System.out.println(message);
     }
     
-   /* public String showCommands1()
-    {
-        Iterator<Command> commIter  =   commands.values().iterator();
-        int colCount                =   0;
-        final int MAX_COLS          =   3;
-        String commandText          =   "\n";
-        while(commIter.hasNext())
-        {
-            Command command         =   commIter.next();
-            String commandName      =   CUITextTools.changeColour(command.getCommandName(), CUITextTools.MAGENTA);
-            String commandDesc      =   CUITextTools.changeColour(command.getCommandDescription(), CUITextTools.PLAIN);
-            String commandDisp      =   CUITextTools.keyText(commandName, commandDesc);
-            
-            commandText += commandDisp + "\t";
-            colCount++;
-            
-            if(colCount == MAX_COLS)
-            {
-                commandText += "\n";
-                colCount = 0;
-            }
-        }
-        return commandText;
-    } */
     
     public void showCommands()
     {
@@ -78,7 +54,6 @@ public abstract class CommandInterpreter implements CommandExecute
         int numRows                         =   Math.max(maxRows, 1);
         int numCols                         =   Math.min(maxCols, commandCol.size());
         
-        System.out.println("size: " + maxRows);
         String[] headers                    =   {};
         String[][] data                     =   new String[numRows][numCols];
         int commandIndex                    =   0;
@@ -87,18 +62,12 @@ public abstract class CommandInterpreter implements CommandExecute
         {
             for(int col = 0; col < numCols; col++)
             {
-                
-               // if((col * (row + 1)) >= numCols || commandIndex >= commandCol.size())
                 if((col * (row + 1)) >= numCols || commandIndex >= commandCol.size())
                 {
-                    System.out.println(commandIndex);
                     data[row][col] = "";
                     continue;
                 }
-                
-               // else if(commandIndex >= 2) break rowLoop;
                
-                System.out.println("ci: " + commandIndex);
                 Command current         =   commandCol.get(commandIndex);
                 String commandName      =   current.getCommandName();
                 String commandDesc      =   current.getCommandDescription();

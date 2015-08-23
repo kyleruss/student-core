@@ -3,10 +3,11 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/root/workspace/PDC/pdc-project/src/engine/controllers/UserController.java</file>
-            <file>file:/root/workspace/PDC/pdc-project/src/engine/views/cui/ClassAssessmentsView.java</file>
-            <file>file:/root/workspace/PDC/pdc-project/src/engine/core/Routes.java</file>
-            <file>file:/root/workspace/PDC/pdc-project/src/engine/controllers/AdminController.java</file>
+            <file>file:/root/workspace/PDC/pdc-project/src/engine/core/CommandInterpreter.java</file>
+            <file>file:/root/workspace/PDC/pdc-project/src/engine/views/ViewExplorer.java</file>
+            <file>file:/root/workspace/PDC/pdc-project/src/engine/views/View.java</file>
+            <file>file:/root/workspace/PDC/pdc-project/src/engine/config/listeners/AgentListener.json</file>
+            <file>file:/root/workspace/PDC/pdc-project/src/engine/views/AbstractView.java</file>
         </group>
     </open-files>
 </project-private>

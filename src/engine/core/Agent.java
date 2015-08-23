@@ -1,15 +1,12 @@
 package engine.core;
 
 import engine.controllers.ControllerMessage;
-import engine.core.authentication.Auth;
 import engine.core.authentication.Session;
 import engine.views.View;
 import engine.views.cui.Utilities.CUITextTools;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Scanner;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class Agent extends CommandInterpreter
 {
@@ -47,6 +44,7 @@ public class Agent extends CommandInterpreter
     public Agent()
     {
         viewTree        =   new LinkedList<>();
+        
         agentThread     =   new Thread(listen);
         begin();
     }
@@ -113,6 +111,12 @@ public class Agent extends CommandInterpreter
             if(view == null) return;
             else
             {
+                if(activeView != null)
+                {
+                    view.setPrevView(activeView);
+                    activeView.setNextView(view);
+                }
+                
                 activeView =   view;
                 view.display(); 
                 agentThread.notify();
@@ -131,6 +135,42 @@ public class Agent extends CommandInterpreter
         setView(controllerView);
     }
     
+    public void setPrevView()
+    {
+        if(activeView == null || activeView.getPrevView() == null)
+            System.out.println(CUITextTools.changeColour("Can't go to that view", CUITextTools.RED));
+        else
+            setView(activeView.getPrevView());
+        
+    }
+    
+    public void setNextView()
+    {
+        if(activeView == null || activeView.getPrevView() == null)
+            System.out.println(CUITextTools.changeColour("Can't go to that view", CUITextTools.RED));
+        else
+            setView(activeView.getNextView());
+    }
+    
+    public void refreshView()
+    {
+         if(activeView == null)
+             System.out.println(CUITextTools.changeColour("Can't refresh this view", CUITextTools.RED));
+         else
+             activeView.display();
+    }
+
+    public void showHelp()
+    {
+        System.out.println("\n" + CUITextTools.underline(CUITextTools.changeColour("Agent commands", CUITextTools.CYAN)) + "\n");
+        showCommands();
+        
+        if(activeView != null)
+        {
+            System.out.println("\n" + CUITextTools.underline(CUITextTools.changeColour("View commands", CUITextTools.MAGENTA)) + "\n");
+            ((CommandInterpreter) activeView).showCommands();
+        }
+    }
     
     public void exitApp()
     {
@@ -211,21 +251,6 @@ public class Agent extends CommandInterpreter
             {
                 e.printStackTrace();
             }     
-                
-                
-                
-           /* while(!(command = input.nextLine()).equals(FINISHED))
-            {
-
-                if(isAgentContext(command))
-                {
-                    String commandStr   =   command.replace("agent: ", "");
-                    fire(commandStr, agentInstance);
-                }
-
-                else if(activeView != null)
-                    activeView.fire(command, activeView); 
-            } */
         }
     };
    

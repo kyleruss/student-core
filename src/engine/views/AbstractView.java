@@ -13,6 +13,8 @@ public abstract class AbstractView extends CommandInterpreter implements View
     protected String viewName;
     protected String viewDescription;
     protected String viewLocation;
+    protected View nextView;
+    protected View prevView;
     
     public AbstractView()
     {
@@ -83,6 +85,30 @@ public abstract class AbstractView extends CommandInterpreter implements View
     public int getAccessLevel()
     {
         return 0;
+    }
+    
+    @Override
+    public View getPrevView()
+    {
+        return prevView;
+    }
+    
+    @Override
+    public View getNextView()
+    {
+        return nextView;
+    }
+    
+    @Override
+    public void setPrevView(View prevView)
+    {
+        this.prevView   =   prevView;
+    }
+    
+    @Override
+    public void setNextView(View nextView)
+    {
+        this.nextView   =   nextView;
     }
     
     @Override

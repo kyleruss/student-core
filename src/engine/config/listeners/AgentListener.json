@@ -17,6 +17,42 @@
             "className": "engine.core.Agent",
             "methodName": "sessionLogout",
             "commandDescription": "Logout of account"
+        },
+        
+        "prevView":
+        {
+            "commandName": "prevView",
+            "paramTypes": [],
+            "className": "engine.core.Agent",
+            "methodName": "setPrevView",
+            "commandDescription": "Go to the previous view" 
+        },
+        
+        "nextView":
+        {
+            "commandName": "nextView",
+            "paramTypes": [],
+            "className": "engine.core.Agent",
+            "methodName": "setNextView",
+            "commandDescription": "Go to the next view" 
+        },
+        
+        "refreshView":
+        {
+            "commandName": "refreshView",
+            "paramTypes": [],
+            "className": "engine.core.Agent",
+            "methodName": "refreshView",
+            "commandDescription": "Refresh the current view" 
+        },
+        
+        "help":
+        {
+            "commandName": "help",
+            "paramTypes": [],
+            "className": "engine.core.Agent",
+            "methodName": "showHelp",
+            "commandDescription": "Show a list of agent and view commands" 
         }
     }
     

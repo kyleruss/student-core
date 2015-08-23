@@ -96,7 +96,7 @@ public class ClassPageView extends AbstractView
     {
         ClassPageView v = (ClassPageView) RouteHandler.go("getClassPage", new Object[] { 1 }, new Class<?>[] { Integer.class }, null);
         v.display();
-        v.showClassAssessments();
+        v.showTeacherContact();
     }
     
 }

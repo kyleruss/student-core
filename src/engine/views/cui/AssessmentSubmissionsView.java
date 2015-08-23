@@ -46,12 +46,7 @@ public class AssessmentSubmissionsView extends AbstractView
     }
     
     public void modifySubmission()
-    {
-      /*  ControllerMessage postData  =   new ControllerMessage();
-        postData.add("subId", submissionId);
-        postData.add("subAttr", attr);
-        postData.add("subVal", value); */
-        
+    {        
         List<String> fieldTitles    =   new ArrayList<>();
         fieldTitles.add(CUITextTools.createFormField("Submission ID", "Enter the submission ID to change"));
         fieldTitles.add(CUITextTools.createFormField("Change attribute", "What is the attribute you want to change?"));
@@ -73,9 +68,6 @@ public class AssessmentSubmissionsView extends AbstractView
     
     public void removeSubmission()
     {
-       // ControllerMessage postData  =   new ControllerMessage();
-      //  postData.add("subId", submissionId);
-        
         List<String> fieldTitles    =   new ArrayList<>();
         fieldTitles.add(CUITextTools.createFormField("Submission ID", "Enter the submission ID of the submission to remove"));
         
@@ -92,13 +84,7 @@ public class AssessmentSubmissionsView extends AbstractView
     }
     
     public void markSubmission()
-    {
-     /*   ControllerMessage postData  =   new ControllerMessage();
-        
-        postData.add("subId", submissionId);
-        postData.add("subGrade", grade);
-        postData.add("subMark", mark); */
-        
+    { 
         List<String> fieldTitles    =   new ArrayList<>();
         fieldTitles.add(CUITextTools.createFormField("Submission ID", "Enter the submission ID of the submission to mark"));
         fieldTitles.add(CUITextTools.createFormField("Grade", "Enter the grade for this submission"));
@@ -119,13 +105,7 @@ public class AssessmentSubmissionsView extends AbstractView
     }
     
     public void getStudentsSubmission()
-    {
-       /* ControllerMessage postData  =   new ControllerMessage();
-        int assessId    =   messages.getData().get(1).getAsJsonObject().get("ID").getAsInt();
-        
-        postData.add("subUser", username);
-        postData.add("assessId", assessId); */
-        
+    { 
         List<String> fieldTitles    =   new ArrayList<>();
         fieldTitles.add(CUITextTools.createFormField("Student username", "Enter the username whose submission you are retrieving"));
         
