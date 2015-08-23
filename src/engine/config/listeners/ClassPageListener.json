@@ -17,6 +17,16 @@
             "className": "engine.views.cui.ClassPageView",
             "methodName": "showTeacherContact",
             "commandDescription": "Teacher contact info"
+        },
+        
+        "assessments":
+        {
+            "commandName": "assessments",
+            "paramTypes": [],
+            "className": "engine.views.cui.ClassPageView",
+            "methodName": "showClassAssessments",
+            "commandDescription": "Show assessments"
+            
         }
     }
     

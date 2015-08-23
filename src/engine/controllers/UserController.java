@@ -187,56 +187,53 @@ public class UserController extends Controller
             user.set("ethnicity", postData.getMessage("registerEthnicity"));
             user.set("role_id", 1);
             
-                try(DataConnector conn  =   new DataConnector())
+            try(DataConnector conn  =   new DataConnector())
+            {
+                try
                 {
-                    try
+                    conn.startTransaction();
+                    conn.setQueryMutator();
+
+                    //Create contact
+                    emergencyContact.setActiveConnection(conn);
+                    emergencyContact.save();
+                    ResultSet rs1    =   conn.getResults();
+                    long emergContactId =   rs1.getLong(1);
+
+
+                    //Create medical
+                    medical.setActiveConnection(conn);
+                    medical.set("contact_id", emergContactId);
+                    medical.save();
+                    ResultSet rs2 =   conn.getResults();
+                    long medicalId  =   rs2.getLong(1);
+
+                    //Create user and commit
+                    user.setActiveConnection(conn);
+                    user.set("medical_id", medicalId);
+
+                    if(user.save())
                     {
-                        conn.startTransaction();
-                        conn.setQueryMutator();
-                        
-                        //Create contact
-                        emergencyContact.setActiveConnection(conn);
-                        emergencyContact.save();
-                        ResultSet rs1    =   conn.getResults();
-                        if(rs1.next()) System.out.println("next!");
-                        long emergContactId =   rs1.getLong(1);
-                        
-
-                        //Create medical
-                        medical.setActiveConnection(conn);
-                        medical.set("contact_id", emergContactId);
-                        medical.save();
-                        ResultSet rs2 =   conn.getResults();
-                        if(rs2.next()) System.out.println("next!");
-                        long medicalId  =   rs2.getLong(1);
-                        
-                        //Create user and commit
-                        System.out.println("starting user create");
-                        user.setActiveConnection(conn);
-                        user.set("medical_id", medicalId);
-                        
-                        if(user.save())
-                        {
-                            conn.commitTransaction();
-                            return new ResponseDataView(successMessage, true);
-                        }
-
-                        else
-                        {
-                            conn.rollbackTransaction();
-                            return new ResponseDataView(failedMessage, false);
-                        }
+                        conn.commitTransaction();
+                        return new ResponseDataView(successMessage, true);
                     }
-                    
-                    catch(SQLException e)
+
+                    else
                     {
-                        e.printStackTrace();
-                        System.out.println("[SQL Exception] " + e.getMessage());
                         conn.rollbackTransaction();
-                        conn.closeConnection();
                         return new ResponseDataView(failedMessage, false);
                     }
                 }
+
+                catch(SQLException e)
+                {
+                    e.printStackTrace();
+                    System.out.println("[SQL Exception] " + e.getMessage());
+                    conn.rollbackTransaction();
+                    conn.closeConnection();
+                    return new ResponseDataView(failedMessage, false);
+                }
+            }
         }
     }
     

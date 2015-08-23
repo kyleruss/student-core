@@ -1,0 +1,41 @@
+{
+    "commands": 
+    { 
+        "createAssessment":
+        {
+            "commandName": "createAssessment",
+            "paramTypes": [],
+            "className": "engine.views.cui.ClassAssessmentsView",
+            "methodName": "makeAssessment",
+            "commandDescription": "Create a new assessment"
+        },
+        
+        "removeAssessment":
+        {
+            "commandName": "removeAssessment",
+            "paramTypes": [],
+            "className": "engine.views.cui.ClassAssessmentsView",
+            "methodName": "deleteAssessment",
+            "commandDescription": "Remove an assessment"
+        },
+        
+        "modifyAssessment":
+        {
+            "commandName": "modifyAssessment",
+            "paramTypes": [],
+            "className": "engine.views.cui.ClassAssessmentsView",
+            "methodName": "modifyAssessment",
+            "commandDescription": "Modify an assessment"
+        },
+        
+        "openAssessment":
+        {
+            "commandName": "openAssessment",
+            "paramTypes": [],
+            "className": "engine.views.cui.ClassAssessmentsView",
+            "methodName": "openAssessment",
+            "commandDescription": "View assessment"
+        }
+    }
+    
+}

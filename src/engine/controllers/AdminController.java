@@ -2,7 +2,7 @@
 package engine.controllers;
 
 import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
+import engine.models.AssessmentModel;
 import engine.models.Model;
 import engine.models.User;
 import engine.views.cui.AdminControlPanelView;
@@ -10,8 +10,6 @@ import engine.views.View;
 import engine.views.cui.ResponseDataView;
 import engine.views.cui.StudentListView;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 
 
 public class AdminController extends Controller
@@ -140,6 +138,76 @@ public class AdminController extends Controller
                return new ResponseDataView(failedMessage, false);
            }
        }
+    }
+    
+    public View postCreateAssessment()
+    {
+        final String invalidInputMesage         =   "Invalid input, please check your fields";
+        final String failedMessage              =   "Failed to create assessment";
+        final String successMessage             =   "Successfully created assessment";
+        
+        if(!validatePostData(new String[]{"assessName", "assessDesc", "assessWeight", "assessClass", "assessDue"})) 
+            return new ResponseDataView(invalidInputMesage, false);
+        else
+        {
+            AssessmentModel assessment  =   new AssessmentModel();
+            assessment.set("name", postData.getMessage("assessName"));
+            assessment.set("description", postData.getMessage("assessDesc"));
+            assessment.set("weight", postData.getMessage("assessWeight"));
+            assessment.set("class_id", postData.getMessage("assessClass"));
+            assessment.set("due_date", postData.getMessage("assessDue"));
+                    
+            try
+            {
+                if(assessment.save()) return new ResponseDataView(successMessage, true);
+                else return new ResponseDataView(failedMessage, false);
+            }
+            
+            catch(SQLException e)
+            {
+                System.out.println("[SQL Exception] " + e.getMessage());
+                return new ResponseDataView(failedMessage, false);
+            }
+        }
+    }
+    
+    public View postModifyAssessment()
+    {
+        final String invalidInputMesage         =   "Invalid input, please check your fields";
+        final String failedMessage              =   "Failed to modify assessment";
+        final String successMessage             =   "Successfully modified assessment";
+        
+        if(!validatePostData(new String[]{"assessId", "assessAttr", "assessValue"}))
+            return new ResponseDataView(invalidInputMesage, false);
+        else
+        {
+            int assessId                 =   Integer.parseInt(postData.getMessage("assessId"));
+            AssessmentModel assessment   =   new AssessmentModel(assessId);
+            String columnModify          =   postData.getMessage("assessAttr");
+            String value                 =   postData.getMessage("assessValue");
+            assessment.set(columnModify, value);
+            
+            if(assessment.update()) return new ResponseDataView(successMessage, true);
+            else return new ResponseDataView(failedMessage, false);
+        }
+    }
+    
+    public View postDeleteAssessment()
+    {
+        final String invalidInputMesage         =   "Invalid input, please check your fields";
+        final String failedMessage              =   "Failed to delete assessment";
+        final String successMessage             =   "Successfully deleted assessment";
+        
+        if(!validatePostData(new String[]{"assessId"}))
+            return new ResponseDataView(invalidInputMesage, false);
+        else
+        {
+            int assessId                =   Integer.parseInt(postData.getMessage("assessId"));
+            AssessmentModel assessment  =   new AssessmentModel(assessId);
+            
+            if(assessment.delete()) return new ResponseDataView(successMessage, true);
+            else return new ResponseDataView(failedMessage, false);
+        }
     }
     
 }

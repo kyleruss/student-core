@@ -39,6 +39,9 @@ public class Routes extends Router
         add("getMyClasses", "UserController", "getMyClasses", "/myclasses");
         add("getMyDepartment", "UserController", "getMyDepartment", "/department");
         add("getClassPage", "UserController", "getClassPage", "/class/class={classId}");
+        add("postCreateAssessment", "AdminController", "postCreateAssessment", "/makeassessment");
+        add("postModifyAssessment", "AdminController", "postModifyAssessment", "/modifyassessment");
+        add("postDeleteAssessment", "AdminController", "postDeleteAssessment", "/deleteassessment");
         
         //Admin panel
         add("getAdmincp", "AdminController", "getAdmincp", "/admincp");
