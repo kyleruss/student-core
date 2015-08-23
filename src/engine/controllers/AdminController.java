@@ -178,8 +178,7 @@ public class AdminController extends Controller
             return new ResponseDataView(invalidInputMesage, false);
         else
         {
-            int assessId                 =   (int) postData.getMessage("assessId");
-            AssessmentModel assessment   =   new AssessmentModel(assessId);
+            AssessmentModel assessment   =   new AssessmentModel(postData.getMessage("assessId"));
             String columnModify          =   (String) postData.getMessage("assessAttr");
             Object value                 =   postData.getMessage("assessValue");
             assessment.set(columnModify, value);
@@ -199,8 +198,7 @@ public class AdminController extends Controller
             return new ResponseDataView(invalidInputMesage, false);
         else
         {
-            int assessId                =   (int) postData.getMessage("assessId");
-            AssessmentModel assessment  =   new AssessmentModel(assessId);
+            AssessmentModel assessment  =   new AssessmentModel(postData.getMessage("assessId"));
             
             if(assessment.delete()) return new ResponseDataView(successMessage, true);
             else return new ResponseDataView(failedMessage, false);

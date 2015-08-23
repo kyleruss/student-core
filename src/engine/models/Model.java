@@ -135,7 +135,7 @@ public abstract class Model
     
     public Column getColumn(String colName)
     {
-        return columns.get(colName);
+        return columns.get(colName.toUpperCase());
     }
     
     //Returns the current columns in models data
@@ -179,7 +179,7 @@ public abstract class Model
     //Is called if init by ID (find)
     public String fetchExisting(Object id)
     {
-        String idLiteral        =   (id instanceof String)? makeLiteral(id.toString()) : id.toString();
+        String idLiteral        =   (getColumn(primaryKey).isLiteral())? makeLiteral(id.toString()) : id.toString();
         QueryBuilder qBuilder   =   builder().where(primaryKey, "=", idLiteral);
         String query            =    qBuilder.build();
         
@@ -193,12 +193,11 @@ public abstract class Model
             if(colMeta == null) return null;
             
             JsonArray columnNames   =   colMeta.get("columnNames").getAsJsonArray();
-            JsonArray colTypes      =   colMeta.get("columnTypes").getAsJsonArray();
+          //  JsonArray colTypes      =   colMeta.get("columnTypes").getAsJsonArray();
             
             ResultSetMetaData meta  =   conn.getResults().getMetaData();
             //System.out.println(results);
-            
-            initColumns(columnNames, colTypes);
+              
             if(results.size() > 0)
             {
                 JsonObject entry            =   results.get(1).getAsJsonObject();

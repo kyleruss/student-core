@@ -49,33 +49,43 @@ public class ClassAssessmentsView extends AbstractView
         
         ControllerMessage postData      =   new ControllerMessage().addAll(inputData); 
         postData.add("assessClass", messages.getData().get(1).getAsJsonObject().get("ID").getAsInt());
-      /*  ControllerMessage postData      =   new ControllerMessage();
-        postData.add("assessName", name);
-        postData.add("assessDesc", desc);
-        postData.add("assessWeight", weight);
-        postData.add("assessDue", due);
-        postData.add("assessClass", messages.getData().get(1).getAsJsonObject().get("ID").getAsInt());*/
         ResponseDataView response       =   (ResponseDataView) RouteHandler.go("postCreateAssessment", postData);
         
         System.out.println(response.getResponseMessage());
     }
     
-    public void removeAssessment(int assessId)
+    public void removeAssessment()
     {
-        ControllerMessage postData  =   new ControllerMessage();
-        postData.add("assessId", assessId);
+        List<String> fieldTitles    =   new ArrayList<>();
+        fieldTitles.add(CUITextTools.createFormField("Assessment ID", "What is the ID of the assessment to remove?"));
         
+        List<String> fieldKeys  =   new ArrayList<>();
+        fieldKeys.add("assessId");
+        
+        String[] headers    =   { "Assessment ID" };
+        Map<String, String> inputData   =   CUITextTools.getFormInput(fieldTitles, fieldKeys, headers);
+        
+        ControllerMessage postData  =   new ControllerMessage().addAll(inputData);
         ResponseDataView response   =   (ResponseDataView) RouteHandler.go("postDeleteAssessment", postData);
         System.out.println(response.getResponseMessage());
     }
     
-    public void modifyAssessment(int assessId, String assessAttr, Object value)
+    public void modifyAssessment()
     {
-        ControllerMessage postData  =   new ControllerMessage();
-        postData.add("assessId", assessId);
-        postData.add("assessAttr", assessAttr);
-        postData.add("assessValue", value);
+        List<String> fieldTitles    =   new ArrayList<>();
+        fieldTitles.add(CUITextTools.createFormField("Assessment ID", "What is the ID fo the assessment to modify?"));
+        fieldTitles.add(CUITextTools.createFormField("Modify attribute", "What attribute are you modifying?"));
+        fieldTitles.add(CUITextTools.createFormField("Modified value", "What is the new value for the field?"));
         
+        List<String> fieldKeys      =   new ArrayList<>();
+        fieldKeys.add("assessId");
+        fieldKeys.add("assessAttr");
+        fieldKeys.add("assessValue");
+        
+        String[] headers                =   { "Assessment ID", "Modify attribute", "New value" };   
+        Map<String, String> inputData   =   CUITextTools.getFormInput(fieldTitles, fieldKeys, headers);
+        
+        ControllerMessage postData  =   new ControllerMessage().addAll(inputData);
         ResponseDataView response   =   (ResponseDataView) RouteHandler.go("postModifyAssessment", postData);
         System.out.println(response.getResponseMessage());
     }
@@ -96,8 +106,8 @@ public class ClassAssessmentsView extends AbstractView
     {  
         ClassAssessmentsView v  =   (ClassAssessmentsView) RouteHandler.go("getClassAssessments",new Object[] { 1 }, new Class<?>[] { Integer.class }, null);
         v.display();
-        v.makeAssessment();
-       // v.modifyAssessment(1, "weight", 30);
+       // v.makeAssessment();
+        v.removeAssessment();
        // v.makeAssessment("Assignemt2", "Complete the graph problems", 10, "2015-09-10");
     }
     
