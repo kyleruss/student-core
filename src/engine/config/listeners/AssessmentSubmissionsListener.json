@@ -34,7 +34,7 @@
             "paramTypes": [],
             "className": "engine.views.cui.AssessmentSubmissionsView",
             "methodName": "getStudentsSubmission",
-            "commandDescription": "Mark/Grade submission"
+            "commandDescription": "Find student submission"
         }
     }
     

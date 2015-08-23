@@ -162,6 +162,7 @@ public abstract class Model
         {
             Column current  =   valIter.next();
             String colName  =   current.getColumnName();
+            
             current.setLiteral(columns.get(colName).isLiteral());
             columnValues += current.getColumnValue() + ((valIter.hasNext())? ", " : "");
         }
@@ -236,9 +237,11 @@ public abstract class Model
         while(setData.hasNext())
         {
             Map.Entry<String, Column> column    =   setData.next();
-            
+            Column current         =   column.getValue();
             String colName         =   column.getKey();
-            Object colValue        =   column.getValue().getColumnValue();
+            
+            current.setLiteral(columns.get(colName).isLiteral());
+            Object colValue        =   current.getColumnValue();
             //System.out.println(colValue);
             colValue               =   (colValue == null)? "null" : colValue.toString();
             //System.out.println(colValue.toString());

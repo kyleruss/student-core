@@ -215,21 +215,75 @@ public class AdminController extends Controller
     
     public View postModifySubmission()
     {
-        return null;
+        final String invalidInputMesage         =   "Invalid input, please check your fields";
+        final String failedMessage              =   "Failed to modify submission";
+        final String successMessage             =   "Successfully modified assessment";
+        
+        if(!validatePostData(new String[]{"subId", "subAttr", "subVal"}))
+            return new ResponseDataView(invalidInputMesage, false);
+        else
+        {
+            AssessmentSubmissionsModel submission   =   new AssessmentSubmissionsModel(postData.getMessage("subId"));
+            submission.set((String) postData.getMessage("subAttr"), postData.getMessage("subVal"));
+            
+            if(submission.update()) return new ResponseDataView(successMessage, true);
+            else return new ResponseDataView(failedMessage, false);
+        }
     }
     
     public View postRemoveSubmission()
     {
-        return null;
+        final String invalidInputMesage         =   "Invalid input, please check your fields";
+        final String failedMessage              =   "Failed to remove submission";
+        final String successMessage             =   "Successfully removed assessment";
+        
+        if(!validatePostData(new String[]{"subId"})) 
+            return new ResponseDataView(invalidInputMesage, false);
+        else
+        {
+            AssessmentSubmissionsModel submission    =   new AssessmentSubmissionsModel(postData.getMessage("subId"));
+            
+            if(submission.delete()) return new ResponseDataView(successMessage, true);
+            else return new ResponseDataView(failedMessage, false);
+        }
     }
     
     public View postMarkSubmission()
     {
-        return null;
+        final String invalidInputMesage         =   "Invalid input, please check your fields";
+        final String failedMessage              =   "Failed to mark submission";
+        final String successMessage             =   "Successfully marked submission";
+        
+        if(!validatePostData(new String[]{"subId", "subGrade", "subMark"})) 
+            return new ResponseDataView(invalidInputMesage, false);
+        else
+        {
+            AssessmentSubmissionsModel submission   =   new AssessmentSubmissionsModel(postData.getMessage("subId"));
+            submission.set("alpha_grade", postData.getMessage("subGrade"));
+            submission.set("mark", postData.getMessage("subMark"));
+            
+            if(submission.update()) return new ResponseDataView(successMessage, true);
+            else return new ResponseDataView(failedMessage, false);
+        }
     }
     
     public View postFindStudentSubmission()
     {
-        return null;
+        final String invalidInputMesage         =   "Invalid input, please check your fields";
+        final String failedMessage              =   "Failed to find submission";
+        final String successMessage             =   "Successfully found assessment";
+        
+        if(!validatePostData(new String[]{"subUser", "assessId"})) 
+            return new ResponseDataView(invalidInputMesage, false);
+        else
+        {
+            JsonArray foundSubmission =  AssessmentSubmissionsModel
+                    .getSubmissionsForStudentAssessment((String) postData.getMessage("subUser"), Integer.parseInt((String) postData.getMessage("assessId")));
+            
+            if(foundSubmission.size() > 1) 
+                return new ResponseDataView(successMessage, true, new ControllerMessage(foundSubmission), 5);
+            else
+                return new ResponseDataView(failedMessage, false);
+        }
     }
 }
