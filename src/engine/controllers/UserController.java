@@ -16,7 +16,9 @@ import engine.models.MedicalModel;
 import engine.models.StaffModel;
 import engine.models.User;
 import engine.parsers.JsonParser;
+import engine.views.AbstractView;
 import engine.views.View;
+import engine.views.cui.ClassAssessmentsView;
 import engine.views.cui.ClassPageView;
 import engine.views.cui.DepartmentView;
 import engine.views.cui.LoginView;
@@ -65,8 +67,8 @@ public class UserController extends Controller
             return new ResponseDataView(invalidInputMesage, false);
         else
         {
-            String loginUsername    =   postData.getMessage("loginUsername");
-            String loginPassword    =   postData.getMessage("loginPassword");
+            String loginUsername    =   (String) postData.getMessage("loginUsername");
+            String loginPassword    =   (String) postData.getMessage("loginPassword");
             
             if(Auth.login(loginUsername, loginPassword) != null)
                 return new ResponseDataView(successMessage, true);
@@ -114,6 +116,13 @@ public class UserController extends Controller
             return null;
         }
         
+    }
+    
+    public View getClassAssessments(Integer classId)
+    {
+        AbstractView classPage      =   (AbstractView) getClassPage(classId);
+        JsonArray details   =   classPage.getMessages().getData();
+        return new ClassAssessmentsView(new ControllerMessage(details));
     }
     
    public View getMyDepartment()
@@ -172,9 +181,9 @@ public class UserController extends Controller
             medical.set("description", postData.getMessage("registerMedicalDescription"));
             
             User user       =   new User();
-            int gender      =   postData.getMessage("registerGender").equalsIgnoreCase("male")? 1 : 0;
-            String passSalt =   Crypto.salt(postData.getMessage("registerUsername"));
-            String passHash =   Crypto.makeHash(passSalt, postData.getMessage("registerPassword"));
+            int gender      =   ((String) postData.getMessage("registerGender")).equalsIgnoreCase("male")? 1 : 0;
+            String passSalt =   Crypto.salt((String) postData.getMessage("registerUsername"));
+            String passHash =   Crypto.makeHash(passSalt, (String) postData.getMessage("registerPassword"));
                     
             user.set("username", postData.getMessage("registerUsername"));
             user.set("password", passHash);

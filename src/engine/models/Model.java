@@ -148,6 +148,7 @@ public abstract class Model
         
         while(nameIter.hasNext())
             columnNames += nameIter.next() + ((nameIter.hasNext())? ", " : "");
+        
         return columnNames;
     }
     
@@ -158,7 +159,12 @@ public abstract class Model
         Iterator<Column> valIter    =   data.values().iterator();
         
         while(valIter.hasNext())
-            columnValues += valIter.next().getColumnValue() + ((valIter.hasNext())? ", " : "");
+        {
+            Column current  =   valIter.next();
+            String colName  =   current.getColumnName();
+            current.setLiteral(columns.get(colName).isLiteral());
+            columnValues += current.getColumnValue() + ((valIter.hasNext())? ", " : "");
+        }
         return columnValues;
     }
     

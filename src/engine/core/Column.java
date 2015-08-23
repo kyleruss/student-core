@@ -19,7 +19,7 @@ public class Column
     public Column(String columnName, String dbColumnType)
     {
         this.columnName =   columnName;
-        isLiteral       =   dbColumnType.equalsIgnoreCase("java.lang.String");
+        isLiteral       =   isKnownLiteral(dbColumnType);
         columnValue     =   null;
     }
     
@@ -44,7 +44,12 @@ public class Column
         }
     }
     
-    
+    public boolean isKnownLiteral(String dbColumnType)
+    {
+        return dbColumnType.equalsIgnoreCase("java.lang.String") ||
+               dbColumnType.equalsIgnoreCase("java.sql.Date");
+
+    }
     
     public String getColumnName()
     {

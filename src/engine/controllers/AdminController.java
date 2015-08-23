@@ -65,7 +65,7 @@ public class AdminController extends Controller
         if(!validatePostData(new String[]{"removeUsername"})) return new ResponseDataView(invalidInputMesage, false); 
         else
         {
-            String username =   postData.getMessage("removeUsername");
+            String username =   (String) postData.getMessage("removeUsername");
             User user       =   new User(username);
             
             if(user.delete()) return new ResponseDataView(successMessage, true);
@@ -83,17 +83,14 @@ public class AdminController extends Controller
         if(!validatePostData(new String[]{"modifyUsername", "modifyAttribute", "modifyValue"})) return new ResponseDataView(invalidInputMesage, false); 
         else
         {
-            String username =   postData.getMessage("modifyUsername");
-            String attr     =   postData.getMessage("modifyAttribute");
-            String value    =   postData.getMessage("modifyValue");
+            String username =   (String) postData.getMessage("modifyUsername");
+            String attr     =   (String) postData.getMessage("modifyAttribute");
+            Object value    =   postData.getMessage("modifyValue");
             
             User user       =   new User(username);
             if(!user.hasColumn(attr))
-            {
-                System.out.println("doesnt have column");
                 return new ResponseDataView(invalidInputMesage, false);
-                
-            }
+            
             else
             {
                 user.set(attr, value);
@@ -113,9 +110,9 @@ public class AdminController extends Controller
        if(!validatePostData(new String[]{"searchAttribute", "searchValue", "searchOperator"})) return new ResponseDataView(invalidInputMesage, false);
        else
        {
-           String searchAttribute   =  postData.getMessage("searchAttribute");
-           String searchValue       =  postData.getMessage("searchValue");
-           String searchOperator    =   postData.getMessage("searchOperator");
+           String searchAttribute   =  (String) postData.getMessage("searchAttribute");
+           String searchValue       =  (String) postData.getMessage("searchValue");
+           String searchOperator    =  (String) postData.getMessage("searchOperator");
            
            try
            {
@@ -153,7 +150,7 @@ public class AdminController extends Controller
             AssessmentModel assessment  =   new AssessmentModel();
             assessment.set("name", postData.getMessage("assessName"));
             assessment.set("description", postData.getMessage("assessDesc"));
-            assessment.set("weight", postData.getMessage("assessWeight"));
+            assessment.set("weight",  postData.getMessage("assessWeight"));
             assessment.set("class_id", postData.getMessage("assessClass"));
             assessment.set("due_date", postData.getMessage("assessDue"));
                     
@@ -181,10 +178,10 @@ public class AdminController extends Controller
             return new ResponseDataView(invalidInputMesage, false);
         else
         {
-            int assessId                 =   Integer.parseInt(postData.getMessage("assessId"));
+            int assessId                 =   (int) postData.getMessage("assessId");
             AssessmentModel assessment   =   new AssessmentModel(assessId);
-            String columnModify          =   postData.getMessage("assessAttr");
-            String value                 =   postData.getMessage("assessValue");
+            String columnModify          =   (String) postData.getMessage("assessAttr");
+            Object value                 =   postData.getMessage("assessValue");
             assessment.set(columnModify, value);
             
             if(assessment.update()) return new ResponseDataView(successMessage, true);
@@ -202,7 +199,7 @@ public class AdminController extends Controller
             return new ResponseDataView(invalidInputMesage, false);
         else
         {
-            int assessId                =   Integer.parseInt(postData.getMessage("assessId"));
+            int assessId                =   (int) postData.getMessage("assessId");
             AssessmentModel assessment  =   new AssessmentModel(assessId);
             
             if(assessment.delete()) return new ResponseDataView(successMessage, true);

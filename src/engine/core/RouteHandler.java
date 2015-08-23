@@ -74,7 +74,7 @@ public class RouteHandler
         Path foundPath  =   routes.getPath(routeName);   
         try
         {
-            if(foundPath == null) throw new NoSuchMethodException();
+            if(foundPath == null) throw new NoSuchMethodException("Route was not found");
             else           
                 return call(foundPath, params, paramTypes, data);
         }

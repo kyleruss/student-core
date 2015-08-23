@@ -11,7 +11,7 @@ import java.util.Map.Entry;
 
 public class ControllerMessage 
 {
-    Map<String, String> messages;
+    Map<String, Object> messages;
     JsonArray data;
     
     public ControllerMessage()
@@ -35,7 +35,7 @@ public class ControllerMessage
         return data;
     }
     
-    public ControllerMessage add(String name, String message)
+    public ControllerMessage add(String name, Object message)
     {
         messages.put(name, message);
         return this;
@@ -47,7 +47,7 @@ public class ControllerMessage
         return this;
     }
     
-    public String getMessage(String name)
+    public Object getMessage(String name)
     {
         return messages.get(name);
     }
@@ -57,7 +57,7 @@ public class ControllerMessage
         return messages.containsKey(name);
     }
     
-    public Iterator<String> getAllMessages()
+    public Iterator<Object> getAllMessages()
     {
         return messages.values().iterator();
     }
@@ -67,7 +67,7 @@ public class ControllerMessage
         return messages.keySet().iterator();
     }
     
-    public Iterator<Entry<String, String>> getAllMessageEntries()
+    public Iterator<Entry<String, Object>> getAllMessageEntries()
     {
         return messages.entrySet().iterator();
     }

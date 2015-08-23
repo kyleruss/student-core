@@ -16,7 +16,7 @@ public class AssessmentModel extends Model
     @Override
     protected void initTable() 
     {
-        table       =   "assessment_submissions";
+        table       =   "assessment";
         primaryKey  =   "id";
     }
     
