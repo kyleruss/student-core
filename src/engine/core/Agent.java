@@ -35,7 +35,6 @@ public class Agent extends CommandInterpreter
     
     private static View activeView;
     private static Context activeContext; 
-    private static List<View> viewTree;
     private static Session activeSession;
     private static Thread agentThread;
     private static volatile boolean waitingOnCommand = false;
@@ -43,8 +42,6 @@ public class Agent extends CommandInterpreter
     
     public Agent()
     {
-        viewTree        =   new LinkedList<>();
-        
         agentThread     =   new Thread(listen);
         begin();
     }
@@ -193,7 +190,7 @@ public class Agent extends CommandInterpreter
         try { Thread.sleep(5000); } 
         catch (InterruptedException ex) 
         {
-            System.out.println(ex.getMessage());
+            //System.out.println(ex.getMessage());
         }
         
         setView("logout");
@@ -249,7 +246,7 @@ public class Agent extends CommandInterpreter
             
             catch(InterruptedException e)
             {
-                e.printStackTrace();
+                //e.printStackTrace();
             }     
         }
     };

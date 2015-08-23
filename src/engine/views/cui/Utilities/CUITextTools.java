@@ -140,20 +140,38 @@ public class CUITextTools
     {
         Map<String, String> form    =   new LinkedHashMap<>();
         
-        Thread inputThread  =   new Thread(() ->
+        Thread inputThread  =   new Thread(new Runnable()
         {
-            boolean formInProgress  =   true;
-            Scanner inputScan       =   new Scanner(System.in);
-            
-            while(formInProgress)
+            @Override
+            public void run()
             {
-                for(int inputIndex = 0; inputIndex < inputKeys.size(); inputIndex++)
+                boolean formInProgress  =   true;
+                Scanner inputScan       =   new Scanner(System.in);
+
+                while(formInProgress)
                 {
-                    System.out.println(fieldTitles.get(inputIndex));
-                    form.put(inputKeys.get(inputIndex), inputScan.nextLine());
+                    for(int inputIndex = 0; inputIndex < inputKeys.size(); inputIndex++)
+                    {
+                     //   System.out.println(fieldTitles.get(inputIndex));
+                     //   form.put(inputKeys.get(inputIndex), inputScan.nextLine());
+
+                        try 
+                        {
+                            System.out.println(fieldTitles.get(inputIndex));
+                            form.put(inputKeys.get(inputIndex), inputScan.nextLine());
+                            synchronized(this)
+                            {
+                                wait(200);
+                            }
+                        } 
+
+                        catch (InterruptedException ex) 
+                        {
+                        }
+                    }
+
+                    formInProgress = !confirmForm(form, headers, inputScan);
                 }
-                
-                formInProgress = !confirmForm(form, headers, inputScan);
             }
         });
         
@@ -170,7 +188,7 @@ public class CUITextTools
     
     public static boolean confirmForm(Map<String, String> form, String[] headers, Scanner scanner)
     {
-        System.out.println("\n" + CUITextTools.changeColour("Please verify that the following details are correct before proceeding\n", CUITextTools.YELLOW) + "\n");
+        System.out.println("\n" + CUITextTools.changeColour("Please verify that the following details are correct before proceeding\n", CUITextTools.RED) + "\n");
         
         String[][] data      =   new String[1][form.size()];
         data[0]              =   (String[]) form.values().toArray(new String[form.size()]);

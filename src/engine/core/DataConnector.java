@@ -119,7 +119,7 @@ public class DataConnector implements AutoCloseable//extends Thread implements A
         try { conn.setAutoCommit(false); } 
         catch (SQLException ex) 
         {
-            System.out.println("[SQL exception] Failed to start transaction, error: " + ex.getMessage());
+          //  System.out.println("[SQL exception] Failed to start transaction, error: " + ex.getMessage());
         }
     }
     
@@ -133,7 +133,7 @@ public class DataConnector implements AutoCloseable//extends Thread implements A
         }
         catch(SQLException e)
         {
-            System.out.println("[SQL exception] Failed to commit transaction, error: " + e.getMessage());
+          //  System.out.println("[SQL exception] Failed to commit transaction, error: " + e.getMessage());
         }
     }
     
@@ -147,7 +147,7 @@ public class DataConnector implements AutoCloseable//extends Thread implements A
         
         catch(SQLException e)
         {
-            System.out.println("[SQL exception] Failed to rollback transaction, error: " + e.getMessage());
+            //System.out.println("[SQL exception] Failed to rollback transaction, error: " + e.getMessage());
         }
     }
     
@@ -208,7 +208,7 @@ public class DataConnector implements AutoCloseable//extends Thread implements A
         
         catch(SQLException e)
         {
-            System.out.println("SQL EXCEPTION: " + e.getMessage());
+          //  System.out.println("SQL EXCEPTION: " + e.getMessage());
             closeConnection();
             return false;
         }
@@ -242,7 +242,8 @@ public class DataConnector implements AutoCloseable//extends Thread implements A
     {
         try
         {
-            System.out.println(query);
+     //       System.out.println(query);
+            
             //Logs the attempted query 
             //Logging config is checked in log()
             MainLogger.log(query, MainLogger.DATA_LOGGER);
@@ -253,8 +254,8 @@ public class DataConnector implements AutoCloseable//extends Thread implements A
         
         catch(SQLException e)
         {
-            e.printStackTrace();
-            System.out.println("[SQL Exception] Error creating query - " + e.getMessage());
+          //  e.printStackTrace();
+         //   System.out.println("[SQL Exception] Error creating query - " + e.getMessage());
             closeConnection();
             return null;
         }
@@ -300,7 +301,7 @@ public class DataConnector implements AutoCloseable//extends Thread implements A
         
         catch(NullPointerException | SQLException e)
         {
-            System.out.println("[CONNECTION CLOSE EXCEPTION] " + e.getMessage());
+     //       System.out.println("[CONNECTION CLOSE EXCEPTION] " + e.getMessage());
         } 
     }
 
@@ -337,7 +338,7 @@ public class DataConnector implements AutoCloseable//extends Thread implements A
         
         catch(SQLException e)
        {
-            e.printStackTrace();
+     //       e.printStackTrace();
         }
     }
 }

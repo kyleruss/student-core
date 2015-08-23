@@ -133,7 +133,7 @@ public class AdminController extends Controller
            
            catch(SQLException e)
            {
-               e.printStackTrace();
+          //     e.printStackTrace();
                return new ResponseDataView(failedMessage, false);
            }
        }
@@ -164,7 +164,7 @@ public class AdminController extends Controller
             
             catch(SQLException e)
             {
-                System.out.println("[SQL Exception] " + e.getMessage());
+              //  System.out.println("[SQL Exception] " + e.getMessage());
                 return new ResponseDataView(failedMessage, false);
             }
         }

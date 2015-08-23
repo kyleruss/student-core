@@ -13,6 +13,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 public class RegisterView extends AbstractView implements View
@@ -33,19 +35,26 @@ public class RegisterView extends AbstractView implements View
         System.out.println(CUITextTools.underline(CUITextTools.changeColour("Step 3/3: Medical details", CUITextTools.MAGENTA)));
         Map<String, String> medicalDetails  =   getMedicalDetailsInput(); 
         
-        System.out.println("Registration complete!");
         
         ControllerMessage postData  =   new ControllerMessage().addAll(accDetails).addAll(contactDetails).addAll(medicalDetails);
         ResponseDataView response   =   (ResponseDataView) RouteHandler.go("postRegister", postData);
         
+       // System.out.println("Registration complete!");
         System.out.println(response.getResponseMessage());
         
         if(response.getResponseStatus())
         {
-        //    System.out.println("\n" + CUITextTools.Login now? [Y/N]");
-            Scanner is  =   new Scanner(System.in);
-            
+           System.out.println("Redirecting in 5 seconds..");
+
+            try { Thread.sleep(5000); } 
+            catch (InterruptedException ex) 
+            {
+                System.out.println(ex.getMessage());
+            }
+
+            Agent.setView("getLogin");
         }
+        
         
         Agent.commandFinished();
     }
@@ -63,8 +72,19 @@ public class RegisterView extends AbstractView implements View
             {
                 for(int inputIndex = 0; inputIndex < inputKeys.size(); inputIndex++)
                 {
-                    System.out.println(fieldTitles.get(inputIndex));
-                    form.put(inputKeys.get(inputIndex), inputScan.nextLine());
+                    try 
+                    {
+                        System.out.println(fieldTitles.get(inputIndex));
+                        form.put(inputKeys.get(inputIndex), inputScan.nextLine());
+                        synchronized(this)
+                        {
+                            wait(200);
+                        }
+                    } 
+                    
+                    catch (InterruptedException ex) 
+                    {
+                    }
                 }
                 
                 formInProgress = !confirmForm(form, headers, inputScan);

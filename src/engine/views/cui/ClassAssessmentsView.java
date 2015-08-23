@@ -3,6 +3,7 @@ package engine.views.cui;
 
 import com.google.gson.JsonArray;
 import engine.controllers.ControllerMessage;
+import engine.core.Agent;
 import engine.core.RouteHandler;
 import engine.models.AssessmentModel;
 import engine.views.AbstractView;
@@ -26,9 +27,9 @@ public class ClassAssessmentsView extends AbstractView
         super
         (
                 messages, 
-                messages.getData().get(1).getAsJsonObject().get("NAME").getAsString() + " assessments", 
+                messages.getData().get(1).getAsJsonObject().get("Class name").getAsString() + " assessments", 
                 "View and manage assessments for this class", 
-                "/" + "students"//Agent.getActiveSession().getUser().get("USERNAME").getNonLiteralValue() + "/students/"
+                "/" + "assessments"//Agent.getActiveSession().getUser().get("USERNAME").getNonLiteralValue() + "/students/"
         );
     }
     
@@ -50,7 +51,10 @@ public class ClassAssessmentsView extends AbstractView
         Map<String, String> inputData   =   CUITextTools.getFormInput(fieldTitles, fieldKeys, headers);
         
         ControllerMessage postData      =   new ControllerMessage().addAll(inputData); 
-        postData.add("assessClass", messages.getData().get(1).getAsJsonObject().get("ID").getAsInt());
+        
+        if(messages.getData() == null || messages.getData().size() <= 1) return; 
+        
+        postData.add("assessClass", messages.getData().get(1).getAsJsonObject().get("Class ID").getAsInt());
         ResponseDataView response       =   (ResponseDataView) RouteHandler.go("postCreateAssessment", postData);
         
         System.out.println(response.getResponseMessage());
@@ -105,6 +109,8 @@ public class ClassAssessmentsView extends AbstractView
         
         int assessID    =   Integer.parseInt(inputData.get("assessId"));
         
+        View subView    =   RouteHandler.go("getAssessmentSubmissions", new Object[] { assessID }, new Class<?>[] { Integer.class }, null);
+        Agent.setView(subView);
     }
     
     @Override
@@ -112,7 +118,9 @@ public class ClassAssessmentsView extends AbstractView
     {
         super.display();
         
-        JsonArray assessments   =   AssessmentModel.getAssessmentsForClass(messages.getData().get(1).getAsJsonObject().get("ID").getAsInt());
+        if(messages.getData() == null || messages.getData().size() <= 1) return; 
+        
+        JsonArray assessments   =   AssessmentModel.getAssessmentsForClass(messages.getData().get(1).getAsJsonObject().get("Class ID").getAsInt());
         if(assessments != null && assessments.size() > 0)
         {
             System.out.println("\n" + CUITextTools.underline(CUITextTools.changeColour("Assessments", CUITextTools.MAGENTA)));
@@ -130,6 +138,7 @@ public class ClassAssessmentsView extends AbstractView
     {  
         ClassAssessmentsView v  =   (ClassAssessmentsView) RouteHandler.go("getClassAssessments",new Object[] { 1 }, new Class<?>[] { Integer.class }, null);
         v.display();
+        v.showSubmissions();
        // v.makeAssessment();
      //   v.removeAssessment();
        // v.makeAssessment("Assignemt2", "Complete the graph problems", 10, "2015-09-10");

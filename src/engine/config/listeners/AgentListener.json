@@ -25,7 +25,7 @@
             "paramTypes": [],
             "className": "engine.core.Agent",
             "methodName": "setPrevView",
-            "commandDescription": "Go to the previous view" 
+            "commandDescription": "Get previous view" 
         },
         
         "nextView":
@@ -34,7 +34,7 @@
             "paramTypes": [],
             "className": "engine.core.Agent",
             "methodName": "setNextView",
-            "commandDescription": "Go to the next view" 
+            "commandDescription": "Get next view" 
         },
         
         "refreshView":
@@ -43,7 +43,7 @@
             "paramTypes": [],
             "className": "engine.core.Agent",
             "methodName": "refreshView",
-            "commandDescription": "Refresh the current view" 
+            "commandDescription": "Refresh view" 
         },
         
         "help":
@@ -52,7 +52,7 @@
             "paramTypes": [],
             "className": "engine.core.Agent",
             "methodName": "showHelp",
-            "commandDescription": "Show a list of agent and view commands" 
+            "commandDescription": "Show all commands" 
         }
     }
     

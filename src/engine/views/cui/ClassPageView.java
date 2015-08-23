@@ -25,9 +25,9 @@ public class ClassPageView extends AbstractView
         super
         (
                 messages, 
-                messages.getData().get(1).getAsJsonObject().get("NAME").toString(), 
+                messages.getData().get(1).getAsJsonObject().get("Class name").getAsString(), 
                 "Class homepage, view and manage this class", 
-                "/" + "students"//Agent.getActiveSession().getUser().get("USERNAME").getNonLiteralValue() + "/students/"
+                "/" + "class/" + messages.getData().get(1).getAsJsonObject().get("Class name").getAsString() + "/" //Agent.getActiveSession().getUser().get("USERNAME").getNonLiteralValue() + "/students/"
         );
     }
     
@@ -35,16 +35,17 @@ public class ClassPageView extends AbstractView
     public void display()
     {
         super.display();
+        System.out.println("\n" + CUITextTools.underline(CUITextTools.changeColour("Class details", CUITextTools.MAGENTA)));
         CUITextTools.responseToTable(messages.getData());
     }
     
     public void showClassStudents()
     {
-        int classId =   messages.getData().get(1).getAsJsonObject().get("ID").getAsInt();
+        int classId =   messages.getData().get(1).getAsJsonObject().get("Class ID").getAsInt();
         try
         {
             JsonArray students  =   ClassEnrolmentModel.getStudentsEnrolledIn(classId);
-            System.out.println(CUITextTools.underline(CUITextTools.changeColour("Class has " + (students.size() - 1) + " student(s)", CUITextTools.GREEN)));
+            System.out.println("\n" + CUITextTools.underline(CUITextTools.changeColour("Class has " + (students.size() - 1) + " student(s)", CUITextTools.GREEN)));
             CUITextTools.responseToTable(students);
         }
         
@@ -57,7 +58,7 @@ public class ClassPageView extends AbstractView
     
     public void showTeacherContact()
     {
-        int classId =   messages.getData().get(1).getAsJsonObject().get("ID").getAsInt();
+        int classId =   messages.getData().get(1).getAsJsonObject().get("Class ID").getAsInt();
         try
         {
             JsonArray teacher   =   ClassesModel.getTeacherContact(classId);
@@ -80,10 +81,10 @@ public class ClassPageView extends AbstractView
     public void showClassAssessments()
     {
         View assessView  =   RouteHandler.go("getClassAssessments",
-                new Object[] { messages.getData().get(1).getAsJsonObject().get("ID").getAsInt() }, 
+                new Object[] { messages.getData().get(1).getAsJsonObject().get("Class ID").getAsInt() }, 
                 new Class<?>[] { Integer.class }, null);
         assessView.display();
-        //Agent.setView(assessView);
+        Agent.setView(assessView);
     }
 
     @Override
@@ -96,7 +97,7 @@ public class ClassPageView extends AbstractView
     {
         ClassPageView v = (ClassPageView) RouteHandler.go("getClassPage", new Object[] { 1 }, new Class<?>[] { Integer.class }, null);
         v.display();
-        v.showTeacherContact();
+        v.showClassAssessments();
     }
     
 }

@@ -34,7 +34,7 @@ public class StudentListView extends AbstractView
                 messages, 
                 "Students", 
                 "Find, remove, modify students in the school", 
-                "/" + Agent.getActiveSession().getUser().get("USERNAME").getNonLiteralValue() + "/students/"
+                "/" //+ Agent.getActiveSession().getUser().get("USERNAME").getNonLiteralValue() + "/students/"
         );
         
         currentPage =   1;
@@ -143,7 +143,9 @@ public class StudentListView extends AbstractView
     public void nextPage()
     {
         if(currentPage < numPages)
-            showList(currentPage++, null);
+        {
+            showList(++currentPage, null);
+        }
         else
             System.out.println(CUITextTools.changeColour("You are already on the last page", CUITextTools.RED));
                     
@@ -152,7 +154,7 @@ public class StudentListView extends AbstractView
     public void prevPage()
     {
         if(currentPage > 1)
-            showList(currentPage--, null);
+            showList(--currentPage, null);
         else
             System.out.println(CUITextTools.changeColour("You are already on the first page", CUITextTools.RED));
     }
@@ -167,9 +169,12 @@ public class StudentListView extends AbstractView
     {
       //  ResponseDataView results = (ResponseDataView) RouteHandler.go("getStudentList", new Object[] { 1 }, new Class<?>[] { Integer.class }, null);
         StudentListView view    =   new StudentListView();
-        //view.display();
+        view.prevPage();
+      //  view.display();
+     //   view.nextPage();
+     //   view.prevPage();
         //view.findStudent();
-      view.deleteStudent();
+     // view.deleteStudent();
     }
     
 }

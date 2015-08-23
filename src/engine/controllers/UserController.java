@@ -87,9 +87,9 @@ public class UserController extends Controller
             JsonArray results   =   user.builder().join(new Join("users", "class_enrolments", "username", "user_id", Join.JoinType.INNERR_JOIN)
             .filter(new Conditional("username", "=", username)))
             .join("class_enrolments", "classes", "class_id", "id", Join.JoinType.INNERR_JOIN)
-            .select("classes.id", "\"Class ID\"")
-            .select("classes.name", "\"Class name\"")
-            .select("classes.description", "\"Class description\"")
+            .select("classes.id", "Class ID")
+            .select("classes.name", "Class name")
+            .select("classes.description", "Class description")
             .select("class_enrolments.semester_num", "Semester")   
             .get();
             return new MyClassesView(new ControllerMessage(results)); 
@@ -97,7 +97,7 @@ public class UserController extends Controller
         
         catch(SQLException e)
         {
-            System.out.println("[SQL Exception] " + e.getMessage());
+         //   System.out.println("[SQL Exception] " + e.getMessage());
             return null;
         }
     }
@@ -106,13 +106,18 @@ public class UserController extends Controller
     {
         try
         {
-            JsonArray classDetails  =   new ClassesModel(classId).builder().where("id", "=", "1").get();
+            JsonArray classDetails  =   new ClassesModel(classId).builder().where("id", "=", "1")
+                    .select("id", "Class ID")
+                    .select("name", "Class name")
+                    .select("teacher_id", "Teacher ID")
+                    .select("created_date", "Date created")
+                    .get();
             return new ClassPageView(new ControllerMessage(classDetails));
         }
         
         catch(SQLException  e)
         {
-            System.out.println(e.getMessage());
+         //   System.out.println(e.getMessage());
             return null;
         }
         
@@ -121,7 +126,7 @@ public class UserController extends Controller
     public View getClassAssessments(Integer classId)
     {
         AbstractView classPage      =   (AbstractView) getClassPage(classId);
-        JsonArray details   =   classPage.getMessages().getData();
+        JsonArray details           =   classPage.getMessages().getData();
         return new ClassAssessmentsView(new ControllerMessage(details));
     }
     
@@ -206,7 +211,9 @@ public class UserController extends Controller
                     //Create contact
                     emergencyContact.setActiveConnection(conn);
                     emergencyContact.save();
-                    ResultSet rs1    =   conn.getResults();
+                    
+                    ResultSet rs1       =   conn.getResults();
+                    if(!rs1.next()) throw new SQLException("Failed to create emergency contact");
                     long emergContactId =   rs1.getLong(1);
 
 
@@ -214,7 +221,9 @@ public class UserController extends Controller
                     medical.setActiveConnection(conn);
                     medical.set("contact_id", emergContactId);
                     medical.save();
+                    
                     ResultSet rs2 =   conn.getResults();
+                     if(!rs2.next()) throw new SQLException("Failed to create medical record");
                     long medicalId  =   rs2.getLong(1);
 
                     //Create user and commit
@@ -236,8 +245,8 @@ public class UserController extends Controller
 
                 catch(SQLException e)
                 {
-                    e.printStackTrace();
-                    System.out.println("[SQL Exception] " + e.getMessage());
+             //       e.printStackTrace();
+              //      System.out.println("[SQL Exception] " + e.getMessage());
                     conn.rollbackTransaction();
                     conn.closeConnection();
                     return new ResponseDataView(failedMessage, false);

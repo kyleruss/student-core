@@ -77,7 +77,7 @@ public class JsonParser
         
         catch(SQLException e)
         {
-            System.out.println("[SQL EXCEPTION] Failed to parse result set - " + e.getMessage());
+           // System.out.println("[SQL EXCEPTION] Failed to parse result set - " + e.getMessage());
             return null;
         }
     }

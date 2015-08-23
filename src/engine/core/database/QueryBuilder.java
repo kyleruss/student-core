@@ -208,7 +208,7 @@ public class QueryBuilder
             if(results == null) return 0;
             
             int totalResults   =   results.size() - 1;
-            if(totalResults > 0) return totalResults / numResults;
+            if(totalResults > 0) return (int) Math.ceil((totalResults * 1.0) / numResults);
             else return 0;
         }
         

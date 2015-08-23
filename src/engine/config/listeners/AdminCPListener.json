@@ -8,17 +8,6 @@
             "className": "engine.views.cui.AdminControlPanelView",
             "methodName": "showStudents",
             "commandDescription": "Show students"
-        },
-        
-        "houses":
-        {
-            "commandName": "houses",
-            "paramTypes": [],
-            "className": "engine.views.cui.AdminControlPanelView",
-            "methodName": "showHouses",
-            "commandDescription": "Show houses"
-            
         }
     }
-    
 }

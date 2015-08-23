@@ -1,4 +1,3 @@
-
 package engine.views.cui;
 
 import com.google.gson.JsonArray;
@@ -6,6 +5,7 @@ import engine.controllers.ControllerMessage;
 import engine.core.RouteHandler;
 import engine.models.AssessmentSubmissionsModel;
 import engine.views.AbstractView;
+import engine.views.View;
 import engine.views.cui.Utilities.CUITextTools;
 import java.util.ArrayList;
 import java.util.List;
@@ -34,6 +34,8 @@ public class AssessmentSubmissionsView extends AbstractView
     public void display()
     {
         super.display();
+        
+        if(messages.getData() == null || messages.getData().size() <= 1) return; 
         
         int assessId    =   messages.getData().get(1).getAsJsonObject().get("ID").getAsInt();
         JsonArray submissionsForAssessment  =   AssessmentSubmissionsModel.getSubmissionsForAssessment(assessId);
@@ -114,6 +116,8 @@ public class AssessmentSubmissionsView extends AbstractView
         
         String[] headers    =   { "Student username" };
         
+        if(messages.getData() == null || messages.getData().size() <= 1) return; 
+        
         int assessId    =   messages.getData().get(1).getAsJsonObject().get("ID").getAsInt();
         Map<String, String> inputData   =   CUITextTools.getFormInput(fieldTitles, fieldKeys, headers);
         inputData.put("assessId", "" + assessId);
@@ -138,5 +142,11 @@ public class AssessmentSubmissionsView extends AbstractView
         return "/engine/config/listeners/AssessmentSubmissionsListener.json";
     }
     
+    public static void main(String[] args)
+    {
+        AssessmentSubmissionsView subView    =   (AssessmentSubmissionsView) RouteHandler.go("getAssessmentSubmissions", new Object[] { 3 }, new Class<?>[] { Integer.class }, null);
+        subView.display();
+        subView.modifySubmission();
+    }
     
 }
