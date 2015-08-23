@@ -3,10 +3,12 @@ package engine.controllers;
 
 import com.google.gson.JsonArray;
 import engine.models.AssessmentModel;
+import engine.models.AssessmentSubmissionsModel;
 import engine.models.Model;
 import engine.models.User;
 import engine.views.cui.AdminControlPanelView;
 import engine.views.View;
+import engine.views.cui.AssessmentSubmissionsView;
 import engine.views.cui.ResponseDataView;
 import engine.views.cui.StudentListView;
 import java.sql.SQLException;
@@ -205,4 +207,29 @@ public class AdminController extends Controller
         }
     }
     
+    public View getAssessmentSubmissions(Integer assessId)
+    {
+        JsonArray assessmentDetails =   AssessmentSubmissionsModel.getSubmissionDetails(assessId);
+        return new AssessmentSubmissionsView(new ControllerMessage(assessmentDetails));
+    }
+    
+    public View postModifySubmission()
+    {
+        return null;
+    }
+    
+    public View postRemoveSubmission()
+    {
+        return null;
+    }
+    
+    public View postMarkSubmission()
+    {
+        return null;
+    }
+    
+    public View postFindStudentSubmission()
+    {
+        return null;
+    }
 }

@@ -1,8 +1,10 @@
 
 package engine.views.cui;
 
+import com.google.gson.JsonArray;
 import engine.controllers.ControllerMessage;
 import engine.core.RouteHandler;
+import engine.models.AssessmentModel;
 import engine.views.AbstractView;
 import engine.views.View;
 import engine.views.cui.Utilities.CUITextTools;
@@ -90,10 +92,32 @@ public class ClassAssessmentsView extends AbstractView
         System.out.println(response.getResponseMessage());
     }
     
+    public void showSubmissions()
+    {
+        List<String> fieldTitles    =   new ArrayList<>();
+        fieldTitles.add(CUITextTools.createFormField("Assessment ID", "What is the assessment ID of the assessment submissions"));
+        
+        List<String> fieldKeys  =   new ArrayList<>();
+        fieldKeys.add("assessId");
+        
+        String[] headers    =   { "Asessment ID" };
+        Map<String, String> inputData   =   CUITextTools.getFormInput(fieldTitles, fieldKeys, headers);
+        
+        int assessID    =   Integer.parseInt(inputData.get("assessId"));
+        
+    }
+    
     @Override
     public void display()
     {
         super.display();
+        
+        JsonArray assessments   =   AssessmentModel.getAssessmentsForClass(messages.getData().get(1).getAsJsonObject().get("ID").getAsInt());
+        if(assessments != null && assessments.size() > 0)
+        {
+            System.out.println("\n" + CUITextTools.underline(CUITextTools.changeColour("Assessments", CUITextTools.MAGENTA)));
+            CUITextTools.responseToTable(assessments);
+        }
     }
     
     @Override
@@ -107,7 +131,7 @@ public class ClassAssessmentsView extends AbstractView
         ClassAssessmentsView v  =   (ClassAssessmentsView) RouteHandler.go("getClassAssessments",new Object[] { 1 }, new Class<?>[] { Integer.class }, null);
         v.display();
        // v.makeAssessment();
-        v.removeAssessment();
+     //   v.removeAssessment();
        // v.makeAssessment("Assignemt2", "Complete the graph problems", 10, "2015-09-10");
     }
     

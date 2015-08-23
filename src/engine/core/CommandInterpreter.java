@@ -74,28 +74,31 @@ public abstract class CommandInterpreter implements CommandExecute
     {
         List<Command> commandCol            =   new ArrayList<>(commands.values());
         final int maxCols                   =   3;
-        int numRows                         =   Math.max(commandCol.size() % maxCols, 1);
+        final int maxRows                   =   (int) Math.ceil((commandCol.size() * 1.0) / maxCols);
+        int numRows                         =   Math.max(maxRows, 1);
         int numCols                         =   Math.min(maxCols, commandCol.size());
         
+        System.out.println("size: " + maxRows);
         String[] headers                    =   {};
         String[][] data                     =   new String[numRows][numCols];
         int commandIndex                    =   0;
         
-        rowLoop:
         for(int row = 0; row < numRows; row++)
         {
             for(int col = 0; col < numCols; col++)
             {
                 
+               // if((col * (row + 1)) >= numCols || commandIndex >= commandCol.size())
                 if((col * (row + 1)) >= numCols || commandIndex >= commandCol.size())
                 {
+                    System.out.println(commandIndex);
                     data[row][col] = "";
                     continue;
                 }
                 
                // else if(commandIndex >= 2) break rowLoop;
                
-                
+                System.out.println("ci: " + commandIndex);
                 Command current         =   commandCol.get(commandIndex);
                 String commandName      =   current.getCommandName();
                 String commandDesc      =   current.getCommandDescription();

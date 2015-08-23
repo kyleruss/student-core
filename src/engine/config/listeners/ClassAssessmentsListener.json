@@ -7,7 +7,7 @@
             "paramTypes": [],
             "className": "engine.views.cui.ClassAssessmentsView",
             "methodName": "makeAssessment",
-            "commandDescription": "Create a new assessment"
+            "commandDescription": "Create new assessment"
         },
         
         "removeAssessment":
@@ -16,7 +16,7 @@
             "paramTypes": [],
             "className": "engine.views.cui.ClassAssessmentsView",
             "methodName": "deleteAssessment",
-            "commandDescription": "Remove an assessment"
+            "commandDescription": "Remove assessment"
         },
         
         "modifyAssessment":
@@ -25,16 +25,16 @@
             "paramTypes": [],
             "className": "engine.views.cui.ClassAssessmentsView",
             "methodName": "modifyAssessment",
-            "commandDescription": "Modify an assessment"
+            "commandDescription": "Change assessment"
         },
         
-        "openAssessment":
+        "submissions":
         {
-            "commandName": "openAssessment",
+            "commandName": "submissions",
             "paramTypes": [],
             "className": "engine.views.cui.ClassAssessmentsView",
-            "methodName": "openAssessment",
-            "commandDescription": "View assessment"
+            "methodName": "showSubmissions",
+            "commandDescription": "Show assessment submissions"
         }
     }
     

@@ -45,6 +45,12 @@ public class Routes extends Router
         add("postModifyAssessment", "AdminController", "postModifyAssessment", "/modifyassessment");
         add("postDeleteAssessment", "AdminController", "postDeleteAssessment", "/deleteassessment");
         
+        add("getAssessmentSubmissions", "AdminController", "getAssessmentSubmissions", "/assessment={assessId}/submissions");
+        add("postModifySubmission", "AdminController", "postModifySubmission", "/modifysubmission");
+        add("postRemoveSubmission", "AdminController", "postRemoveSubmission", "/removesubmission");
+        add("postMarkSubmission", "AdminController", "postMarkSubmission", "/marksubmission");
+        add("postFindStudentSubmission", "AdminController", "postFindStudentSubmission", "/findsubmission");
+        
         //Admin panel
         add("getAdmincp", "AdminController", "getAdmincp", "/admincp");
         add("getStudents", "AdminController", "getStudents", "/students");

@@ -1,0 +1,41 @@
+{
+    "commands": 
+    { 
+        "modifySubmission":
+        {
+            "commandName": "modifySubmission",
+            "paramTypes": [],
+            "className": "engine.views.cui.AssessmentSubmissionsView",
+            "methodName": "modifySubmission",
+            "commandDescription": "Modify a submission"
+        },
+        
+        "removeSubmission":
+        {
+            "commandName": "removeSubmission",
+            "paramTypes": [],
+            "className": "engine.views.cui.AssessmentSubmissionsView",
+            "methodName": "removeSubmission",
+            "commandDescription": "Remove a submission"
+        },
+        
+        "markSubmission":
+        {
+            "commandName": "markSubmission",
+            "paramTypes": [],
+            "className": "engine.views.cui.AssessmentSubmissionsView",
+            "methodName": "markSubmission",
+            "commandDescription": "Mark/Grade submission"
+        },
+        
+        "findStudentsSubmission":
+        {
+            "commandName": "findStudentsSubmission",
+            "paramTypes": [],
+            "className": "engine.views.cui.AssessmentSubmissionsView",
+            "methodName": "getStudentsSubmission",
+            "commandDescription": "Mark/Grade submission"
+        }
+    }
+    
+}

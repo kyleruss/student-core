@@ -3,6 +3,7 @@ package engine.views.cui;
 
 import com.google.gson.JsonArray;
 import engine.controllers.ControllerMessage;
+import engine.core.Agent;
 import engine.core.RouteHandler;
 import engine.models.ClassEnrolmentModel;
 import engine.models.ClassesModel;
@@ -75,6 +76,15 @@ public class ClassPageView extends AbstractView
             System.out.println(CUITextTools.changeColour("No teacher found", CUITextTools.RED));
         }
     }
+    
+    public void showClassAssessments()
+    {
+        View assessView  =   RouteHandler.go("getClassAssessments",
+                new Object[] { messages.getData().get(1).getAsJsonObject().get("ID").getAsInt() }, 
+                new Class<?>[] { Integer.class }, null);
+        assessView.display();
+        //Agent.setView(assessView);
+    }
 
     @Override
     protected String getCommandsFile() 
@@ -86,7 +96,7 @@ public class ClassPageView extends AbstractView
     {
         ClassPageView v = (ClassPageView) RouteHandler.go("getClassPage", new Object[] { 1 }, new Class<?>[] { Integer.class }, null);
         v.display();
-        v.showTeacherContact();
+        v.showClassAssessments();
     }
     
 }
