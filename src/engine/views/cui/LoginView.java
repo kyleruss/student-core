@@ -9,6 +9,8 @@ import engine.views.AbstractView;
 import engine.views.View;
 import engine.views.cui.Utilities.CUITextTools;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class LoginView extends AbstractView implements View
 {
@@ -20,7 +22,7 @@ public class LoginView extends AbstractView implements View
     
     public LoginView(ControllerMessage messages)
     {
-        super(messages, "Welcome to Student core!", "Explore a great DMS", "/login/");
+        super(messages, "Welcome to Student core by Kyle Russell", "Explore a great DMS", "/login/");
     }
 
     @Override
@@ -33,19 +35,85 @@ public class LoginView extends AbstractView implements View
     
     public void loginAttempt()
     {
-        Scanner inputScan   =   new Scanner(System.in);
+    /*    Thread inputThread  =   new Thread(new Runnable()
+        {
+           @Override
+           public void run()
+           {
+               synchronized(this)
+               {
+                   try
+                   {
+                       
+                        Scanner inputScan   =   new Scanner(System.in);
         
+                        String usernameText =   CUITextTools.changeColour("Please enter your username", CUITextTools.GREEN);
+                        String passwordText =   CUITextTools.changeColour("Please enter your password", CUITextTools.GREEN);
+                        String enteredUsername;
+                        String enteredPassword;
+
+                        System.out.println(usernameText);
+                        enteredUsername =   inputScan.nextLine();
+                       
+                       wait(200);
+                       
+                       System.out.println(passwordText);
+                        enteredPassword =   inputScan.nextLine();
+
+
+                        ControllerMessage postData   =   new ControllerMessage();
+                        postData.add("loginUsername", enteredUsername);
+                        postData.add("loginPassword", enteredPassword);
+
+                        ResponseDataView response   =   (ResponseDataView) RouteHandler.go("postLogin", postData);
+
+                        System.out.println("\n" + response.getResponseMessage());
+
+                        if(response.getResponseStatus())
+                        {
+                           System.out.println("Redirecting in 5 seconds..");
+
+                            try { wait(500); } 
+                            catch (InterruptedException ex) 
+                            {
+                                System.out.println(ex.getMessage());
+                            }
+
+                            commandFinished();
+                            Agent.setView("getHome");
+                        }
+
+                   }
+                   
+                   catch(InterruptedException  e)
+                   {
+                       
+                   }
+               }
+           }
+        });
+        
+        inputThread.start();
+        try {
+            inputThread.join(); */
+            
+        try
+        {
+              Scanner inputScan   =   new Scanner(System.in);
+            
             String usernameText =   CUITextTools.changeColour("Please enter your username", CUITextTools.GREEN);
             String passwordText =   CUITextTools.changeColour("Please enter your password", CUITextTools.GREEN);
             String enteredUsername;
             String enteredPassword;
 
+            Thread.sleep(200);
             System.out.println(usernameText);
             enteredUsername =   inputScan.nextLine();
 
+            Thread.sleep(200);
             System.out.println(passwordText);
             enteredPassword =   inputScan.nextLine();
-
+            
             
             ControllerMessage postData   =   new ControllerMessage();
             postData.add("loginUsername", enteredUsername);
@@ -57,20 +125,27 @@ public class LoginView extends AbstractView implements View
             
             if(response.getResponseStatus())
             {
-               System.out.println("Redirecting in 5 seconds..");
-        
-                try { Thread.sleep(5000); } 
-                catch (InterruptedException ex) 
-                {
-                    System.out.println(ex.getMessage());
-                }
-                
+                System.out.println("Redirecting in 5 seconds..");
+
+
+                Thread.sleep(5000); 
+
+
                 Agent.setView("getHome");
-            }
             
+            }
+        }
+            
+                catch (InterruptedException ex)
+                {
+                System.out.println(ex.getMessage());
+                }
             
             commandFinished();
-         
+           /*  
+        } catch (InterruptedException ex) {
+            Logger.getLogger(LoginView.class.getName()).log(Level.SEVERE, null, ex);
+        } */
     }
         
         

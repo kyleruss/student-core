@@ -3,7 +3,7 @@
 //  13831056
 //  PDC Project
 //####################################
-
+/*
 package engine.core.database;
 
 import com.google.gson.JsonArray;
@@ -315,3 +315,4 @@ public class QueryBuilderTest
     }  
     
 }
+*/

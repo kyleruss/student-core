@@ -51,7 +51,7 @@ public class ClassPageView extends AbstractView
         
         catch(SQLException e)
         {
-            System.out.println(e.getMessage());
+          //  System.out.println(e.getMessage());
             System.out.println(CUITextTools.changeColour("No students found", CUITextTools.RED));
         }
     }
@@ -62,7 +62,7 @@ public class ClassPageView extends AbstractView
         try
         {
             JsonArray teacher   =   ClassesModel.getTeacherContact(classId);
-            System.out.println(JsonParser.parsePretty(teacher));
+           // System.out.println(JsonParser.parsePretty(teacher));
             
             if(teacher.size() > 1)
             {
@@ -73,7 +73,7 @@ public class ClassPageView extends AbstractView
         
         catch(SQLException e)
         {
-            System.out.println(e.getMessage());
+            //System.out.println(e.getMessage());
             System.out.println(CUITextTools.changeColour("No teacher found", CUITextTools.RED));
         }
     }

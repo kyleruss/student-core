@@ -1,4 +1,4 @@
-
+ 
 package engine.models;
 
 import com.google.gson.JsonArray;
@@ -29,7 +29,7 @@ public class AssessmentSubmissionsModel extends Model
                     .select("assessment.*")
                     .get();
             
-            System.out.println(results);
+         //   System.out.println(results);
             return results;
         }
         

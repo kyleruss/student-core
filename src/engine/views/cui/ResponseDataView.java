@@ -3,6 +3,7 @@ package engine.views.cui;
 
 import engine.controllers.ControllerMessage;
 import engine.views.DataView;
+import engine.views.View;
 import engine.views.cui.Utilities.CUITextTools;
 
 
@@ -74,5 +75,23 @@ public class ResponseDataView implements DataView
 
     @Override
     public void fire(String command, Object instance) {}
+
+    @Override
+    public View getPrevView() 
+    {
+        return null;
+    }
+
+    @Override
+    public View getNextView() 
+    {
+        return null;
+    }
+
+    @Override
+    public void setPrevView(View prevView) {}
+
+    @Override
+    public void setNextView(View nextView) {}
     
 }
