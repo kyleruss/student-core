@@ -5,8 +5,6 @@ import com.bethecoder.ascii_table.ASCIITable;
 import engine.views.cui.Utilities.CUITextTools;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 

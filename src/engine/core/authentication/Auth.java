@@ -1,3 +1,9 @@
+//####################################
+//  KYLE RUSSELL
+//  13831056
+//  PDC Project
+//####################################
+
 package engine.core.authentication;
 
 import engine.config.AuthConfig;
@@ -48,13 +54,8 @@ public class Auth
         
         catch(Exception e)
         {
-            System.out.println(e.getMessage());
+           // System.out.println("login exception: " + e.getMessage());
             return null;
         }
-    }
-    
-    public static void main(String[] args)
-    {
-        login("kyleruss", "kyleruss123");
     }
 }

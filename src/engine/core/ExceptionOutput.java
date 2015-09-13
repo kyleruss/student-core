@@ -4,12 +4,9 @@
 //  PDC Project
 //####################################
 
-package engine.core.security;
+package engine.core;
 
-public class Input
+public class ExceptionOutput
 {
-    public static String clean(String input)
-    {
-        return input;
-    }
+    
 }
