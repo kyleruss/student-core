@@ -1,20 +1,35 @@
+//####################################
+//  KYLE RUSSELL
+//  13831056
+//  PDC Project
+//####################################
+
 package engine.core;
 
 import engine.controllers.ControllerMessage;
 import engine.core.authentication.Session;
 import engine.views.View;
 import engine.views.cui.Utilities.CUITextTools;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Scanner;
 
-public class Agent extends CommandInterpreter
+
+//------------------------------------------
+//              AGENT
+//------------------------------------------
+//- Agent is the main class and controls the running of the app
+//- Is the bridge of communication between sessions, views and data
+
+public final class Agent extends CommandInterpreter
 {
+    
+    //A conext is the flag for who handlesz communication
+    //Contexts include agent and view (active)
     public enum Context
     {
         AGENT("agent"),
         VIEW("current");
         
+        //The command trigger/prefix
         private final String trigger;
         
         Context(String trigger)
@@ -22,21 +37,23 @@ public class Agent extends CommandInterpreter
             this.trigger    =   trigger;
         }
         
+        //Returns the context trigger/prefix
         public String getTrigger()
         {
             return trigger;
         }
         
+        //Returns the context based on trigger 
         public static Context getContext(String trigger)
         {
             return Context.valueOf(trigger);
         }
     }
     
-    private static View activeView;
-    private static Context activeContext; 
-    private static Session activeSession;
-    private static Thread agentThread;
+    private static View activeView; //The currenbt user view
+    private static Context activeContext; //The current context 
+    private static Session activeSession; //The session, includes auth and logged in users
+    private static Thread agentThread; 
     private static volatile boolean waitingOnCommand = false;
     private static volatile boolean serving = true;
     
