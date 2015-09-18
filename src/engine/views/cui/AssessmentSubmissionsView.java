@@ -1,3 +1,9 @@
+//====================================
+//  KYLE RUSSELL
+//  13831056
+//  PDC Project
+//====================================
+
 package engine.views.cui;
 
 import com.google.gson.JsonArray;
@@ -5,7 +11,6 @@ import engine.controllers.ControllerMessage;
 import engine.core.RouteHandler;
 import engine.models.AssessmentSubmissionsModel;
 import engine.views.AbstractView;
-import engine.views.View;
 import engine.views.cui.Utilities.CUITextTools;
 import java.util.ArrayList;
 import java.util.List;

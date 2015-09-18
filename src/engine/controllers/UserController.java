@@ -1,3 +1,8 @@
+//====================================
+//  KYLE RUSSELL
+//  13831056
+//  PDC Project
+//====================================
 
 package engine.controllers;
 
@@ -10,12 +15,9 @@ import engine.core.database.Join;
 import engine.core.security.Crypto;
 import engine.models.ClassEnrolmentModel;
 import engine.models.ClassesModel;
-import engine.models.DepartmentModel;
 import engine.models.EmergencyContactModel;
 import engine.models.MedicalModel;
-import engine.models.StaffModel;
 import engine.models.User;
-import engine.parsers.JsonParser;
 import engine.views.AbstractView;
 import engine.views.View;
 import engine.views.cui.ClassAssessmentsView;

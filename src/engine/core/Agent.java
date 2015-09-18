@@ -1,8 +1,8 @@
-//####################################
+//====================================
 //  KYLE RUSSELL
 //  13831056
 //  PDC Project
-//####################################
+//====================================
 
 package engine.core;
 
@@ -50,19 +50,23 @@ public final class Agent extends CommandInterpreter
         }
     }
     
-    private static View activeView; //The currenbt user view
-    private static Context activeContext; //The current context 
+    private static View activeView; //The current view being displayed
+    private static Context activeContext; //The current context of input
     private static Session activeSession; //The session, includes auth and logged in users
-    private static Thread agentThread; 
-    private static volatile boolean waitingOnCommand = false;
-    private static volatile boolean serving = true;
+    private static Thread agentThread;  //Thread for agent command input and tasks
+    private static volatile boolean waitingOnCommand = false; //false when view is controlling input
+    private static volatile boolean serving = true; //The agents life flag, true if agent is working
     
+    //Creates and starts the apps agent
     public Agent()
     {
         agentThread     =   new Thread(listen);
         begin();
     }
     
+    //Starts the agent
+    //Loads the initial view at route address '/'
+    //Context is handed over to starting view
     private void begin()
     {
         final String startRoute   =   "/";
@@ -71,6 +75,8 @@ public final class Agent extends CommandInterpreter
         agentThread.start();
     }
     
+    //Call when view controlling input is finished
+    //Control will be handed back to Agent
     public static void commandFinished()
     {
         synchronized(agentThread)
@@ -80,6 +86,8 @@ public final class Agent extends CommandInterpreter
         }
     }
     
+    //Give control of input to current view
+    //When finished call commandFinished()
     public static void commandInProgress()
     {
         synchronized(agentThread)
@@ -89,6 +97,7 @@ public final class Agent extends CommandInterpreter
         }
     }
     
+    //End the agent session
     public static void stopServing()
     {
         synchronized(agentThread)
@@ -98,26 +107,33 @@ public final class Agent extends CommandInterpreter
         }
     }
     
+    //Set the current context to AGENT
     public void agentContext()
     {
         activeContext   =   Context.AGENT;
     }
     
+    //Set the current context to VIEW
     public void viewContext()
     {
         activeContext   =   Context.VIEW;
     }
     
+    //Set the Agents auth session to activeSession
     public static void setActiveSession(Session activeSession)
     {
         Agent.activeSession   =   activeSession;
     }
     
+    //Returns the agents active session
+    //activeSession is null if no auth user
     public static Session getActiveSession()
     {
         return activeSession;
     }
     
+    //Set and display the passed view
+    //Handles ViewExplorer pointers for navigation
     public static void setView(View view)
     {
         synchronized(agentThread)
@@ -138,17 +154,21 @@ public final class Agent extends CommandInterpreter
         }
     }
     
+    //Sets the view to the view with name route
     public static void setView(String route)
     {
         setView(route, null);
     }
     
+    //Changes the view to route with params data
     public static void setView(String route, ControllerMessage data)
     {
         View controllerView =   RouteHandler.go(route, data);
         setView(controllerView);
     }
     
+    //Sets the current view to the previous view
+    //The ViewExplorer must be atleast 2 pages deep to go back
     public void setPrevView()
     {
         if(activeView == null || activeView.getPrevView() == null)
@@ -158,14 +178,18 @@ public final class Agent extends CommandInterpreter
         
     }
     
+    //Sets the current view to the next view
+    //Next view exists if user goes back
+    //then wants to traverse the explorer forward
     public void setNextView()
     {
-        if(activeView == null || activeView.getPrevView() == null)
+        if(activeView == null || activeView.getNextView() == null)
             System.out.println(CUITextTools.changeColour("Can't go to that view", CUITextTools.RED));
         else
             setView(activeView.getNextView());
     }
     
+    //Refreshes the current view by re-displaying the view
     public void refreshView()
     {
          if(activeView == null)
@@ -174,11 +198,14 @@ public final class Agent extends CommandInterpreter
              activeView.display();
     }
 
+    //Shows the command list of the view and agent
+    //Help includes the command names and descriptions
     public void showHelp()
     {
         System.out.println("\n" + CUITextTools.underline(CUITextTools.changeColour("Agent commands", CUITextTools.CYAN)) + "\n");
         showCommands();
         
+        //Show view commands
         if(activeView != null)
         {
             System.out.println("\n" + CUITextTools.underline(CUITextTools.changeColour("View commands", CUITextTools.MAGENTA)) + "\n");
@@ -186,13 +213,17 @@ public final class Agent extends CommandInterpreter
         }
     }
     
+    //Terminates the Agent session
+    //If no other work, app is killed
     public void exitApp()
     {
-        String exitText =   CUITextTools.changeColour("Thanks for trying out Student core by Kyle Russell!", CUITextTools.GREEN);
+        String exitText =   CUITextTools.changeColour("Thanks for using Student core by Kyle Russell!", CUITextTools.GREEN);
         System.out.println(exitText);
         stopServing();
     }
     
+    //Logs the current user out if they are logged in
+    //User is redirected after 5 seconds 
     public void sessionLogout()
     {
         if(activeSession == null)
@@ -213,26 +244,36 @@ public final class Agent extends CommandInterpreter
         setView("logout");
     }
     
+    //Sets the current context of agent
     public void switchContext(Context context)
     {
         this.activeContext  =   context;
     }
-    
+
+    //Checks if the command is an agent context command or if activeContext
+    //Agent commands are prefixed by the Context.Agent.Trigger() 
+    //These commands pierce the views command handler and go straight to agent
     public boolean isAgentContext(String command)
     {
         if(command == null || command.length() == 0 || activeContext == Context.AGENT) return true;
         
+        //Check prefixed trigger in command
         String[] params =   command.split(" ");
         String trigger  =   Context.AGENT.getTrigger();
         return (params[0].equalsIgnoreCase(trigger + ":")) || commands.containsKey(params[0]);
     } 
     
+    //Returns the agents listener
     @Override
     public String getCommandsFile()
     {
         return "/engine/config/listeners/AgentListener.json";
     }
     
+    //The agents listening worker
+    //Takes and interpretes commands passed to agent based on context
+    //Agent handling of commands can be swapped to view by commandInProgress()
+    //Agent runs until it is finished servering - stopServing() or exitApp()
     Runnable listen =   () -> 
     {
         Scanner input           =   new Scanner(System.in);
@@ -244,20 +285,23 @@ public final class Agent extends CommandInterpreter
             {
                 while(serving)
                 {
+                    //Command may be handled by current view
+                    //Control is returned when view is done
                     while(waitingOnCommand)
                         agentThread.wait();
                 
                     command = input.nextLine();
+                    
+                    //Let agent handle command interpretation
                     if(isAgentContext(command))
                     {
                         String commandStr   =   command.replace("agent: ", "");
                         fire(commandStr, Agent.this);
                     }
 
+                    //Command sent to current view
                     else if(activeView != null)
-                        activeView.fire(command, activeView);
-                    
-                    
+                        activeView.fire(command, activeView);    
                 }
             }
             

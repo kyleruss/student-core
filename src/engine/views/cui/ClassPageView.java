@@ -1,3 +1,8 @@
+//====================================
+//  KYLE RUSSELL
+//  13831056
+//  PDC Project
+//====================================
 
 package engine.views.cui;
 
@@ -7,7 +12,6 @@ import engine.core.Agent;
 import engine.core.RouteHandler;
 import engine.models.ClassEnrolmentModel;
 import engine.models.ClassesModel;
-import engine.parsers.JsonParser;
 import engine.views.AbstractView;
 import engine.views.View;
 import engine.views.cui.Utilities.CUITextTools;

@@ -1,16 +1,14 @@
-//####################################
+//====================================
 //  KYLE RUSSELL
 //  13831056
 //  PDC Project
-//####################################
+//====================================
 
 package engine.core;
 
-import com.google.gson.JsonArray;
 import engine.config.DatabaseConfig;
 import engine.core.database.Query;
 import engine.core.loggers.MainLogger;
-import engine.models.EmergencyContactModel;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;

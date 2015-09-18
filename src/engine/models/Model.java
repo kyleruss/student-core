@@ -1,26 +1,23 @@
-//####################################
+//====================================
 //  KYLE RUSSELL
 //  13831056
 //  PDC Project
-//####################################
+//====================================
 
 package engine.models;
 
 import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import engine.parsers.JsonParser;
 import engine.config.DatabaseConfig;
-import engine.core.Column;
+import engine.core.database.Column;
 import engine.core.DataConnector;
 import engine.core.database.QueryBuilder;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.text.MessageFormat;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 
 

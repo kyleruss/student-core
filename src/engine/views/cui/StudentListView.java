@@ -1,11 +1,13 @@
+//====================================
+//  KYLE RUSSELL
+//  13831056
+//  PDC Project
+//====================================
 
 package engine.views.cui;
 
-import com.bethecoder.ascii_table.ASCIITable;
 import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
 import engine.controllers.ControllerMessage;
-import engine.core.Agent;
 import engine.core.RouteHandler;
 import engine.models.User;
 import engine.views.AbstractView;
