@@ -8,6 +8,14 @@ package engine.core;
 
 public class ExceptionOutput
 {
+    //The output type of the exception
+    //DEBUG: for debug/testing types - not shown when DEBUG_MODE off
+    //MESSAGE: for outputing general user errors messages to user 
+    public enum OutputType
+    {
+        DEBUG,
+        MESSAGE
+    }
     
     //outputs the exceptio message 
     //output destination depends on debug mode and gui mode

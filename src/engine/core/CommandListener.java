@@ -60,13 +60,4 @@ public class CommandListener
     {
         return new CommandListener().load(listenerFile);
     }
-    
-    
-    
-    public static void main(String[] args)
-    {
-        CommandListener listener    =   CommandListener.loadFactory("/engine/config/listeners/AgentListener.json");
-        Command c = listener.get("test");
-       // c.call(new String[] {"HELLO!"});
-    }
 }

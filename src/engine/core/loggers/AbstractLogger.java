@@ -14,6 +14,13 @@ import java.util.logging.FileHandler;
 import java.util.logging.Handler;
 import java.util.logging.SimpleFormatter;
 
+//--------------------------------------
+//          ABSTRACTLOGGER
+//--------------------------------------
+//- Provides general logger type 
+//- Defines the log path and pattern for name
+//- Functions for reading the log 
+
 
 public abstract class AbstractLogger implements Logging
 {
@@ -71,7 +78,7 @@ public abstract class AbstractLogger implements Logging
     //Returns the output of the lag at date log_date
     //Returns the latest log if log of log_date !exists
     @Override
-    public String outputLog(Date log_date) 
+    public String readLog(Date log_date) 
     {
         return "";
     }

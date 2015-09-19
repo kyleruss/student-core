@@ -24,7 +24,7 @@ public interface Logging
     public SimpleFormatter getFormatter();
     
     //Returns the log at log_date if it exists
-    public String outputLog(Date log_date);
+    public String readLog(Date log_date);
     
     
 }

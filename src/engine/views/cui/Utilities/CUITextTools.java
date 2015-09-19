@@ -9,8 +9,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.apache.commons.lang3.StringUtils;
 
 
@@ -234,10 +232,4 @@ public class CUITextTools
             
             ASCIITable.getInstance().printTable(headers, data);
     }
-    
-    public static void main(String[] args)
-    {
-        printDelayedText("Hello world!");
-    }
-    
 }

@@ -14,15 +14,23 @@ import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class MainLogger 
+
+//------------------------------------
+//            MAINLOGGER
+//------------------------------------
+//- Core logger that provides bridge to other loggers
+//- Allows creation of loggers from type name
+//- Logging is handled directly with MainLogger 
+
+
+public final class MainLogger 
 {
     public static final String ADMIN_LOGGER =   "admin_logger";
     public static final String AUTH_LOGGER  =   "auth_logger";
     public static final String DATA_LOGGER  =   "data_logger"; 
     
     
-    //Returns a core logger of known type
-    //TODO: get rid of IOEXception, it's no longer thrown
+    //Returns a logger of known type
     public static AbstractLogger create(String log_type)
     {
         try
@@ -43,13 +51,14 @@ public class MainLogger
         }
     }
     
-    //Commits a log messsage* into logger*
-    //Log level is set to FINE for all logging
+    //Commits a log messsage from logger
+    //Log is only written if logging is enabled
+    //
     public static void log(String message, String logger_name)
     {
-        Handler fh      =   null;
-        Logger current  =   null;
-        AbstractLogger core_logger;
+        Handler handler      =   null;
+        Logger current       =   null;
+        AbstractLogger logger;
         
         boolean loggingEnabled =  (boolean) LoggingConfig.config().get(logger_name);
         
@@ -57,20 +66,21 @@ public class MainLogger
         {
             try
             {
-                core_logger  =   create(logger_name);
-                fh           =   core_logger.getHandler();
+                //Get loggers and handler
+                logger       =   create(logger_name);
+                handler      =   logger.getHandler();
                 current      =   Logger.getLogger(logger_name);
 
-                if(current == null || fh == null) throw new IOException();
+                if(current == null || handler == null) throw new IOException();
                 else
                 {
 
                     //set logger params and attach handler
                     current.setLevel(Level.FINE);
                     current.setUseParentHandlers(false);
-                    current.addHandler(fh);
+                    current.addHandler(handler);
 
-                    //commit log
+                    //Write log with message
                     current.fine(message);
 
                 }
@@ -84,10 +94,10 @@ public class MainLogger
             //flush and close handlers
             finally
             {
-                if(fh != null && current != null)
+                if(handler != null && current != null)
                 {
-                    fh.flush();
-                    fh.close();
+                    handler.flush();
+                    handler.close();
                 }
             }
         }

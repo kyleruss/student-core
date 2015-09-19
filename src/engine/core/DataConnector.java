@@ -17,23 +17,25 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 
-public class DataConnector implements AutoCloseable//extends Thread implements AutoCloseable
-{  
+public class DataConnector implements AutoCloseable
+{
+    //The connectors session query type
+    //MUTATOR: includes all DML queries
+    //ACCESSOR: non-DML select etc queries
     public enum QueryType
     {
         MUTATOR,
         ACCESSOR
     }
     
-    private Connection conn;
+    private Connection conn; //Connection obj used in session
     private DataConnection connection_conifg;
     private String connection_url;
     private ResultSet results;
     private volatile PreparedStatement activeQuery;
-    private volatile boolean running = true;
-    private volatile boolean fetchingResults = false;
+  //  private volatile boolean running = true;
+   // private volatile boolean fetchingResults = false;
     private QueryType queryType;
-    private int i = 0;
     
     //Creates a DataConnector with default config
     public DataConnector()
@@ -112,6 +114,8 @@ public class DataConnector implements AutoCloseable//extends Thread implements A
         }                 
     }
     
+    //Begins a transaction in the session
+    //Upon completion use rollbackTransaction() or commitTransaction()
     public void startTransaction()
     {
         try { conn.setAutoCommit(false); } 
@@ -121,6 +125,8 @@ public class DataConnector implements AutoCloseable//extends Thread implements A
         }
     }
     
+    //Commits the transaction
+    //Has no effect if there is no transaction
     public void commitTransaction()
     {
         try
@@ -135,6 +141,9 @@ public class DataConnector implements AutoCloseable//extends Thread implements A
         }
     }
     
+    //Rolls back a transaction
+    //Any queries executed during the transaction state are undone
+    //Useful in catch blocks to prevent inconsistencies
     public void rollbackTransaction()
     {
         try 
@@ -149,7 +158,7 @@ public class DataConnector implements AutoCloseable//extends Thread implements A
         }
     }
     
-    public void finish()
+ /*   public void finish()
     {
         synchronized(this)
         {
@@ -165,18 +174,24 @@ public class DataConnector implements AutoCloseable//extends Thread implements A
             fetchingResults = true;
             notify();
         }
-    }
+    } */
     
+    //Sets the query type to ACCESSOR
+    //Queries will now be handled as accessor queries
     public void setQueryAccessor()
     {
         queryType   =   QueryType.ACCESSOR;
     }
     
+    //Sets teh query type to MUTATOR
+    //Queries will be handled as mutator/DML queries
     public void setQueryMutator()
     {
         queryType   =   QueryType.MUTATOR;
     }
     
+    //Returns the sessions query type
+    //Default is ACCESSOR
     public QueryType getQueryType()
     {
         return queryType;
@@ -190,10 +205,13 @@ public class DataConnector implements AutoCloseable//extends Thread implements A
         
         try
         {
+            //Execute accessor query
+            //Results are the fetched rows
             if(queryType == QueryType.ACCESSOR)
-            
                 results = activeQuery.executeQuery();      
             
+            //Execute mutator/DML query
+            //Results are the keys created by the query
             else
             {
                 activeQuery.executeUpdate();
@@ -288,6 +306,9 @@ public class DataConnector implements AutoCloseable//extends Thread implements A
         return results;
     }
     
+    //Closes the DataConnector
+    //Closes any opened Connections & ResultSets
+    //Must be called on exceptions and when finished
     public void closeConnection()
     {
         try
@@ -303,40 +324,11 @@ public class DataConnector implements AutoCloseable//extends Thread implements A
         } 
     }
 
-    //Closes the DataConnector
-    //Interrupts the DataConnector thread
-    //Closes any opened Connections & ResultSets
-    //Must be called on exceptions and when finished
+    //Allow automatic closing feature of AutoClosable
+    //Active Connections and ResultSets are closed and handled
     @Override
     public void close()
     {
         closeConnection();
-    }
-    
-    public static void main(String[] args)
-    {
-        
-       /* EmergencyContactModel emergencyContact  =   new EmergencyContactModel();
-            emergencyContact.set("firstname", "test");
-            emergencyContact.set("lastname", "test2");
-            emergencyContact.set("contact_ph", "asdasdrw43434");
-            emergencyContact.set("contact_email", "dasdasd@mgial.com");
-            emergencyContact.set("relationship", "test"); */
-        
-        try(DataConnector conn  =   new DataConnector())
-        {
-            conn.setQueryMutator();
-            conn.execute("INSERT INTO medical (DESCRIPTION, CONTACT_ID) VALUES ('dsfsdfye', 1)");
-            ResultSet rs = conn.getResults();
-            System.out.println("Next: " + rs.next());
-            System.out.println(rs.getInt(1));
-            //conn.finish();
-            conn.execute("INSERT INTO medical (DESCRIPTION, CONTACT_ID) VALUES ('TEST', 1)");
-        }
-        
-        catch(SQLException e)
-       {
-     //       e.printStackTrace();
-        }
     }
 }
