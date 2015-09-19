@@ -17,6 +17,7 @@ public class LoggingConfig extends Configuration
     public static final String ENABLE_AUTH_LOG_KEY     =   MainLogger.AUTH_LOGGER;
     public static final String ENABLE_ADMIN_LOG_KEY    =   MainLogger.ADMIN_LOGGER;
     public static final String ENABLE_DATA_LOG_KEY     =   MainLogger.DATA_LOGGER;
+    public static final String ENABLE_DEBUG_LOG_KEY    =   MainLogger.DEBUG_LOGGER;
     public static final String LOG_SIZE_KEY            =   "log_size";
     public static final String LOG_PATH_KEY            =   "log_path";
     public static final String LOG_FILE_COUNT_KEY      =   "log_count";

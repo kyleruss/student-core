@@ -28,6 +28,7 @@ public final class MainLogger
     public static final String ADMIN_LOGGER =   "admin_logger";
     public static final String AUTH_LOGGER  =   "auth_logger";
     public static final String DATA_LOGGER  =   "data_logger"; 
+    public static final String DEBUG_LOGGER =   "debug_logger";
     
     
     //Returns a logger of known type
