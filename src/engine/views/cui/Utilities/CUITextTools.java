@@ -11,9 +11,18 @@ import java.util.Map;
 import java.util.Scanner;
 import org.apache.commons.lang3.StringUtils;
 
+//-------------------------------------------
+//              CUITEXTTOOLS
+//-------------------------------------------
+//- Provides useful utilities for CUI displays
+//- Has methods for drawing buttons, headers
+//text formatting, form tools and more
 
 public class CUITextTools 
 {
+    //------------------------------------
+    //          ASCII COLOURS
+    //------------------------------------
     public final static int WHITE   = 37;
     public final static int CYAN    = 36;
     public final static int RED     = 31;
@@ -22,8 +31,10 @@ public class CUITextTools
     public final static int YELLOW  = 33;
     public final static int PLAIN   = 0;
     public final static int MAGENTA = 35;
+    //-----------------------------------
     
     
+    //returns a button with a frame and buttonText in the center
     public static String drawButton(String buttonText)
     {
         String button;
@@ -33,19 +44,21 @@ public class CUITextTools
         String spaces             =   new String(new char[(horizontalLen / 2) - (buttonText.length()/2) - 1]).replace("\0", " ");
         
         button = horizontalFrame + "\n|" + spaces + buttonText + spaces + "|\n" + horizontalFrame;
-        System.out.println(button);
         return button;
     }
     
+    //Returns a header (large) with headerText centered and headerDescription text below it
+    //Header can be customized by passing borderColour and different text colour
+    //Valid colours are above
     public static String drawLargeHeader(String headerText, String headerDescription, int borderColour, int textColour)
     {
         String header;
-        final int maxLength     =   25;
-        final int padding       =   10;
+        final int maxLength     =   25; //max length of the entire header including border
+        final int padding       =   10; //the padding inside the frame
         final int horizontalLen =   Math.max(headerDescription.length(), maxLength) + (padding * 2);
         
-        String horizontalFrame       =   new String(new char[horizontalLen]).replace("\0", "* ");
-        String spacesOuter           =   new String(new char[horizontalFrame.length() - 3]).replace("\0", " ");
+        String horizontalFrame       =   new String(new char[horizontalLen]).replace("\0", "* "); //the outer north, south frame
+        String spacesOuter           =   new String(new char[horizontalFrame.length() - 3]).replace("\0", " "); //west, east frame
         int lengthBeforeFormat       =   horizontalFrame.length();
         horizontalFrame              =   horizontalFrame.replace("* ", changeColour("* ", borderColour));
         
@@ -53,6 +66,8 @@ public class CUITextTools
         String titleColoured        =   (textColour != PLAIN)? changeColour(headerText, textColour) : headerText;
         String descColoured         =   (textColour != PLAIN)? changeColour(headerDescription, textColour) : headerDescription;
         
+        //ASCII colours add additional length to string
+        //Need to add extra spaces to compensate for overflow
         int colorOverflowTitle          =   titleColoured.length() - headerText.length();
         int colourOverflowDesc          =   descColoured.length() - headerDescription.length();
         
@@ -67,6 +82,10 @@ public class CUITextTools
         return header;
     }
     
+    //Returns a header (small) with headerText centered
+    //borderColour: valid ascii colour to change border colour
+    //textColour: valid ascii colour to change header text
+    //pattern: the border pattern 
     public static String drawSubHeader(String headerText, int borderColour, int textColour, String pattern)
     {
         final int padding           =   5;
@@ -82,6 +101,7 @@ public class CUITextTools
         return header;
     }
     
+    //returns the text underlined
     public static String underline(String text)
     {
         String underlinedText;
@@ -92,18 +112,23 @@ public class CUITextTools
         return underlinedText;
     }
     
+    //Returns a outline for the key and text
+    //Used for commands and descriptions
     public static String keyText(String key, String text)
     {
         String keyText  =   MessageFormat.format("<{0}> {1}", key, text);
         return keyText;
     }
     
+    //Same as keyText() however the key is encapsulated in []
     public static String keyTextBrackets(String text, String key)
     {
         String keyText  =   MessageFormat.format("[{0}] {1}", key, text);
         return keyText;
     }
     
+    //Prints out a message with delayed output
+    //Gives a typewriter effect to the printing
     public static void printDelayedText(String message)
     {
         Thread textThread   =   new Thread(new Runnable()
@@ -129,11 +154,19 @@ public class CUITextTools
         textThread.start();
     }
     
+    //Returns the text with changed colour
+    //colour must be a valid ascii colour code - see above colour section
     public static String changeColour(String text, int colour)
     {
         return ((char)27 + "[" + colour + "m"  + text + (char)27 + "[0m");
     }
     
+    //Provides a useful form style of input
+    //Returns the input from the user
+    //User is prompted to input and is given a header/field display each time
+    //fieldTitles: the titles of the fields that are displayed to the user
+    //inputKeys: keys for the returned form
+    //headers: names shown in the confirmation table
     public static Map<String, String> getFormInput(List<String> fieldTitles, List<String> inputKeys, String[] headers)
     {
         Map<String, String> form    =   new LinkedHashMap<>();
@@ -150,9 +183,6 @@ public class CUITextTools
                 {
                     for(int inputIndex = 0; inputIndex < inputKeys.size(); inputIndex++)
                     {
-                     //   System.out.println(fieldTitles.get(inputIndex));
-                     //   form.put(inputKeys.get(inputIndex), inputScan.nextLine());
-
                         try 
                         {
                             System.out.println(fieldTitles.get(inputIndex));
@@ -184,8 +214,17 @@ public class CUITextTools
         return form;
     }
     
+    //Prints a confirm prompt to the user
+    //Returns their answer to continue
+    //Table is printed with all their input 
+    //form: the input form with users answers
+    //headers: display names/alias for table headers
+    //scanner: a scanner instance, pass null if you don't have one
     public static boolean confirmForm(Map<String, String> form, String[] headers, Scanner scanner)
     {
+        if(scanner == null)
+            scanner = new Scanner(System.in);
+        
         System.out.println("\n" + CUITextTools.changeColour("Please verify that the following details are correct before proceeding\n", CUITextTools.RED) + "\n");
         
         String[][] data      =   new String[1][form.size()];
@@ -198,6 +237,9 @@ public class CUITextTools
         return continueAnswer.equalsIgnoreCase("y");
     }
     
+    //Returns a field with a subheader
+    //title: title of the field
+    //description: brief description of the field, telling user what to input
     public static String createFormField(String title, String description)
     {
         String formField    =   "";
@@ -208,6 +250,9 @@ public class CUITextTools
         return formField;
     }
     
+    //Takes a JsonArray response (data) and prints a table with it's data
+    //Especially useful as Controllers return JsonArray data to views
+    //Data response can be quickly displayed to the user in table form
     public static void responseToTable(JsonArray response)
     {
             JsonArray columns   =   response.get(0).getAsJsonObject().get("columnNames").getAsJsonArray();
