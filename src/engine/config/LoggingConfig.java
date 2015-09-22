@@ -47,6 +47,9 @@ public class LoggingConfig extends Configuration
         //enables/disable logging of all database queries from server
         add(ENABLE_DATA_LOG_KEY, true);
         
+        //enables/disable logging of debug messages
+        add(ENABLE_DEBUG_LOG_KEY, true);
+        
         //set the max size in bytes for each log file
         add(LOG_SIZE_KEY, "5242880");
         

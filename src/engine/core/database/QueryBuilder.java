@@ -50,11 +50,26 @@ public class QueryBuilder
         return where(column, operator, value, false);
     }
     
+    public QueryBuilder orWhere(String column, String operator, String value)
+    {
+       return where(column, operator, value, false, false);
+    }
+    
+    public QueryBuilder orWhere(String column, String operator, String value, boolean isLiteral)
+    {
+        return where(column, operator, value, false, true);
+    }
+    
     //Adds a where clause with a literal value
     //Where clauses can be changed and Query resolves conjunctions
     public QueryBuilder where(String column, String operator, String value, boolean isLiteral)
     {
-        Conditional condition   =   new Conditional(column, operator, value);
+        return where(column, operator, value, isLiteral, true);
+    }
+    
+    public QueryBuilder where(String column, String operator, String value, boolean isLiteral, boolean isConjunction)
+    {
+        Conditional condition   =   new Conditional(column, operator, value, isConjunction);
         
         //Makes conditional value a literal if isLiteral passed true
         if(isLiteral) condition.literal();

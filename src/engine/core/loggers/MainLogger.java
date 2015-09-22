@@ -41,6 +41,7 @@ public final class MainLogger
                 case AUTH_LOGGER: return new AuthLogger();
                 case ADMIN_LOGGER: return new AdminLogger();
                 case DATA_LOGGER: return new DataLogger();
+                case DEBUG_LOGGER: return new DebugLogger();
                 default: throw new IOException();
             }
         }
@@ -54,7 +55,6 @@ public final class MainLogger
     
     //Commits a log messsage from logger
     //Log is only written if logging is enabled
-    //
     public static void log(String message, String logger_name)
     {
         Handler handler      =   null;

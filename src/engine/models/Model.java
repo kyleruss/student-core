@@ -196,7 +196,7 @@ public abstract class Model
             ResultSetMetaData meta  =   conn.getResults().getMetaData();
             //System.out.println(results);
               
-            if(results.size() > 0)
+            if(results.size() > 1)
             {
                 JsonObject entry            =   results.get(1).getAsJsonObject();
                 

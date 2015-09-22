@@ -113,11 +113,15 @@ public class Query
         for(int condIndex = 0; condIndex < conditions.size(); condIndex++)
         {
             Conditional condition =   conditions.get(condIndex);
-            formattedConditions += condition;
+            
+            if(conditions.size() > 1 && condIndex > 0 && condIndex < conditions.size()) 
+                formattedConditions += condition.toString().replace("WHERE ", "");
+            else
+                formattedConditions += condition;
             
             //Add conjunctions/disjunctions to conditionals if more than
             //one where clause in the query
-            if(conditions.size() > 1 && condIndex != conditions.size() - 1)
+            if(conditions.size() > 1 && condIndex != conditions.size() - 1) 
                 formattedConditions += (condition.isConjunction())? conjunction : disjunction;
         }
         

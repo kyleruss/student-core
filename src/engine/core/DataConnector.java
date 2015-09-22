@@ -6,6 +6,8 @@
 
 package engine.core;
 
+import engine.config.AppConfig;
+import engine.config.ConfigFactory;
 import engine.config.DatabaseConfig;
 import engine.core.database.Query;
 import engine.core.loggers.MainLogger;
@@ -248,6 +250,7 @@ public class DataConnector implements AutoCloseable
         }*/
         
         if(statement  == null) return false;
+              
         
         activeQuery =   statement;
         return onExecute();
@@ -257,13 +260,14 @@ public class DataConnector implements AutoCloseable
     public PreparedStatement createStatement(String query)
     {
         try
-        {
-     //       System.out.println(query);
-            
+        {    
             //Logs the attempted query 
             //Logging config is checked in log()
             MainLogger.log(query, MainLogger.DATA_LOGGER);
       
+            if((boolean) ConfigFactory.get(ConfigFactory.APP_CONFIG, AppConfig.DEBUG_MODE))
+                ExceptionOutput.output(query, ExceptionOutput.OutputType.DEBUG);
+            
             PreparedStatement statement = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
             return statement;
         }
