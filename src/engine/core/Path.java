@@ -16,7 +16,7 @@ package engine.core;
 //the controllers method to call and the route url 
 
 
-public class Path 
+public class Path
 {
     //The routes name
     //Route can be identified just by name
@@ -34,6 +34,7 @@ public class Path
     //Defines any params enclosed in {}
     private final String location;
     
+    private RouteGroup group;
     
     public Path(String name, String controller, String controllerMethod, String location)
     {
@@ -65,6 +66,43 @@ public class Path
     public String getLocation()
     {
         return location;
+    }
+    
+    public RouteGroup getGroup()
+    {
+        return group;
+    }
+    
+    public void setGroup(RouteGroup group)
+    {
+        this.group  =   group;
+    }
+    
+    public String getBaseUrl()
+    {
+        String base =   "";
+        if(group != null)
+            base += group.getRootPrefix();
+        
+        return base + name;
+    }
+    
+    @Override
+    public boolean equals(Object other)
+    {
+        if(other instanceof Path)
+        {
+            Path otherPath  =   (Path) other;
+            return this.getName().equalsIgnoreCase(otherPath.getName());
+        }
+        
+        else return false;
+    }
+    
+    @Override
+    public int hashCode()
+    {
+        return this.getName().hashCode();
     }
     
     @Override

@@ -60,5 +60,29 @@ public class Routes extends Router
         add("postRemoveStudent", "AdminController", "postRemoveStudent", "/students/remove");
         add("postModifyStudent", "AdminController", "postModifyStudent", "/students/modify");
         add("postSearchStudent", "AdminController", "postSearchStudent", "/students/search");
+        
+        RouteGroup users;
+        registerGroup(users = new RouteGroup("user", new Path[]
+        {
+            new Path("getAdmincp", "AdminController", "getAdmincp", "/admincp"),
+            new Path("getAdmincp", "AdminController", "getAdmincp", "/admincp"),
+            new Path("getAdmincp", "AdminController", "getAdmincp", "/admincp")
+        }));
+        
+        RouteGroup product;
+        
+        registerGroup(product = new RouteGroup("product", users, new Path[]
+        {
+            new Path("getAdmincp", "AdminController", "getAdmincp", "/admincp"),
+            new Path("getAdmincp", "AdminController", "getAdmincp", "/admincp"),
+            new Path("getAdmincp", "AdminController", "getAdmincp", "/admincp")
+        }));
+        
+        System.out.println(product.getRootPrefix());
+    }
+    
+    public static void main(String[] args)
+    {
+        Routes routes   =   new Routes();
     }
 }

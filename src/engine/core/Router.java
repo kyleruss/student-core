@@ -6,7 +6,10 @@
 
 package engine.core;
 
+import engine.config.AppConfig;
+import engine.config.ConfigFactory;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -30,10 +33,13 @@ public abstract class Router
     //Routes can be fetched directly by their url
     private final Map<String, Path> urlRoutes;
     
+    private final RouteGroup base;
+    
     public Router()
     {
         namedRoutes   =   new HashMap<>();
         urlRoutes     =   new HashMap<>();
+        base          =   new RouteGroup((String) ConfigFactory.get(ConfigFactory.APP_CONFIG, AppConfig.APP_NAME));
         initRoutes();
     }
     
@@ -45,11 +51,22 @@ public abstract class Router
     //- name: the routes name (can be used to identify the route)
     //- controller: the routes controller class name (must house controllerMethod)
     //- controllerMethod: the routes controller method name
-    //- location: the routes url
+    //- location: the routes url  
     public void add(String name, String controller, String controllerMethod, String location)
     {
         Path path   =   new Path(name, controller, controllerMethod, location);
+        path.setGroup(base);
         add(path);
+    }
+    
+    public void registerGroup(RouteGroup group)
+    {
+        Iterator<Path> pathIter    =   group.getChildren().values().iterator();
+        while(pathIter.hasNext())
+            add(pathIter.next());
+        
+        if(group.getParent() == null)
+            base.addGroup(group);
     }
     
     //Adds a new route path
