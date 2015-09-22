@@ -7,6 +7,10 @@
 package engine.controllers;
 
 //------------------------------------------
+
+import engine.core.Path;
+import engine.views.View;
+
 //             CONTROLLER
 //------------------------------------------
 //- Controller provides the bridge between routes and views
@@ -24,25 +28,27 @@ public abstract class Controller
     
     protected ControllerMessage postData; //the passed input data for a post request
     protected RequestType requestType; //immediate request type (GET, POST)
+    protected Path path; //the controller sessions path
     
     //Create general controller session with GET request
-    public Controller()
+    public Controller(Path path)
     {
-        this(new ControllerMessage(), RequestType.GET);
+        this(new ControllerMessage(), RequestType.GET, path);
     }
     
     //Create a controller session with POST request and respective input data
-    public Controller(ControllerMessage postData)
+    public Controller(ControllerMessage postData, Path path)
     {
-        this(postData, RequestType.POST);
+        this(postData, RequestType.POST, path);
     }
     
     //Creates controller with specific request type and input params
     //Passing input data is not restricted to POST
-    public Controller(ControllerMessage postData, RequestType requestType)
+    public Controller(ControllerMessage postData, RequestType requestType, Path path)
     {
         this.postData       =   postData;
         this.requestType    =   requestType;
+        this.path           =   path;
     }
     
     //Returns the controller sessions input data
@@ -62,6 +68,18 @@ public abstract class Controller
     public boolean hasPostData()
     {
         return postData.hasMessages();
+    }
+
+    //Returns the path that was used to create the controller
+    public Path getPath()
+    {
+        return path;
+    }
+    
+    public View prepareView(View view)
+    {
+        view.setPath(path);
+        return view;
     }
     
     //Checks post data such that it must contain all expected keys

@@ -6,6 +6,7 @@
 
 package engine.views.cui;
 
+import engine.views.ResponseDataView;
 import engine.controllers.ControllerMessage;
 import engine.core.Agent;
 import static engine.core.Agent.commandFinished;
@@ -15,7 +16,7 @@ import engine.views.View;
 import engine.views.cui.Utilities.CUITextTools;
 import java.util.Scanner;
 
-public class LoginView extends AbstractView implements View
+public class LoginView extends AbstractView
 {
     
     public LoginView()
@@ -25,7 +26,7 @@ public class LoginView extends AbstractView implements View
     
     public LoginView(ControllerMessage messages)
     {
-        super(messages, "Welcome to Student core by Kyle Russell", "Explore a great DMS", "/login/");
+        super(messages, "Welcome to Student core by Kyle Russell", "Explore a great DMS");
     }
 
     @Override

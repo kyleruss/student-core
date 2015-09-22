@@ -73,7 +73,8 @@ public class RouteHandler
         Path foundPath  =   routes.getPath(routeName);   
         try
         {
-            if(foundPath == null) throw new NoSuchMethodException("Route was not found");
+            if(foundPath == null) 
+                throw new NoSuchMethodException("Route was not found");
             else           
                 return call(foundPath, params, paramTypes, data);
         }
@@ -101,11 +102,15 @@ public class RouteHandler
         Object instance;
         
         if(data == null)
-            instance    =   controller.newInstance();
+        {
+            Constructor<?> construct    =   controller.getConstructor(Path.class);
+            instance                    =   construct.newInstance(path);
+        }
+            
         else
         {
-            Constructor<?> contruct  =   controller.getConstructor(ControllerMessage.class);
-            instance                 =   contruct.newInstance(data);
+            Constructor<?> contruct  =   controller.getConstructor(ControllerMessage.class, Path.class);
+            instance                 =   contruct.newInstance(data, path);
         }
         
         View calledView          =   (View) method.invoke(instance, (Object[]) params);

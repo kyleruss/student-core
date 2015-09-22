@@ -6,6 +6,7 @@
 
 package engine.views.cui;
 
+import engine.views.ResponseDataView;
 import com.bethecoder.ascii_table.ASCIITable;
 import engine.controllers.ControllerMessage;
 import engine.core.Agent;
@@ -20,7 +21,7 @@ import java.util.Map;
 import java.util.Scanner;
 
 
-public class RegisterView extends AbstractView implements View
+public class RegisterView extends AbstractView
 {
 
     @Override

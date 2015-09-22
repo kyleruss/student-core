@@ -9,11 +9,11 @@ package engine.controllers;
 import com.google.gson.JsonArray;
 import engine.core.Agent;
 import engine.core.DataConnector;
+import engine.core.Path;
 import engine.core.authentication.Auth;
 import engine.core.database.Conditional;
 import engine.core.database.Join;
 import engine.core.security.Crypto;
-import engine.models.ClassEnrolmentModel;
 import engine.models.ClassesModel;
 import engine.models.EmergencyContactModel;
 import engine.models.MedicalModel;
@@ -26,37 +26,37 @@ import engine.views.cui.DepartmentView;
 import engine.views.cui.LoginView;
 import engine.views.cui.MyClassesView;
 import engine.views.cui.RegisterView;
-import engine.views.cui.ResponseDataView;
+import engine.views.ResponseDataView;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
 
 public class UserController extends Controller
 {   
-    public UserController()
+    public UserController(Path path)
     {
-        super();
+        super(path);
     }
     
-    public UserController(ControllerMessage postData)
+    public UserController(ControllerMessage postData, Path path)
     {
-        super(postData);
+        super(postData, path);
     }
     
-    public UserController(ControllerMessage postData, RequestType requestType)
+    public UserController(ControllerMessage postData, RequestType requestType, Path path)
     {
-        super(postData, requestType);
+        super(postData, requestType, path);
     }
     
     public View getLogin()
     {
-        return new LoginView();
+        return prepareView(new LoginView());
     }
     
     public View logout()
     {
         Agent.setActiveSession(null);
-        return new LoginView();
+        return prepareView(new LoginView());
     }
     
     public View postLogin()
@@ -66,16 +66,16 @@ public class UserController extends Controller
         final String successMessage             =   "Successfully logged in";
         
         if(!validatePostData(new String[]{"loginUsername", "loginPassword"}))
-            return new ResponseDataView(invalidInputMesage, false);
+            return prepareView(new ResponseDataView(invalidInputMesage, false));
         else
         {
             String loginUsername    =   (String) postData.getMessage("loginUsername");
             String loginPassword    =   (String) postData.getMessage("loginPassword");
             
             if(Auth.login(loginUsername, loginPassword) != null)
-                return new ResponseDataView(successMessage, true);
+                return prepareView(new ResponseDataView(successMessage, true));
             else
-                return new ResponseDataView(invalidAttemptMessage, false);
+                return prepareView(new ResponseDataView(invalidAttemptMessage, false));
         }
             
     }
@@ -94,7 +94,7 @@ public class UserController extends Controller
             .select("classes.description", "Class description")
             .select("class_enrolments.semester_num", "Semester")   
             .get();
-            return new MyClassesView(new ControllerMessage(results)); 
+            return prepareView(new MyClassesView(new ControllerMessage(results))); 
         }
         
         catch(SQLException e)
@@ -114,7 +114,7 @@ public class UserController extends Controller
                     .select("teacher_id", "Teacher ID")
                     .select("created_date", "Date created")
                     .get();
-            return new ClassPageView(new ControllerMessage(classDetails));
+            return prepareView(new ClassPageView(new ControllerMessage(classDetails)));
         }
         
         catch(SQLException  e)
@@ -129,7 +129,7 @@ public class UserController extends Controller
     {
         AbstractView classPage      =   (AbstractView) getClassPage(classId);
         JsonArray details           =   classPage.getMessages().getData();
-        return new ClassAssessmentsView(new ControllerMessage(details));
+        return prepareView(new ClassAssessmentsView(new ControllerMessage(details)));
     }
     
    public View getMyDepartment()
@@ -145,7 +145,7 @@ public class UserController extends Controller
                     .select("department.*")
                     .get();
             
-            return new DepartmentView(new ControllerMessage(results));
+            return prepareView(new DepartmentView(new ControllerMessage(results)));
         }
         
         catch(SQLException e)
@@ -174,7 +174,7 @@ public class UserController extends Controller
         };
         
         if(!validatePostData(expectedInput))
-            return new ResponseDataView(invalidInputMesage, false);
+            return prepareView(new ResponseDataView(invalidInputMesage, false));
         else
         {
             EmergencyContactModel emergencyContact  =   new EmergencyContactModel();
@@ -235,13 +235,13 @@ public class UserController extends Controller
                     if(user.save())
                     {
                         conn.commitTransaction();
-                        return new ResponseDataView(successMessage, true);
+                        return prepareView(new ResponseDataView(successMessage, true));
                     }
 
                     else
                     {
                         conn.rollbackTransaction();
-                        return new ResponseDataView(failedMessage, false);
+                        return prepareView(new ResponseDataView(failedMessage, false));
                     }
                 }
 
@@ -251,14 +251,9 @@ public class UserController extends Controller
               //      System.out.println("[SQL Exception] " + e.getMessage());
                     conn.rollbackTransaction();
                     conn.closeConnection();
-                    return new ResponseDataView(failedMessage, false);
+                    return prepareView(new ResponseDataView(failedMessage, false));
                 }
             }
         }
-    }
-    
-    public static void main(String[] args)
-    {
-        ClassEnrolmentModel model  =   new ClassEnrolmentModel();
     }
 }

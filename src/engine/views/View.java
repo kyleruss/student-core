@@ -8,6 +8,7 @@ package engine.views;
 
 import engine.controllers.ControllerMessage;
 import engine.core.CommandExecute;
+import engine.core.Path;
 
 //------------------------------------
 //              VIEW
@@ -27,4 +28,8 @@ public interface View extends CommandExecute, ViewExplorer
     //Returns the messages passed to the view
     //These can be from the controller 
     public ControllerMessage getMessages();
+    
+    public void setPath(Path path);
+    
+    public Path getPath();
 }

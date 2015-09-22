@@ -30,8 +30,8 @@ public class ClassPageView extends AbstractView
         (
                 messages, 
                 messages.getData().get(1).getAsJsonObject().get("Class name").getAsString(), 
-                "Class homepage, view and manage this class", 
-                "/" + "class/" + messages.getData().get(1).getAsJsonObject().get("Class name").getAsString() + "/" //Agent.getActiveSession().getUser().get("USERNAME").getNonLiteralValue() + "/students/"
+                "Class homepage, view and manage this class" 
+              //  "/" + "class/" + messages.getData().get(1).getAsJsonObject().get("Class name").getAsString() + "/" //Agent.getActiveSession().getUser().get("USERNAME").getNonLiteralValue() + "/students/"
         );
     }
     

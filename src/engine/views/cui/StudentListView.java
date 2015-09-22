@@ -6,6 +6,7 @@
 
 package engine.views.cui;
 
+import engine.views.ResponseDataView;
 import com.google.gson.JsonArray;
 import engine.controllers.ControllerMessage;
 import engine.core.RouteHandler;
@@ -35,8 +36,8 @@ public class StudentListView extends AbstractView
         (
                 messages, 
                 "Students", 
-                "Find, remove, modify students in the school", 
-                "/" //+ Agent.getActiveSession().getUser().get("USERNAME").getNonLiteralValue() + "/students/"
+                "Find, remove, modify students in the school"
+               // "/" //+ Agent.getActiveSession().getUser().get("USERNAME").getNonLiteralValue() + "/students/"
         );
         
         currentPage =   1;

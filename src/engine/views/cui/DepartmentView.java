@@ -29,8 +29,8 @@ public class DepartmentView extends AbstractView
         (
                 message,
                 message.getData().get(1).getAsJsonObject().get("name".toUpperCase()).getAsString() + " Department", 
-                "Access and manage your staff department", 
-                "/"  + "department"//Agent.getActiveSession().getUser().get("USERNAME").getNonLiteralValue() + "/department/"
+                "Access and manage your staff department" 
+               // "/"  + "department"//Agent.getActiveSession().getUser().get("USERNAME").getNonLiteralValue() + "/department/"
         );
     }
     

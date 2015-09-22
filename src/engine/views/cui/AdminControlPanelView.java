@@ -24,8 +24,7 @@ public class AdminControlPanelView extends AbstractView
         (
                 messages, 
                 "Administrator control panel", 
-                "Manage user accounts, student grades and more", 
-                "/" + Agent.getActiveSession().getUser().get("USERNAME").getNonLiteralValue() + "/admincp/"
+                "Manage user accounts, student grades and more"
         );
     }
     

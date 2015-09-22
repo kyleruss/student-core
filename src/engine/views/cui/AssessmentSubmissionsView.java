@@ -6,6 +6,7 @@
 
 package engine.views.cui;
 
+import engine.views.ResponseDataView;
 import com.google.gson.JsonArray;
 import engine.controllers.ControllerMessage;
 import engine.core.RouteHandler;
@@ -30,8 +31,8 @@ public class AssessmentSubmissionsView extends AbstractView
         (
                 messages, 
                 ((messages.getData().size() > 1)? messages.getData().get(1).getAsJsonObject().get("NAME").getAsString() : "" )+ " submissions", 
-                "View and manage submissions for this assessment", 
-                "/" + ((messages.getData().size() > 1)? messages.getData().get(1).getAsJsonObject().get("NAME").getAsString() + "/" : "" ) +  "submissions/" 
+                "View and manage submissions for this assessment" 
+             //   "/" + ((messages.getData().size() > 1)? messages.getData().get(1).getAsJsonObject().get("NAME").getAsString() + "/" : "" ) +  "submissions/" 
         );
     }
     

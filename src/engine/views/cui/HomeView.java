@@ -23,8 +23,8 @@ public class HomeView extends AbstractView
         (
                 message,
                 "Home", 
-                "Manage personal profile, administration and more", 
-                "/"  + Agent.getActiveSession().getUser().get("USERNAME").getNonLiteralValue() + "/home/"
+                "Manage personal profile, administration and more" 
+               // "/"  + Agent.getActiveSession().getUser().get("USERNAME").getNonLiteralValue() + "/home/"
         );
     }
     

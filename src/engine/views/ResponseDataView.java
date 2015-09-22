@@ -4,9 +4,10 @@
 //  PDC Project
 //====================================
 
-package engine.views.cui;
+package engine.views;
 
 import engine.controllers.ControllerMessage;
+import engine.core.Path;
 import engine.views.DataView;
 import engine.views.View;
 import engine.views.cui.Utilities.CUITextTools;
@@ -18,6 +19,7 @@ public class ResponseDataView implements DataView
     protected String responseMessage;
     protected ControllerMessage responseData;
     protected int accessLevel;
+    protected Path path;
     
     public ResponseDataView(String responseMessage, boolean responseStatus)
     {
@@ -46,6 +48,18 @@ public class ResponseDataView implements DataView
         
         return (responseStatus)? 
         CUITextTools.changeColour(responseMessage, SUCCESS_COLOUR) : CUITextTools.changeColour(responseMessage, FAIL_COLOUR);
+    }
+    
+    @Override
+    public void setPath(Path path)
+    {
+        this.path   =   path;
+    }
+    
+    @Override
+    public Path getPath()
+    {
+        return path;
     }
 
     @Override
@@ -98,5 +112,6 @@ public class ResponseDataView implements DataView
 
     @Override
     public void setNextView(View nextView) {}
+    
     
 }

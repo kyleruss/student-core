@@ -22,9 +22,8 @@ import engine.views.cui.Utilities.CUITextTools;
 public abstract class AbstractView extends CommandInterpreter implements View
 {
     protected ControllerMessage messages; //The messages passed to the view
-    protected String viewName; //The views name (can be general)
+    protected String viewTitle; //The views name (can be general)
     protected String viewDescription; //Brief description of the view
-    protected String viewLocation; //The route address of the view
     protected View nextView; //The next view  if set
     protected View prevView; //The previous view if set
     protected Path path; //The path that was used to fetch the view
@@ -37,23 +36,22 @@ public abstract class AbstractView extends CommandInterpreter implements View
     }
     
     //Creates a view with name, description and address
-    public AbstractView(String viewName, String viewDescription, String viewLocation)
+    public AbstractView(String viewTitle, String viewDescription)
     {
-        this(new ControllerMessage(), viewName, viewDescription, viewLocation);
+        this(new ControllerMessage(), viewTitle, viewDescription);
     }
     
     //Create a general view with messages passed
     public AbstractView(ControllerMessage messages)
     {
-        this(messages, "Layout", "Layout view", "/");
+        this(messages, "Layout", "Layout view");
     } 
     
-    public AbstractView(ControllerMessage messages, String viewName, String viewDescription, String viewLocation)
+    public AbstractView(ControllerMessage messages, String viewTitle, String viewDescription)
     {
         this.messages           =   messages;
-        this.viewName           =   viewName;
+        this.viewTitle           =   viewTitle;
         this.viewDescription    =   viewDescription;
-        this.viewLocation       =   viewLocation;
     }
     
     //Views still need to output their listener file path
@@ -68,9 +66,9 @@ public abstract class AbstractView extends CommandInterpreter implements View
     }
     
     //Returns the views name
-    public String getViewName()
+    public String getViewTitle()
     {
-        return viewName;
+        return viewTitle;
     }
     
     //Returns the views description
@@ -80,9 +78,9 @@ public abstract class AbstractView extends CommandInterpreter implements View
     }
     
     //Set the name of the view
-    public void setViewName(String viewName)
+    public void setViewTitle(String viewTitle)
     {
-        this.viewName   =   viewName;
+        this.viewTitle   =   viewTitle;
     }
     
     //Set the description of the view
@@ -103,9 +101,9 @@ public abstract class AbstractView extends CommandInterpreter implements View
     @Override
     public void display()
     {
-       String headerMain    =   CUITextTools.drawLargeHeader(viewName, viewDescription, CUITextTools.GREEN, CUITextTools.CYAN);
+       String headerMain    =   CUITextTools.drawLargeHeader(viewTitle, viewDescription, CUITextTools.GREEN, CUITextTools.CYAN);
        String cmdSubheader  =   CUITextTools.drawSubHeader("Commands", CUITextTools.PLAIN, CUITextTools.GREEN, "=");
-       String breadcrumb    =   CUITextTools.underline(CUITextTools.changeColour("Location: ", CUITextTools.CYAN) + viewLocation);
+       String breadcrumb    =   CUITextTools.underline(CUITextTools.changeColour("Location: ", CUITextTools.CYAN) + path.getFullURL());
       
        System.out.println("\n\n" + headerMain + "\n\n" + breadcrumb + "\n\n" + cmdSubheader + "\n");
        showCommands();
@@ -136,6 +134,12 @@ public abstract class AbstractView extends CommandInterpreter implements View
         return nextView;
     }
     
+    @Override
+    public Path getPath()
+    {
+        return path;
+    }
+    
     //Set the previous view
     @Override
     public void setPrevView(View prevView)
@@ -148,5 +152,11 @@ public abstract class AbstractView extends CommandInterpreter implements View
     public void setNextView(View nextView)
     {
         this.nextView   =   nextView;
+    }
+    
+    @Override
+    public void setPath(Path path)
+    {
+        this.path   =   path;
     }
 }

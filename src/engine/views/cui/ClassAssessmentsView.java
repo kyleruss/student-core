@@ -6,6 +6,7 @@
 
 package engine.views.cui;
 
+import engine.views.ResponseDataView;
 import com.google.gson.JsonArray;
 import engine.controllers.ControllerMessage;
 import engine.core.Agent;
@@ -33,8 +34,8 @@ public class ClassAssessmentsView extends AbstractView
         (
                 messages, 
                 messages.getData().get(1).getAsJsonObject().get("Class name").getAsString() + " assessments", 
-                "View and manage assessments for this class", 
-                "/" + "assessments"//Agent.getActiveSession().getUser().get("USERNAME").getNonLiteralValue() + "/students/"
+                "View and manage assessments for this class" 
+            //    "/" + "assessments"//Agent.getActiveSession().getUser().get("USERNAME").getNonLiteralValue() + "/students/"
         );
     }
     

@@ -78,7 +78,7 @@ public class Path
         this.group  =   group;
     }
     
-    public String getBaseUrl()
+    public String getFullURL()
     {
         String base =   "";
         if(group != null)
