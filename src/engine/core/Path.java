@@ -34,6 +34,7 @@ public class Path
     //Defines any params enclosed in {}
     private final String location;
     
+    
     public Path(String name, String controller, String controllerMethod, String location)
     {
         this.name               =   name;

@@ -8,6 +8,7 @@ package engine.views;
 
 import engine.controllers.ControllerMessage;
 import engine.core.CommandInterpreter;
+import engine.core.Path;
 import engine.views.cui.Utilities.CUITextTools;
 
 //------------------------------------
@@ -26,6 +27,7 @@ public abstract class AbstractView extends CommandInterpreter implements View
     protected String viewLocation; //The route address of the view
     protected View nextView; //The next view  if set
     protected View prevView; //The previous view if set
+    protected Path path; //The path that was used to fetch the view
     
     //Creates a default view
     //view details should be set later

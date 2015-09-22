@@ -35,6 +35,8 @@ public class Routes extends Router
         add("postRegister", "UserController", "postRegister", "/postregister");
         add("logout", "UserController", "logout", "/logout");
         
+     
+        
         //home-personal
         add("getMyClasses", "UserController", "getMyClasses", "/myclasses");
         add("getMyDepartment", "UserController", "getMyDepartment", "/department");
