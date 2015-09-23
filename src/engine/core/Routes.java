@@ -28,22 +28,60 @@ public class Routes extends Router
     @Override
     protected void initRoutes()
     {
-        add("getLogin", "UserController", "getLogin", "/");
+      //  add("getLogin", "UserController", "getLogin", "/");
         add("getHome", "GeneralController", "getHome", "/home");
-        add("postLogin", "UserController", "postLogin", "/postlogin");
-        add("getRegister", "UserController", "getRegister", "/register");
-        add("postRegister", "UserController", "postRegister", "/postregister");
-        add("logout", "UserController", "logout", "/logout");
+    //    add("postLogin", "UserController", "postLogin", "/postlogin");
+     //   add("getRegister", "UserController", "getRegister", "/register");
+    //    add("postRegister", "UserController", "postRegister", "/postregister");
+      //  add("logout", "UserController", "logout", "/logout");
         
      
         
         //home-personal
-        add("getMyClasses", "UserController", "getMyClasses", "/myclasses");
+     /*   add("getMyClasses", "UserController", "getMyClasses", "/myclasses");
         add("getMyDepartment", "UserController", "getMyDepartment", "/department");
         add("getClassPage", "UserController", "getClassPage", "/class/class={classId}");
-        add("getClassAssessments", "UserController", "getClassAssessments", "/class/class={classId}/assessments");
+        add("getClassAssessments", "UserController", "getClassAssessments", "/class/class={classId}/assessments"); */
         
-        add("postCreateAssessment", "AdminController", "postCreateAssessment", "/makeassessment");
+        RouteGroup user;
+        registerGroup(user = new RouteGroup("user", new Path[]
+        {
+            new Path("postLogin", "UserController", "postLogin", "/postlogin"),
+            new Path("getRegister", "UserController", "getRegister", "/register"),
+            new Path("getLogin", "UserController", "getLogin", "/"),
+            new Path("postRegister", "UserController", "postRegister", "/postregister"),
+            new Path("logout", "UserController", "logout", "/logout")
+        }));
+        
+        RouteGroup classes;
+        registerGroup(classes = new RouteGroup("class", new Path[]
+        {
+            new Path("getMyClasses", "UserController", "getMyClasses", "/myclasses"),
+            new Path("getMyDepartment", "UserController", "getMyDepartment", "/department"),
+            new Path("getClassPage", "UserController", "getClassPage", "/class={classId}"),
+            new Path("getClassAssessments", "UserController", "getClassAssessments", "/class={classId}/assessments"),
+        }));
+        
+        RouteGroup assessments;
+        registerGroup(assessments = new RouteGroup("assessment", classes, new Path[]
+        {
+            new Path("postCreateAssessment", "AdminController", "postCreateAssessment", "/makeassessment"),
+            new Path("postModifyAssessment", "AdminController", "postModifyAssessment", "/modifyassessment"),
+            new Path("postDeleteAssessment", "AdminController", "postDeleteAssessment", "/deleteassessment"),
+        
+        }));
+        
+        RouteGroup submissions;
+        registerGroup(submissions = new RouteGroup("submissions", assessments, new Path[]
+        {
+            new Path("getAssessmentSubmissions", "AdminController", "getAssessmentSubmissions", "/assessment={assessId}/submissions"),
+            new Path("postModifySubmission", "AdminController", "postModifySubmission", "/modifysubmission"),
+            new Path("postRemoveSubmission", "AdminController", "postRemoveSubmission", "/removesubmission"),
+            new Path("postMarkSubmission", "AdminController", "postMarkSubmission", "/marksubmission"),
+            new Path("postFindStudentSubmission", "AdminController", "postFindStudentSubmission", "/findsubmission")
+        }));
+        
+     /*   add("postCreateAssessment", "AdminController", "postCreateAssessment", "/makeassessment");
         add("postModifyAssessment", "AdminController", "postModifyAssessment", "/modifyassessment");
         add("postDeleteAssessment", "AdminController", "postDeleteAssessment", "/deleteassessment");
         
@@ -51,34 +89,21 @@ public class Routes extends Router
         add("postModifySubmission", "AdminController", "postModifySubmission", "/modifysubmission");
         add("postRemoveSubmission", "AdminController", "postRemoveSubmission", "/removesubmission");
         add("postMarkSubmission", "AdminController", "postMarkSubmission", "/marksubmission");
-        add("postFindStudentSubmission", "AdminController", "postFindStudentSubmission", "/findsubmission");
+        add("postFindStudentSubmission", "AdminController", "postFindStudentSubmission", "/findsubmission"); */
+        
         
         //Admin panel
-        add("getAdmincp", "AdminController", "getAdmincp", "/admincp");
-        add("getStudents", "AdminController", "getStudents", "/students");
-        add("getStudentList", "AdminController", "getStudentList", "/students/list/page={page}/numresults={numResults}");
-        add("postRemoveStudent", "AdminController", "postRemoveStudent", "/students/remove");
-        add("postModifyStudent", "AdminController", "postModifyStudent", "/students/modify");
-        add("postSearchStudent", "AdminController", "postSearchStudent", "/students/search");
-        
-      /*  RouteGroup users;
-        registerGroup(users = new RouteGroup("user", new Path[]
+        RouteGroup admin;
+        registerGroup(submissions = new RouteGroup("admin", new Path[]
         {
-            new Path("getAdmincp", "AdminController", "getAdmincp", "/admincp"),
-            new Path("getAdmincp", "AdminController", "getAdmincp", "/admincp"),
-            new Path("getAdmincp", "AdminController", "getAdmincp", "/admincp")
+            new Path("getAdmincp", "AdminController", "getAdmincp", "/panel"),
+            new Path("getStudents", "AdminController", "getStudents", "/students"),
+            new Path("getStudentList", "AdminController", "getStudentList", "/students/list/page={page}/numresults={numResults}"),
+            new Path("postRemoveStudent", "AdminController", "postRemoveStudent", "/students/remove"),
+            new Path("postModifyStudent", "AdminController", "postModifyStudent", "/students/modify"),
+            new Path("postSearchStudent", "AdminController", "postSearchStudent", "/students/search")
         }));
-        
-        RouteGroup product;
-        
-        registerGroup(product = new RouteGroup("product", users, new Path[]
-        {
-            new Path("getAdmincp", "AdminController", "getAdmincp", "/admincp"),
-            new Path("getAdmincp", "AdminController", "getAdmincp", "/admincp"),
-            new Path("getAdmincp", "AdminController", "getAdmincp", "/admincp")
-        }));
-        
-        System.out.println(product.getRootPrefix()); */
+
     }
     
     public static void main(String[] args)
