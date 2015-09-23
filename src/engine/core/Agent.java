@@ -143,8 +143,12 @@ public final class Agent extends CommandInterpreter
             {
                 if(activeView != null)
                 {
-                    view.setPrevView(activeView);
-                    activeView.setNextView(view);
+                    //prevent creating paradox
+                    if(view.getNextView() != activeView)
+                        view.setPrevView(activeView);
+                    
+                    if(activeView.getPrevView() != view)
+                        activeView.setNextView(view);
                 }
                 
                 activeView =   view;

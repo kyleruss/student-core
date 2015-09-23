@@ -30,6 +30,11 @@ public abstract class Controller
     protected RequestType requestType; //immediate request type (GET, POST)
     protected Path path; //the controller sessions path
     
+    public Controller()
+    {
+        this(null);
+    }
+    
     //Create general controller session with GET request
     public Controller(Path path)
     {

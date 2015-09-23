@@ -40,13 +40,13 @@ public class AdminController extends Controller
         
     public View getAdmincp()
     {
-        return new AdminControlPanelView();
+        return prepareView(new AdminControlPanelView());
     }
     
     
     public View getStudents()
     {
-        return new StudentListView();
+        return prepareView(new StudentListView());
     }
     
     public View getStudentList(Integer page, Integer numResults)
