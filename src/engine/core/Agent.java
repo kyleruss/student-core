@@ -6,10 +6,13 @@
 
 package engine.core;
 
+import engine.config.AppConfig;
+import engine.config.ConfigFactory;
 import engine.controllers.ControllerMessage;
 import engine.core.authentication.Session;
 import engine.views.View;
 import engine.views.cui.Utilities.CUITextTools;
+import engine.views.gui.layout.Window;
 import java.util.Scanner;
 
 
@@ -56,6 +59,7 @@ public final class Agent extends CommandInterpreter
     private static Thread agentThread;  //Thread for agent command input and tasks
     private static volatile boolean waitingOnCommand = false; //false when view is controlling input
     private static volatile boolean serving = true; //The agents life flag, true if agent is working
+    private static Window window;
     
     //Creates and starts the apps agent
     public Agent()
@@ -73,6 +77,12 @@ public final class Agent extends CommandInterpreter
         setView(startRoute);
         viewContext();
         agentThread.start();
+        
+        if((boolean) ConfigFactory.get(ConfigFactory.APP_CONFIG, AppConfig.GUI_MODE))
+        {
+            window  =   new Window();
+            window.display();
+        }
     }
     
     //Call when view controlling input is finished
