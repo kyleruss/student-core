@@ -12,6 +12,8 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.lang.reflect.InvocationTargetException;
 import java.text.MessageFormat;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 //------------------------------------------
@@ -101,6 +103,8 @@ public class RouteHandler
         Method method            =   controller.getDeclaredMethod(controllerMethod, paramTypes);      
         Object instance;
         
+        path.setLocation(fillUrlWithParams(path.getLocation(), params));
+        
         if(data == null)
         {
             Constructor<?> construct    =   controller.getConstructor(Path.class);
@@ -146,5 +150,34 @@ public class RouteHandler
         }
             
         return params;
+    }
+    
+    public static String fillUrlWithParams(String urlFormat, Object[] params)
+    {
+        if(params.length == 0) return urlFormat;
+        
+        String url      =   "";
+        Pattern pattern =   Pattern.compile("\\{(.*?)\\}");
+        Matcher matcher =   pattern.matcher(urlFormat);
+        int index       =   0;
+        int start       =   0;
+        int end         =   0;
+        
+        
+        while(matcher.find() && index < params.length)
+        {
+            end     =   matcher.start();
+            url     +=  urlFormat.substring(start, end) + params[index];
+            start   =   matcher.end();
+            index++;
+        }
+        
+        return url;
+    }
+    
+    public static void main(String[] args)
+    {
+        String url  =   "test/{asdasd}/asdasd={weqqwe}";
+        System.out.println(fillUrlWithParams(url, new String[]{"1", "2"}));
     }
 }

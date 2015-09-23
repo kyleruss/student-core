@@ -32,7 +32,7 @@ public class Path
     
     //The routes URL that can identify route
     //Defines any params enclosed in {}
-    private final String location;
+    private String location;
     
     private RouteGroup group;
     
@@ -78,13 +78,18 @@ public class Path
         this.group  =   group;
     }
     
+    public void setLocation(String location)
+    {
+        this.location   =   location;
+    }
+    
     public String getFullURL()
     {
         String base =   "";
         if(group != null)
             base += group.getRootPrefix();
         
-        return base + name;
+        return base.substring(0, base.length() - 1) + location;
     }
     
     @Override
