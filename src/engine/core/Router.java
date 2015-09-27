@@ -62,11 +62,12 @@ public abstract class Router
     public void registerGroup(RouteGroup group)
     {
         Iterator<Path> pathIter    =   group.getChildren().values().iterator();
-        while(pathIter.hasNext())
-            add(pathIter.next());
         
         if(group.getParent() == null)
             base.addGroup(group);
+        
+        while(pathIter.hasNext())
+            add(pathIter.next());
     }
     
     //Adds a new route path
@@ -85,17 +86,24 @@ public abstract class Router
     public static boolean isPathName(String name)
     {
         //path names contain only alphabetical characters
-        Pattern pattern =   Pattern.compile("[a-z]+", Pattern.CASE_INSENSITIVE);
+        Pattern pattern =   Pattern.compile("\\w*", Pattern.CASE_INSENSITIVE);
         Matcher match   =   pattern.matcher(name);
-        return match.find();
+        return match.matches();
     }
     
     //Returns a routes path
     //- name: the routes name or url
     public Path getPath(String name)
     {
-        if(isPathName(name)) return namedRoutes.get(name);
-        else return urlRoutes.get(name);
+        if(isPathName(name)) 
+            return namedRoutes.get(name);
+        else 
+        {
+            if(urlRoutes.get(name) == null)
+                return findPlaceholderPath(name);
+            else 
+                return urlRoutes.get(name);
+        }
     }
     
     //Returns the routers named routes
@@ -108,5 +116,30 @@ public abstract class Router
     public Map<String, Path> getUrlRoutes()
     {
         return urlRoutes;
+    }
+    
+    //Route URLS work independently from route names
+    //We store the placeholders so for raw address input
+    //we need to find the corresponding saved placeholder
+    public Path findPlaceholderPath(String fullURL)
+    {
+        Iterator<Map.Entry<String, Path>> urlIter    =   urlRoutes.entrySet().iterator();
+        Pattern pattern;
+        Matcher matcher;
+        
+        while(urlIter.hasNext())
+        {
+            Map.Entry<String, Path> entry   =   urlIter.next();
+            String placeholderURL           =   entry.getKey();
+            Path path                       =   entry.getValue();      
+            
+            String regexPlaceholder         =   placeholderURL.replaceAll("\\{\\w*\\}", "\\\\w*");
+            pattern                         =   Pattern.compile(regexPlaceholder);
+            matcher                         =   pattern.matcher(fullURL);
+            
+            if(matcher.matches()) return path;
+        }
+        
+        return null;
     }
 }

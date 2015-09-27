@@ -43,7 +43,8 @@ public class RouteHandler
         {
             //Path must be valid and created in Routes.initRoutes()
             Path path           =   routes.getPath(route);
-            if(path == null) throw new NoSuchMethodException();
+            if(path == null) 
+                throw new NoSuchMethodException();
             
             String pathName     =   path.getName();
             String urlPattern   =   path.getLocation();

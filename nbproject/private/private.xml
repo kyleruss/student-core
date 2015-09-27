@@ -6,11 +6,13 @@
             <file>file:/root/workspace/PDC/pdc-project/src/engine/core/Agent.java</file>
             <file>file:/root/workspace/PDC/pdc-project/src/engine/core/Path.java</file>
             <file>file:/root/workspace/PDC/pdc-project/src/engine/views/gui/layout/Window.java</file>
+            <file>file:/root/workspace/PDC/pdc-project/src/engine/controllers/UserController.java</file>
             <file>file:/root/workspace/PDC/pdc-project/src/engine/core/RouteHandler.java</file>
             <file>file:/root/workspace/PDC/pdc-project/src/engine/core/Routes.java</file>
             <file>file:/root/workspace/PDC/pdc-project/src/engine/core/Router.java</file>
             <file>file:/root/workspace/PDC/pdc-project/src/engine/views/gui/layout/HeaderNavigation.java</file>
             <file>file:/root/workspace/PDC/pdc-project/src/engine/views/gui/layout/Layout.java</file>
+            <file>file:/root/workspace/PDC/pdc-project/src/engine/controllers/Controller.java</file>
         </group>
     </open-files>
 </project-private>

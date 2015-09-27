@@ -94,12 +94,15 @@ public class HeaderNavigation extends JPanel implements ActionListener
     
     public void setViewAddress(String location)
     {
+        System.out.println("sdasd");
         addressBar.setText(location);
     }
     
     public void changeViews()
     {
+        
         String address  =   addressBar.getText();
+        System.out.println("change views: " + address);
         Agent.setView(address);
     }
     

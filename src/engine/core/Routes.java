@@ -105,9 +105,4 @@ public class Routes extends Router
         }));
 
     }
-    
-    public static void main(String[] args)
-    {
-        Routes routes   =   new Routes();
-    }
 }

@@ -77,7 +77,7 @@ public final class Agent extends CommandInterpreter
     //Context is handed over to starting view
     private void begin()
     {
-        final String startRoute   =   "getLogin";
+        final String startRoute   =   "StudentCore/user/";
         
         if(guiMode)
         {
@@ -152,18 +152,15 @@ public final class Agent extends CommandInterpreter
     //Handles ViewExplorer pointers for navigation
     public static void setView(View view)
     {
-        synchronized(agentThread)
-        {
+       // synchronized(agentThread)
+      //  {
+            
             if(view == null)
-            {
-                System.out.println("view is null");
-                //agentThread.notify();
                 return;
-            }
             
             else
             {
-                if(activeView != null)
+                if(activeView != null && view != activeView)
                 {
                     //prevent creating paradox
                     if(view.getNextView() != activeView)
@@ -175,6 +172,7 @@ public final class Agent extends CommandInterpreter
                
                 if(guiMode)
                 {
+                    System.out.println("in gui");
                     Layout layout               =   window.getAppLayout();
                     HeaderNavigation headNav    =   layout.getHeadNav();
                     headNav.setViewAddress(view.getPath().getFullURL());
@@ -182,8 +180,8 @@ public final class Agent extends CommandInterpreter
                 
                 activeView =   view;
                 view.display(); 
-                agentThread.notify();
-            }
+              //  agentThread.notify();
+           // }
         }
     }
     
