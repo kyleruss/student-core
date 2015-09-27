@@ -3,6 +3,7 @@ package engine.views.gui.layout;
 
 import engine.core.Agent;
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -37,6 +38,8 @@ public class HeaderNavigation extends JPanel implements ActionListener
             Window.getWindowDim().x,
             (int) (Window.getWindowDim().y * 0.1)
         ));
+        
+        
         
         viewNavigationPanel =   new JPanel(new GridLayout(1, 3));
         viewLocationPanel   =   new JPanel(new BorderLayout());
@@ -94,15 +97,12 @@ public class HeaderNavigation extends JPanel implements ActionListener
     
     public void setViewAddress(String location)
     {
-        System.out.println("sdasd");
         addressBar.setText(location);
     }
     
     public void changeViews()
     {
-        
         String address  =   addressBar.getText();
-        System.out.println("change views: " + address);
         Agent.setView(address);
     }
     

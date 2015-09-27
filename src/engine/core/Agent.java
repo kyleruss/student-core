@@ -10,6 +10,7 @@ import engine.config.AppConfig;
 import engine.config.ConfigFactory;
 import engine.controllers.ControllerMessage;
 import engine.core.authentication.Session;
+import engine.views.GUIView;
 import engine.views.View;
 import engine.views.cui.Utilities.CUITextTools;
 import engine.views.gui.layout.HeaderNavigation;
@@ -77,7 +78,7 @@ public final class Agent extends CommandInterpreter
     //Context is handed over to starting view
     private void begin()
     {
-        final String startRoute   =   "StudentCore/user/";
+        final String startRoute   =   "getLogin";
         
         if(guiMode)
         {
@@ -156,7 +157,10 @@ public final class Agent extends CommandInterpreter
       //  {
             
             if(view == null)
+            {
+                ExceptionOutput.output("View not found", ExceptionOutput.OutputType.MESSAGE);
                 return;
+            }
             
             else
             {
@@ -170,16 +174,18 @@ public final class Agent extends CommandInterpreter
                         activeView.setNextView(view);
                 }
                
+                activeView =   view;
+                
                 if(guiMode)
                 {
-                    System.out.println("in gui");
                     Layout layout               =   window.getAppLayout();
                     HeaderNavigation headNav    =   layout.getHeadNav();
                     headNav.setViewAddress(view.getPath().getFullURL());
+                    
+                    window.setActiveView((GUIView) activeView);
                 }
                 
-                activeView =   view;
-                view.display(); 
+                else view.display(); 
               //  agentThread.notify();
            // }
         }

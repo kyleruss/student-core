@@ -9,14 +9,18 @@ import javax.swing.UnsupportedLookAndFeelException;
 public class Layout extends JPanel
 {
     private final HeaderNavigation headNav;
+    private final ViewPane viewPane;
     
     public Layout()
     {
         initLookAndFeel();
         setLayout(new BorderLayout());
         
-        headNav =   new HeaderNavigation();
+        headNav     =   new HeaderNavigation();
+        viewPane    =   new ViewPane();
+        
         add(headNav, BorderLayout.NORTH);
+        add(viewPane, BorderLayout.CENTER);
     }
     
     private void initLookAndFeel()
@@ -35,5 +39,10 @@ public class Layout extends JPanel
     public HeaderNavigation getHeadNav()
     {
         return headNav;
+    }
+    
+    public ViewPane getViewPane()
+    {
+        return viewPane;
     }
 }

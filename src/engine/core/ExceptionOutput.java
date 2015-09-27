@@ -12,6 +12,7 @@ import engine.core.loggers.MainLogger;
 import engine.views.cui.Utilities.CUITextTools;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import javax.swing.JOptionPane;
 
 public class ExceptionOutput
 {
@@ -48,7 +49,7 @@ public class ExceptionOutput
         //Output to GUI
         else
         {
-            
+            JOptionPane.showMessageDialog(null, message);
         }
     }
     

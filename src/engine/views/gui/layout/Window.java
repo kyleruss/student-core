@@ -3,6 +3,7 @@ package engine.views.gui.layout;
 
 import engine.config.AppConfig;
 import engine.config.ConfigFactory;
+import engine.views.GUIView;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Toolkit;
@@ -53,5 +54,10 @@ public class Window extends JFrame
     public Layout getAppLayout()
     {
         return layout;
+    }
+    
+    public void setActiveView(GUIView view)
+    {
+        layout.getViewPane().setActiveView(view);
     }
 }
