@@ -27,6 +27,7 @@ public class Window extends JFrame
         
         setResizable(false);
         setLocationRelativeTo(null);
+        //initLookAndFeel(); 
     }
     
     public void display()
@@ -39,6 +40,7 @@ public class Window extends JFrame
         return layout;
     }
     
+    
     public static Point getWindowDim()
     {
         Dimension size  =   Toolkit.getDefaultToolkit().getScreenSize();
@@ -46,5 +48,10 @@ public class Window extends JFrame
         double height      =   size.height * (double) ConfigFactory.get(ConfigFactory.APP_CONFIG, AppConfig.GUI_HEIGHT_MULTI);
         
         return new Point((int) width, (int) height);
+    }
+    
+    public Layout getAppLayout()
+    {
+        return layout;
     }
 }

@@ -53,6 +53,15 @@
             "className": "engine.core.Agent",
             "methodName": "showHelp",
             "commandDescription": "Show all commands" 
+        },
+        
+        "go":
+        {
+            "commandName": "go",
+            "paramTypes": ["java.lang.String"],
+            "className": "engine.core.Agent",
+            "methodName": "setView",
+            "commandDescription": "Change view locations"
         }
     }
     

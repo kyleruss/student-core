@@ -26,7 +26,7 @@ public class AppConfig extends Configuration
         add(GUI_MODE, true);
         add(APP_NAME, "StudentCore");
         add(GUI_HEIGHT_MULTI, 0.5);
-        add(GUI_WIDTH_MULTI, 0.5);
+        add(GUI_WIDTH_MULTI, 0.4);
     }
     
 }

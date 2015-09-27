@@ -74,7 +74,7 @@ public abstract class Router
     public void add(Path path)
     {
         String routeName  =   path.getName();
-        String location   =   path.getLocation();
+        String location   =   path.getFullURL();
         
         namedRoutes.put(routeName, path);
         urlRoutes.put(location, path);

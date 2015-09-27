@@ -66,7 +66,6 @@ public class ClassPageView extends AbstractView
         try
         {
             JsonArray teacher   =   ClassesModel.getTeacherContact(classId);
-           // System.out.println(JsonParser.parsePretty(teacher));
             
             if(teacher.size() > 1)
             {
@@ -87,7 +86,7 @@ public class ClassPageView extends AbstractView
         View assessView  =   RouteHandler.go("getClassAssessments",
                 new Object[] { messages.getData().get(1).getAsJsonObject().get("Class ID").getAsInt() }, 
                 new Class<?>[] { Integer.class }, null);
-        assessView.display();
+        //assessView.display();
         Agent.setView(assessView);
     }
 

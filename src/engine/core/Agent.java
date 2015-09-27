@@ -12,6 +12,8 @@ import engine.controllers.ControllerMessage;
 import engine.core.authentication.Session;
 import engine.views.View;
 import engine.views.cui.Utilities.CUITextTools;
+import engine.views.gui.layout.HeaderNavigation;
+import engine.views.gui.layout.Layout;
 import engine.views.gui.layout.Window;
 import java.util.Scanner;
 
@@ -60,10 +62,12 @@ public final class Agent extends CommandInterpreter
     private static volatile boolean waitingOnCommand = false; //false when view is controlling input
     private static volatile boolean serving = true; //The agents life flag, true if agent is working
     private static Window window;
+    private static boolean guiMode;
     
     //Creates and starts the apps agent
     public Agent()
     {
+        guiMode         =   (boolean) ConfigFactory.get(ConfigFactory.APP_CONFIG, AppConfig.GUI_MODE);
         agentThread     =   new Thread(listen);
         begin();
     }
@@ -73,16 +77,18 @@ public final class Agent extends CommandInterpreter
     //Context is handed over to starting view
     private void begin()
     {
-        final String startRoute   =   "/";
-        setView(startRoute);
-        viewContext();
-        agentThread.start();
+        final String startRoute   =   "getLogin";
         
-        if((boolean) ConfigFactory.get(ConfigFactory.APP_CONFIG, AppConfig.GUI_MODE))
+        if(guiMode)
         {
             window  =   new Window();
             window.display();
         }
+        
+        setView(startRoute);
+        viewContext();
+        agentThread.start();
+        
     }
     
     //Call when view controlling input is finished
@@ -148,7 +154,13 @@ public final class Agent extends CommandInterpreter
     {
         synchronized(agentThread)
         {
-            if(view == null) return;
+            if(view == null)
+            {
+                System.out.println("view is null");
+                //agentThread.notify();
+                return;
+            }
+            
             else
             {
                 if(activeView != null)
@@ -159,6 +171,13 @@ public final class Agent extends CommandInterpreter
                     
                     if(activeView.getPrevView() != view)
                         activeView.setNextView(view);
+                }
+               
+                if(guiMode)
+                {
+                    Layout layout               =   window.getAppLayout();
+                    HeaderNavigation headNav    =   layout.getHeadNav();
+                    headNav.setViewAddress(view.getPath().getFullURL());
                 }
                 
                 activeView =   view;
@@ -183,7 +202,7 @@ public final class Agent extends CommandInterpreter
     
     //Sets the current view to the previous view
     //The ViewExplorer must be atleast 2 pages deep to go back
-    public void setPrevView()
+    public static void setPrevView()
     {
         if(activeView == null || activeView.getPrevView() == null)
             System.out.println(CUITextTools.changeColour("Can't go to that view", CUITextTools.RED));
@@ -195,7 +214,7 @@ public final class Agent extends CommandInterpreter
     //Sets the current view to the next view
     //Next view exists if user goes back
     //then wants to traverse the explorer forward
-    public void setNextView()
+    public static void setNextView()
     {
         if(activeView == null || activeView.getNextView() == null)
             System.out.println(CUITextTools.changeColour("Can't go to that view", CUITextTools.RED));
@@ -204,7 +223,7 @@ public final class Agent extends CommandInterpreter
     }
     
     //Refreshes the current view by re-displaying the view
-    public void refreshView()
+    public static void refreshView()
     {
          if(activeView == null)
              System.out.println(CUITextTools.changeColour("Can't refresh this view", CUITextTools.RED));
