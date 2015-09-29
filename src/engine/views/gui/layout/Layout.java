@@ -1,6 +1,9 @@
 package engine.views.gui.layout;
 
+import engine.core.Agent;
 import java.awt.BorderLayout;
+import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
@@ -10,6 +13,7 @@ public class Layout extends JPanel
 {
     private final HeaderNavigation headNav;
     private final ViewPane viewPane;
+    private final Menu menu;
     
     public Layout()
     {
@@ -18,6 +22,8 @@ public class Layout extends JPanel
         
         headNav     =   new HeaderNavigation();
         viewPane    =   new ViewPane();
+        menu        =   new Menu();
+        
         
         add(headNav, BorderLayout.NORTH);
         add(viewPane, BorderLayout.CENTER);
@@ -36,6 +42,7 @@ public class Layout extends JPanel
         }
     }
     
+    
     public HeaderNavigation getHeadNav()
     {
         return headNav;
@@ -44,5 +51,17 @@ public class Layout extends JPanel
     public ViewPane getViewPane()
     {
         return viewPane;
+    }
+    
+    public Menu getMenu()
+    {
+        return menu;
+    }
+    
+    public static void makeTransparent(JButton button)
+    {
+        button.setOpaque(false);
+        button.setContentAreaFilled(true);
+        button.setBorderPainted(false);
     }
 }

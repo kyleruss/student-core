@@ -235,6 +235,11 @@ public final class Agent extends CommandInterpreter
              activeView.display();
     }
 
+    public static Window getWindow()
+    {
+        return window;
+    }
+    
     //Shows the command list of the view and agent
     //Help includes the command names and descriptions
     public void showHelp()
@@ -257,6 +262,13 @@ public final class Agent extends CommandInterpreter
         String exitText =   CUITextTools.changeColour("Thanks for using Student core by Kyle Russell!", CUITextTools.GREEN);
         System.out.println(exitText);
         stopServing();
+    }
+    
+    //Returns true if the agent mode is GUI
+    //Controllers and other need to know this for view return
+    public static boolean isGUIMode()
+    {
+        return guiMode;
     }
     
     //Logs the current user out if they are logged in

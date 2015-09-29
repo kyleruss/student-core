@@ -50,7 +50,8 @@ public class UserController extends Controller
     
     public View getLogin()
     {
-        return prepareView(new LoginView());
+        if(!Agent.isGUIMode()) return prepareView(new LoginView());
+        else return null;
     }
     
     public View logout()
@@ -77,7 +78,6 @@ public class UserController extends Controller
             else
                 return prepareView(new ResponseDataView(invalidAttemptMessage, false));
         }
-            
     }
     
     public View getMyClasses()

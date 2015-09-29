@@ -22,6 +22,7 @@ public class Window extends JFrame
         
         layout      =   new Layout();
         getContentPane().add(layout);
+        layout.getMenu().attachTo(this);
         
         Point dim   =   getWindowDim();
         setSize(dim.x, dim.y);

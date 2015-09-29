@@ -18,6 +18,7 @@ public class AppConfig extends Configuration
     public static final String APP_NAME         =   "name";
     public static final String GUI_HEIGHT_MULTI =   "height_multiplier";
     public static final String GUI_WIDTH_MULTI  =   "width_multiplier";
+    public static final String RESOURCE_DIR     =   "resource_dir";
     
     @Override
     protected void initConfig() 
@@ -27,6 +28,7 @@ public class AppConfig extends Configuration
         add(APP_NAME, "StudentCore");
         add(GUI_HEIGHT_MULTI, 0.5);
         add(GUI_WIDTH_MULTI, 0.4);
+        add(RESOURCE_DIR, "/root/Dropbox/PDCAssignmentImages/");
     }
     
 }

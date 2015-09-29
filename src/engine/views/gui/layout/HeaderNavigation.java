@@ -1,6 +1,8 @@
 
 package engine.views.gui.layout;
 
+import engine.config.AppConfig;
+import engine.config.ConfigFactory;
 import engine.core.Agent;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -9,6 +11,7 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.Box;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -36,7 +39,7 @@ public class HeaderNavigation extends JPanel implements ActionListener
         setPreferredSize(new Dimension
         (
             Window.getWindowDim().x,
-            (int) (Window.getWindowDim().y * 0.1)
+            (int) (Window.getWindowDim().y * 0.10)
         ));
         
         
@@ -45,13 +48,26 @@ public class HeaderNavigation extends JPanel implements ActionListener
         viewLocationPanel   =   new JPanel(new BorderLayout());
         userPanel           =   new JPanel(new GridLayout(1, 3));
         
-        viewNavigationPanel.setPreferredSize(new Dimension(200, 25));
+        viewNavigationPanel.setPreferredSize(new Dimension(150, 25));
         viewLocationPanel.setPreferredSize(new Dimension(250, 40));
+        userPanel.setPreferredSize(new Dimension(150, 25));
         
         //View navigation buttons
-        prevViewButton      =   new JButton("Prev");
-        nextViewButton      =   new JButton("Next");
-        refreshViewButton   =   new JButton("Ref");
+        prevViewButton      =   new JButton();
+        nextViewButton      =   new JButton();
+        refreshViewButton   =   new JButton();
+        
+        String prevButtonImage  =   (String) ConfigFactory.get(ConfigFactory.APP_CONFIG, AppConfig.RESOURCE_DIR) + "prevbutton.png";
+        String nextButtonImage  =   (String) ConfigFactory.get(ConfigFactory.APP_CONFIG, AppConfig.RESOURCE_DIR) + "nextbutton.png";
+        String refButtonImage   =   (String) ConfigFactory.get(ConfigFactory.APP_CONFIG, AppConfig.RESOURCE_DIR) + "refresh.png";
+        
+        prevViewButton.setIcon(new ImageIcon(prevButtonImage));
+        nextViewButton.setIcon(new ImageIcon(nextButtonImage));
+        refreshViewButton.setIcon(new ImageIcon(refButtonImage));
+        
+        Layout.makeTransparent(prevViewButton);
+        Layout.makeTransparent(nextViewButton);
+        Layout.makeTransparent(refreshViewButton);
         
         prevViewButton.addActionListener(this);
         nextViewButton.addActionListener(this);
@@ -64,11 +80,18 @@ public class HeaderNavigation extends JPanel implements ActionListener
         //View location components
         JPanel innerAPanel  =   new JPanel(new BorderLayout());
         addressBar          =   new JTextField();
-        addressSearchButton =   new JButton("GO");
+        addressSearchButton =   new JButton();
         addressSearchButton.addActionListener(this);
         
-        addressBar.setPreferredSize(new Dimension(350, 35));
-        viewLocationPanel.add(addressBar, BorderLayout.CENTER);
+        String searchButtonImage =  (String) ConfigFactory.get(ConfigFactory.APP_CONFIG, AppConfig.RESOURCE_DIR) + "gobutton.png";
+        addressSearchButton.setIcon(new ImageIcon(searchButtonImage));
+        Layout.makeTransparent(addressSearchButton);
+        addressSearchButton.setPreferredSize(new Dimension(45, 35));
+        
+        JPanel panel2   =   new JPanel();
+        addressBar.setPreferredSize(new Dimension(300, 35));
+        panel2.add(addressBar);
+        viewLocationPanel.add(panel2, BorderLayout.CENTER);
         viewLocationPanel.add(addressSearchButton, BorderLayout.EAST);
         
         
@@ -77,9 +100,21 @@ public class HeaderNavigation extends JPanel implements ActionListener
         innerAPanel.add(Box.createRigidArea(new Dimension(40, 0)), BorderLayout.EAST);
         
         //User components
-        userProfileButton       =   new JButton("1");
-        userNotificationsButton =   new JButton("3");
-        userLogoutButton        =   new JButton("4");
+        userProfileButton       =   new JButton();
+        userNotificationsButton =   new JButton();
+        userLogoutButton        =   new JButton();
+        
+        String profileButtonImage       =   (String) ConfigFactory.get(ConfigFactory.APP_CONFIG, AppConfig.RESOURCE_DIR) + "profilebutton.png";
+        String notificationButtonImage  =   (String) ConfigFactory.get(ConfigFactory.APP_CONFIG, AppConfig.RESOURCE_DIR) + "nonotificationsbutton.png";
+        String logoutButtonImage        =   (String) ConfigFactory.get(ConfigFactory.APP_CONFIG, AppConfig.RESOURCE_DIR) + "logoutbutton.png";
+        
+        userProfileButton.setIcon(new ImageIcon(profileButtonImage));
+        userNotificationsButton.setIcon(new ImageIcon(notificationButtonImage));
+        userLogoutButton.setIcon(new ImageIcon(logoutButtonImage));
+        
+        Layout.makeTransparent(userProfileButton);
+        Layout.makeTransparent(userNotificationsButton);
+        Layout.makeTransparent(userLogoutButton);
         
         userProfileButton.addActionListener(this);
         userNotificationsButton.addActionListener(this);
