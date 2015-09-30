@@ -36,6 +36,8 @@ public abstract class CommandInterpreter implements CommandExecute
     @Override
     public void fire(String commandRaw, Object instance)
     {
+        if(commands == null) return;
+        
         //Command structure: commandName param1 param2 .. paramN
         //Context triggers are resolved before being passed to interpreter
         List<String> paramList  =   new ArrayList<>(Arrays.asList(commandRaw.split("\\s")));
@@ -69,6 +71,8 @@ public abstract class CommandInterpreter implements CommandExecute
     //Used by help command for each view to show commands of the view
     public void showCommands()
     {
+        if(commands  == null) return;
+        
         List<Command> commandCol            =   new ArrayList<>(commands.values());
         final int maxCols                   =   3;
         final int maxRows                   =   (int) Math.ceil((commandCol.size() * 1.0) / maxCols);
@@ -112,6 +116,8 @@ public abstract class CommandInterpreter implements CommandExecute
     protected void initCommands()
     {
         String listenerFile     =   getCommandsFile();
-        commands                =   CommandListener.loadFactory(listenerFile).getCommands();
+        
+        if(listenerFile != null)
+            commands                =   CommandListener.loadFactory(listenerFile).getCommands();
     }
 }

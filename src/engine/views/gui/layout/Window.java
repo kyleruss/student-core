@@ -37,12 +37,6 @@ public class Window extends JFrame
         setVisible(true);
     }
     
-    public JPanel getLayoutPanel()
-    {
-        return layout;
-    }
-    
-    
     public static Point getWindowDim()
     {
         Dimension size  =   Toolkit.getDefaultToolkit().getScreenSize();

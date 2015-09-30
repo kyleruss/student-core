@@ -2,6 +2,7 @@
 package engine.views;
 
 import engine.controllers.ControllerMessage;
+import engine.core.Agent;
 import javax.swing.JPanel;
 
 
@@ -12,6 +13,9 @@ public abstract class GUIView extends AbstractView
     public GUIView()
     {
         super();
+        initResources();
+        initComponents();
+            
     }
     
     //Creates a view with name, description and address
@@ -32,9 +36,20 @@ public abstract class GUIView extends AbstractView
     }
     
     @Override
-    protected abstract String getCommandsFile();
+    protected String getCommandsFile()
+    {
+        return null;
+    }
+    
+    protected void initPanel()
+    {
+        if(panel != null)
+            panel.setPreferredSize(Agent.getWindow().getAppLayout().getViewPane().getPreferredSize());
+    }
     
     protected abstract void initComponents();
+    
+    protected abstract void initResources();
     
     @Override
     public void display()

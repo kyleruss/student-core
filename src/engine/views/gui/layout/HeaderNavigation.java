@@ -5,7 +5,6 @@ import engine.config.AppConfig;
 import engine.config.ConfigFactory;
 import engine.core.Agent;
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -128,6 +127,10 @@ public class HeaderNavigation extends JPanel implements ActionListener
         add(viewNavigationPanel, BorderLayout.WEST);
         add(innerAPanel, BorderLayout.CENTER);
         add(userPanel, BorderLayout.EAST);
+        
+        disablePrevButton();
+        disableNextButton();
+        disableUserControls();
     }
     
     public void setViewAddress(String location)
@@ -139,6 +142,41 @@ public class HeaderNavigation extends JPanel implements ActionListener
     {
         String address  =   addressBar.getText();
         Agent.setView(address);
+    }
+    
+    
+    public void enablePrevButton()
+    {
+        prevViewButton.setEnabled(true);
+    }
+    
+    public void enableNextButton()
+    {
+        nextViewButton.setEnabled(true);
+    }
+    
+    public void disablePrevButton()
+    {
+        prevViewButton.setEnabled(false);
+    }
+    
+    public void disableNextButton()
+    {
+        nextViewButton.setEnabled(false);
+    }
+    
+    public void enableUserControls()
+    {
+        userProfileButton.setEnabled(true);
+        userNotificationsButton.setEnabled(true);
+        userLogoutButton.setEnabled(true);
+    }
+    
+    public void disableUserControls()
+    {
+        userProfileButton.setEnabled(false);
+        userNotificationsButton.setEnabled(false);
+        userLogoutButton.setEnabled(false);
     }
     
     @Override

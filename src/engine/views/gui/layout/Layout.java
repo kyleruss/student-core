@@ -1,5 +1,7 @@
 package engine.views.gui.layout;
 
+import engine.config.AppConfig;
+import engine.config.ConfigFactory;
 import engine.core.Agent;
 import java.awt.BorderLayout;
 import javax.swing.JButton;
@@ -56,6 +58,13 @@ public class Layout extends JPanel
     public Menu getMenu()
     {
         return menu;
+    }
+    
+    public static String getImage(String name)
+    {
+        String dir  =   (String) ConfigFactory.get(ConfigFactory.APP_CONFIG, AppConfig.RESOURCE_DIR);
+        System.out.println(dir + name);
+        return dir + name;
     }
     
     public static void makeTransparent(JButton button)

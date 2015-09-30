@@ -51,7 +51,7 @@ public class UserController extends Controller
     public View getLogin()
     {
         if(!Agent.isGUIMode()) return prepareView(new LoginView());
-        else return null;
+        else return prepareView(new engine.views.gui.LoginView());
     }
     
     public View logout()

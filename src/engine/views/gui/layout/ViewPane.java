@@ -2,6 +2,7 @@
 package engine.views.gui.layout;
 
 import engine.views.GUIView;
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import javax.swing.JPanel;
@@ -18,6 +19,7 @@ public class ViewPane extends JPanel
             (int) (Window.getWindowDim().y * 0.9)
         ));
         
+        setLayout(new BorderLayout());
         setBackground(Color.WHITE);
     }
     
@@ -28,9 +30,13 @@ public class ViewPane extends JPanel
     
     public void setActiveView(GUIView view)
     {
-        remove(activeView.getPanel());
+        if(view == null) return;
+        
+        if(activeView != null) 
+            remove(activeView.getPanel());
+        
         activeView  =   view;
-        add(activeView.getPanel());
+        add(activeView.getPanel(), BorderLayout.CENTER);
         revalidate();
     }
 }
