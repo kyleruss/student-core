@@ -136,8 +136,6 @@ public class LoginView extends GUIView
         
         panel.add(Box.createRigidArea(new Dimension(0, 350)));
         panel.add(loginPanel);
-        
-        
     }
     
    

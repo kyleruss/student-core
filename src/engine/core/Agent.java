@@ -182,6 +182,18 @@ public final class Agent extends CommandInterpreter
                     HeaderNavigation headNav    =   layout.getHeadNav();
                     headNav.setViewAddress(view.getPath().getFullURL());
                     
+                    try
+                    {
+                        layout.getViewPane().showTransition();
+                        Thread.sleep(2000);
+                        layout.getViewPane().hideTransition();
+                    }
+                    
+                    catch(InterruptedException e)
+                    {
+                        ExceptionOutput.output("[Error] " + e.getMessage(), ExceptionOutput.OutputType.DEBUG);
+                    }
+                    
                     window.setActiveView((GUIView) activeView);
                 }
                 

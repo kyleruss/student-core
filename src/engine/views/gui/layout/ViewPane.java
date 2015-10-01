@@ -11,6 +11,8 @@ import javax.swing.JPanel;
 public class ViewPane extends JPanel
 {
     private GUIView activeView;
+    private final Transition transitionView;
+    
     public ViewPane()
     {
         setPreferredSize(new Dimension
@@ -18,6 +20,9 @@ public class ViewPane extends JPanel
             Window.getWindowDim().x,
             (int) (Window.getWindowDim().y * 0.9)
         ));
+        
+        transitionView  =   new Transition();
+        transitionView.setPreferredSize(getPreferredSize());
         
         setLayout(new BorderLayout());
         setBackground(Color.WHITE);
@@ -28,6 +33,28 @@ public class ViewPane extends JPanel
         return activeView;
     }
     
+    public void addPanel(JPanel panel)
+    {
+        add(panel, BorderLayout.CENTER);
+        revalidate();
+    }
+    
+    public void showTransition()
+    {
+        if(activeView != null)
+            remove(activeView.getPanel());
+        
+        addPanel(transitionView);
+    }
+    
+    public void hideTransition()
+    {
+        remove(transitionView);
+        
+        if(activeView != null)
+            add(activeView.getPanel());
+    }
+    
     public void setActiveView(GUIView view)
     {
         if(view == null) return;
@@ -36,7 +63,6 @@ public class ViewPane extends JPanel
             remove(activeView.getPanel());
         
         activeView  =   view;
-        add(activeView.getPanel(), BorderLayout.CENTER);
-        revalidate();
+        addPanel(activeView.getPanel());
     }
 }
