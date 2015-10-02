@@ -3,6 +3,7 @@ package engine.views.gui.layout;
 
 import engine.views.GUIView;
 import java.awt.BorderLayout;
+import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import javax.swing.JPanel;
@@ -13,8 +14,12 @@ public class ViewPane extends JPanel
     private GUIView activeView;
     private final Transition transitionView;
     
+    private final String TRANSITION_VIEW    =   "transition";
+    private final String ACTIVE_VIEW        =   "active";
+    
     public ViewPane()
     {
+        super(new CardLayout());
         setPreferredSize(new Dimension
         (
             Window.getWindowDim().x,
@@ -23,8 +28,9 @@ public class ViewPane extends JPanel
         
         transitionView  =   new Transition();
         transitionView.setPreferredSize(getPreferredSize());
+        add(transitionView, TRANSITION_VIEW);
         
-        setLayout(new BorderLayout());
+        //setLayout(new BorderLayout());
         setBackground(Color.WHITE);
     }
     
@@ -35,34 +41,29 @@ public class ViewPane extends JPanel
     
     public void addPanel(JPanel panel)
     {
-        add(panel, BorderLayout.CENTER);
+        add(panel);//, BorderLayout.CENTER);
         revalidate();
     }
     
     public void showTransition()
     {
-        if(activeView != null)
-            remove(activeView.getPanel());
-        
-        addPanel(transitionView);
+        CardLayout cLayout  =   (CardLayout) getLayout();
+        cLayout.show(this, TRANSITION_VIEW);
     }
     
     public void hideTransition()
     {
-        remove(transitionView);
+        if(activeView == null) return;
         
-        if(activeView != null)
-            add(activeView.getPanel());
+        CardLayout cLayout  =   (CardLayout) getLayout();
+        cLayout.show(this, ACTIVE_VIEW);
     }
     
     public void setActiveView(GUIView view)
     {
         if(view == null) return;
         
-        if(activeView != null) 
-            remove(activeView.getPanel());
-        
         activeView  =   view;
-        addPanel(activeView.getPanel());
+        add(activeView.getPanel(), ACTIVE_VIEW);
     }
 }

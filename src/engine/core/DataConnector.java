@@ -266,7 +266,8 @@ public class DataConnector implements AutoCloseable
             MainLogger.log(query, MainLogger.DATA_LOGGER);
       
             if((boolean) ConfigFactory.get(ConfigFactory.APP_CONFIG, AppConfig.DEBUG_MODE))
-                ExceptionOutput.output(query, ExceptionOutput.OutputType.DEBUG);
+                System.out.println("[DEBUG] " + query);
+               // ExceptionOutput.output(query, ExceptionOutput.OutputType.DEBUG);
             
             PreparedStatement statement = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
             return statement;

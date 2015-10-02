@@ -1,13 +1,21 @@
 package engine.views.gui;
 
+import engine.controllers.ControllerMessage;
+import engine.core.Agent;
 import engine.core.ExceptionOutput;
+import engine.core.RouteHandler;
 import engine.views.GUIView;
+import engine.views.ResponseDataView;
 import engine.views.gui.layout.Layout;
+import engine.views.gui.layout.Transition;
 import java.awt.BorderLayout;
+import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -18,17 +26,23 @@ import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+import javax.swing.Timer;
 import javax.swing.border.MatteBorder;
 import org.jdesktop.xswingx.BuddySupport;
 import org.jdesktop.xswingx.PromptSupport;
 
-public class LoginView extends GUIView
+public class LoginView extends GUIView implements ActionListener
 {
+    
+    private final String PROCESSING_KEY =   "proc";
+    private final String BUTTON_KEY     =   "button";
+    
     private BufferedImage backgroundImage;
     private ImageIcon loginButtonImage, registerButtonImage, usernameLabelImage, passLabelImage;
-    private JPanel loginPanel;
+    private JPanel loginPanel, loginButtonsPanel;
     private JButton loginButton, registerButton;
     private JTextField usernameField, passwordField;
     
@@ -87,7 +101,7 @@ public class LoginView extends GUIView
         loginFieldsWrapper.setBackground(Color.WHITE);
         
         usernameField               =   new JTextField();
-        passwordField               =   new JTextField();
+        passwordField               =   new JPasswordField();
         PromptSupport.setPrompt(" Username", usernameField);
         PromptSupport.setPrompt(" Password", passwordField);
         usernameField.setBorder(new MatteBorder(0, 0, 1, 0, Color.GRAY));
@@ -113,10 +127,23 @@ public class LoginView extends GUIView
         
         JPanel loginPanelButtons    =   new JPanel(new GridLayout(2, 1));
         JPanel loginPanelButtonWrap =   new JPanel();
+        JPanel loginProcessPanel    =   new JPanel(new BorderLayout());
+        loginButtonsPanel           =   new JPanel(new CardLayout());
+        loginButtonsPanel.setBackground(Color.WHITE);
         
         loginButton                 =   new JButton();
         registerButton              =   new JButton();
-        loginPanelButtons.add(loginButton);
+        JLabel processText          =   new JLabel("Processing...");
+        JLabel processSpinner       =   new JLabel(Transition.getSmallSpinner());
+        
+        loginProcessPanel.setBackground(Color.WHITE);
+        loginProcessPanel.add(processSpinner, BorderLayout.WEST);
+        loginProcessPanel.add(processText, BorderLayout.CENTER);
+        
+        loginButtonsPanel.add(loginButton, BUTTON_KEY);
+        loginButtonsPanel.add(loginProcessPanel, PROCESSING_KEY);
+        
+        loginPanelButtons.add(loginButtonsPanel);
         loginPanelButtons.add(registerButton);
         
         loginPanelButtons.setPreferredSize(new Dimension(183, 90));
@@ -136,9 +163,60 @@ public class LoginView extends GUIView
         
         panel.add(Box.createRigidArea(new Dimension(0, 350)));
         panel.add(loginPanel);
+        
+        loginButton.addActionListener(this);
+        registerButton.addActionListener(this);
     }
     
+    
+    private void attemptLogin()
+    {
+        String username =   usernameField.getText();
+        String password =   passwordField.getText();
+        
+        if(username.equals("") || password.equals(""))
+            ExceptionOutput.output("Please enter both your username and password", ExceptionOutput.OutputType.MESSAGE);
+        else
+        {
+            ControllerMessage postData   =   new ControllerMessage();
+            postData.add("loginUsername", username);
+            postData.add("loginPassword", password); 
+            
+            ResponseDataView response   =   (ResponseDataView) RouteHandler.go("postLogin", postData); 
+            
+            CardLayout cLayout  =   (CardLayout) loginButtonsPanel.getLayout();
+            cLayout.show(loginButtonsPanel, PROCESSING_KEY);
+
+            Timer loginTimer    =   new Timer(2000, (ActionEvent e) -> 
+            {
+                cLayout.show(loginButtonsPanel, BUTTON_KEY);
+                
+                if(!response.getResponseStatus())
+                     ExceptionOutput.output(response.getRawResponseMessage(), ExceptionOutput.OutputType.MESSAGE);
+                else Agent.setView("getHome");
+            });
+
+            loginTimer.setRepeats(false);
+            loginTimer.start(); 
+        }
+    }
+    
+    private void goRegister()
+    {
+        Agent.setView("getHome");
+    }
    
+    @Override
+    public void actionPerformed(ActionEvent e)
+    {
+        Object src = e.getSource();
+        
+        if(src == loginButton)
+            attemptLogin();
+        
+        else if(src == registerButton)
+            goRegister();
+    }
     
     
 }

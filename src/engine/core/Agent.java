@@ -16,7 +16,9 @@ import engine.views.cui.Utilities.CUITextTools;
 import engine.views.gui.layout.HeaderNavigation;
 import engine.views.gui.layout.Layout;
 import engine.views.gui.layout.Window;
+import java.awt.event.ActionEvent;
 import java.util.Scanner;
+import javax.swing.Timer;
 
 
 //------------------------------------------
@@ -157,11 +159,8 @@ public final class Agent extends CommandInterpreter
       //  {
             
             if(view == null)
-            {
                 ExceptionOutput.output("View not found", ExceptionOutput.OutputType.MESSAGE);
-                return;
-            }
-            
+
             else
             {
                 if(activeView != null && view != activeView)
@@ -182,19 +181,15 @@ public final class Agent extends CommandInterpreter
                     HeaderNavigation headNav    =   layout.getHeadNav();
                     headNav.setViewAddress(view.getPath().getFullURL());
                     
-                    try
+                    layout.getViewPane().showTransition();
+                    Timer transitionTimer    =   new Timer(2000, (ActionEvent e) -> 
                     {
-                        layout.getViewPane().showTransition();
-                        Thread.sleep(2000);
+                        window.setActiveView((GUIView) activeView);
                         layout.getViewPane().hideTransition();
-                    }
-                    
-                    catch(InterruptedException e)
-                    {
-                        ExceptionOutput.output("[Error] " + e.getMessage(), ExceptionOutput.OutputType.DEBUG);
-                    }
-                    
-                    window.setActiveView((GUIView) activeView);
+                    });
+
+                    transitionTimer.setRepeats(false);
+                    transitionTimer.start(); 
                 }
                 
                 else view.display(); 

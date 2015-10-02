@@ -8,8 +8,6 @@ package engine.views;
 
 import engine.controllers.ControllerMessage;
 import engine.core.Path;
-import engine.views.DataView;
-import engine.views.View;
 import engine.views.cui.Utilities.CUITextTools;
 
 
@@ -48,6 +46,11 @@ public class ResponseDataView implements DataView
         
         return (responseStatus)? 
         CUITextTools.changeColour(responseMessage, SUCCESS_COLOUR) : CUITextTools.changeColour(responseMessage, FAIL_COLOUR);
+    }
+    
+    public String getRawResponseMessage()
+    {
+        return responseMessage;
     }
     
     @Override

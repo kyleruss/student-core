@@ -29,7 +29,7 @@ public class Routes extends Router
     protected void initRoutes()
     {
       //  add("getLogin", "UserController", "getLogin", "/");
-        add("getHome", "GeneralController", "getHome", "/home");
+        //add("getHome", "GeneralController", "getHome", "/home");
     //    add("postLogin", "UserController", "postLogin", "/postlogin");
      //   add("getRegister", "UserController", "getRegister", "/register");
     //    add("postRegister", "UserController", "postRegister", "/postregister");
@@ -46,6 +46,7 @@ public class Routes extends Router
         RouteGroup user;
         registerGroup(user = new RouteGroup("user", new Path[]
         {
+            new Path("getHome", "UserController", "getHome", "/home"),
             new Path("postLogin", "UserController", "postLogin", "/postlogin"),
             new Path("getRegister", "UserController", "getRegister", "/register"),
             new Path("getLogin", "UserController", "getLogin", "/"),

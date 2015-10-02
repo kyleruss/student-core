@@ -9,7 +9,8 @@ import javax.swing.JPanel;
 
 public class Transition extends JPanel
 {
-    private ImageIcon spinnerImage;
+    private static ImageIcon spinnerImage;
+    private static ImageIcon smallSpinnerImage;
     private JLabel spinnerLabel;
     
     public Transition()
@@ -20,14 +21,20 @@ public class Transition extends JPanel
     public Transition(Color background)
     {
         super(new BorderLayout());
-        spinnerImage    =   new ImageIcon(Layout.getImage("loadspinner.gif"));
-        spinnerLabel    =   new JLabel(spinnerImage);
+        spinnerImage        =   new ImageIcon(Layout.getImage("loadspinner.gif"));
+        smallSpinnerImage   =   new ImageIcon(Layout.getImage("spinner.gif"));
+        spinnerLabel        =   new JLabel(spinnerImage);
         setBackground(background);
         add(spinnerLabel, BorderLayout.CENTER);
     }
     
-    public ImageIcon getSpinner()
+    public static ImageIcon getSpinner()
     {
         return spinnerImage;
+    }
+    
+    public static ImageIcon getSmallSpinner()
+    {
+        return smallSpinnerImage;
     }
 }

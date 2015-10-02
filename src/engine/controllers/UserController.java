@@ -27,6 +27,7 @@ import engine.views.cui.LoginView;
 import engine.views.cui.MyClassesView;
 import engine.views.cui.RegisterView;
 import engine.views.ResponseDataView;
+import engine.views.cui.HomeView;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -52,6 +53,12 @@ public class UserController extends Controller
     {
         if(!Agent.isGUIMode()) return prepareView(new LoginView());
         else return prepareView(new engine.views.gui.LoginView());
+    }
+    
+    public View getHome()
+    {
+        if(!Agent.isGUIMode()) return prepareView(new HomeView());
+        else return prepareView(new engine.views.gui.Home());
     }
     
     public View logout()
