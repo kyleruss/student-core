@@ -82,7 +82,6 @@ public class LoginView extends GUIView implements ActionListener
     @Override
     protected void initComponents() 
     {
-       
         panel.setBackground(Color.GREEN);
         
         loginPanel  =   new JPanel(new BorderLayout());
@@ -193,7 +192,12 @@ public class LoginView extends GUIView implements ActionListener
                 
                 if(!response.getResponseStatus())
                      ExceptionOutput.output(response.getRawResponseMessage(), ExceptionOutput.OutputType.MESSAGE);
-                else Agent.setView("getHome");
+                else 
+                {
+                    Agent.getWindow().getAppLayout().getHeadNav().enableUserControls();
+                    Agent.getWindow().getAppLayout().getHeadNav().enablePrevButton();
+                    Agent.setView("getHome");
+                }
             });
 
             loginTimer.setRepeats(false);
@@ -203,7 +207,7 @@ public class LoginView extends GUIView implements ActionListener
     
     private void goRegister()
     {
-        Agent.setView("getHome");
+        Agent.setView("getRegister");
     }
    
     @Override

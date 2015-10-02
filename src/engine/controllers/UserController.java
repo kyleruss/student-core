@@ -163,7 +163,8 @@ public class UserController extends Controller
     
     public View getRegister()
     {
-        return new RegisterView();
+        if(!Agent.isGUIMode()) return prepareView(new RegisterView());
+        else return prepareView(new engine.views.gui.RegisterView());
     }
     
     public View postRegister()
