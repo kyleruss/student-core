@@ -8,6 +8,7 @@ import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -15,6 +16,8 @@ import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -39,6 +42,9 @@ public class RegisterView extends GUIView implements ActionListener
     private JPanel registerPanel;
     private JPanel headerPanel;
     
+
+    private List<String> forms;
+    private int step;
     private final String FIRST_FORM     = "user";
     private final String SECOND_FORM    = "medical";
     private final String THIRD_FORM     = "confirm";
@@ -46,6 +52,7 @@ public class RegisterView extends GUIView implements ActionListener
     private JButton nextStep;
     private JButton prevStep;
     private JLabel stepLabel;
+    private JScrollPane registerScroll;
     
     private BufferedImage backgroundImage;
     
@@ -90,6 +97,12 @@ public class RegisterView extends GUIView implements ActionListener
         confirmPanel        =   new JPanel();
         headerPanel         =   new JPanel(new GridLayout(2, 1));
         
+        forms               =   new ArrayList<>();
+        step                =   0;
+        forms.add(FIRST_FORM);
+        forms.add(SECOND_FORM);
+        forms.add(THIRD_FORM);
+        
         registerPanel.setBackground(Color.WHITE);
         registerPanel.setPreferredSize(new Dimension(350, 450));
         formWrapperPanel.setPreferredSize(new Dimension(350, 330));
@@ -104,19 +117,24 @@ public class RegisterView extends GUIView implements ActionListener
         formControls.setBackground(Color.WHITE);
         headerPanel.setBackground(Color.WHITE);
         
-        stepLabel   =   new JLabel("Step 1 - Account details");
-        headerPanel.add(new JLabel("Registration"));
+        JLabel headLabel    =   new JLabel("Registration");
+        stepLabel           =   new JLabel("Step 1 - Account details");
+        headerPanel.add(headLabel);
         headerPanel.add(stepLabel);
+        headerPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 10, 10));
+        
+        headLabel.setFont(helveticaThin.deriveFont(Font.BOLD, 16f));
+        stepLabel.setFont(helveticaThin.deriveFont(14f));
         
         //CONTROLS
         prevStep    =   new JButton("Prev");
-        nextStep    =   new JButton("Next");
-        
-        prevStep.addActionListener(this);
-        nextStep.addActionListener(this);
+        nextStep    =   new JButton("Next");     
         
         formControls.add(prevStep);
         formControls.add(nextStep);
+        
+        prevStep.addActionListener(this);
+        nextStep.addActionListener(this);
         
         // USER COMPONENTS
         usernameField       =   new JTextField();
@@ -167,23 +185,43 @@ public class RegisterView extends GUIView implements ActionListener
         contactRelationship =   new JTextField();
         medicalDescription  =   new JTextField();
         
+        contactFirstname.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.GRAY));
+        contactLastname.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.GRAY));
+        contactPhone.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.GRAY));
+        contactEmail.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.GRAY));
+        contactRelationship.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.GRAY));
+        medicalDescription.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.GRAY));
+        
         medicalFormPanel.add(contactFirstname);
+        medicalFormPanel.add(Box.createRigidArea(new Dimension(0, 10)));
         medicalFormPanel.add(contactLastname);
+        medicalFormPanel.add(Box.createRigidArea(new Dimension(0, 10)));
         medicalFormPanel.add(contactPhone);
+        medicalFormPanel.add(Box.createRigidArea(new Dimension(0, 10)));
         medicalFormPanel.add(contactEmail);
+        medicalFormPanel.add(Box.createRigidArea(new Dimension(0, 10)));
         medicalFormPanel.add(contactRelationship);
+        medicalFormPanel.add(Box.createRigidArea(new Dimension(0, 10)));
         medicalFormPanel.add(medicalDescription);
+        
+        PromptSupport.setPrompt("Contact first name", contactFirstname);
+        PromptSupport.setPrompt("Contact last name", contactLastname);
+        PromptSupport.setPrompt("Telephone number", contactPhone);
+        PromptSupport.setPrompt("Email address", contactEmail);
+        PromptSupport.setPrompt("Contact relationship", contactRelationship);
+        PromptSupport.setPrompt("Enter medical information", medicalDescription);
         
         formPanel.add(userFormPanel, FIRST_FORM);
         formPanel.add(medicalFormPanel, SECOND_FORM);
         formPanel.add(confirmPanel, THIRD_FORM);
+        //formPanel.revalidate();
         
         formWrapperPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
         formPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
-        JScrollPane scrollPane  =   new JScrollPane(formPanel);
-        scrollPane.setBorder(null);
-        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        formWrapperPanel.add(scrollPane, BorderLayout.CENTER);
+        registerScroll  =   new JScrollPane(formPanel);
+        registerScroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        formWrapperPanel.add(registerScroll, BorderLayout.CENTER);
+        
         
         registerPanel.add(headerPanel, BorderLayout.NORTH);
         registerPanel.add(formWrapperPanel, BorderLayout.CENTER);
@@ -193,10 +231,56 @@ public class RegisterView extends GUIView implements ActionListener
         panel.add(registerPanel);
     }
     
+    private void nextStep()
+    {
+        System.out.println("next");
+        if(step + 1 < forms.size())
+        {
+            step++;
+            System.out.println("NEXT: " + forms.get(step));
+            CardLayout cLayout  =   (CardLayout) formPanel.getLayout();
+            cLayout.show(formPanel, forms.get(step));
+
+         //   panel.revalidate();
+            
+         //   if(step == forms.size() - 1)
+           //     nextStep.setText("Finish");
+        }
+        
+        else finish();
+    }
+    
+    private void prevStep()
+    {
+        if(step - 1 >= 0)
+        {
+            step--;
+            System.out.println("PREV: " + forms.get(step));
+            CardLayout cLayout  =   (CardLayout) formPanel.getLayout();
+            cLayout.show(formPanel, forms.get(step));
+          //  registerScroll.revalidate();
+       //     userFormPanel.revalidate();
+            
+          //  if(step != forms.size() - 1)
+           //     nextStep.setText("Next");
+        }
+    }
+    
+    private void finish()
+    {
+        
+    }
+    
     @Override
     public void actionPerformed(ActionEvent e)
     {
         Object src  =   e.getSource();
+        
+        if(src == nextStep)
+            nextStep();
+        
+        else if(src == prevStep)
+            prevStep();
     }
 
     @Override

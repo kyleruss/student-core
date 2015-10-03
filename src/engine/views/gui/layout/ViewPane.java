@@ -40,7 +40,7 @@ public class ViewPane extends JPanel
     
     public void addPanel(JPanel panel)
     {
-        add(panel);//, BorderLayout.CENTER);
+        add(panel);
         revalidate();
     }
     

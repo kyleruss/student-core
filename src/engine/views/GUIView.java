@@ -3,16 +3,24 @@ package engine.views;
 
 import engine.controllers.ControllerMessage;
 import engine.core.Agent;
+import engine.core.ExceptionOutput;
+import engine.views.gui.layout.Layout;
+import java.awt.Font;
+import java.awt.FontFormatException;
+import java.io.FileInputStream;
+import java.io.IOException;
 import javax.swing.JPanel;
 
 
 public abstract class GUIView extends AbstractView
 {
     protected JPanel panel;
+    protected Font helveticaThin;
     
     public GUIView()
     {
         super();
+        initAppResources();
         initResources();
         initComponents();
             
@@ -50,6 +58,19 @@ public abstract class GUIView extends AbstractView
     protected abstract void initComponents();
     
     protected abstract void initResources();
+    
+    protected void initAppResources()
+    {
+        try
+        {
+            helveticaThin   =   Font.createFont(Font.TRUETYPE_FONT, new FileInputStream(Layout.getImage("HelveticaThin.ttf")));
+        }
+        
+        catch(IOException | FontFormatException e)
+        {
+            ExceptionOutput.output("Loading resource error: " + e.getMessage(), ExceptionOutput.OutputType.MESSAGE);
+        }
+    }
     
     @Override
     public void display()
