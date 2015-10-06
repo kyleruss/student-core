@@ -93,9 +93,14 @@ public abstract class Controller
         if(!hasPostData()) return false;
         else
         {
+            boolean validate = true;
             for(String name : expectedNames)
-                if(!postData.messageExists(name)) return false;
-            return true;
+                if(!postData.messageExists(name)) 
+                {
+                    System.out.println("FAIL: " + name);
+                    validate = false;
+                }
+            return validate;
         }
     }
 }

@@ -2,6 +2,7 @@
 package engine.views.gui;
 
 import engine.controllers.ControllerMessage;
+import engine.core.Agent;
 import engine.core.ExceptionOutput;
 import engine.core.RouteHandler;
 import engine.views.GUIView;
@@ -29,6 +30,7 @@ import java.util.regex.Pattern;
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -38,6 +40,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.Timer;
 import javax.swing.border.Border;
+import org.jdatepicker.impl.JDatePickerImpl;
 import org.jdesktop.xswingx.PromptSupport;
 
 
@@ -61,7 +64,6 @@ public class RegisterView extends GUIView implements ActionListener
     private JButton prevStep;
     private JLabel stepLabel;
     private JScrollPane registerScroll;
-    
     private BufferedImage backgroundImage;
     
     //---------------------------------------
@@ -76,8 +78,9 @@ public class RegisterView extends GUIView implements ActionListener
     //           USER DETAILS
     //----------------------------------------
     private JTextField usernameField, passwordField, firstnameField, lastnameField;
-    private JTextField phoneField, emailField;
+    private JTextField phoneField, emailField, birthdateField;
     private JComboBox genderField, ethnicityField;
+    
     //-----------------------------------------
     
     
@@ -109,7 +112,7 @@ public class RegisterView extends GUIView implements ActionListener
         formWrapperPanel    =   new JPanel(new BorderLayout());
         formControls        =   new JPanel();
         medicalFormPanel    =   new JPanel(new GridLayout(11, 1));
-        userFormPanel       =   new JPanel(new GridLayout(15, 1));
+        userFormPanel       =   new JPanel(new GridLayout(17, 1));
         headerPanel         =   new JPanel(new GridLayout(2, 1));
         controlWrapper      =   new JPanel(new GridLayout(2, 1));
         
@@ -159,6 +162,18 @@ public class RegisterView extends GUIView implements ActionListener
         emailField          =   new JTextField();
         genderField         =   new JComboBox();
         ethnicityField      =   new JComboBox();
+        birthdateField      =   new JTextField();
+        
+        genderField.addItem("Male");
+        genderField.addItem("Female");
+        
+        ethnicityField.addItem("European");
+        ethnicityField.addItem("Maori");
+        ethnicityField.addItem("Pacific");
+        ethnicityField.addItem("Asian");
+        ethnicityField.addItem("Middle Eastern/Latin American/African");
+        ethnicityField.addItem("Other");
+        
         
         usernameField.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, new Color(209, 209, 209)));
         passwordField.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, new Color(209, 209, 209)));
@@ -166,6 +181,7 @@ public class RegisterView extends GUIView implements ActionListener
         lastnameField.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, new Color(209, 209, 209)));
         phoneField.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, new Color(209, 209, 209)));
         emailField.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, new Color(209, 209, 209)));
+        birthdateField.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, new Color(209, 209, 209)));
         
         PromptSupport.setPrompt(" Username", usernameField);
         PromptSupport.setPrompt(" Password", passwordField);
@@ -173,7 +189,7 @@ public class RegisterView extends GUIView implements ActionListener
         PromptSupport.setPrompt(" Last name", lastnameField);
         PromptSupport.setPrompt(" Telephone number", phoneField);
         PromptSupport.setPrompt(" Email address", emailField);
-        
+        PromptSupport.setPrompt(" Birthdate yyyy-mm-dd", birthdateField);
         
         userFormPanel.add(usernameField);
         userFormPanel.add(Box.createRigidArea(new Dimension(0, 10)));
@@ -186,6 +202,8 @@ public class RegisterView extends GUIView implements ActionListener
         userFormPanel.add(phoneField);
         userFormPanel.add(Box.createRigidArea(new Dimension(0, 10)));
         userFormPanel.add(emailField);
+        userFormPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+        userFormPanel.add(birthdateField);
         userFormPanel.add(Box.createRigidArea(new Dimension(0, 10)));
         userFormPanel.add(genderField);
         userFormPanel.add(Box.createRigidArea(new Dimension(0, 10)));
@@ -292,6 +310,7 @@ public class RegisterView extends GUIView implements ActionListener
                 validateIndexes.add(validateField(lastnameField, "[a-z]*", 3, 35, validBorder, invalidBorder));
                 validateIndexes.add(validateField(phoneField, "\\d*", 7, 12, validBorder, invalidBorder));
                 validateIndexes.add(validateField(emailField, "\\w*", 5, 40, validBorder, invalidBorder));
+                validateIndexes.add(validateField(birthdateField, "[0-9]{4}-[0-9]{2}-[0-9]{2}", 10, 10, validBorder, invalidBorder));
                 break;
                 
             case 1:
@@ -355,6 +374,9 @@ public class RegisterView extends GUIView implements ActionListener
         accDetails.put("registerGender", "Male");
         accDetails.put("registerPhone", phoneField.getText());
         accDetails.put("registerEmail", emailField.getText());
+        accDetails.put("registerBirth", birthdateField.getText());
+        accDetails.put("registerEthnicity", ethnicityField.getSelectedItem().toString());
+        accDetails.put("registerGender", genderField.getSelectedItem().toString());
         
         return accDetails;
     }
@@ -366,10 +388,24 @@ public class RegisterView extends GUIView implements ActionListener
         contactDetails.put("registerContactFirstname", contactFirstname.getText());
         contactDetails.put("registerContactLastname", contactLastname.getText());
         contactDetails.put("registerContactPhone", contactPhone.getText());
-        contactDetails.put("registerEmail", contactEmail.getText());
+        contactDetails.put("registerContactEmail", contactEmail.getText());
         contactDetails.put("registerMedicalDescription", medicalDescription.getText());
         
         return contactDetails;
+    }
+    
+    private void attemptLoginRedirect()
+    {
+        ControllerMessage postData   =   new ControllerMessage();
+        postData.add("loginUsername", usernameField.getText());
+        postData.add("loginPassword", passwordField.getText()); 
+
+        ResponseDataView response   =   (ResponseDataView) RouteHandler.go("postLogin", postData); 
+        
+        if(response.getResponseStatus())
+            Agent.setView("getHome");
+        else
+            Agent.setView("getLogin");
     }
     
     private void finish()
@@ -384,13 +420,23 @@ public class RegisterView extends GUIView implements ActionListener
         {
             if(response.getResponseStatus())
             {
+                statusIcon.setIcon(new ImageIcon(Layout.getImage("successicon.png")));
                 statusText.setText("Registration successful!");
+                Timer redirectTimer =   new Timer(1500, (ActionEvent ev) ->
+                {
+                    attemptLoginRedirect();
+                });
+                
+                redirectTimer.setRepeats(false);
+                redirectTimer.start();
+                
             }
 
             else
             {
-                statusText.setText("Failed to register, please try again");
-        }
+                statusIcon.setIcon(new ImageIcon(Layout.getImage("failicon.png")));
+                statusText.setText(response.getResponseMessage());
+            }
         });
         
         registerTimer.setRepeats(false);
