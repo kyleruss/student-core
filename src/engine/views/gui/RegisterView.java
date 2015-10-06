@@ -1,9 +1,13 @@
 
 package engine.views.gui;
 
+import engine.controllers.ControllerMessage;
 import engine.core.ExceptionOutput;
+import engine.core.RouteHandler;
 import engine.views.GUIView;
+import engine.views.ResponseDataView;
 import engine.views.gui.layout.Layout;
+import engine.views.gui.layout.Transition;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
@@ -17,7 +21,11 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -28,6 +36,8 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
+import javax.swing.Timer;
+import javax.swing.border.Border;
 import org.jdesktop.xswingx.PromptSupport;
 
 
@@ -38,16 +48,14 @@ public class RegisterView extends GUIView implements ActionListener
     private JPanel formPanel;
     private JPanel formWrapperPanel;
     private JPanel formControls;
-    private JPanel confirmPanel;
     private JPanel registerPanel;
     private JPanel headerPanel;
-    
+    private JPanel controlWrapper;
 
     private List<String> forms;
     private int step;
     private final String FIRST_FORM     = "user";
     private final String SECOND_FORM    = "medical";
-    private final String THIRD_FORM     = "confirm";
     
     private JButton nextStep;
     private JButton prevStep;
@@ -55,6 +63,14 @@ public class RegisterView extends GUIView implements ActionListener
     private JScrollPane registerScroll;
     
     private BufferedImage backgroundImage;
+    
+    //---------------------------------------
+    //          STATUS TEXT
+    //---------------------------------------
+    private JPanel statusPanel;
+    private JLabel statusIcon;
+    private JLabel statusText;
+    
     
     //----------------------------------------
     //           USER DETAILS
@@ -92,16 +108,15 @@ public class RegisterView extends GUIView implements ActionListener
         registerPanel       =   new JPanel(new BorderLayout());
         formWrapperPanel    =   new JPanel(new BorderLayout());
         formControls        =   new JPanel();
-        medicalFormPanel    =   new JPanel(new GridLayout(6, 1));
+        medicalFormPanel    =   new JPanel(new GridLayout(11, 1));
         userFormPanel       =   new JPanel(new GridLayout(15, 1));
-        confirmPanel        =   new JPanel();
         headerPanel         =   new JPanel(new GridLayout(2, 1));
+        controlWrapper      =   new JPanel(new GridLayout(2, 1));
         
         forms               =   new ArrayList<>();
         step                =   0;
         forms.add(FIRST_FORM);
         forms.add(SECOND_FORM);
-        forms.add(THIRD_FORM);
         
         registerPanel.setBackground(Color.WHITE);
         registerPanel.setPreferredSize(new Dimension(350, 450));
@@ -113,7 +128,6 @@ public class RegisterView extends GUIView implements ActionListener
         formPanel.setBackground(Color.WHITE);
         userFormPanel.setBackground(Color.WHITE);
         medicalFormPanel.setBackground(Color.WHITE);
-        confirmPanel.setBackground(Color.WHITE);
         formControls.setBackground(Color.WHITE);
         headerPanel.setBackground(Color.WHITE);
         
@@ -146,19 +160,19 @@ public class RegisterView extends GUIView implements ActionListener
         genderField         =   new JComboBox();
         ethnicityField      =   new JComboBox();
         
-        usernameField.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.GRAY));
-        passwordField.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.GRAY));
-        firstnameField.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.GRAY));
-        lastnameField.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.GRAY));
-        phoneField.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.GRAY));
-        emailField.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.GRAY));
+        usernameField.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, new Color(209, 209, 209)));
+        passwordField.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, new Color(209, 209, 209)));
+        firstnameField.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, new Color(209, 209, 209)));
+        lastnameField.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, new Color(209, 209, 209)));
+        phoneField.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, new Color(209, 209, 209)));
+        emailField.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, new Color(209, 209, 209)));
         
-        PromptSupport.setPrompt("Username", usernameField);
-        PromptSupport.setPrompt("Password", passwordField);
-        PromptSupport.setPrompt("First name", firstnameField);
-        PromptSupport.setPrompt("Last name", lastnameField);
-        PromptSupport.setPrompt("Telephone number", phoneField);
-        PromptSupport.setPrompt("Email address", emailField);
+        PromptSupport.setPrompt(" Username", usernameField);
+        PromptSupport.setPrompt(" Password", passwordField);
+        PromptSupport.setPrompt(" First name", firstnameField);
+        PromptSupport.setPrompt(" Last name", lastnameField);
+        PromptSupport.setPrompt(" Telephone number", phoneField);
+        PromptSupport.setPrompt(" Email address", emailField);
         
         
         userFormPanel.add(usernameField);
@@ -185,12 +199,12 @@ public class RegisterView extends GUIView implements ActionListener
         contactRelationship =   new JTextField();
         medicalDescription  =   new JTextField();
         
-        contactFirstname.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.GRAY));
-        contactLastname.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.GRAY));
-        contactPhone.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.GRAY));
-        contactEmail.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.GRAY));
-        contactRelationship.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.GRAY));
-        medicalDescription.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.GRAY));
+        contactFirstname.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, new Color(209, 209, 209)));
+        contactLastname.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, new Color(209, 209, 209)));
+        contactPhone.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, new Color(209, 209, 209)));
+        contactEmail.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, new Color(209, 209, 209)));
+        contactRelationship.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, new Color(209, 209, 209)));
+        medicalDescription.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, new Color(209, 209, 209)));
         
         medicalFormPanel.add(contactFirstname);
         medicalFormPanel.add(Box.createRigidArea(new Dimension(0, 10)));
@@ -204,17 +218,26 @@ public class RegisterView extends GUIView implements ActionListener
         medicalFormPanel.add(Box.createRigidArea(new Dimension(0, 10)));
         medicalFormPanel.add(medicalDescription);
         
-        PromptSupport.setPrompt("Contact first name", contactFirstname);
-        PromptSupport.setPrompt("Contact last name", contactLastname);
-        PromptSupport.setPrompt("Telephone number", contactPhone);
-        PromptSupport.setPrompt("Email address", contactEmail);
-        PromptSupport.setPrompt("Contact relationship", contactRelationship);
-        PromptSupport.setPrompt("Enter medical information", medicalDescription);
+        PromptSupport.setPrompt(" Contact first name", contactFirstname);
+        PromptSupport.setPrompt(" Contact last name", contactLastname);
+        PromptSupport.setPrompt(" Telephone number", contactPhone);
+        PromptSupport.setPrompt(" Email address", contactEmail);
+        PromptSupport.setPrompt(" Contact relationship", contactRelationship);
+        PromptSupport.setPrompt(" Enter medical information", medicalDescription);
+        
         
         formPanel.add(userFormPanel, FIRST_FORM);
         formPanel.add(medicalFormPanel, SECOND_FORM);
-        formPanel.add(confirmPanel, THIRD_FORM);
         //formPanel.revalidate();
+        
+        
+        // STATUS COMPONENTS
+        statusPanel =   new JPanel();
+        statusIcon  =   new JLabel();
+        statusText  =   new JLabel();
+        statusPanel.setBackground(Color.WHITE);
+        statusPanel.add(statusIcon);
+        statusPanel.add(statusText);
         
         formWrapperPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
         formPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
@@ -222,29 +245,86 @@ public class RegisterView extends GUIView implements ActionListener
         registerScroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         formWrapperPanel.add(registerScroll, BorderLayout.CENTER);
         
+        controlWrapper.add(statusPanel);
+        controlWrapper.add(formControls);
+        controlWrapper.setBackground(Color.WHITE);
         
         registerPanel.add(headerPanel, BorderLayout.NORTH);
         registerPanel.add(formWrapperPanel, BorderLayout.CENTER);
-        registerPanel.add(formControls, BorderLayout.SOUTH);
+        registerPanel.add(controlWrapper, BorderLayout.SOUTH);
         
         panel.add(Box.createRigidArea(new Dimension(0, 400)));
         panel.add(registerPanel);
     }
     
+    private boolean validateField(JTextField field, String regex, int minLength, int maxLength, Border valid, Border invalid)
+    {
+        String text         =   field.getText();
+        
+        Pattern pattern     =   Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
+        Matcher matcher     =   pattern.matcher(text);
+        
+        if(matcher.matches() && !(text.length() < minLength || text.length() > maxLength)) 
+        {
+            field.setBorder(valid);
+            return true;
+        }
+        
+        else
+        {
+            field.setBorder(invalid);
+            return false;
+        }
+    }
+   
+    private boolean validateForm(int step)
+    {  
+        final Border validBorder                    =   BorderFactory.createMatteBorder(1, 1, 1, 1, new Color(209, 209, 209));
+        final Border invalidBorder                  =   BorderFactory.createMatteBorder(1, 1, 1, 1, Color.RED);
+        final ArrayList<Boolean> validateIndexes    =   new ArrayList<>();
+        
+        switch(step)
+        {
+            case 0:
+                validateIndexes.add(validateField(usernameField, "\\w*", 6, 18, validBorder, invalidBorder));
+                validateIndexes.add(validateField(passwordField, "\\w*", 6, 25, validBorder, invalidBorder));
+                validateIndexes.add(validateField(firstnameField, "[a-z]*", 3, 35, validBorder, invalidBorder));
+                validateIndexes.add(validateField(lastnameField, "[a-z]*", 3, 35, validBorder, invalidBorder));
+                validateIndexes.add(validateField(phoneField, "\\d*", 7, 12, validBorder, invalidBorder));
+                validateIndexes.add(validateField(emailField, "\\w*", 5, 40, validBorder, invalidBorder));
+                break;
+                
+            case 1:
+                validateIndexes.add(validateField(contactFirstname, "[a-z]*", 6, 18, validBorder, invalidBorder));
+                validateIndexes.add(validateField(contactLastname, "[a-z]*", 6, 25, validBorder, invalidBorder));
+                validateIndexes.add(validateField(contactPhone, "\\d*", 7, 12, validBorder, invalidBorder));
+                validateIndexes.add(validateField(contactEmail, "\\w*", 5, 40, validBorder, invalidBorder));
+                validateIndexes.add(validateField(contactRelationship, "[a-z]*", 5, 100, validBorder, invalidBorder));
+                validateIndexes.add(validateField(medicalDescription, "\\w*", 5, 100, validBorder, invalidBorder));
+                break;
+        }
+        
+        return validateIndexes.contains(false);
+    }
+    
     private void nextStep()
     {
-        System.out.println("next");
+        if(validateForm(step)) 
+        {
+            System.out.println("invalid form");
+            return;
+        }
+        
         if(step + 1 < forms.size())
         {
             step++;
-            System.out.println("NEXT: " + forms.get(step));
             CardLayout cLayout  =   (CardLayout) formPanel.getLayout();
             cLayout.show(formPanel, forms.get(step));
-
-         //   panel.revalidate();
+            registerScroll.getVerticalScrollBar().setValue(0);
             
-         //   if(step == forms.size() - 1)
-           //     nextStep.setText("Finish");
+            if(step == forms.size() - 1) 
+                nextStep.setText("Finish");
+           
         }
         
         else finish();
@@ -258,17 +338,63 @@ public class RegisterView extends GUIView implements ActionListener
             System.out.println("PREV: " + forms.get(step));
             CardLayout cLayout  =   (CardLayout) formPanel.getLayout();
             cLayout.show(formPanel, forms.get(step));
-          //  registerScroll.revalidate();
-       //     userFormPanel.revalidate();
+            registerScroll.getVerticalScrollBar().setValue(0);
             
-          //  if(step != forms.size() - 1)
-           //     nextStep.setText("Next");
+            if(step < forms.size())
+                nextStep.setText("Next");
         }
+    }
+    
+    private Map<String, String> getAccDetails()
+    {
+        Map<String, String> accDetails      =   new HashMap<>();
+        accDetails.put("registerUsername", usernameField.getText());
+        accDetails.put("registerPassword", passwordField.getText());
+        accDetails.put("registerFirstname", firstnameField.getText());
+        accDetails.put("registerLastname", lastnameField.getText());
+        accDetails.put("registerGender", "Male");
+        accDetails.put("registerPhone", phoneField.getText());
+        accDetails.put("registerEmail", emailField.getText());
+        
+        return accDetails;
+    }
+    
+    
+    private Map<String, String> getContactDetails()
+    {
+        Map<String, String> contactDetails  =   new HashMap<>();
+        contactDetails.put("registerContactFirstname", contactFirstname.getText());
+        contactDetails.put("registerContactLastname", contactLastname.getText());
+        contactDetails.put("registerContactPhone", contactPhone.getText());
+        contactDetails.put("registerEmail", contactEmail.getText());
+        contactDetails.put("registerMedicalDescription", medicalDescription.getText());
+        
+        return contactDetails;
     }
     
     private void finish()
     {
+        statusIcon.setIcon(Transition.getSmallSpinner());
+        statusText.setText("Processing...");
         
+        ControllerMessage postData  =   new ControllerMessage().addAll(getAccDetails()).addAll(getContactDetails());
+        ResponseDataView response   =   (ResponseDataView) RouteHandler.go("postRegister", postData);
+        
+        Timer registerTimer =   new Timer(2000, (ActionEvent e) ->
+        {
+            if(response.getResponseStatus())
+            {
+                statusText.setText("Registration successful!");
+            }
+
+            else
+            {
+                statusText.setText("Failed to register, please try again");
+        }
+        });
+        
+        registerTimer.setRepeats(false);
+        registerTimer.start();
     }
     
     @Override
