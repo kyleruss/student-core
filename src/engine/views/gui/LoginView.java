@@ -12,6 +12,7 @@ import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -20,6 +21,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
+import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -45,6 +47,8 @@ public class LoginView extends GUIView implements ActionListener
     private JPanel loginPanel, loginButtonsPanel;
     private JButton loginButton, registerButton;
     private JTextField usernameField, passwordField;
+    private JLabel headerTitle, headerDescription;
+    private JPanel headerPanel;
     
     public LoginView()
     {
@@ -85,7 +89,7 @@ public class LoginView extends GUIView implements ActionListener
         panel.setBackground(Color.GREEN);
         
         loginPanel  =   new JPanel(new BorderLayout());
-        loginPanel.setPreferredSize(new Dimension(350, 300));
+        loginPanel.setPreferredSize(new Dimension(350, 350));
         loginPanel.setBackground(Color.WHITE);
         
         JPanel loginFields          =   new JPanel(new GridLayout(3, 1));
@@ -156,6 +160,17 @@ public class LoginView extends GUIView implements ActionListener
         
         loginPanelButtonWrap.add(loginPanelButtons);
         
+        headerPanel         =   new JPanel(new GridLayout(2, 1));
+        headerTitle         =   new JLabel("Login");
+        headerDescription   =   new JLabel("Enter your StudentCore credentials below");
+        headerTitle.setFont(helveticaThin.deriveFont(Font.BOLD, 16f));
+        headerDescription.setFont(helveticaThin.deriveFont(14f));
+        headerPanel.add(headerTitle);
+        headerPanel.add(headerDescription);
+        headerPanel.setBackground(Color.WHITE);
+        headerPanel.setBorder(BorderFactory.createEmptyBorder(10, 30, 10, 30));
+        
+        loginPanel.add(headerPanel, BorderLayout.NORTH);
         loginPanel.add(loginFieldsWrapper, BorderLayout.CENTER);
         loginPanel.add(loginPanelButtonWrap, BorderLayout.SOUTH);
         
