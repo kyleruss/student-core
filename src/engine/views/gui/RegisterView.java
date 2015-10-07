@@ -40,7 +40,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.Timer;
 import javax.swing.border.Border;
-import org.jdatepicker.impl.JDatePickerImpl;
 import org.jdesktop.xswingx.PromptSupport;
 
 

@@ -181,6 +181,12 @@ public final class Agent extends CommandInterpreter
                     HeaderNavigation headNav    =   layout.getHeadNav();
                     headNav.setViewAddress(view.getPath().getFullURL());
                     
+                    if(activeView.getPrevView() != null) headNav.enablePrevButton();
+                    else headNav.disablePrevButton();
+                    
+                    if(activeView.getNextView() != null) headNav.enableNextButton();
+                    else headNav.disableNextButton();
+                    
                     layout.getViewPane().showTransition();
                     Timer transitionTimer    =   new Timer(2000, (ActionEvent e) -> 
                     {
@@ -239,7 +245,10 @@ public final class Agent extends CommandInterpreter
          if(activeView == null)
              System.out.println(CUITextTools.changeColour("Can't refresh this view", CUITextTools.RED));
          else
-             activeView.display();
+         {
+             if(!guiMode) activeView.display();
+             else setView(activeView);
+         }
     }
 
     public static Window getWindow()

@@ -4,11 +4,14 @@ package engine.views.gui.layout;
 import engine.config.AppConfig;
 import engine.config.ConfigFactory;
 import engine.core.Agent;
+import engine.core.authentication.Session;
+import engine.models.NotificationModel;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
 import javax.swing.Box;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -177,6 +180,31 @@ public class HeaderNavigation extends JPanel implements ActionListener
         userProfileButton.setEnabled(false);
         userNotificationsButton.setEnabled(false);
         userLogoutButton.setEnabled(false);
+    }
+    
+    public void updateUserPanel()
+    {
+        if(Agent.getActiveSession() != null)
+        {
+            enableUserControls();
+            Session session         =   Agent.getActiveSession();
+            String username         =   session.getUser().get("username").getNonLiteralValue().toString();
+            int numNotifications;
+            try
+            {
+                numNotifications    =   NotificationModel.getNumUnreadNotifications(username);
+            }
+            
+            catch(SQLException e)
+            {
+                numNotifications = 0;
+            }
+            
+            if(numNotifications > 0)
+                userNotificationsButton.setIcon(new ImageIcon(Layout.getImage("hasnotificationsbutton.png")));
+            else
+                userNotificationsButton.setIcon(new ImageIcon(Layout.getImage("nonotificationsbutton.png")));
+        }
     }
     
     @Override
