@@ -21,6 +21,7 @@ public abstract class GUIView extends AbstractView
     {
         super();
         initAppResources();
+        initListeners();
         initResources();
         initComponents();
             
@@ -58,6 +59,8 @@ public abstract class GUIView extends AbstractView
     protected abstract void initComponents();
     
     protected abstract void initResources();
+    
+    protected abstract void initListeners();
     
     protected void initAppResources()
     {

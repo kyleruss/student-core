@@ -64,7 +64,7 @@ public class UserController extends Controller
     public View logout()
     {
         Agent.setActiveSession(null);
-        return prepareView(new LoginView());
+        return getLogin();
     }
     
     public View postLogin()

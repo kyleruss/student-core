@@ -17,6 +17,8 @@ import java.awt.Graphics;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -36,7 +38,7 @@ import javax.swing.border.MatteBorder;
 import org.jdesktop.xswingx.BuddySupport;
 import org.jdesktop.xswingx.PromptSupport;
 
-public class LoginView extends GUIView implements ActionListener
+public class LoginView extends GUIView implements ActionListener, KeyListener
 {
     
     private final String PROCESSING_KEY =   "proc";
@@ -82,7 +84,12 @@ public class LoginView extends GUIView implements ActionListener
              }
         };
     }
-
+    
+    @Override
+    protected void initListeners()
+    {   
+    }
+    
     @Override
     protected void initComponents() 
     {
@@ -163,19 +170,19 @@ public class LoginView extends GUIView implements ActionListener
         headerPanel         =   new JPanel(new GridLayout(2, 1));
         headerTitle         =   new JLabel("Login");
         headerDescription   =   new JLabel("Enter your StudentCore credentials below");
-        headerTitle.setFont(helveticaThin.deriveFont(Font.BOLD, 16f));
-        headerDescription.setFont(helveticaThin.deriveFont(14f));
+        headerTitle.setFont(helveticaThin.deriveFont(Font.BOLD, 18f));
+        headerDescription.setFont(helveticaThin.deriveFont(16f));
         headerPanel.add(headerTitle);
         headerPanel.add(headerDescription);
         headerPanel.setBackground(Color.WHITE);
-        headerPanel.setBorder(BorderFactory.createEmptyBorder(10, 30, 10, 30));
+        headerPanel.setBorder(BorderFactory.createEmptyBorder(15, 30, 5, 30));
         
         loginPanel.add(headerPanel, BorderLayout.NORTH);
         loginPanel.add(loginFieldsWrapper, BorderLayout.CENTER);
         loginPanel.add(loginPanelButtonWrap, BorderLayout.SOUTH);
         
         
-        panel.add(Box.createRigidArea(new Dimension(0, 350)));
+        panel.setBorder(BorderFactory.createEmptyBorder(50, 0, 0, 0));//.add(Box.createRigidArea(new Dimension(0, 350)));
         panel.add(loginPanel);
         
         loginButton.addActionListener(this);
@@ -235,6 +242,27 @@ public class LoginView extends GUIView implements ActionListener
         
         else if(src == registerButton)
             goRegister();
+    }
+
+    @Override
+    public void keyTyped(KeyEvent e) 
+    { }
+
+    @Override
+    public void keyPressed(KeyEvent e)
+    {
+        int keyCode =   e.getKeyCode();
+        
+        if(keyCode == KeyEvent.VK_ENTER)
+        {
+            if(usernameField.hasFocus() || passwordField.hasFocus())
+                attemptLogin();
+        }
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) 
+    {
     }
     
     

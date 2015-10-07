@@ -289,21 +289,27 @@ public final class Agent extends CommandInterpreter
     
     //Logs the current user out if they are logged in
     //User is redirected after 5 seconds 
-    public void sessionLogout()
+    public static void sessionLogout()
     {
-        if(activeSession == null)
+      
+        if(!guiMode)
         {
-            System.out.println(CUITextTools.changeColour("You aren't logged in!", CUITextTools.RED));
-            return;
-        }
+            
+            if(activeSession == null)
+            {
+                System.out.println(CUITextTools.changeColour("You aren't logged in!", CUITextTools.RED));
+                return;
+            }
+            
+            System.out.println("\n" + CUITextTools.changeColour("You have been logged out", CUITextTools.RED) + "\n");
+            System.out.println("Redirecting in 5 seconds..");
         
-        System.out.println("\n" + CUITextTools.changeColour("You have been logged out", CUITextTools.RED) + "\n");
-        System.out.println("Redirecting in 5 seconds..");
-        
-        try { Thread.sleep(5000); } 
-        catch (InterruptedException ex) 
-        {
+      
+            try { Thread.sleep(5000); } 
+            catch (InterruptedException ex) 
+            {
             //System.out.println(ex.getMessage());
+            }
         }
         
         setView("logout");

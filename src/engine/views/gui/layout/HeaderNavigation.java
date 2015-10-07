@@ -106,6 +106,10 @@ public class HeaderNavigation extends JPanel implements ActionListener
         userNotificationsButton =   new JButton();
         userLogoutButton        =   new JButton();
         
+        userProfileButton.addActionListener(this);
+        userNotificationsButton.addActionListener(this);
+        userLogoutButton.addActionListener(this);
+        
         String profileButtonImage       =   (String) ConfigFactory.get(ConfigFactory.APP_CONFIG, AppConfig.RESOURCE_DIR) + "profilebutton.png";
         String notificationButtonImage  =   (String) ConfigFactory.get(ConfigFactory.APP_CONFIG, AppConfig.RESOURCE_DIR) + "nonotificationsbutton.png";
         String logoutButtonImage        =   (String) ConfigFactory.get(ConfigFactory.APP_CONFIG, AppConfig.RESOURCE_DIR) + "logoutbutton.png";
@@ -207,6 +211,13 @@ public class HeaderNavigation extends JPanel implements ActionListener
         }
     }
     
+    private void logoutUser()
+    {
+        Agent.sessionLogout();
+        disableUserControls();
+        disableNextButton();
+    }
+    
     @Override
     public void actionPerformed(ActionEvent e)
     {
@@ -224,5 +235,10 @@ public class HeaderNavigation extends JPanel implements ActionListener
         else if(src == addressSearchButton)
             changeViews();
         
+        else if(src == userLogoutButton)
+            logoutUser();
+        
+        else if(src == userProfileButton)
+            Agent.setView("getHome");
     }
 }
