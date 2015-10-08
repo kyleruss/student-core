@@ -51,6 +51,7 @@ public class LoginView extends GUIView implements ActionListener, KeyListener
     private JTextField usernameField, passwordField;
     private JLabel headerTitle, headerDescription;
     private JPanel headerPanel;
+    private JCheckBox rememberCredentials;
     
     public LoginView()
     {
@@ -128,12 +129,12 @@ public class LoginView extends GUIView implements ActionListener, KeyListener
         passLabel.setIcon(passLabelImage);
         BuddySupport.addLeft(passLabel, passwordField);
         
-        JCheckBox rememberBox  =   new JCheckBox("Remember password?");
-        rememberBox.setHorizontalTextPosition(SwingConstants.LEFT);
+        rememberCredentials  =   new JCheckBox("Remember password?");
+        rememberCredentials.setHorizontalTextPosition(SwingConstants.LEFT);
         
         loginFields.add(usernameField);
         loginFields.add(passwordField);
-        loginFields.add(rememberBox);
+        loginFields.add(rememberCredentials);
         loginFieldsWrapper.add(loginFields, BorderLayout.CENTER);
         
         
@@ -204,6 +205,7 @@ public class LoginView extends GUIView implements ActionListener, KeyListener
             ControllerMessage postData   =   new ControllerMessage();
             postData.add("loginUsername", username);
             postData.add("loginPassword", password); 
+            postData.add("storeCredentials", rememberCredentials.isSelected());
             
             ResponseDataView response   =   (ResponseDataView) RouteHandler.go("postLogin", postData); 
             

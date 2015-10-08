@@ -20,7 +20,11 @@ import engine.models.User;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.text.DateFormat;
 import java.text.MessageFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import javax.swing.text.DateFormatter;
 
 //---------------------------------------
 //              AUTH
@@ -36,7 +40,7 @@ public class Auth
     //Passwords are hashed and compared with the stored hash
     //- username: the users valid distinct username
     //- password: plain text input password (NOT HASH)
-    public static Session login(String username, String password)
+    public static Session login(String username, String password, boolean storeCredentials)
     {
         try
         {
@@ -69,6 +73,29 @@ public class Auth
                     Agent.setActiveSession(new Session(attempt));
                     MainLogger.log(logMessage, MainLogger.AUTH_LOGGER);
                     
+                    if(storeCredentials)
+                    {
+                        StoredCredentials credentials   =   StoredCredentials.getSavedCredentials();
+                        
+                        if(credentials == null) credentials = new StoredCredentials();
+                        
+                        Credentials storedCred          =   credentials.getUserCredentials(username);
+                        DateFormat format               =   new SimpleDateFormat("yyyy-mm-dd");
+                        String saveDate                 =   format.format(new Date());
+
+                        if(storedCred == null)
+                            storedCred  =   new Credentials(username, passStored, saveDate, saveDate);
+
+                        storedCred.setPassword(passStored);
+                        storedCred.setLastLogged(saveDate);
+
+                        credentials.setLastAccessed(username);
+                        credentials.addCredential(username, storedCred);
+                        credentials.saveCredentials();
+                        
+                        
+                    }
+                    
                     return new Session(attempt);
                 }
                 
@@ -84,41 +111,5 @@ public class Auth
         }
     }
     
-    public void storeCredentials()
-    {
-        if(!(boolean) ConfigFactory.get(ConfigFactory.APP_CONFIG, AppConfig.ALLOW_PASS_SAVE))
-        {
-            
-        }
-    }
-    
-    //TODO: get saved credentials of pertricular user
-    
-  /*  public static JsonArray getSavedCredentials()
-    {
-        if(!(boolean) ConfigFactory.get(ConfigFactory.APP_CONFIG, AppConfig.ALLOW_PASS_SAVE))
-        {
-            String file =   (String) ConfigFactory.get(ConfigFactory.APP_CONFIG, AppConfig.PASS_SAVE_FILE);
-            if(file == null) return null;
-            
-            String credentials  =   "";
-            try(BufferedReader br   =   new BufferedReader(new FileReader(file)))
-            {
-                String line;
-                while((line = br.readLine()) != null)
-                    credentials += line;
-                
-                Gson gson   =   new Gson();
-               
-            }
-            
-            catch(IOException e)
-            {
-                ExceptionOutput.output("Failed to oepn resourse, " + e.getMessage(), ExceptionOutput.OutputType.DEBUG);
-                return null;
-            }
-        }
-        
-        else return null;
-    } */
+
 }

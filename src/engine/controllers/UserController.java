@@ -73,14 +73,15 @@ public class UserController extends Controller
         final String invalidAttemptMessage      =   "Invalid username or password";
         final String successMessage             =   "Successfully logged in";
         
-        if(!validatePostData(new String[]{"loginUsername", "loginPassword"}))
+        if(!validatePostData(new String[]{"loginUsername", "loginPassword", "storeCredentials"}))
             return prepareView(new ResponseDataView(invalidInputMesage, false));
         else
         {
-            String loginUsername    =   (String) postData.getMessage("loginUsername");
-            String loginPassword    =   (String) postData.getMessage("loginPassword");
+            String loginUsername        =   (String) postData.getMessage("loginUsername");
+            String loginPassword        =   (String) postData.getMessage("loginPassword");
+            boolean storeCredentials    =   (boolean) postData.getMessage("storeCredentials");
             
-            if(Auth.login(loginUsername, loginPassword) != null)
+            if(Auth.login(loginUsername, loginPassword, storeCredentials) != null)
                 return prepareView(new ResponseDataView(successMessage, true));
             else
                 return prepareView(new ResponseDataView(invalidAttemptMessage, false));

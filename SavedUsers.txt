@@ -1,0 +1,11 @@
+{
+  "lastAccessed": "kyleruss",
+  "credentials": {
+    "kyleruss": {
+      "username": "kyleruss",
+      "password": "0Tupn6o7p+nnIS8tbunBhTgz7rE\u003d",
+      "dateSaved": "2015-55-08",
+      "lastLogged": "2015-57-08"
+    }
+  }
+}

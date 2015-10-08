@@ -60,6 +60,7 @@ public class LoginView extends AbstractView
             ControllerMessage postData   =   new ControllerMessage();
             postData.add("loginUsername", enteredUsername);
             postData.add("loginPassword", enteredPassword);
+            postData.add("storeCredentials", false);
             
             ResponseDataView response   =   (ResponseDataView) RouteHandler.go("postLogin", postData);
             
