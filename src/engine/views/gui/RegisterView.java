@@ -274,6 +274,12 @@ public class RegisterView extends GUIView implements ActionListener
         panel.add(registerPanel);
     }
     
+    @Override
+    protected void initListeners()
+    {
+        
+    }
+    
     private boolean validateField(JTextField field, String regex, int minLength, int maxLength, Border valid, Border invalid)
     {
         String text         =   field.getText();

@@ -21,10 +21,9 @@ public abstract class GUIView extends AbstractView
     {
         super();
         initAppResources();
-        initListeners();
         initResources();
         initComponents();
-            
+        initListeners();
     }
     
     //Creates a view with name, description and address

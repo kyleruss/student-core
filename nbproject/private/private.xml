@@ -2,6 +2,12 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group/>
+        <group>
+            <file>file:/root/workspace/PDC/pdc-project/src/engine/views/GUIView.java</file>
+            <file>file:/root/workspace/PDC/pdc-project/src/engine/core/authentication/Auth.java</file>
+            <file>file:/root/workspace/PDC/pdc-project/src/engine/views/gui/LoginView.java</file>
+            <file>file:/root/workspace/PDC/pdc-project/src/engine/views/gui/RegisterView.java</file>
+            <file>file:/root/workspace/PDC/pdc-project/src/engine/config/AppConfig.java</file>
+        </group>
     </open-files>
 </project-private>

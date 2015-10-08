@@ -22,4 +22,10 @@ public class Home extends GUIView
         
     }
     
+    @Override
+    protected void initListeners()
+    {
+        
+    }
+    
 }

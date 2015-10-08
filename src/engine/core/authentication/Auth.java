@@ -6,12 +6,20 @@
 
 package engine.core.authentication;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import engine.config.AppConfig;
 import engine.config.AuthConfig;
+import engine.config.ConfigFactory;
 import engine.core.Agent;
+import engine.core.ExceptionOutput;
 import engine.core.loggers.MainLogger;
 import engine.core.security.Crypto;
 import engine.core.security.Input;
 import engine.models.User;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.text.MessageFormat;
 
 //---------------------------------------
@@ -74,5 +82,43 @@ public class Auth
            // System.out.println("login exception: " + e.getMessage());
             return null;
         }
+    }
+    
+    public void storeCredentials()
+    {
+        if(!(boolean) ConfigFactory.get(ConfigFactory.APP_CONFIG, AppConfig.ALLOW_PASS_SAVE))
+        {
+            
+        }
+    }
+    
+    //TODO: get saved credentials of pertricular user
+    
+    public static JsonArray getSavedCredentials()
+    {
+        if(!(boolean) ConfigFactory.get(ConfigFactory.APP_CONFIG, AppConfig.ALLOW_PASS_SAVE))
+        {
+            String file =   (String) ConfigFactory.get(ConfigFactory.APP_CONFIG, AppConfig.PASS_SAVE_FILE);
+            if(file == null) return null;
+            
+            String credentials  =   "";
+            try(BufferedReader br   =   new BufferedReader(new FileReader(file)))
+            {
+                String line;
+                while((line = br.readLine()) != null)
+                    credentials += line;
+                
+                Gson gson   =   new Gson();
+               
+            }
+            
+            catch(IOException e)
+            {
+                ExceptionOutput.output("Failed to oepn resourse, " + e.getMessage(), ExceptionOutput.OutputType.DEBUG);
+                return null;
+            }
+        }
+        
+        else return null;
     }
 }

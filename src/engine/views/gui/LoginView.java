@@ -88,6 +88,9 @@ public class LoginView extends GUIView implements ActionListener, KeyListener
     @Override
     protected void initListeners()
     {   
+        loginPanel.addKeyListener(this);
+        loginPanel.setFocusable(true);
+        
     }
     
     @Override
@@ -169,7 +172,7 @@ public class LoginView extends GUIView implements ActionListener, KeyListener
         
         headerPanel         =   new JPanel(new GridLayout(2, 1));
         headerTitle         =   new JLabel("Login");
-        headerDescription   =   new JLabel("Enter your StudentCore credentials below");
+        headerDescription   =   new JLabel("Enter your StudentCore credentials");
         headerTitle.setFont(helveticaThin.deriveFont(Font.BOLD, 18f));
         headerDescription.setFont(helveticaThin.deriveFont(16f));
         headerPanel.add(headerTitle);
@@ -246,18 +249,19 @@ public class LoginView extends GUIView implements ActionListener, KeyListener
 
     @Override
     public void keyTyped(KeyEvent e) 
-    { }
+    {
+        int keyCode =   e.getKeyCode();
+        if(keyCode == KeyEvent.VK_ENTER)
+        {
+            System.out.println("test");
+            if(usernameField.hasFocus() || passwordField.hasFocus())
+                attemptLogin();
+        }
+    }
 
     @Override
     public void keyPressed(KeyEvent e)
     {
-        int keyCode =   e.getKeyCode();
-        
-        if(keyCode == KeyEvent.VK_ENTER)
-        {
-            if(usernameField.hasFocus() || passwordField.hasFocus())
-                attemptLogin();
-        }
     }
 
     @Override
