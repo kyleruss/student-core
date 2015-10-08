@@ -94,7 +94,7 @@ public class Auth
     
     //TODO: get saved credentials of pertricular user
     
-    public static JsonArray getSavedCredentials()
+  /*  public static JsonArray getSavedCredentials()
     {
         if(!(boolean) ConfigFactory.get(ConfigFactory.APP_CONFIG, AppConfig.ALLOW_PASS_SAVE))
         {
@@ -120,5 +120,5 @@ public class Auth
         }
         
         else return null;
-    }
+    } */
 }

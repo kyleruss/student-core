@@ -88,9 +88,8 @@ public class LoginView extends GUIView implements ActionListener, KeyListener
     @Override
     protected void initListeners()
     {   
-        loginPanel.addKeyListener(this);
-        loginPanel.setFocusable(true);
-        
+        passwordField.addKeyListener(this);
+        usernameField.addKeyListener(this);
     }
     
     @Override
@@ -246,28 +245,20 @@ public class LoginView extends GUIView implements ActionListener, KeyListener
         else if(src == registerButton)
             goRegister();
     }
-
+    
     @Override
-    public void keyTyped(KeyEvent e) 
+    public void keyPressed(KeyEvent e)
     {
         int keyCode =   e.getKeyCode();
         if(keyCode == KeyEvent.VK_ENTER)
         {
-            System.out.println("test");
-            if(usernameField.hasFocus() || passwordField.hasFocus())
-                attemptLogin();
+            attemptLogin();
         }
     }
 
     @Override
-    public void keyPressed(KeyEvent e)
-    {
-    }
+    public void keyTyped(KeyEvent e) {}
 
     @Override
-    public void keyReleased(KeyEvent e) 
-    {
-    }
-    
-    
+    public void keyReleased(KeyEvent e) {}
 }
