@@ -4,6 +4,8 @@ import engine.controllers.ControllerMessage;
 import engine.core.Agent;
 import engine.core.ExceptionOutput;
 import engine.core.RouteHandler;
+import engine.core.authentication.Credentials;
+import engine.core.authentication.StoredCredentials;
 import engine.views.GUIView;
 import engine.views.ResponseDataView;
 import engine.views.gui.layout.Layout;
@@ -91,6 +93,9 @@ public class LoginView extends GUIView implements ActionListener, KeyListener
     {   
         passwordField.addKeyListener(this);
         usernameField.addKeyListener(this);
+        
+        loginButton.addActionListener(this);
+        registerButton.addActionListener(this);
     }
     
     @Override
@@ -188,8 +193,25 @@ public class LoginView extends GUIView implements ActionListener, KeyListener
         panel.setBorder(BorderFactory.createEmptyBorder(50, 0, 0, 0));//.add(Box.createRigidArea(new Dimension(0, 350)));
         panel.add(loginPanel);
         
-        loginButton.addActionListener(this);
-        registerButton.addActionListener(this);
+        fillStoredCredentials();
+    }
+    
+    private void fillStoredCredentials()
+    {
+        StoredCredentials credentials   =   Agent.getStoredCredentials();
+        String lastAccessed             =   credentials.getLastAccessed();
+        
+        if(lastAccessed == null) return;
+        
+        Credentials user                =   credentials.getUserCredentials(lastAccessed);
+        if(user == null) return;
+        
+        String username =   user.getUsername();
+        String passHash =   user.getPassword();
+        
+        usernameField.setText(username);
+        passwordField.setText(passHash);
+        rememberCredentials.setSelected(true);
     }
     
     

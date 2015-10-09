@@ -50,9 +50,9 @@ public class StoredCredentials
         credentials.put(username, cred);
     }
     
-    public void removeCredential(String username)
+    public Credentials removeCredential(String username)
     {
-        credentials.remove(username);
+        return credentials.remove(username);
     }
     
     public void replaceCredential(String username, Credentials cred)
@@ -65,7 +65,7 @@ public class StoredCredentials
         return credentials.get(username);
     }
     
-    public void saveCredentials()
+    public synchronized void saveCredentials()
     {
         if((boolean) ConfigFactory.get(ConfigFactory.APP_CONFIG, AppConfig.ALLOW_PASS_SAVE))
         {
@@ -88,7 +88,7 @@ public class StoredCredentials
     
     //TODO: get saved credentials of pertricular user
     
-   public static StoredCredentials getSavedCredentials()
+   public synchronized static StoredCredentials getSavedCredentials()
     {
         if((boolean) ConfigFactory.get(ConfigFactory.APP_CONFIG, AppConfig.ALLOW_PASS_SAVE))
         {

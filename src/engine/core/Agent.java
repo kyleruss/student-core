@@ -10,6 +10,7 @@ import engine.config.AppConfig;
 import engine.config.ConfigFactory;
 import engine.controllers.ControllerMessage;
 import engine.core.authentication.Session;
+import engine.core.authentication.StoredCredentials;
 import engine.views.GUIView;
 import engine.views.View;
 import engine.views.cui.Utilities.CUITextTools;
@@ -62,6 +63,7 @@ public final class Agent extends CommandInterpreter
     private static Context activeContext; //The current context of input
     private static Session activeSession; //The session, includes auth and logged in users
     private static Thread agentThread;  //Thread for agent command input and tasks
+    private static StoredCredentials storedCredentials;
     private static volatile boolean waitingOnCommand = false; //false when view is controlling input
     private static volatile boolean serving = true; //The agents life flag, true if agent is working
     private static Window window;
@@ -70,8 +72,9 @@ public final class Agent extends CommandInterpreter
     //Creates and starts the apps agent
     public Agent()
     {
-        guiMode         =   (boolean) ConfigFactory.get(ConfigFactory.APP_CONFIG, AppConfig.GUI_MODE);
-        agentThread     =   new Thread(listen);
+        guiMode             =   (boolean) ConfigFactory.get(ConfigFactory.APP_CONFIG, AppConfig.GUI_MODE);
+        agentThread         =   new Thread(listen);
+        fetchCredentials();
         begin();
     }
     
@@ -124,6 +127,19 @@ public final class Agent extends CommandInterpreter
             serving =   false;
             agentThread.notify();
         }
+    }
+    
+    public static void fetchCredentials()
+    {
+        storedCredentials   =   StoredCredentials.getSavedCredentials();
+        
+        if(storedCredentials == null)
+            storedCredentials = new StoredCredentials();
+    }
+    
+    public static StoredCredentials getStoredCredentials()
+    {
+        return storedCredentials;
     }
     
     //Set the current context to AGENT

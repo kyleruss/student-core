@@ -64,10 +64,15 @@ public class Auth
                 String salt         =   Crypto.salt(username);
                 String passHash     =   Crypto.makeHash(salt, password);
                 
+                StoredCredentials credentials   =   Agent.getStoredCredentials();
+                
+                Credentials foundCredentials    =   credentials.getUserCredentials(username);
+                
                 //Compare hashed password with stored hash
                 //Log successful attempts
                 //Sets the session in agent if successful
-                if(passHash.equals(passStored)) 
+                //StoredCredentials stores pass hashes, if user is stored check matching hashes
+                if(passHash.equals(passStored) || ((foundCredentials != null && foundCredentials.getPassword().equals(passStored))))
                 {
                     String logMessage   =   MessageFormat.format("User {0} has logged in", username);
                     Agent.setActiveSession(new Session(attempt));
@@ -75,10 +80,6 @@ public class Auth
                     
                     if(storeCredentials)
                     {
-                        StoredCredentials credentials   =   StoredCredentials.getSavedCredentials();
-                        
-                        if(credentials == null) credentials = new StoredCredentials();
-                        
                         Credentials storedCred          =   credentials.getUserCredentials(username);
                         DateFormat format               =   new SimpleDateFormat("yyyy-mm-dd");
                         String saveDate                 =   format.format(new Date());
@@ -92,8 +93,12 @@ public class Auth
                         credentials.setLastAccessed(username);
                         credentials.addCredential(username, storedCred);
                         credentials.saveCredentials();
-                        
-                        
+                    }
+                    
+                    else 
+                    {
+                        if(credentials.removeCredential(username) != null)
+                            credentials.saveCredentials();    
                     }
                     
                     return new Session(attempt);
