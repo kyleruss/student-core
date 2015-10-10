@@ -76,16 +76,6 @@ public class LoginView extends GUIView implements ActionListener, KeyListener
         {
             ExceptionOutput.output("[Error] " + e.getMessage(), ExceptionOutput.OutputType.MESSAGE);
         }
-
-        panel   =   new JPanel()
-        {
-             @Override
-             public void paintComponent(Graphics g)
-             {
-                 if(backgroundImage != null)
-                     g.drawImage(backgroundImage, 0, 0, null);
-             }
-        };
     }
     
     @Override
@@ -101,6 +91,16 @@ public class LoginView extends GUIView implements ActionListener, KeyListener
     @Override
     protected void initComponents() 
     {
+        panel   =   new JPanel()
+        {
+             @Override
+             public void paintComponent(Graphics g)
+             {
+                 if(backgroundImage != null)
+                     g.drawImage(backgroundImage, 0, 0, null);
+             }
+        };
+        
         panel.setBackground(Color.GREEN);
         
         loginPanel  =   new JPanel(new BorderLayout());

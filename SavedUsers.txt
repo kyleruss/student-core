@@ -4,8 +4,8 @@
     "kyleruss": {
       "username": "kyleruss",
       "password": "0Tupn6o7p+nnIS8tbunBhTgz7rE\u003d",
-      "dateSaved": "2015-55-08",
-      "lastLogged": "2015-42-09"
+      "dateSaved": "2015-10-10",
+      "lastLogged": "2015-22-10"
     }
   }
 }
