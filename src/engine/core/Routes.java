@@ -57,7 +57,7 @@ public class Routes extends Router
         RouteGroup classes;
         registerGroup(classes = new RouteGroup("class", new Path[]
         {
-            new Path("getMyClasses", "UserController", "getMyClasses", "/myclasses"),
+            new Path("getMyClasses", "UserController", "getMyClasses", "/classes"),
             new Path("getMyDepartment", "UserController", "getMyDepartment", "/department"),
             new Path("getClassPage", "UserController", "getClassPage", "/class={classId}"),
             new Path("getClassAssessments", "UserController", "getClassAssessments", "/class={classId}/assessments"),

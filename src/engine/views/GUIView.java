@@ -20,27 +20,27 @@ public abstract class GUIView extends AbstractView
     public GUIView()
     {
         super();
-        initAppResources();
-        initResources();
-        initComponents();
-        initListeners();
+        initView();
     }
     
     //Creates a view with name, description and address
     public GUIView(String viewTitle, String viewDescription)
     {
         super(new ControllerMessage(), viewTitle, viewDescription);
+        initView();
     }
     
     //Create a general view with messages passed
     public GUIView(ControllerMessage messages)
     {
         super(messages, "Layout", "Layout view");
+        initView();
     } 
     
     public GUIView(ControllerMessage messages, String viewTitle, String viewDescription)
     {
         super(messages, viewTitle, viewDescription);
+        initView();
     }
     
     @Override
@@ -72,6 +72,14 @@ public abstract class GUIView extends AbstractView
         {
             ExceptionOutput.output("Loading resource error: " + e.getMessage(), ExceptionOutput.OutputType.MESSAGE);
         }
+    }
+    
+    protected void initView()
+    {
+        initAppResources();
+        initResources();
+        initComponents();
+        initListeners();
     }
     
     @Override

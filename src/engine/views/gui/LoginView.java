@@ -60,6 +60,11 @@ public class LoginView extends GUIView implements ActionListener, KeyListener
        super();
     }
     
+    public LoginView(ControllerMessage data)
+    {
+        super(data);
+    }
+    
     @Override
     protected void initResources()
     {

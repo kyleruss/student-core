@@ -30,7 +30,6 @@ public class MyClassesView extends AbstractView
                 messages, 
                 "My classes", 
                 "View and manage your classes" 
-                //"/" + "classes"//Agent.getActiveSession().getUser().get("USERNAME").getNonLiteralValue() + "/students/"
         );
     }
     

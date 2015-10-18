@@ -7,6 +7,7 @@
 package engine.controllers;
 
 import com.google.gson.JsonArray;
+import engine.core.Agent;
 import engine.core.Path;
 import engine.models.AssessmentModel;
 import engine.models.AssessmentSubmissionsModel;
@@ -40,7 +41,8 @@ public class AdminController extends Controller
         
     public View getAdmincp()
     {
-        return prepareView(new AdminControlPanelView());
+        if(!Agent.isGUIMode()) return prepareView(new AdminControlPanelView());
+        else return prepareView(new engine.views.gui.AdminControlPanelView());
     }
     
     

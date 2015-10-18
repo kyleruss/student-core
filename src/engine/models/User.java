@@ -20,6 +20,7 @@ public class User extends Model
     {
         super(id);
     }
+    
 
     @Override
     protected void initTable()

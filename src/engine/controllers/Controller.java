@@ -84,6 +84,7 @@ public abstract class Controller
     public View prepareView(View view)
     {
         view.setPath(path);
+        System.out.println("V: " + view);
         return view;
     }
     

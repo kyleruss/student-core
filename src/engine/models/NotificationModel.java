@@ -35,17 +35,40 @@ public class NotificationModel extends Model
 
     }
     
-    public static int getNumUnreadNotifications(String user) throws SQLException
+    public static int getNumUnreadNotifications(String user)
     {
-        JsonArray results =  new NotificationModel().builder()
-                .where("username", "=", user, true)
-                .where("unread", "=", "true")
-                .get();
-                
-        if(results != null) 
-            return results.size() - 1;
+        try
+        {
+            JsonArray results =  new NotificationModel().builder()
+                    .where("username", "=", user, true)
+                    .where("unread", "=", "true")
+                    .get();
+
+            if(results != null) 
+                return results.size() - 1;
+
+            else return 0;
+        }
         
-        else return 0;
+        catch(SQLException e)
+        {
+            return 0;
+        }
+    }
+    
+    public static JsonArray getUserNotifications(String user)
+    {
+        try
+        {
+            return new NotificationModel().builder()
+                                    .where("username", "=", user, true)
+                                    .get();
+        }
+        
+        catch(SQLException e)
+        {
+            return new JsonArray();
+        }
     }
     
     public static String readNotificationMessage(int notificationId)

@@ -90,7 +90,7 @@ public class UserController extends Controller
     
     public View getMyClasses()
     {
-        User user       =   new User("kyleruss");//Agent.getActiveSession().getUser();
+        User user       =   Agent.getActiveSession().getUser();
         String username =   user.get("username").getColumnValue().toString();
         try
         {
@@ -102,7 +102,9 @@ public class UserController extends Controller
             .select("classes.description", "Class description")
             .select("class_enrolments.semester_num", "Semester")   
             .get();
-            return prepareView(new MyClassesView(new ControllerMessage(results))); 
+            
+            if(!Agent.isGUIMode()) return prepareView(new MyClassesView(new ControllerMessage(results))); 
+            else return prepareView(new engine.views.gui.MyClassesView(new ControllerMessage(results)));
         }
         
         catch(SQLException e)
@@ -153,7 +155,8 @@ public class UserController extends Controller
                     .select("department.*")
                     .get();
             
-            return prepareView(new DepartmentView(new ControllerMessage(results)));
+            if(!Agent.isGUIMode()) return prepareView(new DepartmentView(new ControllerMessage(results)));
+            else return prepareView(new engine.views.gui.DepartmentView(new ControllerMessage(results)));
         }
         
         catch(SQLException e)

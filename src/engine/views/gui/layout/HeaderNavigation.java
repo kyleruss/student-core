@@ -1,22 +1,44 @@
 
 package engine.views.gui.layout;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import engine.config.AppConfig;
 import engine.config.ConfigFactory;
 import engine.core.Agent;
 import engine.core.authentication.Session;
 import engine.models.NotificationModel;
 import java.awt.BorderLayout;
+import java.awt.CardLayout;
+import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.SQLException;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import javax.imageio.ImageIO;
+import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
 
 public class HeaderNavigation extends JPanel implements ActionListener
 {
@@ -30,6 +52,10 @@ public class HeaderNavigation extends JPanel implements ActionListener
     private final JButton userProfileButton;
     private final JButton userNotificationsButton;
     private final JButton userLogoutButton;
+    private BufferedImage notificationImage;
+    private BufferedImage backButtonImage;
+    private BufferedImage notificationReadImage;
+    private boolean notificationModalOpen;
     
 
     private final JTextField addressBar;
@@ -44,8 +70,7 @@ public class HeaderNavigation extends JPanel implements ActionListener
             (int) (Window.getWindowDim().y * 0.10)
         ));
         
-        
-        
+        initResources();
         viewNavigationPanel =   new JPanel(new GridLayout(1, 3));
         viewLocationPanel   =   new JPanel(new BorderLayout());
         userPanel           =   new JPanel(new GridLayout(1, 3));
@@ -102,6 +127,7 @@ public class HeaderNavigation extends JPanel implements ActionListener
         innerAPanel.add(Box.createRigidArea(new Dimension(40, 0)), BorderLayout.EAST);
         
         //User components
+        notificationModalOpen   =   false;
         userProfileButton       =   new JButton();
         userNotificationsButton =   new JButton();
         userLogoutButton        =   new JButton();
@@ -138,6 +164,21 @@ public class HeaderNavigation extends JPanel implements ActionListener
         disablePrevButton();
         disableNextButton();
         disableUserControls();
+    }
+    
+    private void initResources()
+    {
+        try
+        {
+            notificationImage       =   ImageIO.read(new File(Layout.getImage("notification_icon.png")));
+            backButtonImage         =   ImageIO.read(new File(Layout.getImage("back_icon.png")));
+            notificationReadImage   =   ImageIO.read(new File(Layout.getImage("notification_icon_read.png")));
+        }
+        
+        catch(IOException e)
+        {
+            JOptionPane.showMessageDialog(null, "Failed to load header resources");
+        }
     }
     
     public void setViewAddress(String location)
@@ -194,20 +235,165 @@ public class HeaderNavigation extends JPanel implements ActionListener
             Session session         =   Agent.getActiveSession();
             String username         =   session.getUser().get("username").getNonLiteralValue().toString();
             int numNotifications;
-            try
-            {
-                numNotifications    =   NotificationModel.getNumUnreadNotifications(username);
-            }
+            numNotifications    =   NotificationModel.getNumUnreadNotifications(username);
             
-            catch(SQLException e)
-            {
-                numNotifications = 0;
-            }
             
             if(numNotifications > 0)
                 userNotificationsButton.setIcon(new ImageIcon(Layout.getImage("hasnotificationsbutton.png")));
             else
                 userNotificationsButton.setIcon(new ImageIcon(Layout.getImage("nonotificationsbutton.png")));
+        }
+    }
+    
+    public void showNotificationWindow()
+    {
+        if(notificationModalOpen) return;
+        
+        SwingUtilities.invokeLater(() ->
+        {
+            final String TABLE_VIEW         =   "table_v";
+            final String SINGLE_VIEW        =   "single_v";
+
+            JsonArray notifications         =   NotificationModel.getUserNotifications("kyleruss");
+            int numNotifications            =   (notifications.size() > 0)? notifications.size() - 1 : 0;
+
+            JPanel notificationPanel        =   new JPanel(new BorderLayout());
+            JButton backButton              =   new JButton();
+            JTable notificationTable        =   new JTable(new DefaultTableModel());
+            JPanel tableView                =   new JPanel();
+            JPanel singleView               =   new JPanel();
+            JTextArea singleViewContent        =   new JTextArea(10, 10);
+            JPanel notificationDetailsPanel =   new JPanel();
+            JPanel notificationViewPanel    =   new JPanel(new CardLayout());   
+            JLabel notificationInfo         =   new JLabel("You have " + numNotifications + " notifications");
+            notificationPanel.setPreferredSize(new Dimension(500, 300));
+
+            backButton.setOpaque(false);
+            backButton.setContentAreaFilled(true);
+            backButton.setBorderPainted(false);
+            backButton.setIcon(new ImageIcon(backButtonImage));
+
+            notificationDetailsPanel.add(notificationInfo);
+            JPanel singleContentWrapper =   new JPanel();
+            singleViewContent.setMaximumSize(new Dimension(350, 150));
+            singleViewContent.setPreferredSize(new Dimension(350, 150));
+            singleViewContent.setLineWrap(true);
+            singleViewContent.setOpaque(false);
+            singleViewContent.setEditable(false);
+            singleViewContent.setFocusable(false);
+            singleViewContent.setBackground(Color.WHITE);
+            singleViewContent.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+            singleContentWrapper.setBorder(BorderFactory.createTitledBorder("Notification content"));
+            singleContentWrapper.setMaximumSize(new Dimension(350, 150));
+
+            singleContentWrapper.add(singleViewContent);
+            singleView.add(backButton);
+            singleView.add(new JLabel("Go back to notification table"));
+            singleView.add(Box.createRigidArea(new Dimension(notificationPanel.getPreferredSize().width, 15)));
+            singleView.add(singleContentWrapper);
+
+            tableView.setBackground(Color.WHITE);
+            singleView.setBackground(Color.WHITE);
+            singleContentWrapper.setBackground(Color.WHITE);
+            notificationTable.setBackground(Color.WHITE);
+            notificationInfo.setForeground(Color.WHITE);
+
+            tableView.setBorder(BorderFactory.createEmptyBorder(15, 0, 0, 0));
+            notificationTable.setPreferredScrollableViewportSize(new Dimension(400, 200));
+            DefaultTableModel model             =   (DefaultTableModel) notificationTable.getModel();
+            DefaultTableCellRenderer renderer   =   new DefaultTableCellRenderer();
+            renderer.setHorizontalAlignment(JLabel.CENTER);
+            model.addColumn("Unread");
+            model.addColumn("ID");
+            model.addColumn("Content");
+            model.addColumn("Date sent");
+            notificationTable.getColumnModel().getColumn(1).setCellRenderer(renderer);
+            notificationTable.getColumnModel().getColumn(0).setCellRenderer(new NotificationCellRenderer());
+
+            notificationTable.getSelectionModel().addListSelectionListener((ListSelectionEvent e) -> 
+            {
+                if(!e.getValueIsAdjusting() && notificationTable.getSelectionModel().getMinSelectionIndex() >= 0)
+                {
+                    int row =   notificationTable.getSelectedRow();
+
+                    String content  =   (String) model.getValueAt(row, 2);
+                    int id          =   (int) model.getValueAt(row, 1);
+                    singleViewContent.setText(content);
+                    CardLayout cLayout  = (CardLayout) notificationViewPanel.getLayout();
+                    cLayout.show(notificationViewPanel, SINGLE_VIEW);
+                    
+                    NotificationModel.readNotificationMessage(id);
+                    model.setValueAt(false, row, 0);
+                    model.fireTableCellUpdated(row, 0);
+                }
+            });
+
+            backButton.addActionListener((ActionEvent e) ->
+            {
+                CardLayout cLayout  = (CardLayout) notificationViewPanel.getLayout();
+                cLayout.show(notificationViewPanel, TABLE_VIEW);
+
+                notificationTable.getSelectionModel().clearSelection();
+            });
+
+            for(int i = 1; i < notifications.size(); i++)
+            {
+                JsonObject jObj         =   notifications.get(i).getAsJsonObject();
+                int notificationID      =   jObj.get("ID").getAsInt();
+                boolean unread          =   jObj.get("UNREAD").getAsBoolean();
+                String content          =   jObj.get("CONTENT").getAsString();
+                String dateSent         =   jObj.get("SENT_DATE").getAsString();
+
+                model.addRow(new Object[] { unread, notificationID, content, dateSent } );
+            }
+
+            tableView.add(new JScrollPane(notificationTable));
+            notificationViewPanel.add(tableView, TABLE_VIEW);
+            notificationViewPanel.add(singleView, SINGLE_VIEW);
+
+
+            notificationPanel.setBackground(Color.WHITE);
+            notificationDetailsPanel.setBackground(Color.BLACK);
+
+
+            CardLayout cLayout = (CardLayout)notificationViewPanel.getLayout();
+            cLayout.show(notificationViewPanel, TABLE_VIEW);
+
+            notificationPanel.add(notificationDetailsPanel, BorderLayout.NORTH);
+            notificationPanel.add(notificationViewPanel, BorderLayout.CENTER);
+
+            JFrame frame    =   Agent.getWindow();
+            JDialog modal   =   new JDialog(frame);
+            modal.getContentPane().add(notificationPanel);
+            modal.setLocation(frame.getWidth() - notificationPanel.getSize().width, frame.getHeight() / 2 - notificationPanel.getSize().height);
+            modal.setTitle("Notifications");
+            modal.pack();
+            modal.setResizable(false);
+            modal.addWindowListener(new WindowAdapter()
+            {
+                @Override
+                public void windowClosing(WindowEvent e)
+                {
+                    notificationModalOpen = false;
+                }
+            });
+            
+            modal.setVisible(true);
+        });
+    }
+
+    
+    private class NotificationCellRenderer extends DefaultTableCellRenderer
+    {
+        @Override
+        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) 
+        {
+            boolean unread      =   (boolean) value;
+            JLabel component    =   new JLabel();
+            if(unread) component.setIcon(new ImageIcon(notificationImage));
+            else component.setIcon(new ImageIcon(notificationReadImage));
+            component.setHorizontalAlignment(JLabel.CENTER);
+            return component;
         }
     }
     
@@ -240,5 +426,11 @@ public class HeaderNavigation extends JPanel implements ActionListener
         
         else if(src == userProfileButton)
             Agent.setView("getHome");
+        
+        else if(src == userNotificationsButton)
+        {
+            showNotificationWindow();
+            notificationModalOpen   = true;
+        }
     }
 }

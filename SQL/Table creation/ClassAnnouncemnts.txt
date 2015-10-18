@@ -1,0 +1,10 @@
+CREATE TABLE class_announcements
+(
+    id INTEGER NOT NULL PRIMARY KEY GENERATED ALWAYS AS IDENTITY(START WITH 1, INCREMENT BY 1),
+    announcement VARCHAR(1500) NOT NULL,
+    announcer VARCHAR(16) NOT NULL,
+    class_id INTEGER NOT NULL,
+    date_announced DATE DEFAULT CURRENT DATE,
+    FOREIGN KEY(announcer) REFERENCES users(username) ON DELETE CASCADE,
+    FOREIGN KEY(class_id) REFERENCES classes(id) ON DELETE CASCADE
+);
