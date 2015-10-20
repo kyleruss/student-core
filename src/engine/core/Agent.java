@@ -209,7 +209,7 @@ public final class Agent extends CommandInterpreter
                     else headNav.disableNextButton();
                     
                     layout.getViewPane().showTransition();
-                    Timer transitionTimer    =   new Timer(2000, (ActionEvent e) -> 
+                    Timer transitionTimer    =   new Timer(100, (ActionEvent e) -> 
                     {
                         window.setActiveView((GUIView) activeView);
                         layout.getViewPane().hideTransition();

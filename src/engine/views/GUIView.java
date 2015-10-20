@@ -7,8 +7,11 @@ import engine.core.ExceptionOutput;
 import engine.views.gui.layout.Layout;
 import java.awt.Font;
 import java.awt.FontFormatException;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
 
@@ -16,6 +19,9 @@ public abstract class GUIView extends AbstractView
 {
     protected JPanel panel;
     protected Font helveticaThin;
+    protected BufferedImage addSmallImage;
+    protected BufferedImage removeSmallImage;
+    protected BufferedImage editSmallImage;
     
     public GUIView()
     {
@@ -65,7 +71,10 @@ public abstract class GUIView extends AbstractView
     {
         try
         {
-            helveticaThin   =   Font.createFont(Font.TRUETYPE_FONT, new FileInputStream(Layout.getImage("HelveticaThin.ttf")));
+            helveticaThin       =   Font.createFont(Font.TRUETYPE_FONT, new FileInputStream(Layout.getImage("HelveticaThin.ttf")));
+            addSmallImage       =   ImageIO.read(new File(Layout.getImage("addSmallIcon.png")));
+            removeSmallImage    =   ImageIO.read(new File(Layout.getImage("removeSmallIcon.png")));
+            editSmallImage      =   ImageIO.read(new File(Layout.getImage("edit_icon.png")));
         }
         
         catch(IOException | FontFormatException e)

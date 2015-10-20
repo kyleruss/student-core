@@ -233,7 +233,7 @@ public class LoginView extends GUIView implements ActionListener, KeyListener
             CardLayout cLayout  =   (CardLayout) loginButtonsPanel.getLayout();
             cLayout.show(loginButtonsPanel, PROCESSING_KEY);
 
-            Timer loginTimer    =   new Timer(2000, (ActionEvent e) -> 
+            Timer loginTimer    =   new Timer(100, (ActionEvent e) -> 
             {
                 ControllerMessage postData   =   new ControllerMessage();
                 postData.add("loginUsername", username);
