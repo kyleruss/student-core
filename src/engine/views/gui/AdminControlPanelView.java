@@ -30,6 +30,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -58,11 +59,6 @@ public class AdminControlPanelView extends GUIView implements ActionListener
     private final String ANNOUNCE_VIEW  =   "annouce_v";  
     
     private AdminAnnouncementView announcementsView;
-   /* private JList announcementList;
-    private UpdateListModel announcementModel;
-    private JButton addAnnouncementButton;
-    private JButton removeAnnouncementButton;
-    private JButton editAnnouncementButton; */
     
     private JPanel classesView;
     private JTable usersTable;
@@ -120,14 +116,12 @@ public class AdminControlPanelView extends GUIView implements ActionListener
         initClassesView();
         initDepartmentsView();
         initUsersView();
-    //    initAnnouncementsView();
         
         announcementsView   =   new AdminAnnouncementView();
         adminPaneView.add(classesView, CLASS_VIEW);
         adminPaneView.add(departmentView, DEPT_VIEW);
         adminPaneView.add(usersView, USERS_VIEW);
-        adminPaneView.add(announcementsView.announcementPanel, ANNOUNCE_VIEW);
-        
+        adminPaneView.add(announcementsView.getAnnouncementViewPanel(), ANNOUNCE_VIEW);
         
         showClassesButton       =   new JButton("Classes");
         showDepartmentButton    =   new JButton("Departments");
@@ -185,63 +179,6 @@ public class AdminControlPanelView extends GUIView implements ActionListener
         usersView.add(new JScrollPane(usersTable));
     }
     
-  /*  private void initAnnouncementsView()
-    {
-        announcementsView           =   new JPanel(new BorderLayout());
-        JPanel announcementHeader   =   new JPanel();   
-        JPanel announcementControls =   new JPanel(new GridLayout(1, 3));
-        addAnnouncementButton       =   new JButton("Add");
-        removeAnnouncementButton    =   new JButton("Remove");
-        editAnnouncementButton      =   new JButton("Edit");
-        
-        addAnnouncementButton.setIcon(new ImageIcon(addSmallImage));
-        removeAnnouncementButton.setIcon(new ImageIcon(removeSmallImage));
-        editAnnouncementButton.setIcon(new ImageIcon(editSmallImage));
-        
-        JPanel announcementsWrapper =   new JPanel();
-        announcementsView.setBackground(Color.WHITE);
-        announcementHeader.setBackground(Color.WHITE);
-        announcementsWrapper.setBackground(Color.WHITE);
-        announcementControls.setBackground(Color.WHITE);
-        
-        announcementControls.add(addAnnouncementButton);
-        announcementControls.add(removeAnnouncementButton);
-        announcementControls.add(editAnnouncementButton);
-
-        announcementModel   =   new UpdateListModel();
-        announcementList    =   new JList(announcementModel);
-        announcementList.setCellRenderer(new AnnouncementCellRenderer());
-        announcementList.setPreferredSize(new Dimension(380, 150));
-        announcementsWrapper.setPreferredSize(new Dimension(400, 150));
-        announcementControls.setBorder(BorderFactory.createTitledBorder("Controls"));
-        
-        
-        JsonArray announcements =   AdminAnnouncementsModel.getAllAnnouncements();
-        
-        if(announcements.size() > 0) 
-        {
-            announcementsView.add(announcementList);
-            for(int i = 1; i < announcements.size(); i++)
-                announcementModel.addElement(announcements.get(i).getAsJsonObject());
-            
-            announcementList.setSelectedIndex(0);
-        }
-        
-        JScrollPane announcementScroller    =   new JScrollPane(announcementList);
-        announcementScroller.setPreferredSize(new Dimension(390, 300));
-        announcementsWrapper.add(announcementScroller);
-        
-        
-        
-        announcementHeader.add(announcementControls, BorderLayout.EAST);
-        announcementHeader.setPreferredSize(new Dimension(1, 75));
-        announcementHeader.setBorder(BorderFactory.createEmptyBorder(0, 30, 0, 30));
-        
-        announcementsView.add(announcementHeader, BorderLayout.NORTH);
-        announcementsView.add(announcementsWrapper, BorderLayout.CENTER);
-        
-    } */
-    
     @Override
     protected void initResources() 
     {
@@ -267,9 +204,6 @@ public class AdminControlPanelView extends GUIView implements ActionListener
         showUsersButton.addActionListener(this);
         showDepartmentButton.addActionListener(this);
         showAnnouncementsButton.addActionListener(this);
-       /* addAnnouncementButton.addActionListener(this);
-        removeAnnouncementButton.addActionListener(this);
-        editAnnouncementButton.addActionListener(this); */
     }
     
     @Override
@@ -288,32 +222,7 @@ public class AdminControlPanelView extends GUIView implements ActionListener
         
         else if(src == showAnnouncementsButton)
             showAdminView(ANNOUNCE_VIEW);
-        
-        /*else if(src == addAnnouncementButton)
-            addAnnouncement();
-        
-        else if(src == editAnnouncementButton)
-            editAnnouncement();
-        
-        else if(src == removeAnnouncementButton)
-            removeAnnouncement(); */
-        
     }
-    
-    /*private void addAnnouncement()
-    {
-        
-    }
-    
-    private void editAnnouncement()
-    {
-        
-    }
-    
-    private void removeAnnouncement()
-    {
-        
-    } */
     
     private void showAdminView(String viewName)
     {
@@ -321,70 +230,27 @@ public class AdminControlPanelView extends GUIView implements ActionListener
         cLayout.show(adminPaneView, viewName);
     }
     
-  /*  private class AnnouncementCellRenderer implements ListCellRenderer
-    {
-        @Override
-        public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) 
-        {
-            JsonObject jObj             =   (JsonObject) value;
-            JPanel announcementPanel    =   new JPanel(new BorderLayout());
-            JPanel announceHeaderPanel  =   new JPanel();
-            JPanel announceInfoPanel    =   new JPanel();
-            JPanel contentWrapper       =   new JPanel();
-            JLabel announcerLabel       =   new JLabel(jObj.get("ANNOUNCER").getAsString());
-            JLabel announceDateLabel    =   new JLabel(jObj.get("ANNOUNCE_DATE").getAsString());
-            JTextArea content           =   new JTextArea(jObj.get("CONTENT").getAsString());
-            
-            announcementPanel.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.LIGHT_GRAY));
-            announcementPanel.setBackground(Color.WHITE);
-            announceHeaderPanel.setBackground(Color.BLACK);
-            content.setBackground(Color.WHITE);
-            contentWrapper.setBackground(Color.WHITE);
-            announcerLabel.setForeground(Color.WHITE);
-            announceDateLabel.setForeground(Color.WHITE);
-            announceInfoPanel.setBackground(Color.BLACK);
-            
-            announceInfoPanel.add(announcerLabel);
-            announceInfoPanel.add(announceDateLabel);
-            announceHeaderPanel.add(announceInfoPanel, BorderLayout.WEST);
-            
-            JScrollPane contentScrollPane   =   new JScrollPane(content);
-            contentScrollPane.setBorder(null);
-            contentWrapper.add(contentScrollPane);
-            
-            announcementPanel.add(announceHeaderPanel, BorderLayout.NORTH);
-            announcementPanel.add(contentWrapper, BorderLayout.CENTER);
-            if(index == announcementList.getSelectedIndex()) 
-            {
-                contentWrapper.setVisible(true);
-                announcementModel.update(index);
-                announceHeaderPanel.setBackground(new Color(67, 133, 224));
-                announceInfoPanel.setBackground(new Color(67, 133, 224));
-            }
-            else 
-            {
-                contentWrapper.setVisible(false);
-                announcementModel.update(index);
-
-            }
-           
-            return announcementPanel;
-        }
-    }*/
-    
     private class AdminAnnouncementView extends AnnouncementView
     {
 
         @Override
-        protected void addAnnouncement() {
+        protected void addAnnouncement() 
+        {
+            announcementsView.showAnnouncementView(AnnouncementView.MODIFY_VIEW);
         }
 
         @Override
-        protected void removeAnnouncement() {
+        protected void removeAnnouncement() 
+        {
+            if(announcementList.getSelectedIndex() == -1)
+                JOptionPane.showMessageDialog(null, "Please select an announcement in remove");
         }
 
         @Override
-        protected void editAnnouncement() {
+        protected void editAnnouncement() 
+        {
+            if(announcementList.getSelectedIndex() == -1)
+                JOptionPane.showMessageDialog(null, "Please select an announcement to edit");
         }
 
         @Override

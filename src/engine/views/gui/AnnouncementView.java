@@ -7,6 +7,7 @@ import engine.controllers.ControllerMessage;
 import engine.models.AdminAnnouncementsModel;
 import engine.views.GUIView;
 import java.awt.BorderLayout;
+import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -22,12 +23,18 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.JTextField;
 import javax.swing.ListCellRenderer;
+import org.jdesktop.xswingx.PromptSupport;
 
 
 public abstract class AnnouncementView extends GUIView implements ActionListener
 {
+    protected static final String ANNOUNCEMENT_VIEW =   "announce_v";
+    protected static final String MODIFY_VIEW       =   "modify_v";
     protected JPanel announcementPanel;
+    protected JPanel announcementViewPanel;
+    protected ModifyAnnouncementView modifyPanel;
     protected JList announcementList;
     protected UpdateListModel announcementModel;
     protected JButton addAnnouncementButton;
@@ -47,7 +54,9 @@ public abstract class AnnouncementView extends GUIView implements ActionListener
     @Override
     protected void initComponents()
     {
+        announcementViewPanel       =   new JPanel(new CardLayout());
         announcementPanel           =   new JPanel(new BorderLayout());
+        modifyPanel                 =   new ModifyAnnouncementView();
         JPanel announcementHeader   =   new JPanel();   
         JPanel announcementControls =   new JPanel(new GridLayout(1, 3));
         addAnnouncementButton       =   new JButton("Add");
@@ -63,6 +72,7 @@ public abstract class AnnouncementView extends GUIView implements ActionListener
         announcementHeader.setBackground(Color.WHITE);
         announcementsWrapper.setBackground(Color.WHITE);
         announcementControls.setBackground(Color.WHITE);
+        modifyPanel.setBackground(Color.WHITE);
         
         announcementControls.add(addAnnouncementButton);
         announcementControls.add(removeAnnouncementButton);
@@ -99,7 +109,13 @@ public abstract class AnnouncementView extends GUIView implements ActionListener
         
         announcementPanel.add(announcementHeader, BorderLayout.NORTH);
         announcementPanel.add(announcementsWrapper, BorderLayout.CENTER);
+        
+        announcementViewPanel.add(announcementPanel, ANNOUNCEMENT_VIEW);
+        announcementViewPanel.add(modifyPanel, MODIFY_VIEW);
+        
+        showAnnouncementView(ANNOUNCEMENT_VIEW);
     }
+    
 
     @Override
     protected void initResources()
@@ -119,9 +135,30 @@ public abstract class AnnouncementView extends GUIView implements ActionListener
     protected abstract void removeAnnouncement();
     
     protected abstract void editAnnouncement();
-    
+     
     protected abstract JsonArray getData();
+    
+    public JPanel getAnnouncementViewPanel()
+    {
+        return announcementViewPanel;
+    }
+    
+    public JList getList()
+    {
+        return announcementList;
+    }
+    
+    public UpdateListModel getModel()
+    {
+        return announcementModel;
+    }
 
+    public void showAnnouncementView(String viewName)
+    {
+        CardLayout cLayout  =   (CardLayout) announcementViewPanel.getLayout();
+        cLayout.show(announcementViewPanel, viewName);
+    }
+    
     @Override
     public void actionPerformed(ActionEvent e) 
     {
@@ -187,8 +224,46 @@ public abstract class AnnouncementView extends GUIView implements ActionListener
             return announcementPanel;
         }
     }
+
+    protected class ModifyAnnouncementView extends JPanel
+    {
+        protected JTextField announcementTitle;
+        protected JTextArea announcementContent;
+        
+        public ModifyAnnouncementView()
+        {
+            setLayout(new BorderLayout());
+            announcementTitle   =   new JTextField();
+            announcementContent =   new JTextArea();
+            
+            modifyPanel.setBackground(Color.WHITE);
+            announcementContent.setBackground(Color.WHITE);
+            
+            PromptSupport.setPrompt("Enter your announcement content", announcementContent);
+            PromptSupport.setPrompt("Enter your announcement title", announcementTitle);
+            
+            add(announcementTitle, BorderLayout.NORTH);
+            add(announcementContent, BorderLayout.CENTER);
+        }
+        
+        protected void fill(String title, String content)
+        {
+            announcementTitle.setText(title);
+            announcementContent.setText(content);
+        }
+        
+        protected String getTitle()
+        {
+            return announcementTitle.getText();
+        }
+        
+        protected String getContent()
+        {
+            return announcementContent.getText();
+        }
+    }
     
-    private class UpdateListModel extends DefaultListModel
+    protected class UpdateListModel extends DefaultListModel
     {
         public void update(int index)
         {
