@@ -43,6 +43,8 @@ public class Routes extends Router
         add("getClassPage", "UserController", "getClassPage", "/class/class={classId}");
         add("getClassAssessments", "UserController", "getClassAssessments", "/class/class={classId}/assessments"); */
         
+        add("getErrorPage", "BaseController", "getErrorView", "/error");
+        
         RouteGroup user;
         registerGroup(user = new RouteGroup("user", new Path[]
         {

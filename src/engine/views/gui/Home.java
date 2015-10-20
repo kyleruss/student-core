@@ -1,7 +1,6 @@
 
 package engine.views.gui;
 
-import com.google.gson.JsonArray;
 import engine.controllers.ControllerMessage;
 import engine.core.Agent;
 import engine.core.ExceptionOutput;

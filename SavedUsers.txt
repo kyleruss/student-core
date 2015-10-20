@@ -5,7 +5,19 @@
       "username": "kyleruss",
       "password": "0Tupn6o7p+nnIS8tbunBhTgz7rE\u003d",
       "dateSaved": "2015-10-10",
-      "lastLogged": "2015-55-19"
+      "lastLogged": "2015-31-20"
+    },
+    "test12345": {
+      "username": "test12345",
+      "password": "EDIZlZNWy3e4jBgxnshL4pgtr/A\u003d",
+      "dateSaved": "2015-53-19",
+      "lastLogged": "2015-53-19"
+    },
+    "demouser": {
+      "username": "demouser",
+      "password": "Ul+Ko62A/J70IDaMLQpFVALUP8M\u003d",
+      "dateSaved": "2015-34-19",
+      "lastLogged": "2015-34-19"
     }
   }
 }

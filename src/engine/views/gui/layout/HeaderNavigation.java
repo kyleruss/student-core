@@ -116,7 +116,8 @@ public class HeaderNavigation extends JPanel implements ActionListener
         addressSearchButton.setPreferredSize(new Dimension(45, 35));
         
         JPanel panel2   =   new JPanel();
-        addressBar.setPreferredSize(new Dimension(300, 35));
+        addressBar.setPreferredSize(new Dimension(300, 50));
+        addressBar.setBorder(BorderFactory.createEmptyBorder(5, 0, 0, 0));
         panel2.add(addressBar);
         viewLocationPanel.add(panel2, BorderLayout.CENTER);
         viewLocationPanel.add(addressSearchButton, BorderLayout.EAST);

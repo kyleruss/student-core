@@ -145,6 +145,7 @@ public class RegisterView extends GUIView implements ActionListener
         //CONTROLS
         prevStep    =   new JButton("Prev");
         nextStep    =   new JButton("Next");     
+        prevStep.setEnabled(false);
         
         formControls.add(prevStep);
         formControls.add(nextStep);
@@ -270,7 +271,7 @@ public class RegisterView extends GUIView implements ActionListener
         registerPanel.add(formWrapperPanel, BorderLayout.CENTER);
         registerPanel.add(controlWrapper, BorderLayout.SOUTH);
         
-        panel.add(Box.createRigidArea(new Dimension(0, 400)));
+        panel.add(Box.createRigidArea(new Dimension(0, 500)));
         panel.add(registerPanel);
     }
     
@@ -335,7 +336,8 @@ public class RegisterView extends GUIView implements ActionListener
     {
         if(validateForm(step)) 
         {
-            System.out.println("invalid form");
+            System.out.println("invalid");
+            showInvalidForm();
             return;
         }
         
@@ -348,7 +350,7 @@ public class RegisterView extends GUIView implements ActionListener
             
             if(step == forms.size() - 1) 
                 nextStep.setText("Finish");
-           
+           prevStep.setEnabled(true);
         }
         
         else finish();
@@ -366,6 +368,8 @@ public class RegisterView extends GUIView implements ActionListener
             
             if(step < forms.size())
                 nextStep.setText("Next");
+            
+            nextStep.setEnabled(true);
         }
     }
     
@@ -410,13 +414,34 @@ public class RegisterView extends GUIView implements ActionListener
         if(response.getResponseStatus())
             Agent.setView("getHome");
         else
+        {
+            System.out.println("FAILED TO LOGIN: " + response.getRawResponseMessage());
             Agent.setView("getLogin");
+        }
+    }
+    
+    private void showInvalidForm()
+    {
+        statusIcon.setIcon(new ImageIcon(Layout.getImage("failicon.png")));
+        statusText.setText("Invalid form, please check your fields");
+        statusIcon.setVisible(true);
+        statusText.setVisible(true);
+        Timer invalidTimer  =   new Timer(1500, (ActionEvent e) ->
+        {
+            statusIcon.setVisible(false);
+            statusText.setVisible(false);
+        });
+        
+        invalidTimer.setRepeats(false);
+        invalidTimer.start();
     }
     
     private void finish()
     {
         statusIcon.setIcon(Transition.getSmallSpinner());
         statusText.setText("Processing...");
+        statusIcon.setVisible(true);
+        statusText.setVisible(true);
         
         ControllerMessage postData  =   new ControllerMessage().addAll(getAccDetails()).addAll(getContactDetails());
         ResponseDataView response   =   (ResponseDataView) RouteHandler.go("postRegister", postData);
@@ -429,7 +454,7 @@ public class RegisterView extends GUIView implements ActionListener
                 statusText.setText("Registration successful!");
                 Timer redirectTimer =   new Timer(1500, (ActionEvent ev) ->
                 {
-                    attemptLoginRedirect();
+                    Agent.setView("getLogin");//attemptLoginRedirect();
                 });
                 
                 redirectTimer.setRepeats(false);

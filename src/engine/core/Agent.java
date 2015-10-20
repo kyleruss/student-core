@@ -158,6 +158,8 @@ public final class Agent extends CommandInterpreter
     public static void setActiveSession(Session activeSession)
     {
         Agent.activeSession   =   activeSession;
+        if(activeSession != null)
+            window.getAppLayout().getHeadNav().updateUserPanel();
     }
     
     //Returns the agents active session
@@ -175,7 +177,10 @@ public final class Agent extends CommandInterpreter
       //  {
             
             if(view == null)
-                ExceptionOutput.output("View not found", ExceptionOutput.OutputType.MESSAGE);
+            {
+             //   ExceptionOutput.output("View not found", ExceptionOutput.OutputType.MESSAGE);
+                setView("getErrorPage");
+            }
 
             else
             {

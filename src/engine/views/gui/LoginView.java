@@ -229,18 +229,18 @@ public class LoginView extends GUIView implements ActionListener, KeyListener
             ExceptionOutput.output("Please enter both your username and password", ExceptionOutput.OutputType.MESSAGE);
         else
         {
-            ControllerMessage postData   =   new ControllerMessage();
-            postData.add("loginUsername", username);
-            postData.add("loginPassword", password); 
-            postData.add("storeCredentials", rememberCredentials.isSelected());
-            
-            ResponseDataView response   =   (ResponseDataView) RouteHandler.go("postLogin", postData); 
             
             CardLayout cLayout  =   (CardLayout) loginButtonsPanel.getLayout();
             cLayout.show(loginButtonsPanel, PROCESSING_KEY);
 
             Timer loginTimer    =   new Timer(2000, (ActionEvent e) -> 
             {
+                ControllerMessage postData   =   new ControllerMessage();
+                postData.add("loginUsername", username);
+                postData.add("loginPassword", password); 
+                postData.add("storeCredentials", rememberCredentials.isSelected());
+
+                ResponseDataView response   =   (ResponseDataView) RouteHandler.go("postLogin", postData); 
                 cLayout.show(loginButtonsPanel, BUTTON_KEY);
                 
                 if(!response.getResponseStatus())
