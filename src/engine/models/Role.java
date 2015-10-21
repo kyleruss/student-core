@@ -19,7 +19,7 @@ public class Role extends Model
         super();
     }
     
-    public Role(String id)
+    public Role(Object id)
     {
         super(id);
     }
@@ -40,6 +40,19 @@ public class Role extends Model
         catch(SQLException e)
         {
             return "";
+        }
+    }
+    
+    public static JsonArray getRoles()
+    {
+        try
+        {
+            return new Role().builder().get();
+        }
+        
+        catch(SQLException e)
+        {
+            return new JsonArray();
         }
     }
 

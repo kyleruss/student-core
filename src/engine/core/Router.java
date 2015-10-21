@@ -7,7 +7,6 @@
 package engine.core;
 
 import engine.config.AppConfig;
-import engine.config.ConfigFactory;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -39,7 +38,7 @@ public abstract class Router
     {
         namedRoutes   =   new HashMap<>();
         urlRoutes     =   new HashMap<>();
-        base          =   new RouteGroup((String) ConfigFactory.get(ConfigFactory.APP_CONFIG, AppConfig.APP_NAME));
+        base          =   new RouteGroup(AppConfig.APP_NAME);
         initRoutes();
     }
     

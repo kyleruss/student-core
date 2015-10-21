@@ -10,7 +10,6 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import engine.config.AppConfig;
 import engine.config.AuthConfig;
-import engine.config.ConfigFactory;
 import engine.core.Agent;
 import engine.core.ExceptionOutput;
 import engine.core.loggers.MainLogger;
@@ -49,8 +48,8 @@ public class Auth
             password        =   Input.clean(password);
             
             //Get user and password column names
-            String userCol  =   ((String) AuthConfig.config().get(AuthConfig.USERNAME_COL_KEY)).toUpperCase();
-            String passCol  =   ((String) AuthConfig.config().get(AuthConfig.PASSWORD_COL_KEY)).toUpperCase();
+            String userCol  =   AuthConfig.USERNAME_COL.toUpperCase();
+            String passCol  =   AuthConfig.PASSWORD_COL.toUpperCase();
             
             //Fetch user
             User attempt    =   new User(username);

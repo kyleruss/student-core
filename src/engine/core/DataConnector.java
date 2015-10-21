@@ -7,7 +7,6 @@
 package engine.core;
 
 import engine.config.AppConfig;
-import engine.config.ConfigFactory;
 import engine.config.DatabaseConfig;
 import engine.core.database.Query;
 import engine.core.loggers.MainLogger;
@@ -35,8 +34,6 @@ public class DataConnector implements AutoCloseable
     private String connection_url;
     private ResultSet results;
     private volatile PreparedStatement activeQuery;
-  //  private volatile boolean running = true;
-   // private volatile boolean fetchingResults = false;
     private QueryType queryType;
     
     //Creates a DataConnector with default config
@@ -54,36 +51,6 @@ public class DataConnector implements AutoCloseable
         connect();
         
     }
-    
-    
-    //Thread is synced, waits for queries to be added before execution
-    //Queries can be added by execute() calls that assign activeQuery and notify
-    /*@Override
-    public void run()
-    {  
-        synchronized(this)
-        {
-          try
-          {
-              while(running)
-              {
-
-                //Execute the active query
-                 if(activeQuery != null) onExecute();
-                 else if(fetchingResults != true) wait();
-             }
-        }
-
-        catch(InterruptedException e)
-        {
-            e.printStackTrace();
-            System.out.println("exception " + e.getMessage());
-            
-           // closeConnection();
-        } 
-    }
-        
-    }*/
     
     //-----------------------------
     //       CONNECT TO DB
@@ -104,9 +71,8 @@ public class DataConnector implements AutoCloseable
             conn    =   DriverManager.getConnection(connection_url);
             
             //Sets the active schema
-            conn.setSchema((String) DatabaseConfig.config().get(DatabaseConfig.SCHEMA_KEY));
-            
-           // start();
+            conn.setSchema(DatabaseConfig.SCHEMA);
+            System.out.println("connected");
         }
 
         catch(SQLException e)
@@ -123,7 +89,6 @@ public class DataConnector implements AutoCloseable
         try { conn.setAutoCommit(false); } 
         catch (SQLException ex) 
         {
-          //  System.out.println("[SQL exception] Failed to start transaction, error: " + ex.getMessage());
         }
     }
     
@@ -150,7 +115,7 @@ public class DataConnector implements AutoCloseable
     {
         try 
         { 
-            if(!conn.isClosed() && !conn.getAutoCommit()) 
+            if(conn != null && !conn.isClosed() && !conn.getAutoCommit()) 
                 conn.rollback(); 
         }
         
@@ -159,24 +124,6 @@ public class DataConnector implements AutoCloseable
             //System.out.println("[SQL exception] Failed to rollback transaction, error: " + e.getMessage());
         }
     }
-    
- /*   public void finish()
-    {
-        synchronized(this)
-        {
-            running = false;
-            notify();
-        }
-    }
-    
-    public void fetchResults()
-    {
-        synchronized(this)
-        {
-            fetchingResults = true;
-            notify();
-        }
-    } */
     
     //Sets the query type to ACCESSOR
     //Queries will now be handled as accessor queries
@@ -243,14 +190,7 @@ public class DataConnector implements AutoCloseable
     //Execution is handled by run and onExecute()
     public boolean execute(PreparedStatement statement)
     {  
-       /* synchronized(this)
-        {
-            activeQuery     =   statement; //Set active query to be next executed
-            notify(); //continue - query executed in run by onExecuted()
-        }*/
-        
         if(statement  == null) return false;
-              
         
         activeQuery =   statement;
         return onExecute();
@@ -265,7 +205,7 @@ public class DataConnector implements AutoCloseable
             //Logging config is checked in log()
             MainLogger.log(query, MainLogger.DATA_LOGGER);
       
-            if((boolean) ConfigFactory.get(ConfigFactory.APP_CONFIG, AppConfig.DEBUG_MODE))
+            if(AppConfig.DEBUG_MODE)
                 System.out.println("[DEBUG] " + query);
                // ExceptionOutput.output(query, ExceptionOutput.OutputType.DEBUG);
             
@@ -323,10 +263,7 @@ public class DataConnector implements AutoCloseable
             if(results != null && !results.isClosed()) results.close();
         }
         
-        catch(NullPointerException | SQLException e)
-        {
-     //       System.out.println("[CONNECTION CLOSE EXCEPTION] " + e.getMessage());
-        } 
+        catch(SQLException e) {}
     }
 
     //Allow automatic closing feature of AutoClosable
@@ -335,5 +272,10 @@ public class DataConnector implements AutoCloseable
     public void close()
     {
         closeConnection();
+    }
+    
+    public static void main(String[] args)
+    {
+        DataConnector connector =   new DataConnector();
     }
 }

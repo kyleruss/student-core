@@ -1,7 +1,6 @@
 package engine.views.gui.layout;
 
 import engine.config.AppConfig;
-import engine.config.ConfigFactory;
 import java.awt.BorderLayout;
 import javax.swing.JButton;
 import javax.swing.JPanel;
@@ -60,9 +59,7 @@ public class Layout extends JPanel
     
     public static String getImage(String name)
     {
-        String dir  =   (String) ConfigFactory.get(ConfigFactory.APP_CONFIG, AppConfig.RESOURCE_DIR);
-        System.out.println(dir + name);
-        return dir + name;
+        return AppConfig.RESOURCE_DIR + name;
     }
     
     public static void makeTransparent(JButton button)

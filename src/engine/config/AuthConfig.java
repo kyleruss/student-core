@@ -8,52 +8,17 @@ package engine.config;
 
 import java.util.Properties;
 
-public class AuthConfig extends Configuration 
+public class AuthConfig 
 {
 
 
     //---------------------------------------------------------------------
     //                              CONFIG KEYS
     //---------------------------------------------------------------------
-    public static final String AUTH_TABLE_KEY       =   "auth_table";
-    public static final String PERM_TABLE_KEY       =   "perm_table";
-    public static final String HASH_ALGORITHM_KEY   =   "crypt_algorithm";
-    public static final String ENCRYPT_FORMAT_KEY   =   "enc_format";
-    public static final String USERNAME_COL_KEY     =   "user_column";
-    public static final String PASSWORD_COL_KEY     =   "pass_column";
-    public static final String SALT_PREFIX_KEY      =   "salt_pre";
-    //---------------------------------------------------------------------
-    
-    public AuthConfig()
-    {
-        super();
-    }
-    
-    public AuthConfig(Properties config)
-    {
-        super(config);
-    }
-    
-    @Override
-    protected void initConfig()
-    {
-        add(AUTH_TABLE_KEY, "users");
-        add(HASH_ALGORITHM_KEY, "SHA-1");
-        add(ENCRYPT_FORMAT_KEY, "utf-8");
-        add(USERNAME_COL_KEY, "username");
-        add(PASSWORD_COL_KEY, "password");
-        add(SALT_PREFIX_KEY, "vb+FwcR~Sj+bq5imRBJd3%L");
-    }
-    
-    //factory => default auth config
-    public static AuthConfig config()
-    {
-        return new AuthConfig();
-    }
-    
-    //factory => auth config with custom params
-    public static AuthConfig config(Properties config)
-    {
-        return new AuthConfig(config);
-    }
+    public static final String AUTH_TABLE           =   "users";
+    public static final String HASH_ALGORITHM       =   "SHA-1";
+    public static final String ENC_FORMAT           =   "utf-8";
+    public static final String USERNAME_COL         =   "username";
+    public static final String PASSWORD_COL         =   "password";
+    public static final String SALT_PREFIX          =   "vb+FwcR~Sj+bq5imRBJd3%L";
 }

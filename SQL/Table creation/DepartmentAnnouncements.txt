@@ -4,6 +4,7 @@ CREATE TABLE dept_announcements
     dept_id INTEGER NOT NULL,
     announcer varchar(16) NOT NULL,
     content varchar(1500),
+	title varchar(50),
     annouce_date DATE DEFAULT CURRENT DATE,
     FOREIGN KEY(dept_id) REFERENCES Department(id) ON DELETE CASCADE,
     FOREIGN KEY(announcer) REFERENCES Users(username) ON DELETE CASCADE

@@ -4,7 +4,6 @@ package engine.views.gui.layout;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import engine.config.AppConfig;
-import engine.config.ConfigFactory;
 import engine.core.Agent;
 import engine.core.authentication.Session;
 import engine.models.NotificationModel;
@@ -84,9 +83,9 @@ public class HeaderNavigation extends JPanel implements ActionListener
         nextViewButton      =   new JButton();
         refreshViewButton   =   new JButton();
         
-        String prevButtonImage  =   (String) ConfigFactory.get(ConfigFactory.APP_CONFIG, AppConfig.RESOURCE_DIR) + "prevbutton.png";
-        String nextButtonImage  =   (String) ConfigFactory.get(ConfigFactory.APP_CONFIG, AppConfig.RESOURCE_DIR) + "nextbutton.png";
-        String refButtonImage   =   (String) ConfigFactory.get(ConfigFactory.APP_CONFIG, AppConfig.RESOURCE_DIR) + "refresh.png";
+        String prevButtonImage  =    Layout.getImage("prevbutton.png");
+        String nextButtonImage  =    Layout.getImage("nextbutton.png");
+        String refButtonImage   =    Layout.getImage("refresh.png");
         
         prevViewButton.setIcon(new ImageIcon(prevButtonImage));
         nextViewButton.setIcon(new ImageIcon(nextButtonImage));
@@ -110,7 +109,7 @@ public class HeaderNavigation extends JPanel implements ActionListener
         addressSearchButton =   new JButton();
         addressSearchButton.addActionListener(this);
         
-        String searchButtonImage =  (String) ConfigFactory.get(ConfigFactory.APP_CONFIG, AppConfig.RESOURCE_DIR) + "gobutton.png";
+        String searchButtonImage =  Layout.getImage("gobutton.png");
         addressSearchButton.setIcon(new ImageIcon(searchButtonImage));
         Layout.makeTransparent(addressSearchButton);
         addressSearchButton.setPreferredSize(new Dimension(45, 35));
@@ -137,9 +136,9 @@ public class HeaderNavigation extends JPanel implements ActionListener
         userNotificationsButton.addActionListener(this);
         userLogoutButton.addActionListener(this);
         
-        String profileButtonImage       =   (String) ConfigFactory.get(ConfigFactory.APP_CONFIG, AppConfig.RESOURCE_DIR) + "profilebutton.png";
-        String notificationButtonImage  =   (String) ConfigFactory.get(ConfigFactory.APP_CONFIG, AppConfig.RESOURCE_DIR) + "nonotificationsbutton.png";
-        String logoutButtonImage        =   (String) ConfigFactory.get(ConfigFactory.APP_CONFIG, AppConfig.RESOURCE_DIR) + "logoutbutton.png";
+        String profileButtonImage       =    Layout.getImage("profilebutton.png");
+        String notificationButtonImage  =    Layout.getImage("nonotificationsbutton.png");
+        String logoutButtonImage        =    Layout.getImage("logoutbutton.png");
         
         userProfileButton.setIcon(new ImageIcon(profileButtonImage));
         userNotificationsButton.setIcon(new ImageIcon(notificationButtonImage));

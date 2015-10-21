@@ -15,7 +15,7 @@ import org.junit.Test;
 public class DatabaseConfigTest 
 {
     
-    @Test
+   /* @Test
     public void testFactories()
     {
         Properties ptest        =   new Properties();
@@ -35,6 +35,6 @@ public class DatabaseConfigTest
        String fake          =   (String) conf.get("bogus"); //test bogus entry
        assertNotNull(real);
        assertNull(fake);
-    }
+    } */
     
 }

@@ -61,9 +61,8 @@ public final class MainLogger
         Logger current       =   null;
         AbstractLogger logger;
         
-        boolean loggingEnabled =  (boolean) LoggingConfig.config().get(logger_name);
         
-        if(loggingEnabled)
+        if(loggerEnabled(logger_name))
         {
             try
             {
@@ -104,12 +103,27 @@ public final class MainLogger
         }
     }
     
+    //Returns true if the logger passed is enabled in config
+    //To enable/disable loggers see engine\core\loggers\LoggingConfig
+    public static boolean loggerEnabled(String loggerName)
+    {
+        switch(loggerName)
+        {
+            case ADMIN_LOGGER:
+            case AUTH_LOGGER:
+            case DATA_LOGGER:
+            case DEBUG_LOGGER:
+                return true;
+            default: return false;
+        }
+    }
+    
     //Returns the correct formatting including path of log file
     //Template: /FOLDER/logname_dd-mm-yyy
     public static String formatLogName(String file)
     {
         final char delimiter            =   '_';
-        final String folder             =   (String) LoggingConfig.config().get(LoggingConfig.LOG_PATH_KEY);
+        final String folder             =   LoggingConfig.LOG_PATH;
         Date time                       =   new Date();
         SimpleDateFormat date_format    =   new SimpleDateFormat("dd-MM-yyyy");
         String date                     =   date_format.format(time);

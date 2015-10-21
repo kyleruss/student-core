@@ -37,7 +37,7 @@ public abstract class Model
     
     //The table's primary key column name
     //For default see DatabaseConfig - typically "ID" column
-    protected String primaryKey = (String) DatabaseConfig.config().get("DEFAULT_PRIMARY");
+    protected String primaryKey = DatabaseConfig.DEFAULT_KEY;
     
     //The columns in the table
     //Columns are fetched on initialization by initColumns()

@@ -2,22 +2,18 @@
 package engine.views.gui.layout;
 
 import engine.config.AppConfig;
-import engine.config.ConfigFactory;
 import engine.views.GUIView;
-import java.awt.Dimension;
 import java.awt.Point;
-import java.awt.Toolkit;
 import javax.swing.JFrame;
-import javax.swing.JPanel;
 
 
 public class Window extends JFrame
 {
-    private Layout layout;
+    private final Layout layout;
     
     public Window()
     {
-        super((String) ConfigFactory.get(ConfigFactory.APP_CONFIG, AppConfig.APP_NAME));
+        super(AppConfig.APP_NAME);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         
         layout      =   new Layout();
@@ -38,11 +34,7 @@ public class Window extends JFrame
     
     public static Point getWindowDim()
     {
-        Dimension size  =   Toolkit.getDefaultToolkit().getScreenSize();
-        double width       =   size.width *  (double) ConfigFactory.get(ConfigFactory.APP_CONFIG, AppConfig.GUI_WIDTH_MULTI);
-        double height      =   size.height * (double) ConfigFactory.get(ConfigFactory.APP_CONFIG, AppConfig.GUI_HEIGHT_MULTI);
-        
-        return new Point((int) width, (int) height);
+        return new Point(AppConfig.WINDOW_WIDTH, AppConfig.WINDOW_HEIGHT);
     }
     
     public Layout getAppLayout()

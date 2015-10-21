@@ -7,7 +7,6 @@
 package engine.core;
 
 import engine.config.AppConfig;
-import engine.config.ConfigFactory;
 import engine.controllers.ControllerMessage;
 import engine.core.authentication.Session;
 import engine.core.authentication.StoredCredentials;
@@ -72,7 +71,7 @@ public final class Agent extends CommandInterpreter
     //Creates and starts the apps agent
     public Agent()
     {
-        guiMode             =   (boolean) ConfigFactory.get(ConfigFactory.APP_CONFIG, AppConfig.GUI_MODE);
+        guiMode             =   AppConfig.GUI_MODE;
         agentThread         =   new Thread(listen);
         fetchCredentials();
         begin();

@@ -25,7 +25,7 @@ public class User extends Model
     @Override
     protected void initTable()
     {
-        table       =   (String) AuthConfig.config().get(AuthConfig.AUTH_TABLE_KEY);
-        primaryKey  =   (String) AuthConfig.config().get(AuthConfig.USERNAME_COL_KEY);
+        table       =   AuthConfig.AUTH_TABLE;
+        primaryKey  =   AuthConfig.USERNAME_COL;
     }
 }

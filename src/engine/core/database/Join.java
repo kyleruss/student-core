@@ -82,8 +82,8 @@ public class Join
         (
             fromTable, 
             toTable, 
-            MessageFormat.format("{0}_{1}", toTable, (String) DatabaseConfig.config().get(DatabaseConfig.DEFAULT_PRIMARY)), 
-            (String) DatabaseConfig.config().get(DatabaseConfig.DEFAULT_PRIMARY),
+            MessageFormat.format("{0}_{1}", toTable, DatabaseConfig.DEFAULT_KEY), 
+            DatabaseConfig.DEFAULT_KEY,
             joinType
         );
     }

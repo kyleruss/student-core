@@ -9,9 +9,11 @@ package engine.controllers;
 import com.google.gson.JsonArray;
 import engine.core.Agent;
 import engine.core.Path;
+import engine.models.AdminAnnouncementsModel;
 import engine.models.AssessmentModel;
 import engine.models.AssessmentSubmissionsModel;
 import engine.models.Model;
+import engine.models.Role;
 import engine.models.User;
 import engine.views.cui.AdminControlPanelView;
 import engine.views.View;
@@ -309,6 +311,144 @@ public class AdminController extends Controller
                 return prepareView(new ResponseDataView(successMessage, true, new ControllerMessage(foundSubmission), 5));
             else
                 return prepareView(new ResponseDataView(failedMessage, false));
+        }
+    }
+    
+    public View postAddAdminAnnouncement()
+    {
+        final String invalidInputMessage    =   "Invalid input";
+        final String failedMessage          =   "Failed to add announcement";
+        final String successMessage         =   "Successfully added announcement";
+        
+        if(!validatePostData(new String[] {"announceTitle", "announcePoster", "announceContent" }))
+            return prepareView(new ResponseDataView(invalidInputMessage, false));
+        else
+        {
+            AdminAnnouncementsModel model   =   new AdminAnnouncementsModel();
+            model.set("title", postData.getMessage("announceTitle"));
+            model.set("content", postData.getMessage("announceContent"));
+            model.set("announcer", postData.getMessage("announcePoster"));
+            
+            try
+            {
+                model.save();
+                return prepareView(new ResponseDataView(successMessage, true)); 
+            }
+            
+            catch(SQLException e)
+            {
+                return prepareView(new ResponseDataView(failedMessage, false));
+            }
+        }
+    }
+    
+    public View postEditAdminAnnouncement()
+    {
+        final String invalidInputMessage    =   "Invalid input";
+        final String failedMessage          =   "Failed to edit announcement";
+        final String successMessage         =   "Successfully edited announcement";
+        
+        if(!validatePostData(new String[] {"announceID", "announceTitle", "announceContent" }))
+            return prepareView(new ResponseDataView(invalidInputMessage, false));
+        else
+        {
+            AdminAnnouncementsModel model   =   new AdminAnnouncementsModel(postData.getMessage("announceID"));
+            model.set("title", postData.getMessage("announceTitle"));
+            model.set("content", postData.getMessage("announceContent"));
+            
+            if(model.update())
+                return prepareView(new ResponseDataView(successMessage, true)); 
+            else
+                return prepareView(new ResponseDataView(failedMessage, false)); 
+        }
+    }
+    
+    public View postRemoveAdminAnnouncement()
+    {
+        final String invalidInputMessage    =   "Invalid input";
+        final String failedMessage          =   "Failed to remove announcement";
+        final String successMessage         =   "Successfully removed announcement";
+        
+        if(!validatePostData(new String[] {"announceID" }))
+            return prepareView(new ResponseDataView(invalidInputMessage, false));
+        else
+        {
+            AdminAnnouncementsModel model   =   new AdminAnnouncementsModel(postData.getMessage("announceID"));
+            if(model.delete())
+                return prepareView(new ResponseDataView(successMessage, true)); 
+            else
+                return prepareView(new ResponseDataView(failedMessage, false));
+        }
+    }
+    
+    public View postRemoveRole()
+    {
+        final String invalidInputMessage    =   "Invalid input";
+        final String failedMessage          =   "Failed to remove role";
+        final String successMessage         =   "Successfully removed role";
+        
+        if(!validatePostData(new String[]  {"roleID" }))
+            return prepareView(new ResponseDataView(invalidInputMessage, false));
+        else
+        {
+            Role roleModel  =   new Role(postData.getMessage("roleID"));
+            if(roleModel.delete())
+                return prepareView(new ResponseDataView(successMessage, true)); 
+            else
+                return prepareView(new ResponseDataView(failedMessage, false));
+                
+        }
+    }
+    
+    public View postAddRole()
+    {
+        final String invalidInputMessage    =   "Invalid input";
+        final String failedMessage          =   "Failed to add role";
+        final String successMessage         =   "Successfully added role";
+        
+        if(!validatePostData(new String[] { "roleName", "roleDesc", "permLevel" }))
+            return prepareView(new ResponseDataView(invalidInputMessage, false));
+        else
+        {
+            Role role   =   new Role();
+            role.set("name", postData.getMessage("roleName"));
+            role.set("description", postData.getMessage("roleDesc"));
+            role.set("permission_level", postData.getMessage("permLevel"));
+            
+            try
+            {
+                role.save();
+                return prepareView(new ResponseDataView(successMessage, true)); 
+            }
+            
+            catch(SQLException e)
+            {
+                return prepareView(new ResponseDataView(failedMessage, false));
+            }
+        }
+    }
+    
+    public View postEditRole()
+    {
+        final String invalidInputMessage    =   "Invalid input";
+        final String failedMessage          =   "Failed to edit role";
+        final String successMessage         =   "Successfully edited role";
+        
+        if(!validatePostData(new String[] { "roleName", "roleDesc", "permLevel", "roleID" }))
+            return prepareView(new ResponseDataView(invalidInputMessage, false));
+        else
+        {
+            int id      =   (int) postData.getMessage("roleID");
+            Role role   =   new Role(id);
+            role.set("name", postData.getMessage("roleName"));
+            role.set("description", postData.getMessage("roleDesc"));
+            role.set("permission_level", postData.getMessage("permLevel"));
+            
+            if(role.update())
+                return prepareView(new ResponseDataView(successMessage, true)); 
+            else
+                return prepareView(new ResponseDataView(failedMessage, false));
+                
         }
     }
 }

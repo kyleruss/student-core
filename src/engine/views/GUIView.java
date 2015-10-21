@@ -12,6 +12,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
 
@@ -22,6 +23,9 @@ public abstract class GUIView extends AbstractView
     protected BufferedImage addSmallImage;
     protected BufferedImage removeSmallImage;
     protected BufferedImage editSmallImage;
+    protected BufferedImage successImage;
+    protected BufferedImage failImage;
+    protected ImageIcon spinnerSmall;
     
     public GUIView()
     {
@@ -75,6 +79,9 @@ public abstract class GUIView extends AbstractView
             addSmallImage       =   ImageIO.read(new File(Layout.getImage("addSmallIcon.png")));
             removeSmallImage    =   ImageIO.read(new File(Layout.getImage("removeSmallIcon.png")));
             editSmallImage      =   ImageIO.read(new File(Layout.getImage("edit_icon.png")));
+            successImage        =   ImageIO.read(new File(Layout.getImage("successicon.png")));
+            failImage           =   ImageIO.read(new File(Layout.getImage("failicon.png")));
+            spinnerSmall        =   new ImageIcon(Layout.getImage("spinner_small.gif"));
         }
         
         catch(IOException | FontFormatException e)

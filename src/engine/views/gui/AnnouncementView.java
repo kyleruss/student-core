@@ -21,12 +21,13 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JList;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.ListCellRenderer;
+import javax.swing.SwingUtilities;
+import javax.swing.Timer;
 import org.jdesktop.xswingx.PromptSupport;
 
 
@@ -51,6 +52,7 @@ public abstract class AnnouncementView extends GUIView implements ActionListener
     protected JButton editAnnouncementButton;
     protected JButton submitButton, backButton;
     protected ManageContext context;
+    protected JLabel operationLabel;
     
     public AnnouncementView()
     {
@@ -68,8 +70,10 @@ public abstract class AnnouncementView extends GUIView implements ActionListener
         announcementViewPanel       =   new JPanel(new CardLayout());
         announcementPanel           =   new JPanel(new BorderLayout());
         modifyPanel                 =   new ModifyAnnouncementView();
-        JPanel announcementHeader   =   new JPanel();   
+        JPanel announcementHeader   =   new JPanel(new GridLayout(2, 1));   
         JPanel announcementControls =   new JPanel(new GridLayout(1, 3));
+        JPanel statusWrapper        =   new JPanel();
+        operationLabel              =   new JLabel();
         addAnnouncementButton       =   new JButton("Add");
         removeAnnouncementButton    =   new JButton("Remove");
         editAnnouncementButton      =   new JButton("Edit");
@@ -78,13 +82,19 @@ public abstract class AnnouncementView extends GUIView implements ActionListener
         removeAnnouncementButton.setIcon(new ImageIcon(removeSmallImage));
         editAnnouncementButton.setIcon(new ImageIcon(editSmallImage));
         
-        JPanel announcementsWrapper =   new JPanel();
+        JPanel announcementsWrapper     =   new JPanel();
+        JPanel announcementInnerWrapper =   new JPanel();   
         announcementPanel.setBackground(Color.WHITE);
         announcementHeader.setBackground(Color.WHITE);
         announcementsWrapper.setBackground(Color.WHITE);
         announcementControls.setBackground(Color.WHITE);
+        announcementInnerWrapper.setBackground(Color.WHITE);
+        statusWrapper.setBackground(Color.WHITE);
         modifyPanel.setBackground(Color.WHITE);
+        operationLabel.setHorizontalAlignment(JLabel.CENTER);
+        operationLabel.setVisible(false);
         
+        statusWrapper.add(operationLabel);
         announcementControls.add(addAnnouncementButton);
         announcementControls.add(removeAnnouncementButton);
         announcementControls.add(editAnnouncementButton);
@@ -92,37 +102,28 @@ public abstract class AnnouncementView extends GUIView implements ActionListener
         announcementModel   =   new UpdateListModel();
         announcementList    =   new JList(announcementModel);
         announcementList.setCellRenderer(new AnnouncementCellRenderer());
-        announcementList.setPreferredSize(new Dimension(380, 150));
-        announcementsWrapper.setPreferredSize(new Dimension(400, 150));
-        announcementControls.setBorder(BorderFactory.createTitledBorder("Controls"));
-        
-        JsonArray announcements =   getData();
-        
-        if(announcements.size() > 0) 
-        {
-            announcementPanel.add(announcementList);
-            for(int i = 1; i < announcements.size(); i++)
-                announcementModel.addElement(announcements.get(i).getAsJsonObject());
-            
-            announcementList.setSelectedIndex(0);
-        }
+        announcementList.setPreferredSize(new Dimension(150, 150));
+        announcementInnerWrapper.setPreferredSize(new Dimension(150, 150));
+        announcementsWrapper.setPreferredSize(new Dimension(150, 150));
         
         JScrollPane announcementScroller    =   new JScrollPane(announcementList);
-        announcementScroller.setPreferredSize(new Dimension(390, 300));
+        announcementScroller.setPreferredSize(new Dimension(390, 280));
+        announcementInnerWrapper.add(announcementScroller);
         announcementsWrapper.add(announcementScroller);
         
         
         
-        announcementHeader.add(announcementControls, BorderLayout.EAST);
-        announcementHeader.setPreferredSize(new Dimension(1, 75));
+        announcementHeader.add(announcementControls);
+        announcementHeader.add(statusWrapper);
+        announcementHeader.setPreferredSize(new Dimension(1, 90));
         announcementHeader.setBorder(BorderFactory.createEmptyBorder(0, 30, 0, 30));
-        
         announcementPanel.add(announcementHeader, BorderLayout.NORTH);
         announcementPanel.add(announcementsWrapper, BorderLayout.CENTER);
         
         announcementViewPanel.add(announcementPanel, ANNOUNCEMENT_VIEW);
         announcementViewPanel.add(modifyPanel, MODIFY_VIEW);
         
+        initData();
         showAnnouncementView(ANNOUNCEMENT_VIEW);
     }
     
@@ -156,6 +157,23 @@ public abstract class AnnouncementView extends GUIView implements ActionListener
      
     protected abstract JsonArray getData();
     
+    protected void initData()
+    {
+        JsonArray announcements =   getData();
+        SwingUtilities.invokeLater(()->
+        {
+            announcementModel.removeAllElements();
+
+            if(announcements.size() > 0) 
+            {
+                for(int i = 1; i < announcements.size(); i++)
+                    announcementModel.addElement(announcements.get(i).getAsJsonObject());
+
+                announcementList.setSelectedIndex(0);
+            }
+        });
+    }
+    
     protected void submit()
     {
         if(context == null) return;
@@ -172,6 +190,11 @@ public abstract class AnnouncementView extends GUIView implements ActionListener
                 submitEditAnnouncement();
                 break;
         }
+    }
+    
+    protected void back()
+    {
+        showAnnouncementView(ANNOUNCEMENT_VIEW);
     }
     
     
@@ -196,6 +219,36 @@ public abstract class AnnouncementView extends GUIView implements ActionListener
         cLayout.show(announcementViewPanel, viewName);
     }
     
+    protected void showStatusLabel(String message, boolean success)
+    {
+        operationLabel.setText(message);
+        if(success)
+            operationLabel.setIcon(new ImageIcon(successImage));
+        else
+            operationLabel.setIcon(new ImageIcon(failImage));
+        
+        operationLabel.setVisible(true);
+        Timer statusTimer   =   new Timer(2000, (ActionEvent e)->
+        {
+            operationLabel.setVisible(false);
+        });
+        
+        statusTimer.setRepeats(false);
+        statusTimer.start();
+    }
+    
+    protected void showProcessing()
+    {
+        submitButton.setIcon(spinnerSmall);
+        Timer processTimer  =   new Timer(2500, (ActionEvent e)->
+        {
+            submitButton.setIcon(null);
+        });
+        
+        processTimer.setRepeats(false);
+        processTimer.start();
+    }
+    
     @Override
     public void actionPerformed(ActionEvent e) 
     {
@@ -205,13 +258,13 @@ public abstract class AnnouncementView extends GUIView implements ActionListener
             showAddAnnouncement();
         
         else if(src == editAnnouncementButton)
-            showRemoveAnnouncement();
-        
-        else if(src == removeAnnouncementButton)
             showEditAnnouncement();
         
+        else if(src == removeAnnouncementButton)
+            showRemoveAnnouncement();
+        
         else if(src == backButton)
-            showAnnouncementView(ANNOUNCEMENT_VIEW);
+            back();
         
         else if(src == submitButton)
             submit();
@@ -225,10 +278,11 @@ public abstract class AnnouncementView extends GUIView implements ActionListener
             JsonObject jObj             =   (JsonObject) value;
             JPanel announcementPanel    =   new JPanel(new BorderLayout());
             JPanel announceHeaderPanel  =   new JPanel();
-            JPanel announceInfoPanel    =   new JPanel();
+            JPanel announceInfoPanel    =   new JPanel(new GridLayout(1, 3));
             JPanel contentWrapper       =   new JPanel();
             JLabel announcerLabel       =   new JLabel(jObj.get("ANNOUNCER").getAsString());
             JLabel announceDateLabel    =   new JLabel(jObj.get("ANNOUNCE_DATE").getAsString());
+            JLabel announcementTitle    =   new JLabel(jObj.get("TITLE").getAsString());
             JTextArea content           =   new JTextArea(jObj.get("CONTENT").getAsString());
             
             announcementPanel.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.LIGHT_GRAY));
@@ -239,10 +293,15 @@ public abstract class AnnouncementView extends GUIView implements ActionListener
             announcerLabel.setForeground(Color.WHITE);
             announceDateLabel.setForeground(Color.WHITE);
             announceInfoPanel.setBackground(Color.BLACK);
+            announcementTitle.setForeground(Color.WHITE);
             
             announceInfoPanel.add(announcerLabel);
+            announceInfoPanel.add(announcementTitle);
             announceInfoPanel.add(announceDateLabel);
             announceHeaderPanel.add(announceInfoPanel, BorderLayout.WEST);
+            announcerLabel.setHorizontalAlignment(JLabel.CENTER);
+            announcementTitle.setHorizontalAlignment(JLabel.CENTER);
+            announceDateLabel.setHorizontalAlignment(JLabel.CENTER);
             
             JScrollPane contentScrollPane   =   new JScrollPane(content);
             contentScrollPane.setBorder(null);
@@ -267,7 +326,12 @@ public abstract class AnnouncementView extends GUIView implements ActionListener
             return announcementPanel;
         }
     }
-
+    
+    protected JsonObject getSelectedValue()
+    {
+        return (JsonObject) announcementList.getSelectedValue();
+    }
+    
     protected class ModifyAnnouncementView extends JPanel
     {
         protected JTextField announcementTitle;
@@ -305,7 +369,6 @@ public abstract class AnnouncementView extends GUIView implements ActionListener
             headerWrapper.setBackground(Color.WHITE);
             footerWrapper.setBackground(Color.WHITE);
             
-            PromptSupport.setPrompt(" Enter your announcement content", announcementContent);
             PromptSupport.setPrompt(" Enter your announcement title", announcementTitle);
             
             innerWrapper.add(titleWrapper, BorderLayout.NORTH);
@@ -319,6 +382,12 @@ public abstract class AnnouncementView extends GUIView implements ActionListener
         {
             announcementTitle.setText(title);
             announcementContent.setText(content);
+        }
+        
+        protected void clear()
+        {
+            announcementTitle.setText("");
+            announcementContent.setText("");
         }
         
         protected String getTitle()

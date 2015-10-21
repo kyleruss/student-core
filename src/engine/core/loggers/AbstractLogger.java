@@ -31,7 +31,7 @@ public abstract class AbstractLogger implements Logging
     {
         this
         (
-            MainLogger.formatLogName(log_file) + "_%u%g" + LoggingConfig.config().get(LoggingConfig.LOG_EXTENSION), 
+            MainLogger.formatLogName(log_file) + "_%u%g" + LoggingConfig.LOG_FILE_EXT, 
             new SimpleFormatter()
         );
     }
@@ -51,8 +51,8 @@ public abstract class AbstractLogger implements Logging
         Handler fh =  new FileHandler
         (
                 log_file, //Log file name
-                Integer.parseInt((String) LoggingConfig.config().get(LoggingConfig.LOG_SIZE_KEY)), //Log max file size
-                Integer.parseInt((String) LoggingConfig.config().get(LoggingConfig.LOG_FILE_COUNT_KEY)), //Max number of logs created after max size
+                LoggingConfig.LOG_MAX_SIZE, //Log max file size
+                LoggingConfig.LOG_FILE_MAX_COUNT, //Max number of logs created after max size
                 true //Allow appending to existing logs
         );
         

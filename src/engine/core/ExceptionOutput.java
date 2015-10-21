@@ -7,7 +7,6 @@
 package engine.core;
 
 import engine.config.AppConfig;
-import engine.config.ConfigFactory;
 import engine.core.loggers.MainLogger;
 import engine.views.cui.Utilities.CUITextTools;
 import java.io.PrintWriter;
@@ -30,7 +29,7 @@ public class ExceptionOutput
     public static void output(String message, OutputType outputType)
     {
         //Output to console
-        if(!(boolean) ConfigFactory.get(ConfigFactory.APP_CONFIG, AppConfig.GUI_MODE))
+        if(!AppConfig.DEBUG_MODE)
         {
             String prefix;
             if(outputType == OutputType.DEBUG)

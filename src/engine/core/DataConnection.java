@@ -14,37 +14,37 @@ import java.util.Properties;
         
 public class DataConnection 
 {
-    private String db_server; //database server
-    private String db_port; //database port - default: 1527
-    private String db_user; //database username
-    private String db_pass;//database password
-    private String db_database; //the apps database 
-    private String db_driver; //databases driver
+    private String server; //database server
+    private int port; //database port - default: 1527
+    private String user; //database username
+    private String pass;//database password
+    private String database; //the apps database 
+    private String driver; //databases driver
     private Properties attributes; //connection properties
     
     //Creates a DataConnection with default Database configurations
     public DataConnection()
     {
-       this(DatabaseConfig.config().getConfig());
+       this(DatabaseConfig.SERVER, DatabaseConfig.PORT, DatabaseConfig.DB_USERNAME, DatabaseConfig.DB_PASSWORD, DatabaseConfig.DATABASE, DatabaseConfig.DRIVER);
     }
     
     //Creates a DataConnection with custom configurations
-    public DataConnection(Properties db_conf)
+    public DataConnection(String server, int port, String user, String pass, String database, String driver)
     {
-       db_server            =   db_conf.getProperty(DatabaseConfig.SERVER_KEY);
-       db_port              =   db_conf.getProperty(DatabaseConfig.PORT_KEY);
-       db_user              =   db_conf.getProperty(DatabaseConfig.USER_KEY);
-       db_pass              =   db_conf.getProperty(DatabaseConfig.PASS_KEY);
-       db_database          =   db_conf.getProperty(DatabaseConfig.DB_KEY);
-       db_driver            =   db_conf.getProperty(DatabaseConfig.DRIVER_KEY);
+       this.server            =     server;
+       this.port              =     port;
+       this.user              =     user;
+       this.pass              =     pass;
+       this.database          =     database;
+       this.driver            =     driver;
    
     }
     
     //Creates a DataConnection with custom config & additional attributes
     //to add to connection string
-    public DataConnection(Properties db_conf, Properties attributes)
+    public DataConnection(String server, int port, String user, String pass, String database, String driver, Properties attributes)
     {
-        this(db_conf);
+        this(server, port, user, pass, database, driver);
         this.attributes =   attributes;
     }
     
@@ -54,17 +54,17 @@ public class DataConnection
 
     public String getConnectionString()
     {
-        String attrs_string = "";
-        Properties db_attrs = attributes;
-        db_attrs   =   (db_attrs == null)? new Properties() : db_attrs;
+        String attrs_string =   "";
+        Properties attrs    =   attributes;
+        attrs               =   (attrs == null)? new Properties() : attrs;
         
         //user & pass is attribute => push to db_attrs
-        db_attrs.put("user", db_user);
-        db_attrs.put("password", db_pass);
+        attrs.put("user", user);
+        attrs.put("password", pass);
         
         //add attributes to attrs_string
         //TEMPLATE: attr_name=attr_value;
-        Iterator<Map.Entry<Object, Object>> conf_iterator  =   db_attrs.entrySet().iterator();
+        Iterator<Map.Entry<Object, Object>> conf_iterator  =   attrs.entrySet().iterator();
         while(conf_iterator.hasNext())
         {
             Map.Entry<Object, Object> conf_property =   conf_iterator.next();
@@ -75,49 +75,56 @@ public class DataConnection
         return  MessageFormat.format
         (
                 "{0}://{1}:{2}/{3}{4}", 
-                db_driver, db_server, db_port, db_database, attrs_string
+                driver, server, "" + port, database, attrs_string
         );
+        
     }
     
     //Returns db server
     public String getServer()
     {
-        return db_server;
+        return server;
     }
     
     //Returns db port
-    public String getPort()
+    public int getPort()
     {
-        return db_port;
+        return port;
     }
     
     //Returns db user
     public String getUser()
     {
-        return db_user;
+        return user;
     }
     
     //Returns db password
     public String getPass()
     {
-        return db_pass;
+        return pass;
     }
     
     //Returns active database
     public String getDatabase()
     {
-        return db_database;
+        return database;
     }
     
     //Returns db driver
     public String getDriver()
     {
-        return db_driver;
+        return driver;
     }
     
     //Returns active attributes 
     public Properties getAttributes()
     {
         return attributes;
+    }
+    
+    public static void main(String[] args)
+    {
+        DataConnection conn = new DataConnection();
+        System.out.println(conn.getConnectionString());
     }
 }

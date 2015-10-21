@@ -4,7 +4,6 @@ package engine.core.authentication;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import engine.config.AppConfig;
-import engine.config.ConfigFactory;
 import engine.core.ExceptionOutput;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -67,14 +66,12 @@ public class StoredCredentials
     
     public synchronized void saveCredentials()
     {
-        if((boolean) ConfigFactory.get(ConfigFactory.APP_CONFIG, AppConfig.ALLOW_PASS_SAVE))
+        if(AppConfig.ALLOW_CRED_SAVE)
         {
-            String file         =   (String) ConfigFactory.get(ConfigFactory.APP_CONFIG, AppConfig.PASS_SAVE_FILE);
             Gson gson           =   new GsonBuilder().setPrettyPrinting().create();
             String storedCreds  =   gson.toJson(this);
-            System.out.println("save: " + storedCreds);
             
-            try(BufferedWriter bw   =   new BufferedWriter(new FileWriter(file)))
+            try(BufferedWriter bw   =   new BufferedWriter(new FileWriter(AppConfig.CRED_SAVE_FILE)))
             {
                 bw.write(storedCreds);
             }
@@ -90,12 +87,10 @@ public class StoredCredentials
     
    public synchronized static StoredCredentials getSavedCredentials()
     {
-        if((boolean) ConfigFactory.get(ConfigFactory.APP_CONFIG, AppConfig.ALLOW_PASS_SAVE))
+        if(AppConfig.ALLOW_CRED_SAVE)
         {
-            String file =   (String) ConfigFactory.get(ConfigFactory.APP_CONFIG, AppConfig.PASS_SAVE_FILE);
-            if(file == null) return null;
             
-            try(BufferedReader br   =   new BufferedReader(new FileReader(file)))
+            try(BufferedReader br   =   new BufferedReader(new FileReader(AppConfig.CRED_SAVE_FILE)))
             {
                 
                 Gson gson   =   new Gson();

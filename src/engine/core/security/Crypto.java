@@ -33,9 +33,9 @@ public class Crypto
             String saltedInput  =   salt + input; //Salt the input
             
             //Get hashing algorithm (Default: SHA-1)
-            String algorithm    =   (String) AuthConfig.config().get(AuthConfig.HASH_ALGORITHM_KEY);
+            String algorithm    =   AuthConfig.HASH_ALGORITHM;
             //Get encoding format (Default: utf-8)
-            String format       =   (String) AuthConfig.config().get(AuthConfig.ENCRYPT_FORMAT_KEY);
+            String format       =   AuthConfig.ENC_FORMAT;
             
             //Make hash bytes 
             MessageDigest enc   =   MessageDigest.getInstance(algorithm);
@@ -59,7 +59,7 @@ public class Crypto
     //An additional prefix is added (see AuthConfig) to salt
     public static String salt(String postfix)
     {
-        String prefix  =   (String) AuthConfig.config().get(AuthConfig.SALT_PREFIX_KEY);
+        String prefix  =   AuthConfig.SALT_PREFIX;
         return prefix + postfix;
     }
 }
