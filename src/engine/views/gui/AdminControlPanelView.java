@@ -11,10 +11,7 @@ import engine.views.gui.layout.Layout;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -28,14 +25,10 @@ import javax.swing.Box;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.JTextArea;
-import javax.swing.ListCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
 
@@ -234,23 +227,28 @@ public class AdminControlPanelView extends GUIView implements ActionListener
     {
 
         @Override
-        protected void addAnnouncement() 
+        protected void showAddAnnouncement() 
         {
             announcementsView.showAnnouncementView(AnnouncementView.MODIFY_VIEW);
         }
 
         @Override
-        protected void removeAnnouncement() 
+        protected void showRemoveAnnouncement() 
         {
             if(announcementList.getSelectedIndex() == -1)
                 JOptionPane.showMessageDialog(null, "Please select an announcement in remove");
         }
 
         @Override
-        protected void editAnnouncement() 
+        protected void showEditAnnouncement() 
         {
             if(announcementList.getSelectedIndex() == -1)
                 JOptionPane.showMessageDialog(null, "Please select an announcement to edit");
+            
+            String title    =   "Test title";
+            String content  =   "Test content..";
+            announcementsView.modifyPanel.fill(title, content);
+            announcementsView.showAnnouncementView(AnnouncementView.MODIFY_VIEW);
         }
 
         @Override
@@ -258,16 +256,22 @@ public class AdminControlPanelView extends GUIView implements ActionListener
         {
             return AdminAnnouncementsModel.getAllAnnouncements();
         }
+
+        @Override
+        protected void submitAddAnnouncement() 
+        {
+        }
+
+        @Override
+        protected void submitRemoveAnnouncement() 
+        {
+        }
+
+        @Override
+        protected void submitEditAnnouncement() 
+        {
+            
+        }
         
     }
-    
-    private class UpdateListModel extends DefaultListModel
-    {
-        public void update(int index)
-        {
-            fireContentsChanged(this, index, index);
-        }
-    }
-    
-    
 }

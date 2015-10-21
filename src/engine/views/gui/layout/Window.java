@@ -29,7 +29,6 @@ public class Window extends JFrame
         
         setResizable(false);
         setLocationRelativeTo(null);
-        //initLookAndFeel(); 
     }
     
     public void display()
