@@ -50,6 +50,7 @@ public class AdminControlPanelView extends GUIView implements ActionListener
     private BufferedImage deptMenuImage;
     private BufferedImage announceMenuImage;
     private BufferedImage rolesMenuImage;
+    private BufferedImage assignRoleImage;
     
     private JPanel adminPanel;
     private JPanel leftPanel;
@@ -73,7 +74,8 @@ public class AdminControlPanelView extends GUIView implements ActionListener
     
     private JPanel rolesView;
     private JPanel roleControls;
-    private JButton addRoleButton, removeRoleButton, editRoleButton;
+    private JButton addRoleButton, removeRoleButton;
+    private JButton editRoleButton, assignRoleButton;
     private JTable rolesTable;
     private DefaultTableModel rolesModel;
     private JLabel roleStatusLabel;
@@ -211,6 +213,7 @@ public class AdminControlPanelView extends GUIView implements ActionListener
         addRoleButton           =   new JButton("Add");
         removeRoleButton        =   new JButton("Remove");
         editRoleButton          =   new JButton("Edit");
+        assignRoleButton        =   new JButton("Assign");
         roleStatusLabel         =   new JLabel();
         JPanel header           =   new JPanel(new GridLayout(2, 1));
         JPanel tableWrapper     =   new JPanel();   
@@ -219,10 +222,12 @@ public class AdminControlPanelView extends GUIView implements ActionListener
         addRoleButton.setIcon(new ImageIcon(addSmallImage));
         removeRoleButton.setIcon(new ImageIcon(removeSmallImage));
         editRoleButton.setIcon(new ImageIcon(editSmallImage));
+        assignRoleButton.setIcon(new ImageIcon(assignRoleImage));
         
         roleControls.add(addRoleButton);
         roleControls.add(removeRoleButton);
         roleControls.add(editRoleButton);
+        roleControls.add(assignRoleButton);
         statusWrapper.add(roleStatusLabel);
         header.add(roleControls);
         header.add(statusWrapper);
@@ -241,7 +246,7 @@ public class AdminControlPanelView extends GUIView implements ActionListener
         
         tableWrapper.setPreferredSize(new Dimension(390, 280));
         tableScroller.setPreferredSize(new Dimension(390, 280));
-        header.setPreferredSize(new Dimension(1, 90));
+        header.setPreferredSize(new Dimension(1, 100));
         
         roleControls.setBackground(Color.WHITE);
         tableWrapper.setBackground(Color.WHITE);
@@ -367,6 +372,31 @@ public class AdminControlPanelView extends GUIView implements ActionListener
         }
     }
     
+    private void assignRole()
+    {
+        AssignRoleDialog assignDialog   =   new AssignRoleDialog();
+        int selectedRow                 =   rolesTable.getSelectedRow();
+        if(selectedRow != -1)
+        {
+            String selectedRoleName     =   (String) rolesTable.getValueAt(selectedRow, 1);
+            assignDialog.rolesSelect.setSelectedItem(selectedRoleName);
+        }
+        
+        int option  =   JOptionPane.showConfirmDialog(null, assignDialog, "Assign role to user", JOptionPane.OK_CANCEL_OPTION);
+        if(option == JOptionPane.OK_OPTION)
+        {
+            String username     =   assignDialog.userField.getText();
+            int roleID          =   (int) rolesTable.getValueAt(assignDialog.rolesSelect.getSelectedIndex(), 0);
+            
+            ControllerMessage postData  =   new ControllerMessage();
+            postData.add("assignTO", username);
+            postData.add("roleID", roleID);
+            
+            ResponseDataView response   =   (ResponseDataView) RouteHandler.go("postAssignRole", postData);
+            showResponseLabel(roleStatusLabel, response.getRawResponseMessage(), response.getResponseStatus());
+        }
+    }
+    
     private class AddRoleDialog extends JPanel
     {
         protected JTextField roleName;
@@ -380,15 +410,36 @@ public class AdminControlPanelView extends GUIView implements ActionListener
             roleDesc    =   new JTextField();
             permLevel   =   new JComboBox();
             
-            add(new JLabel("Role name: "));
+            add(new JLabel("Role name "));
             add(roleName);
-            add(new JLabel("Role description: "));
+            add(new JLabel("Role description "));
             add(roleDesc);
-            add(new JLabel("PermissionLevel: "));
+            add(new JLabel("PermissionLevel "));
             add(permLevel);
             
             for(int i = 0; i < 10; i++)
                 permLevel.addItem(i);
+        }
+    }
+    
+    private class AssignRoleDialog extends JPanel
+    {
+        protected JTextField userField;
+        protected JComboBox rolesSelect;
+        
+        public AssignRoleDialog()
+        {
+            setLayout(new GridLayout(2, 2));
+            userField   =   new JTextField();
+            rolesSelect =   new JComboBox();
+            
+            for(int i = 0; i < rolesModel.getRowCount(); i++)
+                rolesSelect.addItem(rolesModel.getValueAt(i, 1));
+            
+            add(new JLabel("Username "));
+            add(userField);
+            add(new JLabel("Role "));
+            add(rolesSelect);
         }
     }
     
@@ -403,6 +454,7 @@ public class AdminControlPanelView extends GUIView implements ActionListener
             deptMenuImage       =   ImageIO.read(new File(Layout.getImage("department_large_icon.png")));
             usersMenuImage      =   ImageIO.read(new File(Layout.getImage("users_icon.png")));
             rolesMenuImage      =   ImageIO.read(new File(Layout.getImage("roles_icon.png")));
+            assignRoleImage     =   ImageIO.read(new File(Layout.getImage("assign_role_icon.png")));
         }
         
         catch(IOException e)
@@ -440,6 +492,7 @@ public class AdminControlPanelView extends GUIView implements ActionListener
         addRoleButton.addActionListener(this);
         removeRoleButton.addActionListener(this);
         editRoleButton.addActionListener(this);
+        assignRoleButton.addActionListener(this);
     }
     
     @Override
@@ -470,6 +523,9 @@ public class AdminControlPanelView extends GUIView implements ActionListener
         
         else if(src == editRoleButton)
             editRole();
+        
+        else if(src == assignRoleButton)
+            assignRole();
     }
     
     private void showAdminView(String viewName)

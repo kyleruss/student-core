@@ -191,10 +191,7 @@ public abstract class Model
             if(colMeta == null) return null;
             
             JsonArray columnNames   =   colMeta.get("columnNames").getAsJsonArray();
-          //  JsonArray colTypes      =   colMeta.get("columnTypes").getAsJsonArray();
-            
             ResultSetMetaData meta  =   conn.getResults().getMetaData();
-            //System.out.println(results);
               
             if(results.size() > 1)
             {
@@ -239,9 +236,7 @@ public abstract class Model
             
             current.setLiteral(columns.get(colName).isLiteral());
             Object colValue        =   current.getColumnValue();
-            //System.out.println(colValue);
             colValue               =   (colValue == null)? "null" : colValue.toString();
-            //System.out.println(colValue.toString());
             
             if(!colName.equalsIgnoreCase(primaryKey))
                 updateStr += MessageFormat.format("{0} = {1}{2} ", 
@@ -256,29 +251,26 @@ public abstract class Model
     //Inserts the Model data values corresponding to data column names
     //Into the Model mapping table
     //Returns true if the insertion was successful
-    public boolean save() throws SQLException
+    public boolean save()
     {
         String columnNames      =   getDataColumns();
         String columnValues     =   getDataValues();
         String insertQuery      =   MessageFormat.format("INSERT INTO {0} ({1}) VALUES ({2})", table, columnNames, columnValues);
         
-       // System.out.println(insertQuery);
+        if(activeConnection == null)
+        {
+            try(DataConnector conn  =   new DataConnector())
+            {
+                conn.setQueryMutator();
+                return conn.execute(insertQuery);
+            }
+        }
 
-            if(activeConnection == null)
-            {
-                try(DataConnector conn  =   new DataConnector())
-                {
-                    conn.setQueryMutator();
-                    return conn.execute(insertQuery);
-                }
-            }
-            
-            else
-            {
-                activeConnection.setQueryMutator();
-                return activeConnection.execute(insertQuery);
-            }
-        
+        else
+        {
+            activeConnection.setQueryMutator();
+            return activeConnection.execute(insertQuery);
+        }
     }
     
     public boolean update()
@@ -289,7 +281,6 @@ public abstract class Model
         
         String id           =   column.getColumnValue().toString();
         String updateQuery  =   MessageFormat.format("UPDATE {0} {1} WHERE {2} = {3}", table, changes, primaryKey, id);
-       // System.out.println(updateQuery);
         
         try(DataConnector conn   =   new DataConnector())
         {
@@ -315,6 +306,11 @@ public abstract class Model
                 return true;
             }
         }
+    }
+    
+    public boolean exists()
+    {
+        return data.get(primaryKey.toUpperCase()) != null;
     }
     
     //Makes the value a literal

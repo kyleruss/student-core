@@ -84,7 +84,11 @@ public class Routes extends Router
             new Path("postRemoveAdminAnnouncement", "AdminController", "postRemoveAdminAnnouncement", "/panel/announcements/remove"),
             new Path("postRemoveRole", "AdminController", "postRemoveRole", "/panel/roles/remove"),
             new Path("postAddRole", "AdminController", "postAddRole", "/panel/roles/add"),
-            new Path("postEditRole", "AdminController", "postEditRole", "/panel/roles/edit")
+            new Path("postEditRole", "AdminController", "postEditRole", "/panel/roles/edit"),
+            new Path("postAssignRole", "AdminController", "postAssignRole", "/panel/roles/assign"),
+            new Path("postAddDepartment", "AdminController", "postAddDepartment", "/panel/departments/add"),
+            new Path("postRemoveDepartment", "AdminController", "postRemoveDepartment", "/panel/departments/remove"),
+            new Path("postEditDepartment", "AdminController", "postEditDepartment", "/panel/departments/edit"),
         }));
 
     }

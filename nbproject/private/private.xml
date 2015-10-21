@@ -3,14 +3,7 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/root/workspace/PDC/pdc-project/src/engine/views/gui/AdminControlPanelView.java</file>
-            <file>file:/root/workspace/PDC/pdc-project/src/engine/views/GUIView.java</file>
-            <file>file:/root/workspace/PDC/pdc-project/src/engine/views/gui/AnnouncementView.java</file>
-            <file>file:/root/workspace/PDC/pdc-project/src/engine/views/ResponseDataView.java</file>
-            <file>file:/root/workspace/PDC/pdc-project/src/engine/core/DataConnector.java</file>
-            <file>file:/root/workspace/PDC/pdc-project/src/engine/core/DataConnection.java</file>
             <file>file:/root/workspace/PDC/pdc-project/src/engine/core/Routes.java</file>
-            <file>file:/root/workspace/PDC/pdc-project/src/engine/views/cui/RegisterView.java</file>
             <file>file:/root/workspace/PDC/pdc-project/src/engine/controllers/AdminController.java</file>
         </group>
     </open-files>

@@ -171,19 +171,10 @@ public class AdminController extends Controller
             assessment.set("class_id", postData.getMessage("assessClass"));
             assessment.set("due_date", postData.getMessage("assessDue"));
                     
-            try
-            {
-                if(assessment.save()) 
-                    return prepareView(new ResponseDataView(successMessage, true));
-                else 
-                    return prepareView(new ResponseDataView(failedMessage, false));
-            }
-            
-            catch(SQLException e)
-            {
-              //  System.out.println("[SQL Exception] " + e.getMessage());
+            if(assessment.save()) 
+                return prepareView(new ResponseDataView(successMessage, true));
+            else 
                 return prepareView(new ResponseDataView(failedMessage, false));
-            }
         }
     }
     
@@ -329,16 +320,10 @@ public class AdminController extends Controller
             model.set("content", postData.getMessage("announceContent"));
             model.set("announcer", postData.getMessage("announcePoster"));
             
-            try
-            {
-                model.save();
+            if(model.save())
                 return prepareView(new ResponseDataView(successMessage, true)); 
-            }
-            
-            catch(SQLException e)
-            {
+            else
                 return prepareView(new ResponseDataView(failedMessage, false));
-            }
         }
     }
     
@@ -414,17 +399,11 @@ public class AdminController extends Controller
             role.set("name", postData.getMessage("roleName"));
             role.set("description", postData.getMessage("roleDesc"));
             role.set("permission_level", postData.getMessage("permLevel"));
-            
-            try
-            {
-                role.save();
+
+            if(role.save())
                 return prepareView(new ResponseDataView(successMessage, true)); 
-            }
-            
-            catch(SQLException e)
-            {
+            else
                 return prepareView(new ResponseDataView(failedMessage, false));
-            }
         }
     }
     
@@ -449,6 +428,38 @@ public class AdminController extends Controller
             else
                 return prepareView(new ResponseDataView(failedMessage, false));
                 
+        }
+    }
+    
+    public View postAssignRole()
+    {
+        final String invalidInputMessage    =   "Invalid input";
+        final String failedMessage          =   "Failed to assign role";
+        final String successMessage         =   "Successfully assigned role";
+        final String roleNotFoundMessage    =   "This role was not found";
+        final String userNotFoundMessage    =   "User was not found";
+        
+        if(!validatePostData(new String[] { "roleID", "assignTO" }))
+            return prepareView(new ResponseDataView(invalidInputMessage, false));
+        else
+        {
+            int roleID          =   (int) postData.getMessage("roleID");
+            String assignUser   =   (String) postData.getMessage("assignTO");
+            Role role           =   new Role(roleID);
+            User user           =   new User(assignUser);
+            
+            if(!role.exists())
+                return prepareView(new ResponseDataView(roleNotFoundMessage, false));
+            else if(!user.exists())
+                return prepareView(new ResponseDataView(userNotFoundMessage, false));
+            else
+            {
+                user.set("role_id", roleID);
+                if(user.update())
+                    return prepareView(new ResponseDataView(successMessage, true));
+                else
+                    return prepareView(new ResponseDataView(failedMessage, false));
+            }
         }
     }
 }
