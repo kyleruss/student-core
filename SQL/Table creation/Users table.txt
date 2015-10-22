@@ -12,6 +12,8 @@ CREATE TABLE users
     ethnicity varchar(255),
     role_id INTEGER,
     medical_id INTEGER,
+	dept_id INTEGER,
     FOREIGN KEY(role_id) REFERENCES role(id) ON DELETE CASCADE,
     FOREIGN KEY(medical_id) REFERENCES medical(id) ON DELETE SET NULL
+	FOREIGN KEY(dept_id) REFERENCES department(id) ON DELETE SET NULL
 );

@@ -17,6 +17,7 @@ import engine.models.AssessmentSubmissionsModel;
 import engine.models.ClassEnrolmentModel;
 import engine.models.ClassesModel;
 import engine.models.DepartmentModel;
+import engine.models.DeptAnnouncementsModel;
 import engine.models.EmergencyContactModel;
 import engine.models.MedicalModel;
 import engine.models.Model;
@@ -318,12 +319,29 @@ public class AdminController extends Controller
         final String invalidInputMessage    =   "Invalid input";
         final String failedMessage          =   "Failed to add announcement";
         final String successMessage         =   "Successfully added announcement";
+        final String codeNotFound           =   "Announcement model not found";
         
-        if(!validatePostData(new String[] {"announceTitle", "announcePoster", "announceContent" }))
+        if(!validatePostData(new String[] {"announceTitle", "announcePoster", "announceContent", "announceCode" }))
             return prepareView(new ResponseDataView(invalidInputMessage, false));
         else
         {
-            AdminAnnouncementsModel model   =   new AdminAnnouncementsModel();
+            Model model;
+            switch((String) postData.getMessage("announceCode"))
+            {
+                case "ADMIN": 
+                    model = new AdminAnnouncementsModel();
+                    break;
+                case "DEPT":
+                    if(!validatePostData(new String[] { "deptID" }))
+                        return prepareView(new ResponseDataView(invalidInputMessage, false));
+                    else
+                    {
+                        model = new DeptAnnouncementsModel();
+                        model.set("dept_id", postData.getMessage("deptID"));
+                        break;
+                    }
+                default: return prepareView(new ResponseDataView(codeNotFound, false)); 
+            }
             model.set("title", postData.getMessage("announceTitle"));
             model.set("content", postData.getMessage("announceContent"));
             model.set("announcer", postData.getMessage("announcePoster"));
@@ -340,12 +358,30 @@ public class AdminController extends Controller
         final String invalidInputMessage    =   "Invalid input";
         final String failedMessage          =   "Failed to edit announcement";
         final String successMessage         =   "Successfully edited announcement";
+        final String codeNotFound           =   "Announcement model not found";
         
-        if(!validatePostData(new String[] {"announceID", "announceTitle", "announceContent" }))
+        if(!validatePostData(new String[] {"announceID", "announceTitle", "announceContent", "announceCode" }))
             return prepareView(new ResponseDataView(invalidInputMessage, false));
         else
         {
-            AdminAnnouncementsModel model   =   new AdminAnnouncementsModel(postData.getMessage("announceID"));
+            Model model;
+            switch((String) postData.getMessage("announceCode"))
+            {
+                case "ADMIN": 
+                    model = new AdminAnnouncementsModel(postData.getMessage("announceID"));
+                    break;
+                case "DEPT":
+                   if(!validatePostData(new String[] { "deptID" }))
+                        return prepareView(new ResponseDataView(invalidInputMessage, false));
+                    else
+                    {
+                        model = new DeptAnnouncementsModel(postData.getMessage("announceID"));
+                        model.set("dept_id", postData.getMessage("deptID"));
+                        break;
+                    }
+                default: return prepareView(new ResponseDataView(codeNotFound, false)); 
+            }
+            
             model.set("title", postData.getMessage("announceTitle"));
             model.set("content", postData.getMessage("announceContent"));
             
@@ -361,12 +397,31 @@ public class AdminController extends Controller
         final String invalidInputMessage    =   "Invalid input";
         final String failedMessage          =   "Failed to remove announcement";
         final String successMessage         =   "Successfully removed announcement";
+        final String codeNotFound           =   "Announcement model not found";
         
-        if(!validatePostData(new String[] {"announceID" }))
+        if(!validatePostData(new String[] {"announceID", "announceCode" }))
             return prepareView(new ResponseDataView(invalidInputMessage, false));
         else
         {
-            AdminAnnouncementsModel model   =   new AdminAnnouncementsModel(postData.getMessage("announceID"));
+            
+            Model model;
+            switch((String) postData.getMessage("announceCode"))
+            {
+                case "ADMIN": 
+                    model = new AdminAnnouncementsModel(postData.getMessage("announceID"));
+                    break;
+                case "DEPT":
+                    if(!validatePostData(new String[] { "deptID" }))
+                        return prepareView(new ResponseDataView(invalidInputMessage, false));
+                    else
+                    {
+                        model = new DeptAnnouncementsModel(postData.getMessage("announceID"));
+                        model.set("dept_id", postData.getMessage("deptID"));
+                        break;
+                    }
+                default: return prepareView(new ResponseDataView(codeNotFound, false)); 
+            }
+            
             if(model.delete())
                 return prepareView(new ResponseDataView(successMessage, true)); 
             else

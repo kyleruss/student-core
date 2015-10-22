@@ -53,6 +53,8 @@ public abstract class AnnouncementView extends GUIView implements ActionListener
     protected JButton submitButton, backButton;
     protected ManageContext context;
     protected JLabel operationLabel;
+    protected JScrollPane announcementScroller;
+    protected JPanel announcementControls;
     
     public AnnouncementView()
     {
@@ -70,8 +72,8 @@ public abstract class AnnouncementView extends GUIView implements ActionListener
         announcementViewPanel       =   new JPanel(new CardLayout());
         announcementPanel           =   new JPanel(new BorderLayout());
         modifyPanel                 =   new ModifyAnnouncementView();
+        announcementControls        =   new JPanel(new GridLayout(1, 3));
         JPanel announcementHeader   =   new JPanel(new GridLayout(2, 1));   
-        JPanel announcementControls =   new JPanel(new GridLayout(1, 3));
         JPanel statusWrapper        =   new JPanel();
         operationLabel              =   new JLabel();
         addAnnouncementButton       =   new JButton("Add");
@@ -106,7 +108,7 @@ public abstract class AnnouncementView extends GUIView implements ActionListener
         announcementInnerWrapper.setPreferredSize(new Dimension(150, 150));
         announcementsWrapper.setPreferredSize(new Dimension(150, 150));
         
-        JScrollPane announcementScroller    =   new JScrollPane(announcementList);
+        announcementScroller   =   new JScrollPane(announcementList);
         announcementScroller.setPreferredSize(new Dimension(390, 280));
         announcementInnerWrapper.add(announcementScroller);
         announcementsWrapper.add(announcementScroller);
@@ -160,6 +162,7 @@ public abstract class AnnouncementView extends GUIView implements ActionListener
     protected void initData()
     {
         JsonArray announcements =   getData();
+        System.out.println(announcements);
         SwingUtilities.invokeLater(()->
         {
             announcementModel.removeAllElements();

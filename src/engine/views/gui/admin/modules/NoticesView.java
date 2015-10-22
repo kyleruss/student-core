@@ -15,7 +15,8 @@ import javax.swing.Timer;
 
 
 public class NoticesView extends AnnouncementView
-    {
+{
+    protected String announcementCode  =   "ADMIN";
         @Override
         protected void showAddAnnouncement() 
         {
@@ -64,7 +65,7 @@ public class NoticesView extends AnnouncementView
         @Override
         protected void submitAddAnnouncement() 
         {
-            String title    =   modifyPanel.getTitle();
+           /* String title    =   modifyPanel.getTitle();
             String content  =   modifyPanel.getContent();
             
             if(title.equals("") || content.equals(""))
@@ -77,6 +78,10 @@ public class NoticesView extends AnnouncementView
                 postData.add("announcePoster", username);
                 postData.add("announceContent", content);
                 postData.add("announceTitle", title);
+                postData.add("announceCode", announcementCode);  */
+            
+                ControllerMessage postData  =   prepareAddPost();
+                if(postData == null) return;
                 
                 ResponseDataView response   =   (ResponseDataView) RouteHandler.go("postAddAdminAnnouncement", postData);
                 Timer responseTimer =   new Timer(2000, (ActionEvent e)->
@@ -90,16 +95,21 @@ public class NoticesView extends AnnouncementView
                 
                 if(response.getResponseStatus())
                     initData();
-            }
+          //  }
         }
 
         @Override
         protected void submitRemoveAnnouncement()  
         {
-            JsonObject value            =   (JsonObject) announcementList.getSelectedValue();
+            /*JsonObject value            =   (JsonObject) announcementList.getSelectedValue();
             int announceID              =   value.get("ID").getAsInt();
             ControllerMessage postData  =   new ControllerMessage();
             postData.add("announceID", announceID);
+            postData.add("announceCode", announcementCode); */
+            
+            ControllerMessage postData  =   prepareRemovePost();
+            if(postData == null) return;
+            
             ResponseDataView response   =   (ResponseDataView) RouteHandler.go("postRemoveAdminAnnouncement", postData);
             showStatusLabel(response.getRawResponseMessage(), response.getResponseStatus());
             
@@ -110,11 +120,77 @@ public class NoticesView extends AnnouncementView
                     announcementList.setSelectedIndex(0);
             }
         }
+        
+        protected ControllerMessage prepareEditPost()
+        {
+            String title    =   modifyPanel.getTitle();
+            String content  =   modifyPanel.getContent();
+            int id          =   getSelectedValue().get("ID").getAsInt();
+
+            if(title.equals("") || content.equals(""))
+            {
+                JOptionPane.showMessageDialog(null, "Please fill in all the fields");
+                return null;
+            }
+            
+            else
+            {
+                showProcessing();
+                ControllerMessage postData  =   new ControllerMessage();
+                postData.add("announceID", id);
+                postData.add("announceContent", content);
+                postData.add("announceTitle", title);
+                postData.add("announceCode", announcementCode);
+                
+                return postData;
+            }
+        }
+        
+        protected ControllerMessage prepareAddPost()
+        {
+            String title    =   modifyPanel.getTitle();
+            String content  =   modifyPanel.getContent();
+            
+            if(title.equals("") || content.equals(""))
+            {
+                JOptionPane.showMessageDialog(null, "Please fill in all the fields");
+                return null;
+            }
+            
+            else
+            {
+                String username =   Agent.getActiveSession().getUser().get("username").getNonLiteralValue().toString();
+                showProcessing();
+                ControllerMessage postData  =   new ControllerMessage();
+                postData.add("announcePoster", username);
+                postData.add("announceContent", content);
+                postData.add("announceTitle", title);
+                postData.add("announceCode", announcementCode);
+                
+                return postData;
+            }
+        }
+        
+        protected ControllerMessage prepareRemovePost()
+        {
+            JsonObject value            =   (JsonObject) announcementList.getSelectedValue();
+            if(value == null)
+            {
+                JOptionPane.showMessageDialog(null, "Please select an announcement to delete");
+                return null;
+            }
+            int announceID              =   value.get("ID").getAsInt();
+            ControllerMessage postData  =   new ControllerMessage();
+            postData.add("announceID", announceID);
+            postData.add("announceCode", announcementCode);
+            
+            return postData;
+        }
 
         @Override
         protected void submitEditAnnouncement() 
         {
-            String title    =   modifyPanel.getTitle();
+            /*String title    =   modifyPanel.getTitle();
             String content  =   modifyPanel.getContent();
             int id          =   getSelectedValue().get("ID").getAsInt();
             
@@ -127,6 +203,10 @@ public class NoticesView extends AnnouncementView
                 postData.add("announceID", id);
                 postData.add("announceContent", content);
                 postData.add("announceTitle", title);
+                postData.add("announceCode", announcementCode); */
+                
+                ControllerMessage postData  =   prepareEditPost();
+                if(postData == null) return;
                 
                 ResponseDataView response   =   (ResponseDataView) RouteHandler.go("postEditAdminAnnouncement", postData);
                 Timer responseTimer =   new Timer(2000, (ActionEvent e)->
@@ -140,7 +220,5 @@ public class NoticesView extends AnnouncementView
                 
                 if(response.getResponseStatus())
                     initData();
-            }
         }
-        
     }
