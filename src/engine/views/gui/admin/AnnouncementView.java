@@ -1,5 +1,5 @@
 
-package engine.views.gui;
+package engine.views.gui.admin;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;

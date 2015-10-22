@@ -44,7 +44,7 @@ public class AdminController extends Controller
     public View getAdmincp()
     {
         if(!Agent.isGUIMode()) return prepareView(new AdminControlPanelView());
-        else return prepareView(new engine.views.gui.AdminControlPanelView());
+        else return prepareView(new engine.views.gui.admin.AdminControlPanelView());
     }
     
     

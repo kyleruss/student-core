@@ -1,5 +1,5 @@
 
-package engine.views.gui;
+package engine.views.gui.admin;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -11,6 +11,7 @@ import engine.models.AdminAnnouncementsModel;
 import engine.models.Role;
 import engine.views.GUIView;
 import engine.views.ResponseDataView;
+import engine.views.gui.admin.modules.RolesView;
 import engine.views.gui.layout.Layout;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
@@ -44,7 +45,7 @@ import javax.swing.table.DefaultTableModel;
 
 public class AdminControlPanelView extends GUIView implements ActionListener
 {
-    private BufferedImage backgroundImage;
+    protected BufferedImage backgroundImage;
     private BufferedImage classesMenuImage;
     private BufferedImage usersMenuImage;
     private BufferedImage deptMenuImage;
@@ -70,7 +71,15 @@ public class AdminControlPanelView extends GUIView implements ActionListener
     private JTable usersTable;
     
     private JPanel usersView;
+    
+    
     private JPanel departmentView;
+    private JPanel departmentControls;
+    private JButton addDeptButton, removeDeptButton;
+    private JButton editDeptButton, assignDeptHeadButton;
+    private JTable deptTable;
+    private DefaultTableModel deptModel;
+    private JLabel deptStatusLabel;
     
     private JPanel rolesView;
     private JPanel roleControls;
@@ -185,8 +194,61 @@ public class AdminControlPanelView extends GUIView implements ActionListener
 
     private void initDepartmentsView()
     {
-        departmentView  =   new JPanel();
+        departmentView          =   new JPanel(new BorderLayout());
+        departmentControls      =   new JPanel();
+        deptModel               =   new DefaultTableModel();
+        deptTable               =   new JTable(deptModel);
+        addDeptButton           =   new JButton("Add");
+        removeDeptButton        =   new JButton("Remove");
+        editDeptButton          =   new JButton("Edit");
+        assignDeptHeadButton    =   new JButton("Assign Dept. head");
+        deptStatusLabel         =   new JLabel();
+        JPanel header           =   new JPanel(new GridLayout(2, 1));
+        JPanel tableWrapper     =   new JPanel();   
+        JPanel statusWrapper    =   new JPanel();
+        
+        
+        addDeptButton.setIcon(new ImageIcon(addSmallImage));
+        removeDeptButton.setIcon(new ImageIcon(removeSmallImage));
+        editDeptButton.setIcon(new ImageIcon(editSmallImage));
+        assignDeptHeadButton.setIcon(new ImageIcon(assignRoleImage));
+        
+        departmentControls.add(addDeptButton);
+        departmentControls.add(removeDeptButton);
+        departmentControls.add(editDeptButton);
+        departmentControls.add(assignDeptHeadButton);
+        
+        deptStatusLabel.setHorizontalAlignment(JLabel.CENTER);
+        statusWrapper.add(deptStatusLabel);
+        header.add(departmentControls);
+        header.add(statusWrapper);
+        
+        deptModel.addColumn("ID");
+        deptModel.addColumn("Name");
+        deptModel.addColumn("Description");
+        deptModel.addColumn("Head");
+        
+        DefaultTableCellRenderer roleRenderer   =   new DefaultTableCellRenderer();
+        roleRenderer.setHorizontalAlignment(JLabel.CENTER);
+        for(int i = 0; i < deptTable.getColumnCount(); i++)
+            deptTable.getColumnModel().getColumn(i).setCellRenderer(roleRenderer);
+        
+        JScrollPane scroller =  new JScrollPane(deptTable);
+        tableWrapper.add(scroller);
+        tableWrapper.setPreferredSize(new Dimension(390, 280));
+        scroller.setPreferredSize(new Dimension(390, 280));
+        header.setPreferredSize(new Dimension(1, 100));
+        
+        departmentControls.setBackground(Color.WHITE);
         departmentView.setBackground(Color.WHITE);
+        deptTable.setBackground(Color.WHITE);
+        scroller.setBackground(Color.WHITE);
+        header.setBackground(Color.WHITE);
+        statusWrapper.setBackground(Color.WHITE);
+        tableWrapper.setBackground(Color.WHITE);
+        
+        departmentView.add(header, BorderLayout.NORTH);
+        departmentView.add(tableWrapper, BorderLayout.CENTER);
     }
     
     private void initClassesView()
@@ -206,241 +268,7 @@ public class AdminControlPanelView extends GUIView implements ActionListener
     
     private void initRolesView()
     {
-        rolesView               =   new JPanel(new BorderLayout());
-        roleControls            =   new JPanel();
-        rolesModel              =   new DefaultTableModel();
-        rolesTable              =   new JTable(rolesModel);
-        addRoleButton           =   new JButton("Add");
-        removeRoleButton        =   new JButton("Remove");
-        editRoleButton          =   new JButton("Edit");
-        assignRoleButton        =   new JButton("Assign");
-        roleStatusLabel         =   new JLabel();
-        JPanel header           =   new JPanel(new GridLayout(2, 1));
-        JPanel tableWrapper     =   new JPanel();   
-        JPanel statusWrapper    =   new JPanel();
-        
-        addRoleButton.setIcon(new ImageIcon(addSmallImage));
-        removeRoleButton.setIcon(new ImageIcon(removeSmallImage));
-        editRoleButton.setIcon(new ImageIcon(editSmallImage));
-        assignRoleButton.setIcon(new ImageIcon(assignRoleImage));
-        
-        roleControls.add(addRoleButton);
-        roleControls.add(removeRoleButton);
-        roleControls.add(editRoleButton);
-        roleControls.add(assignRoleButton);
-        statusWrapper.add(roleStatusLabel);
-        header.add(roleControls);
-        header.add(statusWrapper);
-        
-        rolesModel.addColumn("ID");
-        rolesModel.addColumn("Name");
-        rolesModel.addColumn("Description");
-        rolesModel.addColumn("Permission");
-        DefaultTableCellRenderer roleRenderer   =   new DefaultTableCellRenderer();
-        roleRenderer.setHorizontalAlignment(JLabel.CENTER);
-        for(int i = 0; i < rolesTable.getColumnCount(); i++)
-            rolesTable.getColumnModel().getColumn(i).setCellRenderer(roleRenderer);
-        
-        JScrollPane tableScroller               =   new JScrollPane(rolesTable);
-        tableWrapper.add(tableScroller);
-        
-        tableWrapper.setPreferredSize(new Dimension(390, 280));
-        tableScroller.setPreferredSize(new Dimension(390, 280));
-        header.setPreferredSize(new Dimension(1, 100));
-        
-        roleControls.setBackground(Color.WHITE);
-        tableWrapper.setBackground(Color.WHITE);
-        rolesView.setBackground(Color.WHITE);
-        header.setBackground(Color.WHITE);
-        statusWrapper.setBackground(Color.WHITE);
-        tableScroller.setBackground(Color.WHITE);
-        rolesTable.setBackground(Color.WHITE);
-        
-        rolesView.add(header, BorderLayout.NORTH);
-        rolesView.add(tableWrapper, BorderLayout.CENTER);
-        fetchRoleResults();
-    }
-    
-    private void fetchRoleResults()
-    {
-        JsonArray results   =   Role.getRoles();
-        if(results.size() == 0) return;
-        else
-        {
-            SwingUtilities.invokeLater(()->
-            {
-                rolesModel.setRowCount(0);
-                for(int i = 1; i < results.size(); i++)
-                {
-                    JsonObject jObj =   results.get(i).getAsJsonObject();
-                    rolesModel.addRow(new Object[] 
-                    { 
-                        jObj.get("ID").getAsInt(), 
-                        jObj.get("NAME").getAsString(), 
-                        jObj.get("DESCRIPTION").getAsString(), 
-                        jObj.get("PERMISSION_LEVEL").getAsInt() 
-                    });
-                }
-            });
-        }
-    }
-    
-    private void removeRole()
-    {
-        int row = rolesTable.getSelectedRow();
-        if(row == -1) 
-            JOptionPane.showMessageDialog(null, "Please select a role to remove");
-        else
-        {
-            int roleID  =   (int) rolesModel.getValueAt(row, 0);
-            String role =   (String) rolesModel.getValueAt(row, 1);
-            int option  =   JOptionPane.showConfirmDialog(null, "Are you sure you want to delete the " + role + " role?", "Remove role", JOptionPane.YES_NO_OPTION);
-            
-            if(option == JOptionPane.YES_OPTION)
-            {
-                ControllerMessage postData  =   new ControllerMessage();
-                postData.add("roleID", roleID);
-                ResponseDataView response   =   (ResponseDataView) RouteHandler.go("postRemoveRole", postData);
-                showResponseLabel(roleStatusLabel, response.getRawResponseMessage(), response.getResponseStatus());
-                
-                if(response.getResponseStatus())
-                    rolesModel.removeRow(row);
-            }
-        }
-    }
-    
-    private void addRole()
-    {
-        AddRoleDialog roleDialog =   new AddRoleDialog();
-        int option = JOptionPane.showConfirmDialog(null, roleDialog, "Add role", JOptionPane.OK_CANCEL_OPTION);
-        
-        if(option == JOptionPane.OK_OPTION)
-        {
-            String roleName =   roleDialog.roleName.getText();
-            String roleDesc =   roleDialog.roleDesc.getText();
-            int permLevel   =   (int) roleDialog.permLevel.getSelectedItem();
-            
-            ControllerMessage postData  =   new ControllerMessage();
-            postData.add("roleName", roleName);
-            postData.add("roleDesc", roleDesc);
-            postData.add("permLevel", permLevel);
-           
-            ResponseDataView response   =   (ResponseDataView) RouteHandler.go("postAddRole", postData);
-            showResponseLabel(roleStatusLabel, response.getRawResponseMessage(), response.getResponseStatus());
-            
-            if(response.getResponseStatus())
-                fetchRoleResults();
-        }
-    }
-    
-    private void editRole()
-    {
-        AddRoleDialog roleDialog    =   new AddRoleDialog();
-        int selectedRow             =   rolesTable.getSelectedRow();
-        if(selectedRow == -1)
-            JOptionPane.showMessageDialog(null, "Please select a role to edit");
-        else
-        {
-            String currentName          =   (String) rolesTable.getValueAt(selectedRow, 1);
-            String currentDesc          =   (String) rolesTable.getValueAt(selectedRow, 2);
-            int currentPerm             =   (int) rolesTable.getValueAt(selectedRow, 3);
-            roleDialog.roleName.setText(currentName);
-            roleDialog.roleDesc.setText(currentDesc);
-            roleDialog.permLevel.setSelectedItem(currentPerm);
-            
-            int option = JOptionPane.showConfirmDialog(null, roleDialog, "Add role", JOptionPane.OK_CANCEL_OPTION);
-
-            if(option == JOptionPane.OK_OPTION)
-            {
-                String roleName =   roleDialog.roleName.getText();
-                String roleDesc =   roleDialog.roleDesc.getText();
-                int permLevel   =   (int) roleDialog.permLevel.getSelectedItem();
-                int roleID      =   (int) rolesTable.getValueAt(selectedRow, 0);
-
-                ControllerMessage postData  =   new ControllerMessage();
-                postData.add("roleName", roleName);
-                postData.add("roleDesc", roleDesc);
-                postData.add("permLevel", permLevel);
-                postData.add("roleID", roleID);
-                
-                ResponseDataView response   =   (ResponseDataView) RouteHandler.go("postEditRole", postData);
-                showResponseLabel(roleStatusLabel, response.getRawResponseMessage(), response.getResponseStatus());
-                
-                if(response.getResponseStatus())
-                    fetchRoleResults();
-            }
-        }
-    }
-    
-    private void assignRole()
-    {
-        AssignRoleDialog assignDialog   =   new AssignRoleDialog();
-        int selectedRow                 =   rolesTable.getSelectedRow();
-        if(selectedRow != -1)
-        {
-            String selectedRoleName     =   (String) rolesTable.getValueAt(selectedRow, 1);
-            assignDialog.rolesSelect.setSelectedItem(selectedRoleName);
-        }
-        
-        int option  =   JOptionPane.showConfirmDialog(null, assignDialog, "Assign role to user", JOptionPane.OK_CANCEL_OPTION);
-        if(option == JOptionPane.OK_OPTION)
-        {
-            String username     =   assignDialog.userField.getText();
-            int roleID          =   (int) rolesTable.getValueAt(assignDialog.rolesSelect.getSelectedIndex(), 0);
-            
-            ControllerMessage postData  =   new ControllerMessage();
-            postData.add("assignTO", username);
-            postData.add("roleID", roleID);
-            
-            ResponseDataView response   =   (ResponseDataView) RouteHandler.go("postAssignRole", postData);
-            showResponseLabel(roleStatusLabel, response.getRawResponseMessage(), response.getResponseStatus());
-        }
-    }
-    
-    private class AddRoleDialog extends JPanel
-    {
-        protected JTextField roleName;
-        protected JTextField roleDesc;
-        protected JComboBox permLevel;
-        
-        public AddRoleDialog()
-        {
-            setLayout(new GridLayout(3, 2));
-            roleName    =   new JTextField();
-            roleDesc    =   new JTextField();
-            permLevel   =   new JComboBox();
-            
-            add(new JLabel("Role name "));
-            add(roleName);
-            add(new JLabel("Role description "));
-            add(roleDesc);
-            add(new JLabel("PermissionLevel "));
-            add(permLevel);
-            
-            for(int i = 0; i < 10; i++)
-                permLevel.addItem(i);
-        }
-    }
-    
-    private class AssignRoleDialog extends JPanel
-    {
-        protected JTextField userField;
-        protected JComboBox rolesSelect;
-        
-        public AssignRoleDialog()
-        {
-            setLayout(new GridLayout(2, 2));
-            userField   =   new JTextField();
-            rolesSelect =   new JComboBox();
-            
-            for(int i = 0; i < rolesModel.getRowCount(); i++)
-                rolesSelect.addItem(rolesModel.getValueAt(i, 1));
-            
-            add(new JLabel("Username "));
-            add(userField);
-            add(new JLabel("Role "));
-            add(rolesSelect);
-        }
+        rolesView               =   new RolesView().getPanel();
     }
     
     @Override
@@ -489,10 +317,14 @@ public class AdminControlPanelView extends GUIView implements ActionListener
         showDepartmentButton.addActionListener(this);
         showAnnouncementsButton.addActionListener(this);
         showRolesButton.addActionListener(this);
-        addRoleButton.addActionListener(this);
+      /*  addRoleButton.addActionListener(this);
         removeRoleButton.addActionListener(this);
         editRoleButton.addActionListener(this);
-        assignRoleButton.addActionListener(this);
+        assignRoleButton.addActionListener(this);*/
+        addDeptButton.addActionListener(this);
+        removeDeptButton.addActionListener(this);
+        editDeptButton.addActionListener(this);
+        assignDeptHeadButton.addActionListener(this);
     }
     
     @Override
@@ -515,7 +347,7 @@ public class AdminControlPanelView extends GUIView implements ActionListener
         else if(src == showRolesButton)
             showAdminView(ROLES_VIEW);
         
-        else if(src == removeRoleButton)
+      /*  else if(src == removeRoleButton)
             removeRole();
         
         else if(src == addRoleButton)
@@ -525,7 +357,7 @@ public class AdminControlPanelView extends GUIView implements ActionListener
             editRole();
         
         else if(src == assignRoleButton)
-            assignRole();
+            assignRole(); */
     }
     
     private void showAdminView(String viewName)
@@ -665,5 +497,10 @@ public class AdminControlPanelView extends GUIView implements ActionListener
             }
         }
         
+    }
+    
+    public static void main(String[] args)
+    {
+        AdminControlPanelView view  =   new AdminControlPanelView();
     }
 }
