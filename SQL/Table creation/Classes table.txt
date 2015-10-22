@@ -4,6 +4,8 @@ CREATE TABLE classes
     name varchar(40),
     description varchar(100),
     teacher_id varchar(16),
+	dept_id INTEGER,
 	created_date DATE DEFAULT CURRENT DATE
-    FOREIGN KEY(teacher_id) REFERENCES users(username) ON DELETE SET NULL
+    FOREIGN KEY(teacher_id) REFERENCES users(username) ON DELETE SET NULL,
+	FOREIGN KEY(dept_id) REFERENCES Department(id) ON DELETE CASCADE
 );

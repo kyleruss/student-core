@@ -10,8 +10,11 @@ import engine.core.RouteHandler;
 import engine.models.AdminAnnouncementsModel;
 import engine.models.Role;
 import engine.views.GUIView;
-import engine.views.ResponseDataView;
+import engine.views.gui.admin.modules.ClassesView;
+import engine.views.gui.admin.modules.DeptView;
+import engine.views.gui.admin.modules.NoticesView;
 import engine.views.gui.admin.modules.RolesView;
+import engine.views.gui.admin.modules.UsersView;
 import engine.views.gui.layout.Layout;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
@@ -65,7 +68,7 @@ public class AdminControlPanelView extends GUIView implements ActionListener
     private final String ANNOUNCE_VIEW  =   "annouce_v";  
     private final String ROLES_VIEW     =   "roles_v";
     
-    private AdminAnnouncementView announcementsView;
+    private NoticesView announcementsView;
     
     private JPanel classesView;
     private JTable usersTable;
@@ -136,13 +139,12 @@ public class AdminControlPanelView extends GUIView implements ActionListener
         
         leftPanel.setBorder(BorderFactory.createMatteBorder(0, 0, 0, 2, Color.LIGHT_GRAY));
         
-
-        initClassesView();
-        initDepartmentsView();
-        initUsersView();
-        initRolesView();
+        departmentView  =   new DeptView().getPanel();
+        classesView     =   new ClassesView().getPanel();
+        usersView       =   new UsersView().getPanel();
+        rolesView       =   new RolesView().getPanel();
         
-        announcementsView   =   new AdminAnnouncementView();
+        announcementsView   =   new NoticesView();
         adminPaneView.add(classesView, CLASS_VIEW);
         adminPaneView.add(departmentView, DEPT_VIEW);
         adminPaneView.add(usersView, USERS_VIEW);
@@ -192,85 +194,6 @@ public class AdminControlPanelView extends GUIView implements ActionListener
         showAdminView(ANNOUNCE_VIEW);
     }
 
-    private void initDepartmentsView()
-    {
-        departmentView          =   new JPanel(new BorderLayout());
-        departmentControls      =   new JPanel();
-        deptModel               =   new DefaultTableModel();
-        deptTable               =   new JTable(deptModel);
-        addDeptButton           =   new JButton("Add");
-        removeDeptButton        =   new JButton("Remove");
-        editDeptButton          =   new JButton("Edit");
-        assignDeptHeadButton    =   new JButton("Assign Dept. head");
-        deptStatusLabel         =   new JLabel();
-        JPanel header           =   new JPanel(new GridLayout(2, 1));
-        JPanel tableWrapper     =   new JPanel();   
-        JPanel statusWrapper    =   new JPanel();
-        
-        
-        addDeptButton.setIcon(new ImageIcon(addSmallImage));
-        removeDeptButton.setIcon(new ImageIcon(removeSmallImage));
-        editDeptButton.setIcon(new ImageIcon(editSmallImage));
-        assignDeptHeadButton.setIcon(new ImageIcon(assignRoleImage));
-        
-        departmentControls.add(addDeptButton);
-        departmentControls.add(removeDeptButton);
-        departmentControls.add(editDeptButton);
-        departmentControls.add(assignDeptHeadButton);
-        
-        deptStatusLabel.setHorizontalAlignment(JLabel.CENTER);
-        statusWrapper.add(deptStatusLabel);
-        header.add(departmentControls);
-        header.add(statusWrapper);
-        
-        deptModel.addColumn("ID");
-        deptModel.addColumn("Name");
-        deptModel.addColumn("Description");
-        deptModel.addColumn("Head");
-        
-        DefaultTableCellRenderer roleRenderer   =   new DefaultTableCellRenderer();
-        roleRenderer.setHorizontalAlignment(JLabel.CENTER);
-        for(int i = 0; i < deptTable.getColumnCount(); i++)
-            deptTable.getColumnModel().getColumn(i).setCellRenderer(roleRenderer);
-        
-        JScrollPane scroller =  new JScrollPane(deptTable);
-        tableWrapper.add(scroller);
-        tableWrapper.setPreferredSize(new Dimension(390, 280));
-        scroller.setPreferredSize(new Dimension(390, 280));
-        header.setPreferredSize(new Dimension(1, 100));
-        
-        departmentControls.setBackground(Color.WHITE);
-        departmentView.setBackground(Color.WHITE);
-        deptTable.setBackground(Color.WHITE);
-        scroller.setBackground(Color.WHITE);
-        header.setBackground(Color.WHITE);
-        statusWrapper.setBackground(Color.WHITE);
-        tableWrapper.setBackground(Color.WHITE);
-        
-        departmentView.add(header, BorderLayout.NORTH);
-        departmentView.add(tableWrapper, BorderLayout.CENTER);
-    }
-    
-    private void initClassesView()
-    {
-        classesView         =   new JPanel();
-        classesView.setBackground(Color.WHITE);
-    }
-    
-    private void initUsersView()
-    {
-        usersView   =   new JPanel();
-        usersView.setBackground(Color.WHITE);
-        
-        usersTable  =   new JTable(new DefaultTableModel());
-        usersView.add(new JScrollPane(usersTable));
-    }
-    
-    private void initRolesView()
-    {
-        rolesView               =   new RolesView().getPanel();
-    }
-    
     @Override
     protected void initResources() 
     {
@@ -290,24 +213,6 @@ public class AdminControlPanelView extends GUIView implements ActionListener
             ExceptionOutput.output("Failed to load resources: " + e.getMessage(), ExceptionOutput.OutputType.MESSAGE);
         }
     }
-    
-    private void showResponseLabel(JLabel label, String message, boolean result)
-    {
-        label.setText(message);
-        if(result)
-            label.setIcon(new ImageIcon(successImage));
-        else
-            label.setIcon(new ImageIcon(failImage));
-        
-        label.setVisible(true);
-        Timer responseTimer =   new Timer(2000, (ActionEvent e)->
-        {
-            label.setVisible(false);
-        });
-        
-        responseTimer.setRepeats(false);
-        responseTimer.start();
-    }
 
     @Override
     protected void initListeners()
@@ -317,14 +222,6 @@ public class AdminControlPanelView extends GUIView implements ActionListener
         showDepartmentButton.addActionListener(this);
         showAnnouncementsButton.addActionListener(this);
         showRolesButton.addActionListener(this);
-      /*  addRoleButton.addActionListener(this);
-        removeRoleButton.addActionListener(this);
-        editRoleButton.addActionListener(this);
-        assignRoleButton.addActionListener(this);*/
-        addDeptButton.addActionListener(this);
-        removeDeptButton.addActionListener(this);
-        editDeptButton.addActionListener(this);
-        assignDeptHeadButton.addActionListener(this);
     }
     
     @Override
@@ -346,157 +243,12 @@ public class AdminControlPanelView extends GUIView implements ActionListener
         
         else if(src == showRolesButton)
             showAdminView(ROLES_VIEW);
-        
-      /*  else if(src == removeRoleButton)
-            removeRole();
-        
-        else if(src == addRoleButton)
-            addRole();
-        
-        else if(src == editRoleButton)
-            editRole();
-        
-        else if(src == assignRoleButton)
-            assignRole(); */
     }
     
     private void showAdminView(String viewName)
     {
         CardLayout cLayout  =   (CardLayout) adminPaneView.getLayout();
         cLayout.show(adminPaneView, viewName);
-    }
-    
-    
-    
-    private class AdminAnnouncementView extends AnnouncementView
-    {
-        @Override
-        protected void showAddAnnouncement() 
-        {
-            announcementsView.modifyPanel.clear();
-            announcementsView.modifyPanel.header.setText("Add announcement");
-            announcementsView.modifyPanel.header.setIcon(new ImageIcon(addSmallImage));
-            announcementsView.showAnnouncementView(AnnouncementView.MODIFY_VIEW);
-            announcementsView.context = AnnouncementView.ManageContext.ADDING;
-        }
-
-        @Override
-        protected void showRemoveAnnouncement() 
-        {
-            if(announcementList.getSelectedIndex() == -1)
-                JOptionPane.showMessageDialog(null, "Please select an announcement in remove");
-            
-            int option      =   JOptionPane.showConfirmDialog(null, "Are you sure you want to remove this announcement?", "Remove announcement", JOptionPane.YES_NO_OPTION);
-            if(option == JOptionPane.YES_OPTION)
-            {
-                submitRemoveAnnouncement();
-            }
-        }
-
-        @Override
-        protected void showEditAnnouncement() 
-        {
-            if(announcementList.getSelectedIndex() == -1)
-                JOptionPane.showMessageDialog(null, "Please select an announcement to edit");
-            
-            JsonObject value = (JsonObject) announcementList.getSelectedValue();
-            String title    =   value.get("TITLE").getAsString();
-            String content  =   value.get("CONTENT").getAsString();
-            announcementsView.modifyPanel.header.setText("Edit announcement");
-            announcementsView.modifyPanel.header.setIcon(new ImageIcon(editSmallImage));
-            announcementsView.modifyPanel.fill(title, content);
-            announcementsView.showAnnouncementView(AnnouncementView.MODIFY_VIEW);
-            announcementsView.context = AnnouncementView.ManageContext.EDITING;
-        }
-
-        @Override
-        protected JsonArray getData()
-        {
-            return AdminAnnouncementsModel.getAllAnnouncements();
-        }
-
-        @Override
-        protected void submitAddAnnouncement() 
-        {
-            String title    =   announcementsView.modifyPanel.getTitle();
-            String content  =   announcementsView.modifyPanel.getContent();
-            
-            if(title.equals("") || content.equals(""))
-                JOptionPane.showMessageDialog(null, "Please fill in all the fields");
-            else
-            {
-                String username =   Agent.getActiveSession().getUser().get("username").getNonLiteralValue().toString();
-                announcementsView.showProcessing();
-                ControllerMessage postData  =   new ControllerMessage();
-                postData.add("announcePoster", username);
-                postData.add("announceContent", content);
-                postData.add("announceTitle", title);
-                
-                ResponseDataView response   =   (ResponseDataView) RouteHandler.go("postAddAdminAnnouncement", postData);
-                Timer responseTimer =   new Timer(2000, (ActionEvent e)->
-                {
-                    announcementsView.showStatusLabel(response.getRawResponseMessage(), response.getResponseStatus());
-                    announcementsView.back();
-                });
-                
-                responseTimer.setRepeats(false);
-                responseTimer.start();
-                
-                if(response.getResponseStatus())
-                    announcementsView.initData();
-            }
-        }
-
-        @Override
-        protected void submitRemoveAnnouncement()  
-        {
-            JsonObject value            =   (JsonObject) announcementList.getSelectedValue();
-            int announceID              =   value.get("ID").getAsInt();
-            ControllerMessage postData  =   new ControllerMessage();
-            postData.add("announceID", announceID);
-            ResponseDataView response   =   (ResponseDataView) RouteHandler.go("postRemoveAdminAnnouncement", postData);
-            announcementsView.showStatusLabel(response.getRawResponseMessage(), response.getResponseStatus());
-            
-            if(response.getResponseStatus())
-            {
-                announcementModel.remove(announcementList.getSelectedIndex());
-                if(announcementModel.size() > 0)
-                    announcementList.setSelectedIndex(0);
-            }
-        }
-
-        @Override
-        protected void submitEditAnnouncement() 
-        {
-            String title    =   announcementsView.modifyPanel.getTitle();
-            String content  =   announcementsView.modifyPanel.getContent();
-            int id          =   announcementsView.getSelectedValue().get("ID").getAsInt();
-            
-            if(title.equals("") || content.equals(""))
-                JOptionPane.showMessageDialog(null, "Please fill in all the fields");
-            else
-            {
-                announcementsView.showProcessing();
-                ControllerMessage postData  =   new ControllerMessage();
-                postData.add("announceID", id);
-                postData.add("announceContent", content);
-                postData.add("announceTitle", title);
-                
-                ResponseDataView response   =   (ResponseDataView) RouteHandler.go("postEditAdminAnnouncement", postData);
-                Timer responseTimer =   new Timer(2000, (ActionEvent e)->
-                {
-                    announcementsView.showStatusLabel(response.getRawResponseMessage(), response.getResponseStatus());
-                    announcementsView.back();
-                });
-                
-                responseTimer.setRepeats(false);
-                responseTimer.start();
-                
-                if(response.getResponseStatus())
-                    announcementsView.initData();
-            }
-        }
-        
     }
     
     public static void main(String[] args)

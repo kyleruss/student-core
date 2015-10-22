@@ -259,8 +259,6 @@ public class UserController extends Controller
 
                 catch(SQLException e)
                 {
-             //       e.printStackTrace();
-              //      System.out.println("[SQL Exception] " + e.getMessage());
                     conn.rollbackTransaction();
                     conn.closeConnection();
                     return prepareView(new ResponseDataView(failedMessage, false));

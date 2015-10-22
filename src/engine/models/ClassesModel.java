@@ -33,6 +33,25 @@ public class ClassesModel extends Model
                 .select("users.contact_email", "Contact email")
                 .get();
     }
+    
+    public static JsonArray getAllClasses()
+    {
+        try
+        {
+            return new ClassesModel().builder()
+                    .join("classes", "department", "dept_id", "id", Join.JoinType.INNERR_JOIN)
+                    .select("classes.*")
+                    .select("department.name", "dept_name")
+                    .get();
+                    
+                    
+        }
+        
+        catch(SQLException e)
+        {
+            return new JsonArray();
+        }
+    }
 
     @Override
     protected void initTable() 
@@ -40,5 +59,7 @@ public class ClassesModel extends Model
         table       =   "classes";
         primaryKey  =   "id";
     }
+    
+    
     
 }

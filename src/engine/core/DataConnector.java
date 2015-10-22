@@ -173,7 +173,6 @@ public class DataConnector implements AutoCloseable
         
         catch(SQLException e)
         {
-          //  System.out.println("SQL EXCEPTION: " + e.getMessage());
             closeConnection();
             return false;
         }

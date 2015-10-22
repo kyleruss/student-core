@@ -129,12 +129,20 @@ public abstract class DataModuleView extends GUIView implements ActionListener
     
     protected Object[] getDataFromResults(JsonObject jObj)
     {
-        if(columnNames == null) return new Object[] {};
+        return getDataFromResults(jObj, columnNames);
+    }
+    
+    protected static Object[] getDataFromResults(JsonObject jObj, String[] colNames)
+    {
+        if(colNames == null) return new Object[] {};
         
         List<Object> rowData    =   new ArrayList<>();
-        for (String columnName : columnNames)
+        for (String columnName : colNames)
         {
             Object current = jObj.get(columnName.toUpperCase());
+            if(current == null) 
+                current = jObj.get(columnName);
+            
             if(current != null)
                 rowData.add(current.toString().replace("\"", ""));
         }
@@ -144,7 +152,7 @@ public abstract class DataModuleView extends GUIView implements ActionListener
     
     protected void setColumns()
     {
-        DefaultTableCellRenderer renderer   =   new DefaultTableCellRenderer();
+       /* DefaultTableCellRenderer renderer   =   new DefaultTableCellRenderer();
         renderer.setHorizontalAlignment(JLabel.CENTER);
         
         for (String columnHeader : columnHeaders) 
@@ -152,7 +160,25 @@ public abstract class DataModuleView extends GUIView implements ActionListener
         
         
         for(int i = 0; i < dataTable.getColumnCount(); i++)
-            dataTable.getColumnModel().getColumn(i).setCellRenderer(renderer);
+            dataTable.getColumnModel().getColumn(i).setCellRenderer(renderer); */
+        
+        setColumns(columnHeaders, dataTable, dataModel);
+    }
+    
+    public static void setColumns(String[] columns, JTable table, DefaultTableModel model)
+    {
+        if(columns == null || table == null || model == null)
+            return; 
+        
+        DefaultTableCellRenderer renderer   =   new DefaultTableCellRenderer();
+        renderer.setHorizontalAlignment(JLabel.CENTER);
+        
+        for (String columnHeader : columns) 
+            model.addColumn(columnHeader);
+        
+        
+        for(int i = 0; i < table.getColumnCount(); i++)
+            table.getColumnModel().getColumn(i).setCellRenderer(renderer);
     }
     
     protected void showResponseLabel(String message, boolean result)

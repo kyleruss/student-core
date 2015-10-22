@@ -8,10 +8,17 @@ package engine.controllers;
 
 import com.google.gson.JsonArray;
 import engine.core.Agent;
+import engine.core.DataConnector;
 import engine.core.Path;
+import engine.core.security.Crypto;
 import engine.models.AdminAnnouncementsModel;
 import engine.models.AssessmentModel;
 import engine.models.AssessmentSubmissionsModel;
+import engine.models.ClassEnrolmentModel;
+import engine.models.ClassesModel;
+import engine.models.DepartmentModel;
+import engine.models.EmergencyContactModel;
+import engine.models.MedicalModel;
 import engine.models.Model;
 import engine.models.Role;
 import engine.models.User;
@@ -20,6 +27,7 @@ import engine.views.View;
 import engine.views.cui.AssessmentSubmissionsView;
 import engine.views.ResponseDataView;
 import engine.views.cui.StudentListView;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 
@@ -459,6 +467,335 @@ public class AdminController extends Controller
                     return prepareView(new ResponseDataView(successMessage, true));
                 else
                     return prepareView(new ResponseDataView(failedMessage, false));
+            }
+        }
+    }
+    
+    public View postAddDepartment()
+    {
+        final String invalidInputMessage    =   "Invalid input";
+        final String failedMessage          =   "Failed to create department";
+        final String successMessage         =   "Successfully created department";
+        final String userNotFoundMessage    =   "User assigned HOD was not found";
+        
+        if(!validatePostData(new String[] { "deptName", "deptDesc", "deptHOD" }))
+            return prepareView(new ResponseDataView(invalidInputMessage, false));
+        else
+        {
+            String username =   (String) postData.getMessage("deptHOD");
+            User user   =   new User(username);
+            if(!user.exists())
+                return prepareView(new ResponseDataView(userNotFoundMessage, false));
+            else
+            {
+                DepartmentModel dept =   new DepartmentModel();
+                dept.set("name", (String) postData.getMessage("deptName"));
+                dept.set("description", (String) postData.getMessage("deptDesc"));
+                dept.set("dept_head", username);
+                
+                if(dept.save())
+                    return prepareView(new ResponseDataView(successMessage, true));
+                else
+                    return prepareView(new ResponseDataView(failedMessage, false));
+            }
+        }
+    }
+    
+    public View postRemoveDepartment()
+    {
+        final String invalidInputMessage    =   "Invalid input";
+        final String failedMessage          =   "Failed to remove department";
+        final String successMessage         =   "Successfully removed department";
+        final String deptNotFoundMessage    =   "Department was not found";
+        
+        if(!validatePostData(new String[] { "deptID" }))
+            return prepareView(new ResponseDataView(invalidInputMessage, false));
+        else
+        {
+            DepartmentModel dept    =   new DepartmentModel(postData.getMessage("deptID"));   
+            
+            if(!dept.exists()) 
+                return prepareView(new ResponseDataView(deptNotFoundMessage, false));
+            else
+            {
+                if(dept.delete())
+                    return prepareView(new ResponseDataView(successMessage, true));
+                else
+                    return prepareView(new ResponseDataView(failedMessage, false));
+            }
+        }
+    }
+    
+    public View postEditDepartment()
+    {
+        final String invalidInputMessage    =   "Invalid input";
+        final String failedMessage          =   "Failed to edit department";
+        final String successMessage         =   "Successfully edited department";
+        final String userNotFoundMessage    =   "User assigned HOD was not found";
+        final String deptNotFoundMessage    =   "Department was not found";
+        
+        if(!validatePostData(new String[] { "deptName", "deptDesc", "deptHOD", "deptID" }))
+            return prepareView(new ResponseDataView(invalidInputMessage, false));
+        else
+        {
+            System.out.println("EDIT--");
+            User user               =   new User(postData.getMessage("deptHOD"));
+            DepartmentModel dept    =   new DepartmentModel(postData.getMessage("deptID"));
+            if(!user.exists())
+                return prepareView(new ResponseDataView(userNotFoundMessage, false));
+            else if(!dept.exists())
+                return prepareView(new ResponseDataView(deptNotFoundMessage, false));
+            else
+            {
+                dept.set("name", postData.getMessage("deptName"));
+                dept.set("description", postData.getMessage("deptDesc"));
+                dept.set("dept_head", postData.getMessage("deptHOD"));
+                
+                if(dept.update())
+                    return prepareView(new ResponseDataView(successMessage, true));
+                else
+                    return prepareView(new ResponseDataView(failedMessage, false));
+            }
+        }
+    }
+    
+    public View postAddClass()
+    {
+        final String invalidInputMessage    =   "Invalid input";
+        final String failedMessage          =   "Failed to create class";
+        final String successMessage         =   "Successfully created class";
+        final String teacherMessage         =   "Teacher was not found";
+        
+        if(!validatePostData(new String[] { "className", "classDescription", "teacherID", "deptID" }))
+            return prepareView(new ResponseDataView(invalidInputMessage, false));
+        else
+        {
+            User teacher    =   new User(postData.getMessage("teacherID"));
+            if(!teacher.exists())
+                return prepareView(new ResponseDataView(teacherMessage, false));
+            else
+            {
+                ClassesModel classModel     =   new ClassesModel();
+                classModel.set("name", postData.getMessage("className"));
+                classModel.set("description", postData.getMessage("classDescription"));
+                classModel.set("teacher_id", postData.getMessage("teacherID"));
+                classModel.set("dept_id", postData.getMessage("deptID"));
+                
+                if(classModel.save())
+                    return prepareView(new ResponseDataView(successMessage, true));
+                else
+                    return prepareView(new ResponseDataView(failedMessage, false));
+            }
+        }
+            
+    }
+    
+    public View postRemoveClass()
+    {
+        final String invalidInputMessage    =   "Invalid input";
+        final String failedMessage          =   "Failed to remove class";
+        final String successMessage         =   "Successfully removed class";
+        final String classNotFound          =   "Class was not found";
+        
+        if(!validatePostData(new String[] { "classID" }))
+            return prepareView(new ResponseDataView(invalidInputMessage, false));
+        else
+        {
+            ClassesModel classModel     =   new ClassesModel(postData.getMessage("classID"));
+            if(!classModel.exists()) 
+                return prepareView(new ResponseDataView(classNotFound, false));
+            else
+            {
+                if(classModel.delete())
+                    return prepareView(new ResponseDataView(successMessage, true));
+                else
+                    return prepareView(new ResponseDataView(failedMessage, false));
+            }
+        }
+    }
+    
+    public View postEditClass()
+    {
+        final String invalidInputMessage    =   "Invalid input";
+        final String failedMessage          =   "Failed to edit class";
+        final String successMessage         =   "Successfully edited class";
+        final String classNotFound          =   "Class was not found";
+        final String teacherNotFound        =   "Teacher was not found";
+        
+        if(!validatePostData(new String[] { "classID", "className", "classDescription", "teacherID", "deptID" }))
+            return prepareView(new ResponseDataView(invalidInputMessage, false));
+        else
+        {
+            User teacher            =   new User(postData.getMessage("teacherID"));
+            ClassesModel classModel =   new ClassesModel(postData.getMessage("classID"));
+            
+            if(!classModel.exists())
+                return prepareView(new ResponseDataView(classNotFound, false));
+            else if(!teacher.exists())
+                return prepareView(new ResponseDataView(teacherNotFound, false));
+            else
+            {
+                classModel.set("name", postData.getMessage("className"));
+                classModel.set("description", postData.getMessage("classDescription"));
+                classModel.set("teacher_id", postData.getMessage("teacherID"));
+                classModel.set("dept_id", postData.getMessage("deptID"));
+                
+                if(classModel.update())
+                    return prepareView(new ResponseDataView(successMessage, true));
+                else
+                    return prepareView(new ResponseDataView(failedMessage, false));
+            }
+        }
+    }
+    
+    public View postEditUser()
+    {
+        final String invalidInputMesage         =   "Invalid information, please check your fields";
+        final String failedMessage              =   "Failed to edit user";
+        final String successMessage             =   "Successfully edited user";
+        final String medicalNotFound            =   "Medical details could not be found";
+        final String contactNotFound            =   "Emergency contact details could not be found";
+        final String userNotFound               =   "User was not found";
+        
+        String[] input  =   
+        { 
+            "registerUsername", "registerPassword", "registerFirstname", "registerLastname",
+            "registerGender", "registerBirth", "registerPhone", "registerEmail", "registerEthnicity",
+            "registerContactFirstname", "registerContactLastname", "registerContactPhone",
+            "registerContactEmail", "registerMedicalDescription"
+        };
+        
+        if(!validatePostData(input))
+            return prepareView(new ResponseDataView(invalidInputMesage, false));
+        else
+        {
+            User user       =   new User(postData.getMessage("registerUsername"));
+            if(!user.exists()) 
+                return prepareView(new ResponseDataView(userNotFound, false));
+            
+            int gender      =   ((String) postData.getMessage("registerGender")).equalsIgnoreCase("male")? 1 : 0;
+            String passSalt =   Crypto.salt((String) postData.getMessage("registerUsername"));
+            String passHash =   Crypto.makeHash(passSalt, (String) postData.getMessage("registerPassword"));
+                    
+            user.set("username", postData.getMessage("registerUsername"));
+            user.set("password", passHash);
+            user.set("firstname", postData.getMessage("registerFirstname"));
+            user.set("lastname", postData.getMessage("registerLastname"));
+            user.set("gender", gender);
+            user.set("birthdate", postData.getMessage("registerBirth"));
+            user.set("contact_ph", postData.getMessage("registerPhone"));
+            user.set("contact_email", postData.getMessage("registerEmail"));
+            user.set("ethnicity", postData.getMessage("registerEthnicity"));
+            
+            MedicalModel medical    =  new MedicalModel(user.get("MEDICAL_ID").getNonLiteralValue());
+            if(!medical.exists())
+                return prepareView(new ResponseDataView(medicalNotFound, false));
+            
+            medical.set("description", postData.getMessage("registerMedicalDescription"));
+            
+            EmergencyContactModel emergencyContact  =   new EmergencyContactModel(medical.get("CONTACT_ID").getNonLiteralValue());
+            if(!emergencyContact.exists())
+                return prepareView(new ResponseDataView(contactNotFound, false));
+            
+            emergencyContact.set("firstname", postData.getMessage("registerContactFirstname"));
+            emergencyContact.set("lastname", postData.getMessage("registerContactLastname"));
+            emergencyContact.set("contact_ph", postData.getMessage("registerContactPhone"));
+            emergencyContact.set("contact_email", postData.getMessage("registerContactEmail"));
+            emergencyContact.set("relationship", "Doctor");
+            
+            
+            try(DataConnector conn  =   new DataConnector())
+            {
+                try
+                {
+                    conn.startTransaction();
+                    conn.setQueryMutator();
+
+                    emergencyContact.setActiveConnection(conn);
+                    if(!emergencyContact.update()) throw new SQLException();
+
+                    medical.setActiveConnection(conn);
+                    if(!medical.update()) throw new SQLException();
+
+                    user.setActiveConnection(conn);
+                    if(!user.update()) throw new SQLException();
+                    
+                    conn.commitTransaction();
+                    return prepareView(new ResponseDataView(successMessage, true));
+                }
+
+                catch(SQLException e)
+                {
+                    conn.rollbackTransaction();
+                    conn.closeConnection();
+                    return prepareView(new ResponseDataView(failedMessage, false));
+                }
+            }
+        }
+    }
+    
+    public View postRemoveEnrolment()
+    {
+        final String invalidInputMesage         =   "Invalid information, please check your fields";
+        final String failedMessage              =   "Failed to remove the enrolment";
+        final String successMessage             =   "Successfully removed the enrolment";
+        final String enrolmentNotFound          =   "The enrolment could not be found";
+        
+        if(!validatePostData(new String[] { "enrolID" }))
+            return prepareView(new ResponseDataView(invalidInputMesage, false));
+        else
+        {
+            ClassEnrolmentModel enrolmentModel  =   new ClassEnrolmentModel(postData.getMessage("enrolID"));
+            if(!enrolmentModel.exists())
+                return prepareView(new ResponseDataView(enrolmentNotFound, false));
+            else
+            {
+                if(enrolmentModel.delete())
+                    return prepareView(new ResponseDataView(successMessage, true));
+                else
+                    return prepareView(new ResponseDataView(failedMessage, false));
+            }
+        }
+    }
+    
+    public View postAddEnrolment()
+    {
+        final String invalidInputMesage         =   "Invalid information, please check your fields";
+        final String failedMessage              =   "Failed to add enrolment";
+        final String successMessage             =   "Successfully added enrolment";
+        final String userEnroled                =   "This user is already enroled in this class";
+        
+        if(!validatePostData(new String[] { "userID", "classID", "semester" }))
+            return prepareView(new ResponseDataView(invalidInputMesage, false));
+        else
+        {
+            ClassEnrolmentModel enrolmentModel  =   new ClassEnrolmentModel();
+            try
+            {
+                JsonArray results                   =   enrolmentModel.builder()
+                                                        .where("user_id", "=",  postData.getMessage("userID").toString())
+                                                        .where("class_id", "=", postData.getMessage("classID").toString())
+                                                        .where("semester_num", "=", postData.getMessage("semester").toString())
+                                                        .get();
+                
+                if(results != null && results.size() > 1)
+                    return prepareView(new ResponseDataView(userEnroled, false)); 
+                else
+                {
+                    enrolmentModel.set("user_id", postData.getMessage("userID"));
+                    enrolmentModel.set("class_id", postData.getMessage("classID"));
+                    enrolmentModel.set("semester_num", postData.getMessage("semester"));
+                    
+                    if(enrolmentModel.save())
+                        return prepareView(new ResponseDataView(successMessage, true)); 
+                    else
+                        return prepareView(new ResponseDataView(failedMessage, false)); 
+                }
+            }
+            
+            catch(SQLException e)
+            {
+                return prepareView(new ResponseDataView(failedMessage, false)); 
             }
         }
     }

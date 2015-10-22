@@ -88,7 +88,7 @@ public final class MainLogger
 
             catch(IOException | SecurityException e)
             {
-                System.out.println("Failed to commit log");
+                System.out.println("Failed to commit log: " + e.getMessage());
             }
 
             //flush and close handlers

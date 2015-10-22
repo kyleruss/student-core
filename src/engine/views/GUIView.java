@@ -25,6 +25,7 @@ public abstract class GUIView extends AbstractView
     protected BufferedImage editSmallImage;
     protected BufferedImage successImage;
     protected BufferedImage failImage;
+    protected BufferedImage searchSmallImage;
     protected ImageIcon spinnerSmall;
     
     public GUIView()
@@ -81,6 +82,7 @@ public abstract class GUIView extends AbstractView
             editSmallImage      =   ImageIO.read(new File(Layout.getImage("edit_icon.png")));
             successImage        =   ImageIO.read(new File(Layout.getImage("successicon.png")));
             failImage           =   ImageIO.read(new File(Layout.getImage("failicon.png")));
+            searchSmallImage    =   ImageIO.read(new File(Layout.getImage("search_icon.png")));
             spinnerSmall        =   new ImageIcon(Layout.getImage("spinner_small.gif"));
         }
         

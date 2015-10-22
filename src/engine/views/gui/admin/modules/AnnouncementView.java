@@ -1,5 +1,5 @@
 
-package engine.views.gui.admin;
+package engine.views.gui.admin.modules;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -330,6 +330,11 @@ public abstract class AnnouncementView extends GUIView implements ActionListener
     protected JsonObject getSelectedValue()
     {
         return (JsonObject) announcementList.getSelectedValue();
+    }
+    
+    protected ModifyAnnouncementView getModifyPanel()
+    {
+        return modifyPanel;
     }
     
     protected class ModifyAnnouncementView extends JPanel

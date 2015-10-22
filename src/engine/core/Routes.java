@@ -89,6 +89,12 @@ public class Routes extends Router
             new Path("postAddDepartment", "AdminController", "postAddDepartment", "/panel/departments/add"),
             new Path("postRemoveDepartment", "AdminController", "postRemoveDepartment", "/panel/departments/remove"),
             new Path("postEditDepartment", "AdminController", "postEditDepartment", "/panel/departments/edit"),
+            new Path("postAddClass", "AdminController", "postAddClass", "/panel/classes/add"),
+            new Path("postEditClass", "AdminController", "postEditClass", "/panel/classes/edit"),
+            new Path("postRemoveClass", "AdminController", "postRemoveClass", "/panel/classes/remove"),
+            new Path("postEditUser", "AdminController", "postEditUser", "/panel/users/edit"),
+            new Path("postAddEnrolment", "AdminController", "postAddEnrolment", "/panel/enrolment/add"),
+            new Path("postRemoveEnrolment", "AdminController", "postRemoveEnrolment", "/panel/enrolment/remove")
         }));
 
     }

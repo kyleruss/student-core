@@ -373,7 +373,7 @@ public class RegisterView extends GUIView implements ActionListener
         }
     }
     
-    private Map<String, String> getAccDetails()
+    public Map<String, String> getAccDetails()
     {
         Map<String, String> accDetails      =   new HashMap<>();
         accDetails.put("registerUsername", usernameField.getText());
@@ -391,7 +391,7 @@ public class RegisterView extends GUIView implements ActionListener
     }
     
     
-    private Map<String, String> getContactDetails()
+    public Map<String, String> getContactDetails()
     {
         Map<String, String> contactDetails  =   new HashMap<>();
         contactDetails.put("registerContactFirstname", contactFirstname.getText());
@@ -472,6 +472,178 @@ public class RegisterView extends GUIView implements ActionListener
         registerTimer.setRepeats(false);
         registerTimer.start();
     }
+
+    public JPanel getUserFormPanel()
+    {
+        return userFormPanel;
+    }
+
+    public JPanel getMedicalFormPanel()
+    {
+        return medicalFormPanel;
+    }
+
+    public JTextField getUsernameField()
+    {
+        return usernameField;
+    }
+
+    public JTextField getPasswordField() 
+    {
+        return passwordField;
+    }
+
+    public JTextField getFirstnameField()
+    {
+        return firstnameField;
+    }
+
+    public JTextField getLastnameField()
+    {
+        return lastnameField;
+    }
+
+    public JTextField getPhoneField()
+    {
+        return phoneField;
+    }
+
+    public JTextField getEmailField() 
+    {
+        return emailField;
+    }
+
+    public JTextField getBirthdateField()
+    {
+        return birthdateField;
+    }
+
+    public JComboBox getGenderField() 
+    {
+        return genderField;
+    }
+
+    public JComboBox getEthnicityField() 
+    {
+        return ethnicityField;
+    }
+
+    public JTextField getContactFirstname() 
+    {
+        return contactFirstname;
+    }
+
+    public JTextField getContactLastname()
+    {
+        return contactLastname;
+    }
+
+    public JTextField getContactPhone() 
+    {
+        return contactPhone;
+    }
+
+    public JTextField getContactEmail()
+    {
+        return contactEmail;
+    }
+
+    public JTextField getContactRelationship()
+    {
+        return contactRelationship;
+    }
+
+    public JTextField getMedicalDescription()
+    {
+        return medicalDescription;
+    }
+
+    public void setUsernameField(JTextField usernameField)
+    {
+        this.usernameField = usernameField;
+    }
+
+    public void setPasswordField(JTextField passwordField)
+    {
+        this.passwordField = passwordField;
+    }
+
+    public void setFirstnameField(JTextField firstnameField)
+    {
+        this.firstnameField = firstnameField;
+    }
+
+    public void setLastnameField(JTextField lastnameField)
+    {
+        this.lastnameField = lastnameField;
+    }
+
+    public void setPhoneField(JTextField phoneField)
+    {
+        this.phoneField = phoneField;
+    }
+
+    public void setEmailField(JTextField emailField) 
+    {
+        this.emailField = emailField;
+    }
+
+    public void setBirthdateField(JTextField birthdateField)
+    {
+        this.birthdateField = birthdateField;
+    }
+
+    public void setGenderField(JComboBox genderField)
+    {
+        this.genderField = genderField;
+    }
+
+    public void setEthnicityField(JComboBox ethnicityField)
+    {
+        this.ethnicityField = ethnicityField;
+    }
+
+    public void setContactFirstname(JTextField contactFirstname) 
+    {
+        this.contactFirstname = contactFirstname;
+    }
+
+    public void setContactLastname(JTextField contactLastname)
+    {
+        this.contactLastname = contactLastname;
+    }
+
+    public void setContactPhone(JTextField contactPhone)
+    {
+        this.contactPhone = contactPhone;
+    }
+
+    public void setContactEmail(JTextField contactEmail)
+    {
+        this.contactEmail = contactEmail;
+    }
+
+    public void setContactRelationship(JTextField contactRelationship)
+    {
+        this.contactRelationship = contactRelationship;
+    }
+
+    public void setMedicalDescription(JTextField medicalDescription)
+    {
+        this.medicalDescription = medicalDescription;
+    }
+
+    public JPanel getFormPanel()
+    {
+        return formPanel;
+    }
+
+    public void setFormPanel(JPanel formPanel) 
+    {
+        this.formPanel = formPanel;
+    }
+    
+    
     
     @Override
     public void actionPerformed(ActionEvent e)

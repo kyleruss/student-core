@@ -117,7 +117,7 @@ public class RolesView extends DataModuleView
             roleDialog.roleDesc.setText(currentDesc);
             roleDialog.permLevel.setSelectedItem(currentPerm);
             
-            int option = JOptionPane.showConfirmDialog(null, roleDialog, "Add role", JOptionPane.OK_CANCEL_OPTION);
+            int option = JOptionPane.showConfirmDialog(null, roleDialog, "Edit role", JOptionPane.OK_CANCEL_OPTION);
 
             if(option == JOptionPane.OK_OPTION)
             {

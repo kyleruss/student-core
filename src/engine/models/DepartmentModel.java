@@ -46,6 +46,19 @@ public class DepartmentModel extends Model
         }
     }
     
+    public static JsonArray getAllDepartments()
+    {
+        try
+        {
+            return new DepartmentModel().builder().get();
+        }
+        
+        catch(SQLException e)
+        {
+            return new JsonArray();
+        }
+    }
+    
     @Override
     protected void initTable() 
     {
