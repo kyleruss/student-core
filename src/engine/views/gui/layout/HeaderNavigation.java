@@ -3,7 +3,6 @@ package engine.views.gui.layout;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import engine.config.AppConfig;
 import engine.core.Agent;
 import engine.core.authentication.Session;
 import engine.models.NotificationModel;
@@ -38,6 +37,9 @@ import javax.swing.SwingUtilities;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import org.jdesktop.xswingx.BuddySupport;
+import org.jdesktop.xswingx.BuddySupport.Position;
+import org.jdesktop.xswingx.PromptSupport;
 
 public class HeaderNavigation extends JPanel implements ActionListener
 {
@@ -114,11 +116,11 @@ public class HeaderNavigation extends JPanel implements ActionListener
         Layout.makeTransparent(addressSearchButton);
         addressSearchButton.setPreferredSize(new Dimension(45, 35));
         
-        JPanel panel2   =   new JPanel();
+        JPanel searchBarWrapper   =   new JPanel();
         addressBar.setPreferredSize(new Dimension(300, 50));
         addressBar.setBorder(BorderFactory.createEmptyBorder(5, 0, 0, 0));
-        panel2.add(addressBar);
-        viewLocationPanel.add(panel2, BorderLayout.CENTER);
+        searchBarWrapper.add(addressBar);
+        viewLocationPanel.add(searchBarWrapper, BorderLayout.CENTER);
         viewLocationPanel.add(addressSearchButton, BorderLayout.EAST);
         
         

@@ -369,7 +369,7 @@ public abstract class AnnouncementView extends GUIView implements ActionListener
             announcementContent.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.LIGHT_GRAY));
             titleWrapper.setPreferredSize(new Dimension(1, 45));
             titleWrapper.add(announcementTitle);
-            announcementTitle.setPreferredSize(new Dimension(404, 35));
+            announcementTitle.setPreferredSize(new Dimension(400, 35));
             
             setBackground(Color.WHITE);
             announcementContent.setBackground(Color.WHITE);

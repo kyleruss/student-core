@@ -7,6 +7,7 @@
 package engine.models;
 
 import com.google.gson.JsonArray;
+import engine.core.ExceptionOutput;
 import engine.core.database.Conditional;
 import engine.core.database.Join;
 import java.sql.SQLException;
@@ -34,13 +35,12 @@ public class AssessmentSubmissionsModel extends Model
                     .select("assessment.*")
                     .get();
             
-         //   System.out.println(results);
             return results;
         }
         
         catch(SQLException e)
         {
-            System.out.println("[SQL Exception] " + e.getMessage());
+            ExceptionOutput.output("SQL Exception] " + e.getMessage(), ExceptionOutput.OutputType.DEBUG);
             return new JsonArray();
         }
     }
@@ -59,6 +59,7 @@ public class AssessmentSubmissionsModel extends Model
                 .select("date_submitted", "Date submitted")
                 .select("alpha_grade", "Grade")
                 .select("mark")
+                .select("comments")
                 .get();
             
             return results;
@@ -66,7 +67,7 @@ public class AssessmentSubmissionsModel extends Model
         
         catch(SQLException e)
         {
-            System.out.println("[SQL Exception] " + e.getMessage());
+            ExceptionOutput.output("SQL Exception] " + e.getMessage(), ExceptionOutput.OutputType.DEBUG);
             return new JsonArray();
         }
     }
@@ -93,7 +94,7 @@ public class AssessmentSubmissionsModel extends Model
         
         catch(SQLException e)
         {
-            System.out.println("[SQL Exception] " + e.getMessage());
+            ExceptionOutput.output("SQL Exception] " + e.getMessage(), ExceptionOutput.OutputType.DEBUG);
             return new JsonArray();
         }
     }
@@ -123,8 +124,26 @@ public class AssessmentSubmissionsModel extends Model
         
         catch(SQLException e)
         {
-            System.out.println("[SQL Exception] " + e.getMessage());
+            ExceptionOutput.output("SQL Exception] " + e.getMessage(), ExceptionOutput.OutputType.DEBUG);
             return new JsonArray();
+        }
+    }
+    
+    
+    public static boolean userHasSubmitted(String userId, int assessId)
+    {
+        try
+        {
+            JsonArray results  = new AssessmentSubmissionsModel().builder().where("assessment_id", "=", "" + assessId)
+                                    .where("user_id", "=", userId)
+                                    .get();
+            
+            return results != null && results.size() > 1;
+        }
+        
+        catch(SQLException e)
+        {
+            return false;
         }
     }
     

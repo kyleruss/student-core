@@ -5,13 +5,19 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import engine.config.AppConfig;
 import engine.controllers.ControllerMessage;
+import engine.core.Agent;
 import engine.core.RouteHandler;
+import engine.core.database.Column;
 import engine.models.AssessmentModel;
+import engine.models.AssessmentSubmissionsModel;
+import engine.models.ClassAnnouncementsModel;
 import engine.models.ClassEnrolmentModel;
 import engine.models.ClassesModel;
+import engine.models.DeptAnnouncementsModel;
 import engine.views.GUIView;
 import engine.views.ResponseDataView;
 import engine.views.gui.admin.modules.DataModuleView;
+import engine.views.gui.admin.modules.NoticesView;
 import engine.views.gui.layout.Layout;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
@@ -29,7 +35,9 @@ import java.text.MessageFormat;
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -49,7 +57,9 @@ public class ClassPageView extends GUIView implements ActionListener
     private final String STUDENT_VIEW   =   "student_v";
     private final String DETAILS_VIEW   =   "details_v";
     private final String ASSESS_VIEW    =   "assessments_v";
+    private final String NOTICE_VIEW    =   "notice_v";
     private BufferedImage backgroundImage;
+    private BufferedImage backImage;
     private JPanel leftPane;
     private JPanel rightPane;
     private JPanel pageControls;
@@ -58,9 +68,11 @@ public class ClassPageView extends GUIView implements ActionListener
     private DetailsView detailsView;
     private AssessmentsView assessmentsView;
     private StudentsView studentsView;
+    private ClassNoticeView noticeView;
     private JButton goDetailsButton;
     private JButton goAssessButton;
     private JButton goStudentsButton;
+    private JButton goNoticesButton;
     
     public ClassPageView()
     {
@@ -98,6 +110,8 @@ public class ClassPageView extends GUIView implements ActionListener
         };
         
         initPassedData();
+        try
+        {
         classPagePanel      =   new JPanel(new BorderLayout());
         leftPane            =   new JPanel();
         rightPane           =   new JPanel();
@@ -106,20 +120,31 @@ public class ClassPageView extends GUIView implements ActionListener
         detailsView         =   new DetailsView();
         assessmentsView     =   new AssessmentsView();
         studentsView        =   new StudentsView();
+        noticeView          =   new ClassNoticeView();
         goDetailsButton     =   new JButton("Details");
         goAssessButton      =   new JButton("Assessments");
         goStudentsButton    =   new JButton("Students");
+        goNoticesButton     =   new JButton("Notices");
         
         viewPanel.add(detailsView, DETAILS_VIEW);
         viewPanel.add(assessmentsView, ASSESS_VIEW);
         viewPanel.add(studentsView, STUDENT_VIEW);
+        viewPanel.add(noticeView.getAnnouncementViewPanel(), NOTICE_VIEW);
+        }
         
-        JPanel controlWrapper   =   new JPanel(new GridLayout(3, 1));
-        controlWrapper.setPreferredSize(new Dimension(200, 120));
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
+        
+        JPanel controlWrapper   =   new JPanel(new GridLayout(4, 1));
+        controlWrapper.setPreferredSize(new Dimension(230, 200));
+        controlWrapper.add(goNoticesButton);
         controlWrapper.add(goDetailsButton);
         controlWrapper.add(goStudentsButton);
         controlWrapper.add(goAssessButton);
         
+        goNoticesButton.setForeground(Color.WHITE);
         goDetailsButton.setForeground(Color.WHITE);
         goAssessButton.setForeground(Color.WHITE);
         goStudentsButton.setForeground(Color.WHITE);
@@ -130,7 +155,7 @@ public class ClassPageView extends GUIView implements ActionListener
         viewPanel.setBackground(Color.WHITE);
         controlWrapper.setBackground(new Color(50, 50, 62));
         
-        classPagePanel.setPreferredSize(new Dimension(500, 400));
+        classPagePanel.setPreferredSize(new Dimension(600, 400));
         leftPane.setPreferredSize(new Dimension(120, 1));
         rightPane.add(viewPanel);
         leftPane.add(controlWrapper);
@@ -157,6 +182,7 @@ public class ClassPageView extends GUIView implements ActionListener
         try
         {
             backgroundImage =   ImageIO.read(new File(Layout.getImage("blurredbackground25.jpg")));
+            backImage       =   ImageIO.read(new File(Layout.getImage("back_icon.png")));
         }
         
         catch(IOException e)
@@ -171,7 +197,7 @@ public class ClassPageView extends GUIView implements ActionListener
         goDetailsButton.addActionListener(this);
         goStudentsButton.addActionListener(this);
         goAssessButton.addActionListener(this);
-        
+        goNoticesButton.addActionListener(this);
     }
 
     @Override
@@ -187,6 +213,9 @@ public class ClassPageView extends GUIView implements ActionListener
         
         else if(src == goAssessButton)
             showView(ASSESS_VIEW);
+        
+        else if(src == goNoticesButton)
+            showView(NOTICE_VIEW);
     }
     
     private class StudentsView extends JPanel
@@ -208,7 +237,7 @@ public class ClassPageView extends GUIView implements ActionListener
             
             headerWrapper.add(numStudentsLabel);
             JScrollPane scroller    =   new JScrollPane(studentTable);
-            scroller.setPreferredSize(new Dimension(320, 250));
+            scroller.setPreferredSize(new Dimension(450, 300));
             tableWrapper.add(scroller);
             
             numStudentsLabel.setFont(new Font("Arial", Font.PLAIN, 14));
@@ -254,17 +283,35 @@ public class ClassPageView extends GUIView implements ActionListener
         private JPanel assessmentViewPanel;
         private AssessmentListView assessmentListView;
         private SubmissionView submissionView;
+        private JButton backButton;
+        private JPanel subHeader;
+        private JLabel submissionLabel;
         
         public AssessmentsView()
         {
-            assessmentViewPanel =   new JPanel(new CardLayout());
-            assessmentListView  =   new AssessmentListView();
-            submissionView      =   new SubmissionView();
+            backButton                  =   new JButton();
+            subHeader                   =   new JPanel();
+            submissionLabel             =   new JLabel();
+            assessmentViewPanel         =   new JPanel(new CardLayout());
+            assessmentListView          =   new AssessmentListView();
+            submissionView              =   new SubmissionView();
+            JPanel submissionWrapper    =   new JPanel(new BorderLayout());   
+            
+            Layout.makeTransparent(backButton);
+            backButton.setIcon(new ImageIcon(backImage));
+            submissionLabel.setFont(new Font("Arial", Font.PLAIN, 12));
+            submissionLabel.setForeground(Color.DARK_GRAY);
+            
+            subHeader.add(backButton);
+            subHeader.add(submissionLabel);
+            submissionWrapper.add(subHeader, BorderLayout.NORTH);
+            submissionWrapper.add(submissionView.getPanel(), BorderLayout.CENTER);
             
             assessmentViewPanel.add(assessmentListView.getPanel(), ASSESS_LIST_VIEW);
-            assessmentViewPanel.add(submissionView.getPanel(), ASSESS_SUB_VIEW);
+            assessmentViewPanel.add(submissionWrapper, ASSESS_SUB_VIEW);
             
-            
+            subHeader.setBackground(Color.WHITE);
+            submissionWrapper.setBackground(Color.WHITE);
             assessmentViewPanel.setBackground(Color.WHITE);
             setBackground(Color.WHITE);
             showAssessmentView(ASSESS_LIST_VIEW);
@@ -293,9 +340,11 @@ public class ClassPageView extends GUIView implements ActionListener
                 super.initComponents();
                 goSubmissionsButton    =   new JButton("Submissions");
                 dataControls.add(goSubmissionsButton);
-                tableScroller.setPreferredSize(new Dimension(300, 150));
-                panel.setPreferredSize(new Dimension(360, 320));
-                header.setPreferredSize(new Dimension(1, 130));
+                panel.setPreferredSize(new Dimension(400, 320)); 
+                tableScroller.setPreferredSize(new Dimension(400, 250));
+                header.setPreferredSize(new Dimension(1, 90));
+                        
+                        
             }
             
             @Override
@@ -312,7 +361,11 @@ public class ClassPageView extends GUIView implements ActionListener
                     JOptionPane.showMessageDialog(null, "Please select an assessment");
                 else
                 {
-                    int assessmentID    =   Integer.parseInt(dataTable.getValueAt(selectedRow, 0).toString());
+                    int assessmentID        =   Integer.parseInt(dataTable.getValueAt(selectedRow, 0).toString());
+                    String assessmentName   =   (String) dataTable.getValueAt(selectedRow, 1);
+                    submissionView.setAssessID(assessmentID);
+                    submissionLabel.setText(MessageFormat.format("{0} submissions", assessmentName));
+                    showAssessmentView(ASSESS_SUB_VIEW);
                 }
             }
             
@@ -435,34 +488,166 @@ public class ClassPageView extends GUIView implements ActionListener
         private class SubmissionView extends DataModuleView
         {
             private int assessID;
+            
+            @Override
+            protected void initComponents()
+            {
+                assessID    =   -1;
+                super.initComponents();
+                tableScroller.setPreferredSize(new Dimension(300, 150));
+                panel.setPreferredSize(new Dimension(360, 320));
+            }
+            
             @Override
             protected JsonArray getData() 
             {
-                
+                if(assessID == -1) return new JsonArray();
+                else return AssessmentSubmissionsModel.getSubmissionsForAssessment(assessID);
             }
+            
+            protected void setAssessID(int assessID)
+            {
+                this.assessID   =   assessID;
+                loadData();
+            }
+            
+            @Override
+            protected void initListeners()
+            {
+                super.initListeners();
+                backButton.addActionListener(this);
+            }
+            
+            @Override
+            public void actionPerformed(ActionEvent e)
+            {
+                super.actionPerformed(e);
+                Object src  =   e.getSource();
+                
+                if(src == backButton)
+                    showAssessmentView(ASSESS_LIST_VIEW);
+            }
+            
 
             @Override
             protected void add()
             {
-                
+                AddSubmissionDialog dialog  =   new AddSubmissionDialog();
+                int option                  =   JOptionPane.showConfirmDialog(null, dialog, "Add submission", JOptionPane.OK_CANCEL_OPTION);
+                if(option == JOptionPane.OK_OPTION)
+                {
+                    ControllerMessage postData  =   new ControllerMessage();
+                    postData.add("subUser", dialog.subUser.getText());
+                    postData.add("assessID", assessID);
+                    postData.add("subGrade", dialog.subGrade.getSelectedItem());
+                    postData.add("subMark", dialog.subMark.getText());
+                    postData.add("subComments", dialog.comments.getText());
+                    
+                    ResponseDataView response   =   (ResponseDataView) RouteHandler.go("postAddSubmission", postData);
+                    showResponseLabel(response.getRawResponseMessage(), response.getResponseStatus());
+
+                    if(response.getResponseStatus())
+                        loadData();
+                }
             }
 
             @Override
             protected void remove()
             {
-                
+                int selectedRow =   dataTable.getSelectedRow();
+                if(selectedRow == -1)
+                    JOptionPane.showMessageDialog(null, "Please select a submission to remove");
+                else
+                {
+                    int option = JOptionPane.showConfirmDialog(null, "Are you sure you want to delete this submission?", "Remove submission", JOptionPane.OK_CANCEL_OPTION);
+                    if(option == JOptionPane.OK_OPTION)
+                    {
+                        ControllerMessage postData  =   new ControllerMessage();
+                        postData.add("subId", dataTable.getValueAt(selectedRow, 0));
+
+                        ResponseDataView response   =   (ResponseDataView) RouteHandler.go("postRemoveSubmission", postData);
+                        showResponseLabel(response.getRawResponseMessage(), response.getResponseStatus());
+
+                        if(response.getResponseStatus())
+                            loadData(); 
+                    }
+                }
             }
 
             @Override
-            protected void edit()
+            protected void edit() 
             {
-                
+                int selectedRow =   dataTable.getSelectedRow();
+                if(selectedRow == -1)
+                    JOptionPane.showMessageDialog(null, "Please select a submission to edit");
+                else
+                {
+                    AddSubmissionDialog dialog  =   new AddSubmissionDialog();
+                    dialog.subUser.setText((String) dataTable.getValueAt(selectedRow, 1));
+                    dialog.subGrade.setSelectedItem(dataTable.getValueAt(selectedRow, 2).toString());
+                    dialog.subMark.setText(dataTable.getValueAt(selectedRow, 3).toString());
+                    dialog.comments.setText((String) dataTable.getValueAt(selectedRow, 5));
+                    
+                    int option = JOptionPane.showConfirmDialog(null, dialog, "Edit submission", JOptionPane.OK_CANCEL_OPTION);
+                    if(option == JOptionPane.OK_OPTION)
+                    {
+                        ControllerMessage postData  =   new ControllerMessage();
+                        postData.add("subUser", dialog.subUser.getText());
+                        postData.add("assessID", assessID);
+                        postData.add("subGrade", dialog.subGrade.getSelectedItem());
+                        postData.add("subMark", dialog.subMark.getText());
+                        postData.add("subComments", dialog.comments.getText());
+                        postData.add("subId", dataTable.getValueAt(selectedRow, 0));
+
+                        ResponseDataView response   =   (ResponseDataView) RouteHandler.go("postEditSubmission", postData);
+                        showResponseLabel(response.getRawResponseMessage(), response.getResponseStatus());
+
+                        if(response.getResponseStatus())
+                            loadData();
+                    }
+                }
             }
 
             @Override
             protected void initColumns() 
             {
+                columnHeaders   =   new String[] { "ID", "Username", "Grade", "Mark", "Date submitted", "Comments" };
+                columnNames     =   new String[] { "Submission ID", "Username", "Grade", "mark", "Date submitted", "comments" };
+            }
+            
+            private class AddSubmissionDialog extends JPanel
+            {
+                private JTextField subUser;
+                private JComboBox subGrade;
+                private JTextField subMark;
+                private JTextField comments;
                 
+                public AddSubmissionDialog()
+                {
+                    setLayout(new GridLayout(4, 2));
+                    subUser     =   new JTextField();
+                    subGrade    =   new JComboBox();
+                    subMark     =   new JTextField();
+                    comments    =   new JTextField();
+                    
+                    String[] gradeLetters   =   new String[] { "A", "B", "C", "D", "E", "F" };
+                    for(String letter : gradeLetters)
+                    {
+                        if(!letter.equals(gradeLetters[5])) subGrade.addItem(letter + "+");
+                        subGrade.addItem(letter);
+                        if(!letter.equals(gradeLetters[5])) subGrade.addItem(letter + "-");
+                    }
+                    
+                    
+                    add(new JLabel("Username"));
+                    add(subUser);
+                    add(new JLabel("Alpha grade"));
+                    add(subGrade);
+                    add(new JLabel("Mark"));
+                    add(subMark);
+                    add(new JLabel("Comments"));
+                    add(comments);
+                }
             }
             
         }
@@ -535,6 +720,52 @@ public class ClassPageView extends GUIView implements ActionListener
                 add(teacherOuterWrapper);
                 add(classOuterWrapper);
             }
+        }
+    }
+    
+    private class ClassNoticeView extends NoticesView
+    {
+        public ClassNoticeView()
+        {
+            super();
+            announcementCode    =   "CLASS";
+        }
+        
+        private ControllerMessage addClassToPost(ControllerMessage data)
+        {
+            if(data == null) return null;
+            else
+            {
+                data.add("classID", classID);
+                return data;
+            }
+        }
+        
+        @Override
+        protected ControllerMessage prepareEditPost()
+        {
+            ControllerMessage postData  =   super.prepareEditPost();
+            return addClassToPost(postData);
+        }
+        
+        @Override
+        protected ControllerMessage prepareAddPost()
+        {
+            ControllerMessage postData  =   super.prepareAddPost();
+            return addClassToPost(postData);
+        }
+        
+        @Override
+        protected ControllerMessage prepareRemovePost()
+        {
+            ControllerMessage postData  =   super.prepareRemovePost();
+            return addClassToPost(postData);
+        }
+        
+        @Override
+        protected JsonArray getData() 
+        {
+            return ClassAnnouncementsModel.getClassAnnouncementsFor(classID);
         }
     }
     

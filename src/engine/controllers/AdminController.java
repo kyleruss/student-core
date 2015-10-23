@@ -14,6 +14,7 @@ import engine.core.security.Crypto;
 import engine.models.AdminAnnouncementsModel;
 import engine.models.AssessmentModel;
 import engine.models.AssessmentSubmissionsModel;
+import engine.models.ClassAnnouncementsModel;
 import engine.models.ClassEnrolmentModel;
 import engine.models.ClassesModel;
 import engine.models.DepartmentModel;
@@ -326,6 +327,77 @@ public class AdminController extends Controller
         }
     }
     
+    public View postAddSubmission()
+    {
+        final String invalidInputMesage         =   "Invalid input, please check your fields";
+        final String failedMessage              =   "Failed to add submission";
+        final String successMessage             =   "Successfully added submission";
+        final String alreadySubmitted           =   "User has already submitted";
+        
+        if(!validatePostData(new String[]{ "assessID", "subUser", "subGrade", "subMark", "subComments"})) 
+                return prepareView(new ResponseDataView(invalidInputMesage, false));
+        else
+        {
+            try
+            {
+            if(AssessmentSubmissionsModel.userHasSubmitted(postData.getMessage("subUser").toString(), 
+                    Integer.parseInt(postData.getMessage("assessID").toString())))
+            {
+                return prepareView(new ResponseDataView(alreadySubmitted, false)); 
+            }
+                
+            else
+            {
+                AssessmentSubmissionsModel submission    =   new AssessmentSubmissionsModel();
+                submission.set("assessment_id", postData.getMessage("assessID"));
+                submission.set("user_id", postData.getMessage("subUser"));
+                submission.set("comments", postData.getMessage("subComments"));
+                submission.set("alpha_grade", postData.getMessage("subGrade"));
+                submission.set("mark", postData.getMessage("subMark"));
+                
+                if(submission.save())
+                    return prepareView(new ResponseDataView(successMessage, true));
+                else 
+                    return prepareView(new ResponseDataView(failedMessage, false));
+            }
+            }
+            catch(Exception e)
+            {
+                e.printStackTrace();
+                return prepareView(new ResponseDataView(failedMessage, false));
+            }
+            
+        }
+    }
+    
+    public View postEditSubmission()
+    {
+        final String invalidInputMesage         =   "Invalid input, please check your fields";
+        final String failedMessage              =   "Failed to edit submission";
+        final String successMessage             =   "Successfully edited submission";
+        final String submissionNotFound         =   "Submission could not be found";
+        
+        if(!validatePostData(new String[]{ "subId", "assessID", "subUser", "subGrade", "subMark", "subComments"})) 
+                return prepareView(new ResponseDataView(invalidInputMesage, false));
+        else
+        {
+            AssessmentSubmissionsModel submission    =   new AssessmentSubmissionsModel(postData.getMessage("subId"));
+            if(!submission.exists())
+                return prepareView(new ResponseDataView(submissionNotFound, false));
+            
+            submission.set("assessment_id", postData.getMessage("assessID"));
+            submission.set("user_id", postData.getMessage("subUser"));
+            submission.set("comments", postData.getMessage("subComments"));
+            submission.set("alpha_grade", postData.getMessage("subGrade"));
+            submission.set("mark", postData.getMessage("subMark"));
+
+            if(submission.update())
+                return prepareView(new ResponseDataView(successMessage, true));
+            else 
+                return prepareView(new ResponseDataView(failedMessage, false));
+        }
+    }
+    
     public View postFindStudentSubmission()
     {
         final String invalidInputMesage         =   "Invalid input, please check your fields";
@@ -372,6 +444,17 @@ public class AdminController extends Controller
                         model.set("dept_id", postData.getMessage("deptID"));
                         break;
                     }
+                
+                case "CLASS":
+                    if(!validatePostData(new String[] { "classID" }))
+                        return prepareView(new ResponseDataView(invalidInputMessage, false));
+                    else
+                    {
+                        model   =   new ClassAnnouncementsModel();
+                        model.set("class_id", postData.getMessage("classID"));
+                        break;
+                    }
+
                 default: return prepareView(new ResponseDataView(codeNotFound, false)); 
             }
             model.set("title", postData.getMessage("announceTitle"));
@@ -411,6 +494,17 @@ public class AdminController extends Controller
                         model.set("dept_id", postData.getMessage("deptID"));
                         break;
                     }
+                
+                case "CLASS":
+                    if(!validatePostData(new String[] { "classID" }))
+                        return prepareView(new ResponseDataView(invalidInputMessage, false));
+                    else
+                    {
+                        model   =   new ClassAnnouncementsModel(postData.getMessage("announceID"));
+                        model.set("class_id", postData.getMessage("classID"));
+                        break;
+                    }
+                
                 default: return prepareView(new ResponseDataView(codeNotFound, false)); 
             }
             
@@ -448,9 +542,21 @@ public class AdminController extends Controller
                     else
                     {
                         model = new DeptAnnouncementsModel(postData.getMessage("announceID"));
-                        model.set("dept_id", postData.getMessage("deptID"));
                         break;
+                   //     model.set("dept_id", postData.getMessage("deptID"));
+                     //   break;
                     }
+                
+                case "CLASS":
+                    if(!validatePostData(new String[] { "classID" }))
+                        return prepareView(new ResponseDataView(invalidInputMessage, false));
+                    else
+                    {
+                        model   =   new ClassAnnouncementsModel(postData.getMessage("announceID"));
+                        break;
+                  //      model.set("class_id", postData.getMessage("classID"));
+                    }
+                
                 default: return prepareView(new ResponseDataView(codeNotFound, false)); 
             }
             

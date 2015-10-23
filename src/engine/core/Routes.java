@@ -67,7 +67,9 @@ public class Routes extends Router
             new Path("postModifySubmission", "AdminController", "postModifySubmission", "/modifysubmission"),
             new Path("postRemoveSubmission", "AdminController", "postRemoveSubmission", "/removesubmission"),
             new Path("postMarkSubmission", "AdminController", "postMarkSubmission", "/marksubmission"),
-            new Path("postFindStudentSubmission", "AdminController", "postFindStudentSubmission", "/findsubmission")
+            new Path("postFindStudentSubmission", "AdminController", "postFindStudentSubmission", "/findsubmission"),
+            new Path("postAddSubmission", "AdminController", "postAddSubmission", "/addsubmission"),
+            new Path("postEditSubmission", "AdminController", "postEditSubmission", "/editsubmission")
         }));
         
         //Admin panel

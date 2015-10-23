@@ -32,11 +32,13 @@ public class NoticesView extends AnnouncementView
         {
             if(announcementList.getSelectedIndex() == -1)
                 JOptionPane.showMessageDialog(null, "Please select an announcement in remove");
-            
-            int option      =   JOptionPane.showConfirmDialog(null, "Are you sure you want to remove this announcement?", "Remove announcement", JOptionPane.YES_NO_OPTION);
-            if(option == JOptionPane.YES_OPTION)
+            else
             {
-                submitRemoveAnnouncement();
+                int option      =   JOptionPane.showConfirmDialog(null, "Are you sure you want to remove this announcement?", "Remove announcement", JOptionPane.YES_NO_OPTION);
+                if(option == JOptionPane.YES_OPTION)
+                {
+                    submitRemoveAnnouncement();
+                }
             }
         }
 
@@ -44,8 +46,13 @@ public class NoticesView extends AnnouncementView
         protected void showEditAnnouncement() 
         {
             if(announcementList.getSelectedIndex() == -1)
+            {
                 JOptionPane.showMessageDialog(null, "Please select an announcement to edit");
+                return;
+            }
             
+            modifyPanel.header.setText("Edit announcement");
+            modifyPanel.header.setIcon(new ImageIcon(editSmallImage));
             JsonObject value = (JsonObject) announcementList.getSelectedValue();
             String title    =   value.get("TITLE").getAsString();
             String content  =   value.get("CONTENT").getAsString();
