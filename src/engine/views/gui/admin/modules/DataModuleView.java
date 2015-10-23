@@ -36,6 +36,7 @@ public abstract class DataModuleView extends GUIView implements ActionListener
     protected JLabel statusLabel;
     protected String[] columnHeaders;
     protected String[] columnNames;
+    protected JScrollPane tableScroller;
     
     
     @Override
@@ -49,8 +50,8 @@ public abstract class DataModuleView extends GUIView implements ActionListener
         remove                  =   new JButton("Remove");
         edit                    =   new JButton("Edit");
         statusLabel             =   new JLabel();
-        header           =   new JPanel(new GridLayout(2, 1));
-        tableWrapper     =   new JPanel();   
+        header                  =   new JPanel(new GridLayout(2, 1));
+        tableWrapper            =   new JPanel();   
         JPanel statusWrapper    =   new JPanel();
         
         add.setIcon(new ImageIcon(addSmallImage));
@@ -67,7 +68,7 @@ public abstract class DataModuleView extends GUIView implements ActionListener
         initColumns();
         setColumns();
         
-        JScrollPane tableScroller               =   new JScrollPane(dataTable);
+        tableScroller        =   new JScrollPane(dataTable);
         tableWrapper.add(tableScroller);
         
         tableWrapper.setPreferredSize(new Dimension(390, 280));

@@ -249,23 +249,26 @@ public class ClassPageView extends GUIView implements ActionListener
     
     private class AssessmentsView extends JPanel
     {
-        private final String ASSESS_LIST_VIEW   =   "assess_list_v";
-        private final String ASSES_SUB_VIEW     =   "assess_sub_v";
+        private final String ASSESS_LIST_VIEW       =   "assess_list_v";
+        private final String ASSESS_SUB_VIEW        =   "assess_sub_v";
         private JPanel assessmentViewPanel;
         private AssessmentListView assessmentListView;
-        private JPanel submissionView;
-        private JButton backButton;
+        private SubmissionView submissionView;
         
         public AssessmentsView()
         {
             assessmentViewPanel =   new JPanel(new CardLayout());
             assessmentListView  =   new AssessmentListView();
-            submissionView      =   new JPanel();
+            submissionView      =   new SubmissionView();
+            
+            assessmentViewPanel.add(assessmentListView.getPanel(), ASSESS_LIST_VIEW);
+            assessmentViewPanel.add(submissionView.getPanel(), ASSESS_SUB_VIEW);
             
             
             assessmentViewPanel.setBackground(Color.WHITE);
-            submissionView.setBackground(Color.WHITE);
+            setBackground(Color.WHITE);
             showAssessmentView(ASSESS_LIST_VIEW);
+            add(assessmentViewPanel);
         }
         
         private void showAssessmentView(String viewName)
@@ -277,6 +280,7 @@ public class ClassPageView extends GUIView implements ActionListener
         private class AssessmentListView extends DataModuleView
         {
             private JButton goSubmissionsButton;
+            
             @Override
             protected JsonArray getData()
             {
@@ -289,6 +293,9 @@ public class ClassPageView extends GUIView implements ActionListener
                 super.initComponents();
                 goSubmissionsButton    =   new JButton("Submissions");
                 dataControls.add(goSubmissionsButton);
+                tableScroller.setPreferredSize(new Dimension(300, 150));
+                panel.setPreferredSize(new Dimension(360, 320));
+                header.setPreferredSize(new Dimension(1, 130));
             }
             
             @Override
@@ -298,13 +305,25 @@ public class ClassPageView extends GUIView implements ActionListener
                 goSubmissionsButton.addActionListener(this);
             }
             
+            private void showSubmissions()
+            {
+                int selectedRow =   dataTable.getSelectedRow();
+                if(selectedRow == -1)
+                    JOptionPane.showMessageDialog(null, "Please select an assessment");
+                else
+                {
+                    int assessmentID    =   Integer.parseInt(dataTable.getValueAt(selectedRow, 0).toString());
+                }
+            }
+            
             @Override
             public void actionPerformed(ActionEvent e)
             {
                 super.actionPerformed(e);
                 Object src = e.getSource();
                 
-                    
+                if(src == goSubmissionsButton)
+                    showSubmissions();
             }
             
             @Override
@@ -413,6 +432,41 @@ public class ClassPageView extends GUIView implements ActionListener
             }
         }
         
+        private class SubmissionView extends DataModuleView
+        {
+            private int assessID;
+            @Override
+            protected JsonArray getData() 
+            {
+                
+            }
+
+            @Override
+            protected void add()
+            {
+                
+            }
+
+            @Override
+            protected void remove()
+            {
+                
+            }
+
+            @Override
+            protected void edit()
+            {
+                
+            }
+
+            @Override
+            protected void initColumns() 
+            {
+                
+            }
+            
+        }
+        
     }
     
     private class DetailsView extends JPanel
@@ -483,4 +537,5 @@ public class ClassPageView extends GUIView implements ActionListener
             }
         }
     }
+    
 }
