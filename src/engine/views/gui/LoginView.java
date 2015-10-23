@@ -14,6 +14,7 @@ import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.GridLayout;
@@ -45,6 +46,7 @@ public class LoginView extends GUIView implements ActionListener, KeyListener
     
     private final String PROCESSING_KEY =   "proc";
     private final String BUTTON_KEY     =   "button";
+    private final String STATUS_KEY     =   "status";
     
     private BufferedImage backgroundImage;
     private ImageIcon loginButtonImage, registerButtonImage, usernameLabelImage, passLabelImage;
@@ -53,6 +55,7 @@ public class LoginView extends GUIView implements ActionListener, KeyListener
     private JTextField usernameField, passwordField;
     private JLabel headerTitle, headerDescription;
     private JPanel headerPanel;
+    private JLabel statusLabel;
     private JCheckBox rememberCredentials;
     
     public LoginView()
@@ -150,26 +153,34 @@ public class LoginView extends GUIView implements ActionListener, KeyListener
         
         JPanel loginPanelButtons    =   new JPanel(new GridLayout(2, 1));
         JPanel loginPanelButtonWrap =   new JPanel();
-        JPanel loginProcessPanel    =   new JPanel(new BorderLayout());
+        JPanel loginProcessPanel    =   new JPanel();
+        JPanel loginStatusPanel     =   new JPanel(new FlowLayout(FlowLayout.CENTER));
         loginButtonsPanel           =   new JPanel(new CardLayout());
         loginButtonsPanel.setBackground(Color.WHITE);
         
         loginButton                 =   new JButton();
         registerButton              =   new JButton();
+        statusLabel                 =   new JLabel();
         JLabel processText          =   new JLabel("Processing...");
-        JLabel processSpinner       =   new JLabel(Transition.getSmallSpinner());
+        processText.setIcon(Transition.getSmallSpinner());
+      //  JLabel processSpinner       =   new JLabel(Transition.getSmallSpinner());
         
+       // processSpinner.setHorizontalAlignment(JLabel.CENTER);
+        processText.setHorizontalAlignment(JLabel.CENTER);
+        loginStatusPanel.setBackground(Color.WHITE);
         loginProcessPanel.setBackground(Color.WHITE);
-        loginProcessPanel.add(processSpinner, BorderLayout.WEST);
-        loginProcessPanel.add(processText, BorderLayout.CENTER);
+        //loginProcessPanel.add(processSpinner, BorderLayout.WEST);
+        loginProcessPanel.add(processText);
+        loginStatusPanel.add(statusLabel);
         
         loginButtonsPanel.add(loginButton, BUTTON_KEY);
+        loginButtonsPanel.add(loginStatusPanel, STATUS_KEY);
         loginButtonsPanel.add(loginProcessPanel, PROCESSING_KEY);
         
         loginPanelButtons.add(loginButtonsPanel);
         loginPanelButtons.add(registerButton);
         
-        loginPanelButtons.setPreferredSize(new Dimension(183, 90));
+        loginPanelButtons.setPreferredSize(new Dimension(300, 90));
         loginPanelButtonWrap.setBackground(Color.WHITE);
         loginPanelButtons.setBackground(Color.WHITE);
         
@@ -225,37 +236,44 @@ public class LoginView extends GUIView implements ActionListener, KeyListener
         String username =   usernameField.getText();
         String password =   passwordField.getText();
         
-        if(username.equals("") || password.equals(""))
-            ExceptionOutput.output("Please enter both your username and password", ExceptionOutput.OutputType.MESSAGE);
-        else
+        CardLayout cLayout  =   (CardLayout) loginButtonsPanel.getLayout();
+        cLayout.show(loginButtonsPanel, PROCESSING_KEY);
+
+        Timer loginTimer    =   new Timer(500, (ActionEvent e) -> 
         {
-            
-            CardLayout cLayout  =   (CardLayout) loginButtonsPanel.getLayout();
-            cLayout.show(loginButtonsPanel, PROCESSING_KEY);
+            ControllerMessage postData   =   new ControllerMessage();
+            postData.add("loginUsername", username);
+            postData.add("loginPassword", password); 
+            postData.add("storeCredentials", rememberCredentials.isSelected());
 
-            Timer loginTimer    =   new Timer(100, (ActionEvent e) -> 
+            ResponseDataView response   =   (ResponseDataView) RouteHandler.go("postLogin", postData); 
+
+            statusLabel.setText(response.getRawResponseMessage());
+            if(response.getResponseStatus())
+                statusLabel.setIcon(new ImageIcon(successImage));
+            else
+                statusLabel.setIcon(new ImageIcon(failImage));
+
+            cLayout.show(loginButtonsPanel, STATUS_KEY);
+            Timer statusTimer   =   new Timer(500, (ActionEvent ex)->
             {
-                ControllerMessage postData   =   new ControllerMessage();
-                postData.add("loginUsername", username);
-                postData.add("loginPassword", password); 
-                postData.add("storeCredentials", rememberCredentials.isSelected());
-
-                ResponseDataView response   =   (ResponseDataView) RouteHandler.go("postLogin", postData); 
                 cLayout.show(loginButtonsPanel, BUTTON_KEY);
-                
-                if(!response.getResponseStatus())
-                     ExceptionOutput.output(response.getRawResponseMessage(), ExceptionOutput.OutputType.MESSAGE);
-                else 
+                if(response.getResponseStatus())
                 {
                     Agent.getWindow().getAppLayout().getHeadNav().enableUserControls();
                     Agent.getWindow().getAppLayout().getHeadNav().enablePrevButton();
                     Agent.setView("getHome");
-                }
+               }
             });
 
-            loginTimer.setRepeats(false);
-            loginTimer.start(); 
-        }
+            statusTimer.setRepeats(false);
+            statusTimer.start();
+
+
+        });
+
+        loginTimer.setRepeats(false);
+        loginTimer.start(); 
     }
     
     private void goRegister()

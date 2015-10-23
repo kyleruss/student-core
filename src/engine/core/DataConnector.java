@@ -77,7 +77,7 @@ public class DataConnector implements AutoCloseable
 
         catch(SQLException e)
         {
-            System.out.println("Failed to connect to server, please try again\nError: " + e.getMessage());      
+            ExceptionOutput.output("Failed to connect to DB server\nError: " + e.getMessage(), ExceptionOutput.OutputType.MESSAGE);      
             close();
         }                 
     }
@@ -87,9 +87,7 @@ public class DataConnector implements AutoCloseable
     public void startTransaction()
     {
         try { conn.setAutoCommit(false); } 
-        catch (SQLException ex) 
-        {
-        }
+        catch (SQLException ex) {}
     }
     
     //Commits the transaction

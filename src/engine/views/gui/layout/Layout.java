@@ -67,5 +67,6 @@ public class Layout extends JPanel
         button.setOpaque(false);
         button.setContentAreaFilled(true);
         button.setBorderPainted(false);
+        button.setRolloverEnabled(false);
     }
 }
