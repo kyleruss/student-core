@@ -37,9 +37,6 @@ import javax.swing.SwingUtilities;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
-import org.jdesktop.xswingx.BuddySupport;
-import org.jdesktop.xswingx.BuddySupport.Position;
-import org.jdesktop.xswingx.PromptSupport;
 
 public class HeaderNavigation extends JPanel implements ActionListener
 {
@@ -250,6 +247,7 @@ public class HeaderNavigation extends JPanel implements ActionListener
     public void showNotificationWindow()
     {
         if(notificationModalOpen) return;
+        else notificationModalOpen   = true;
         
         SwingUtilities.invokeLater(() ->
         {
@@ -432,7 +430,7 @@ public class HeaderNavigation extends JPanel implements ActionListener
         else if(src == userNotificationsButton)
         {
             showNotificationWindow();
-            notificationModalOpen   = true;
+          //  notificationModalOpen   = true;
         }
     }
 }

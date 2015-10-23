@@ -163,7 +163,7 @@ public class ClassPageView extends GUIView implements ActionListener
         classPagePanel.add(leftPane, BorderLayout.WEST);
         classPagePanel.add(rightPane, BorderLayout.CENTER);
 
-        showView(DETAILS_VIEW);
+        showView(NOTICE_VIEW);
         
         panel.add(Box.createRigidArea(new Dimension(AppConfig.WINDOW_WIDTH, 30)));
         panel.add(classPagePanel);

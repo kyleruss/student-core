@@ -158,7 +158,10 @@ public final class Agent extends CommandInterpreter
     {
         Agent.activeSession   =   activeSession;
         if(activeSession != null)
+        {
             window.getAppLayout().getHeadNav().updateUserPanel();
+            window.getAppLayout().getMenu().setEnableUserControls(true);
+        }
     }
     
     //Returns the agents active session
@@ -177,8 +180,10 @@ public final class Agent extends CommandInterpreter
             
             if(view == null)
             {
-             //   ExceptionOutput.output("View not found", ExceptionOutput.OutputType.MESSAGE);
-                setView("getErrorPage");
+                if(!guiMode)
+                    ExceptionOutput.output("View not found", ExceptionOutput.OutputType.MESSAGE);
+                else
+                    setView("getErrorPage");
             }
 
             else
@@ -201,11 +206,29 @@ public final class Agent extends CommandInterpreter
                     HeaderNavigation headNav    =   layout.getHeadNav();
                     headNav.setViewAddress(view.getPath().getFullURL());
                     
-                    if(activeView.getPrevView() != null) headNav.enablePrevButton();
-                    else headNav.disablePrevButton();
+                    if(activeView.getPrevView() != null) 
+                    {
+                        headNav.enablePrevButton();
+                        layout.getMenu().setEnablePrev(true);
+                    }
                     
-                    if(activeView.getNextView() != null) headNav.enableNextButton();
-                    else headNav.disableNextButton();
+                    else
+                    {
+                        headNav.disablePrevButton();
+                        layout.getMenu().setEnablePrev(false);
+                    }
+                    
+                    if(activeView.getNextView() != null)
+                    {
+                        headNav.enableNextButton();
+                        layout.getMenu().setEnableNext(true);
+                    }
+                    
+                    else 
+                    {
+                        headNav.disableNextButton();
+                        layout.getMenu().setEnableNext(false);
+                    }
                     
                     layout.getViewPane().showTransition();
                     Timer transitionTimer    =   new Timer(100, (ActionEvent e) -> 
@@ -326,10 +349,16 @@ public final class Agent extends CommandInterpreter
         
       
             try { Thread.sleep(5000); } 
-            catch (InterruptedException ex) 
-            {
-            //System.out.println(ex.getMessage());
-            }
+            catch (InterruptedException ex)  {}
+        }
+        
+        else
+        {
+            Layout layout   =   window.getAppLayout();
+            layout.getHeadNav().disableUserControls();
+            layout.getHeadNav().disableNextButton();
+            layout.getMenu().setEnableUserControls(false);
+            layout.getMenu().setEnableNext(false);
         }
         
         setView("logout");
