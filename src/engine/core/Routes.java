@@ -53,9 +53,10 @@ public class Routes extends Router
         RouteGroup assessments;
         registerGroup(assessments = new RouteGroup("assessment", classes, new Path[]
         {
-            new Path("postCreateAssessment", "AdminController", "postCreateAssessment", "/makeassessment"),
-            new Path("postModifyAssessment", "AdminController", "postModifyAssessment", "/modifyassessment"),
-            new Path("postDeleteAssessment", "AdminController", "postDeleteAssessment", "/deleteassessment"),
+            new Path("postCreateAssessment", "AdminController", "postCreateAssessment", "/make"),
+            new Path("postModifyAssessment", "AdminController", "postModifyAssessment", "/modify"),
+            new Path("postDeleteAssessment", "AdminController", "postDeleteAssessment", "/delete"),
+            new Path("postEditAssessment", "AdminController", "postEditAssessment", "/edit")
         
         }));
         

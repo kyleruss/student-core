@@ -18,6 +18,7 @@ import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -32,6 +33,9 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
 
 public class DepartmentView extends GUIView implements ActionListener
 {
@@ -76,8 +80,8 @@ public class DepartmentView extends GUIView implements ActionListener
         deptPanel           =   new JPanel(new BorderLayout());
         deptControls        =   new JPanel();
         deptViewPanel       =   new JPanel(new CardLayout());
-        deptUsersView       =   new JPanel();
-        contactView         =   new JPanel();
+        deptUsersView       =   new JPanel(new BorderLayout());
+        contactView         =   new JPanel(new BorderLayout());
         deptHeader          =   new JPanel(new GridLayout(2, 1));
         deptLabel           =   new JLabel("HR Department");
         showNoticesButton   =   new JButton("Notices");
@@ -94,6 +98,9 @@ public class DepartmentView extends GUIView implements ActionListener
         noticeWrapper.add(announcementView.getAnnouncementViewPanel());
         
         initData();
+        initContactView();
+        initUsersView();
+        
         deptLabel.setHorizontalAlignment(JLabel.CENTER);
         deptControls.add(showNoticesButton);
         deptControls.add(showUsersButton);
@@ -180,6 +187,91 @@ public class DepartmentView extends GUIView implements ActionListener
         showUsersButton.addActionListener(this);
     }
     
+    private void initUsersView()
+    {
+        DefaultTableModel userModel =   new DefaultTableModel();   
+        JTable userTable            =   new JTable(userModel);
+        JScrollPane scroller        =   new JScrollPane(userTable);
+        JPanel tableWrapper         =   new JPanel();
+        JLabel usersLabel           =   new JLabel("Department users");
+        usersLabel.setFont(new Font("Arial", Font.BOLD, 14));
+        scroller.setPreferredSize(new Dimension(400, 280));
+        
+        if(deptData != null)
+        {
+            int deptID                  =   Integer.parseInt(deptData.get("id").getNonLiteralValue().toString());
+            JsonArray results           =   DepartmentModel.getUsersInDept(deptID);
+            
+            userModel.addColumn("Username");
+            userModel.addColumn("Firstname");
+            userModel.addColumn("Lastname");
+            userModel.addColumn("Email");
+            userModel.addColumn("Phone");
+            
+            if(results != null && results.size() > 1)
+            {
+                for(int i = 1; i < results.size(); i++)
+                {
+                    JsonObject current  =   results.get(i).getAsJsonObject();
+                    userModel.addRow(new Object[]
+                    {
+                        current.get("USERNAME").getAsString(),
+                        current.get("FIRSTNAME").getAsString(),
+                        current.get("LASTNAME").getAsString(),
+                        current.get("CONTACT_EMAIL").getAsString(),
+                        current.get("CONTACT_PH").getAsString()
+                    });
+                }
+            }
+        }
+        
+        tableWrapper.setBackground(Color.WHITE);
+        scroller.setBackground(Color.WHITE);
+        userTable.setBackground(Color.WHITE);
+        
+        tableWrapper.add(scroller);
+        deptUsersView.add(usersLabel, BorderLayout.NORTH);
+        deptUsersView.add(tableWrapper, BorderLayout.CENTER);
+        deptUsersView.setBorder(BorderFactory.createEmptyBorder(50, 0, 0, 0));
+    }
+    
+    private void initContactView()
+    {
+        JPanel contactInfoPanel =   new JPanel();
+        JPanel innerWrapper     =   new JPanel(new GridLayout(4, 2));
+        JLabel contactLabel     =   new JLabel("Head of Department");
+        
+        contactLabel.setFont(new Font("Arial", Font.BOLD, 14));
+        contactInfoPanel.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.LIGHT_GRAY));
+        innerWrapper.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+        
+        if(deptData != null)
+        {
+            int deptID  =   Integer.parseInt(deptData.get("id").getNonLiteralValue().toString());
+            JsonArray contactResults    =   DepartmentModel.getHOD(deptID);
+            if(contactResults != null && contactResults.size() > 1)
+            {
+                JsonObject contactObj   =   contactResults.get(1).getAsJsonObject();
+                innerWrapper.add(new JLabel("Name"));
+                innerWrapper.add(new JLabel(contactObj.get("FIRSTNAME").getAsString() + " " + contactObj.get("LASTNAME").getAsString()));
+                innerWrapper.add(new JLabel("Phone number"));
+                innerWrapper.add(new JLabel(contactObj.get("CONTACT_PH").getAsString()));
+                innerWrapper.add(new JLabel("Email address"));
+                innerWrapper.add(new JLabel(contactObj.get("CONTACT_EMAIL").getAsString()));
+                innerWrapper.add(new JLabel("Role"));
+                innerWrapper.add(new JLabel(contactObj.get("ROLE_NAME").getAsString()));
+            }
+        }
+        
+        innerWrapper.setBackground(Color.WHITE);
+        contactInfoPanel.setBackground(Color.WHITE);
+        
+        contactInfoPanel.add(innerWrapper);
+        contactView.setBorder(BorderFactory.createEmptyBorder(50, 0, 0, 0));
+        contactView.add(contactLabel, BorderLayout.NORTH);
+        contactView.add(contactInfoPanel, BorderLayout.CENTER);
+    }
+    
     private void showDeptView(String viewName)
     {
         CardLayout cLayout  =   (CardLayout) deptViewPanel.getLayout();
@@ -225,7 +317,6 @@ public class DepartmentView extends GUIView implements ActionListener
                 if(deptData == null) return null;
                 else
                 {
-                    System.out.println("DEPT HERE: " + deptData.get("id").getNonLiteralValue());
                     postData.add("deptID", deptData.get("id").getNonLiteralValue());
                     return postData;
                 }

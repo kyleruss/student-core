@@ -24,13 +24,13 @@ public class DepartmentModel extends Model
         super(id);
     }
     
-    public static JsonArray getStaffInDept(int deptId)
+    public static JsonArray getStaffInDept(int deptID)
     {
         try
         {
             JsonArray results   =   new StaffModel().builder()
                     .join(new Join("staff", "users", "user_id", "username", Join.JoinType.INNERR_JOIN)
-                        .filter(new Conditional("dept_id", "=", "" + deptId)))
+                        .filter(new Conditional("dept_id", "=", "" + deptID)))
                     .select("user_id", "Username")
                     .select("users.firstname", "First name")
                     .select("users.lastname", "Last name")
@@ -46,11 +46,48 @@ public class DepartmentModel extends Model
         }
     }
     
+    public static JsonArray getUsersInDept(int deptID)
+    {
+        try
+        {
+            JsonArray results   =   new User().builder()
+                                    .where("dept_id", "=", "" + deptID)
+                                    .get();
+            return results;
+        }
+        
+        catch(SQLException e)
+        {
+            return new JsonArray();
+        }
+    }
+    
     public static JsonArray getAllDepartments()
     {
         try
         {
-            return new DepartmentModel().builder().get();
+            JsonArray results =  new DepartmentModel().builder().get();
+            return results;
+        }
+        
+        catch(SQLException e)
+        {
+            return new JsonArray();
+        }
+    }
+    
+    public static JsonArray getHOD(int deptID)
+    {
+        try
+        {
+            JsonArray results   =   new DepartmentModel().builder()
+                                    .join(new Join("department", "users", "dept_head", "username", Join.JoinType.INNERR_JOIN)
+                                        .filter(new Conditional("dept_id", "=", "" + deptID)))
+                                    .join("users", "role", "role_id", "id", Join.JoinType.INNERR_JOIN)
+                                    .select("users.*")
+                                    .select("role.name", "role_name")
+                                    .get();
+            return results;
         }
         
         catch(SQLException e)

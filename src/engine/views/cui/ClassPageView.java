@@ -31,7 +31,6 @@ public class ClassPageView extends AbstractView
                 messages, 
                 messages.getData().get(1).getAsJsonObject().get("Class name").getAsString(), 
                 "Class homepage, view and manage this class" 
-              //  "/" + "class/" + messages.getData().get(1).getAsJsonObject().get("Class name").getAsString() + "/" //Agent.getActiveSession().getUser().get("USERNAME").getNonLiteralValue() + "/students/"
         );
     }
     
@@ -46,17 +45,13 @@ public class ClassPageView extends AbstractView
     public void showClassStudents()
     {
         int classId =   messages.getData().get(1).getAsJsonObject().get("Class ID").getAsInt();
-        try
+        JsonArray students  =   ClassEnrolmentModel.getStudentsEnrolledIn(classId);
+        if(students == null || students.size() <= 1)
+            System.out.println(CUITextTools.changeColour("No students found", CUITextTools.RED));
+        else
         {
-            JsonArray students  =   ClassEnrolmentModel.getStudentsEnrolledIn(classId);
             System.out.println("\n" + CUITextTools.underline(CUITextTools.changeColour("Class has " + (students.size() - 1) + " student(s)", CUITextTools.GREEN)));
             CUITextTools.responseToTable(students);
-        }
-        
-        catch(SQLException e)
-        {
-          //  System.out.println(e.getMessage());
-            System.out.println(CUITextTools.changeColour("No students found", CUITextTools.RED));
         }
     }
     

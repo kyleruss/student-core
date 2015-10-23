@@ -28,7 +28,7 @@ public class ClassEnrolmentModel extends Model
     {
         try
         {
-            return new ClassEnrolmentModel().builder()
+            JsonArray results = new ClassEnrolmentModel().builder()
                     .join(new Join("class_enrolments", "users", "user_id", "username", Join.JoinType.INNERR_JOIN).filter(new Conditional("class_id", "=", "" + classId)))
                     .join(new Join("class_enrolments", "classes", "class_id", "id", Join.JoinType.INNERR_JOIN))
                     .select("class_enrolments.id", "enrol_id")
@@ -39,6 +39,29 @@ public class ClassEnrolmentModel extends Model
                     .select("class_enrolments.semester_num", "semester")
                     .select("classes.name", "class_name")
                     .get();
+            return results;
+        }
+        
+        catch(SQLException e)
+        {
+            return new JsonArray();
+        }
+    }
+    
+    public static JsonArray getStudentEnrolments(String username)
+    {
+        try
+        {
+            JsonArray results   =   new ClassEnrolmentModel().builder()
+                                    .join(new Join("class_enrolments", "classes", "class_id", "id", Join.JoinType.INNERR_JOIN).
+                                            filter(new Conditional("user_id", "=", username).literal()))
+                                    .select("class_enrolments.*")
+                                    .select("classes.name", "class_name")
+                                    .select("classes.description", "class_desc")
+                                    .select("classes.id", "class_id")
+                                    .get();
+            
+            return results;
         }
         
         catch(SQLException e)

@@ -192,15 +192,47 @@ public class AdminController extends Controller
         final String invalidInputMesage         =   "Invalid input, please check your fields";
         final String failedMessage              =   "Failed to modify assessment";
         final String successMessage             =   "Successfully modified assessment";
+        final String assessNotFound             =   "Assessment not found";
         
         if(!validatePostData(new String[]{"assessId", "assessAttr", "assessValue"}))
             return prepareView(new ResponseDataView(invalidInputMesage, false));
         else
         {
             AssessmentModel assessment   =   new AssessmentModel(postData.getMessage("assessId"));
+            if(!assessment.exists())
+                return prepareView(new ResponseDataView(assessNotFound, false));
+            
             String columnModify          =   (String) postData.getMessage("assessAttr");
             Object value                 =   postData.getMessage("assessValue");
             assessment.set(columnModify, value);
+            
+            if(assessment.update()) 
+                return prepareView(new ResponseDataView(successMessage, true));
+            else 
+                return prepareView(new ResponseDataView(failedMessage, false));
+        }
+    }
+    
+    public View postEditAssessment()
+    {
+        final String invalidInputMesage         =   "Invalid input, please check your fields";
+        final String failedMessage              =   "Failed to modify assessment";
+        final String successMessage             =   "Successfully modified assessment";
+        final String assessNotFound             =   "Assessment not found";
+        
+        if(!validatePostData(new String[]{"assessId", "assessName", "assessDesc", "assessWeight", "assessClass", "assessDue"}))
+            return prepareView(new ResponseDataView(assessNotFound, false));
+        else
+        {
+            AssessmentModel assessment   =   new AssessmentModel(postData.getMessage("assessId"));
+            if(!assessment.exists())
+                return prepareView(new ResponseDataView(invalidInputMesage, false));
+            
+            assessment.set("name", postData.getMessage("assessName"));
+            assessment.set("description", postData.getMessage("assessDesc"));
+            assessment.set("weight",  postData.getMessage("assessWeight"));
+            assessment.set("class_id", postData.getMessage("assessClass"));
+            assessment.set("due_date", postData.getMessage("assessDue"));
             
             if(assessment.update()) 
                 return prepareView(new ResponseDataView(successMessage, true));

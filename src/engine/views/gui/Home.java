@@ -1,14 +1,20 @@
 
 package engine.views.gui;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import engine.controllers.ControllerMessage;
 import engine.core.Agent;
 import engine.core.ExceptionOutput;
+import engine.core.RouteHandler;
 import engine.core.database.Conditional;
 import engine.core.database.Join;
+import engine.models.ClassEnrolmentModel;
 import engine.models.Role;
 import engine.models.User;
 import engine.views.GUIView;
+import engine.views.View;
+import engine.views.gui.admin.modules.DataModuleView;
 import engine.views.gui.layout.Layout;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -30,7 +36,13 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.table.DefaultTableModel;
 
 
 public class Home extends GUIView implements ActionListener
@@ -41,13 +53,15 @@ public class Home extends GUIView implements ActionListener
     private BufferedImage deptButtonImage;
     private BufferedImage classesButtonImage;
     private BufferedImage homeLabelImage;
+    private BufferedImage notificationImage;
     
     private JPanel homePanel;
     private JPanel homeDisplayPanel;
     private JLabel homeLabel;
+    private ClassesPanel classPanel;
     
     private JPanel homeControls;
-    private JButton adminGoButton, classesGoButton, deptGoButton;
+    private JButton adminGoButton, notificationsGoButton, deptGoButton;
     
     private JPanel userPanel;
     private JPanel userDetailsPanel;
@@ -82,7 +96,7 @@ public class Home extends GUIView implements ActionListener
         };
         
         panel.setBackground(Color.WHITE);
-        
+        classPanel  =   new ClassesPanel();
         homePanel   =   new JPanel(new BorderLayout());
         homePanel.setBackground(Color.WHITE);
         homePanel.setPreferredSize(new Dimension(600, 350));
@@ -94,16 +108,16 @@ public class Home extends GUIView implements ActionListener
         
         homeControls.setOpaque(false);
         
-        adminGoButton       =   new JButton("Admin Panel");
-        classesGoButton     =   new JButton("Classes");
-        deptGoButton        =   new JButton("Department");
+        adminGoButton               =   new JButton("Admin Panel");
+        notificationsGoButton       =   new JButton("Notifications");
+        deptGoButton                =   new JButton("Department");
         
         adminGoButton.setIcon(new ImageIcon(adminButtonImage));
-        classesGoButton.setIcon(new ImageIcon(classesButtonImage));
+        notificationsGoButton.setIcon(new ImageIcon(notificationImage));
         deptGoButton.setIcon(new ImageIcon(deptButtonImage));
         
         homeControls.add(adminGoButton);
-        homeControls.add(classesGoButton);
+        homeControls.add(notificationsGoButton);
         homeControls.add(deptGoButton);
         
         homeDisplayPanel                =   new JPanel(new FlowLayout(FlowLayout.LEFT));
@@ -116,7 +130,9 @@ public class Home extends GUIView implements ActionListener
         homeLabel   =   new JLabel("Home");
         homeLabel.setIcon(new ImageIcon(homeLabelImage));
         innerHomeDisplayPanel.add(homeLabel);
-        homeDisplayPanel.add(innerHomeDisplayPanel);
+        
+        //homeDisplayPanel.add(innerHomeDisplayPanel);
+        homeDisplayPanel.add(classPanel);
         
         userPanel           =   new JPanel();
         userPanel.setPreferredSize(new Dimension(200, homePanel.getPreferredSize().height));
@@ -177,6 +193,7 @@ public class Home extends GUIView implements ActionListener
             deptButtonImage                     =   ImageIO.read(new File(Layout.getImage("department_icon.png")));
             classesButtonImage                  =   ImageIO.read(new File(Layout.getImage("classes_icon.png")));
             homeLabelImage                      =   ImageIO.read(new File(Layout.getImage("home_icon.png")));
+            notificationImage                   =   ImageIO.read(new File(Layout.getImage("notifications_small_icon.png")));
             
             int gender                          =    Integer.parseInt(Agent.getActiveSession().getUser().get("GENDER").getColumnValue().toString());
             
@@ -194,7 +211,7 @@ public class Home extends GUIView implements ActionListener
     protected void initListeners()
     {
         adminGoButton.addActionListener(this);
-        classesGoButton.addActionListener(this);
+        notificationsGoButton.addActionListener(this);
         deptGoButton.addActionListener(this);
     }
     
@@ -206,11 +223,77 @@ public class Home extends GUIView implements ActionListener
         if(src == adminGoButton)
             Agent.setView("getAdmincp");
         
-        else if(src == classesGoButton)
-            Agent.setView("getMyClasses");
+        else if(src == notificationsGoButton)
+            Agent.getWindow().getAppLayout().getHeadNav().showNotificationWindow();
         
         else if(src == deptGoButton)
             Agent.setView("getMyDepartment");
+    }
+    
+    private class ClassesPanel extends JPanel implements ListSelectionListener
+    {
+        private JTable classTable;
+        private DefaultTableModel classModel;
+        private JLabel classesLabel;
+        
+        public ClassesPanel()
+        {
+            setLayout(new BorderLayout());
+            setBackground(Color.WHITE);
+            setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+            
+            classModel          =   new DefaultTableModel();
+            classTable          =   new JTable(classModel);
+            classesLabel        =   new JLabel("My classes");
+            JPanel tableWrapper =   new JPanel();
+            classTable.getSelectionModel().addListSelectionListener(this);
+            
+            classTable.setBackground(Color.WHITE);
+            tableWrapper.setBackground(Color.WHITE);
+            classesLabel.setIcon(new ImageIcon(classesButtonImage));
+            classesLabel.setFont(new Font("Arial", Font.BOLD, 14));
+            
+            JScrollPane scroller    =   new JScrollPane(classTable);
+            scroller.setPreferredSize(new Dimension(350, 250));
+            tableWrapper.add(scroller);
+            add(classesLabel, BorderLayout.NORTH);
+            add(tableWrapper, BorderLayout.CENTER);
+            
+            initData();
+        }
+        
+        private void initData()
+        {
+            DataModuleView.setColumns(new String[] { "ID", "Name", "Description", "Semester" }, classTable, classModel);
+            JsonArray results   =   ClassEnrolmentModel.getStudentEnrolments((String) Agent.getActiveSession().getUser().get("username").getNonLiteralValue());
+            
+            if(results != null && results.size() > 1)
+            {
+                System.out.println(results);
+                SwingUtilities.invokeLater(()->
+                {
+                    for(int i = 1; i < results.size(); i++)
+                    {
+                        JsonObject current  =   results.get(i).getAsJsonObject();
+                        Object[] row        =   DataModuleView.getDataFromResults(current, 
+                                            new String[] { "class_id", "class_name", "class_desc", "semester_num" });
+                        classModel.addRow(row);
+                    }
+                });
+            }
+        }
+
+        @Override
+        public void valueChanged(ListSelectionEvent e) 
+        {
+            if(!e.getValueIsAdjusting())
+            {
+                int selectedRow =   classTable.getSelectedRow();
+                int classID     =   Integer.parseInt(classTable.getValueAt(selectedRow, 0).toString());
+                View classPage  =   RouteHandler.go("getClassPage", new Object[] { classID }, new Class<?>[] { Integer.class }, null);
+                Agent.setView(classPage);
+            }
+        }
     }
     
 }

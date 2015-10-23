@@ -132,7 +132,7 @@ public abstract class DataModuleView extends GUIView implements ActionListener
         return getDataFromResults(jObj, columnNames);
     }
     
-    protected static Object[] getDataFromResults(JsonObject jObj, String[] colNames)
+    public static Object[] getDataFromResults(JsonObject jObj, String[] colNames)
     {
         if(colNames == null) return new Object[] {};
         

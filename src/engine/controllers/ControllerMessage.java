@@ -87,4 +87,10 @@ public class ControllerMessage
         return !messages.isEmpty();
     }
     
+    @Override
+    public String toString()
+    {
+        return makeJson();
+    }
+    
 }

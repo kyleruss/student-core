@@ -1,14 +1,486 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package engine.views.gui;
 
-/**
- *
- * @author root
- */
-public class ClassPageView {
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import engine.config.AppConfig;
+import engine.controllers.ControllerMessage;
+import engine.core.RouteHandler;
+import engine.models.AssessmentModel;
+import engine.models.ClassEnrolmentModel;
+import engine.models.ClassesModel;
+import engine.views.GUIView;
+import engine.views.ResponseDataView;
+import engine.views.gui.admin.modules.DataModuleView;
+import engine.views.gui.layout.Layout;
+import java.awt.BorderLayout;
+import java.awt.CardLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.text.MessageFormat;
+import javax.imageio.ImageIO;
+import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
+import javax.swing.table.DefaultTableModel;
+
+
+public class ClassPageView extends GUIView implements ActionListener
+{
+    int classID;
+    String className;
+    String teacherUsername;
     
+    private final String STUDENT_VIEW   =   "student_v";
+    private final String DETAILS_VIEW   =   "details_v";
+    private final String ASSESS_VIEW    =   "assessments_v";
+    private BufferedImage backgroundImage;
+    private JPanel leftPane;
+    private JPanel rightPane;
+    private JPanel pageControls;
+    private JPanel classPagePanel;
+    private JPanel viewPanel;
+    private DetailsView detailsView;
+    private AssessmentsView assessmentsView;
+    private StudentsView studentsView;
+    private JButton goDetailsButton;
+    private JButton goAssessButton;
+    private JButton goStudentsButton;
+    
+    public ClassPageView()
+    {
+        super();
+    }
+    
+    public ClassPageView(ControllerMessage data)
+    {
+        super(data);
+    }
+    
+    private void initPassedData()
+    {
+        JsonArray jsonData  =   messages.getData();
+        if(jsonData != null && jsonData.size() > 1)
+        {
+            JsonObject dataObj  =   jsonData.get(1).getAsJsonObject();
+            classID         =   dataObj.get("Class ID").getAsInt();
+            className       =   dataObj.get("Class name").getAsString();
+            teacherUsername =   dataObj.get("Teacher ID").getAsString();
+        }
+    }
+    
+    @Override
+    protected void initComponents() 
+    {
+        panel   =   new JPanel()
+        {
+            @Override
+            public void paintComponent(Graphics g)
+            {
+                super.paintComponent(g);
+                g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), null);
+            }
+        };
+        
+        initPassedData();
+        classPagePanel      =   new JPanel(new BorderLayout());
+        leftPane            =   new JPanel();
+        rightPane           =   new JPanel();
+        pageControls        =   new JPanel();
+        viewPanel           =   new JPanel(new CardLayout());
+        detailsView         =   new DetailsView();
+        assessmentsView     =   new AssessmentsView();
+        studentsView        =   new StudentsView();
+        goDetailsButton     =   new JButton("Details");
+        goAssessButton      =   new JButton("Assessments");
+        goStudentsButton    =   new JButton("Students");
+        
+        viewPanel.add(detailsView, DETAILS_VIEW);
+        viewPanel.add(assessmentsView, ASSESS_VIEW);
+        viewPanel.add(studentsView, STUDENT_VIEW);
+        
+        JPanel controlWrapper   =   new JPanel(new GridLayout(3, 1));
+        controlWrapper.setPreferredSize(new Dimension(200, 120));
+        controlWrapper.add(goDetailsButton);
+        controlWrapper.add(goStudentsButton);
+        controlWrapper.add(goAssessButton);
+        
+        goDetailsButton.setForeground(Color.WHITE);
+        goAssessButton.setForeground(Color.WHITE);
+        goStudentsButton.setForeground(Color.WHITE);
+        classPagePanel.setBackground(Color.WHITE);
+        leftPane.setBackground(new Color(50, 50, 62));
+        rightPane.setBackground(Color.WHITE);
+        pageControls.setBackground(new Color(50, 50, 62));
+        viewPanel.setBackground(Color.WHITE);
+        controlWrapper.setBackground(new Color(50, 50, 62));
+        
+        classPagePanel.setPreferredSize(new Dimension(500, 400));
+        leftPane.setPreferredSize(new Dimension(120, 1));
+        rightPane.add(viewPanel);
+        leftPane.add(controlWrapper);
+        
+        classPagePanel.add(leftPane, BorderLayout.WEST);
+        classPagePanel.add(rightPane, BorderLayout.CENTER);
+
+        showView(DETAILS_VIEW);
+        
+        panel.add(Box.createRigidArea(new Dimension(AppConfig.WINDOW_WIDTH, 30)));
+        panel.add(classPagePanel);
+        
+    }
+
+    private void showView(String viewName)
+    {
+        CardLayout cLayout  =   (CardLayout) viewPanel.getLayout();
+        cLayout.show(viewPanel, viewName);
+    }
+    
+    @Override
+    protected void initResources()
+    {
+        try
+        {
+            backgroundImage =   ImageIO.read(new File(Layout.getImage("blurredbackground25.jpg")));
+        }
+        
+        catch(IOException e)
+        {
+            JOptionPane.showMessageDialog(null, "Failed to load resources: " + e.getMessage());
+        }
+    }
+
+    @Override
+    protected void initListeners()
+    {
+        goDetailsButton.addActionListener(this);
+        goStudentsButton.addActionListener(this);
+        goAssessButton.addActionListener(this);
+        
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) 
+    {
+        Object src  =   e.getSource();
+        
+        if(src == goDetailsButton)
+            showView(DETAILS_VIEW);
+        
+        else if(src == goStudentsButton)
+            showView(STUDENT_VIEW);
+        
+        else if(src == goAssessButton)
+            showView(ASSESS_VIEW);
+    }
+    
+    private class StudentsView extends JPanel
+    {
+        private JLabel numStudentsLabel;
+        private JTable studentTable;
+        private DefaultTableModel studentModel;
+        
+        public StudentsView()
+        {
+            setLayout(new BorderLayout());
+            setBorder(BorderFactory.createEmptyBorder(30, 0, 0, 0));
+            studentModel            =   new DefaultTableModel();
+            studentTable            =   new JTable(studentModel);
+            numStudentsLabel        =   new JLabel();
+            
+            JPanel tableWrapper     =   new JPanel();
+            JPanel headerWrapper    =   new JPanel();
+            
+            headerWrapper.add(numStudentsLabel);
+            JScrollPane scroller    =   new JScrollPane(studentTable);
+            scroller.setPreferredSize(new Dimension(320, 250));
+            tableWrapper.add(scroller);
+            
+            numStudentsLabel.setFont(new Font("Arial", Font.PLAIN, 14));
+            numStudentsLabel.setForeground(Color.DARK_GRAY);
+            tableWrapper.setBackground(Color.WHITE);
+            scroller.setBackground(Color.WHITE);
+            studentTable.setBackground(Color.WHITE);
+            setBackground(Color.WHITE);
+            headerWrapper.setBackground(Color.WHITE);
+            
+            
+            add(headerWrapper, BorderLayout.NORTH);
+            add(tableWrapper, BorderLayout.CENTER);
+            initData();
+        }
+        
+        private void initData()
+        {
+            JsonArray data  =   ClassEnrolmentModel.getStudentsEnrolledIn(classID);
+            if(data != null && data.size() > 1)
+            {
+                String numStudentsMessage   =   MessageFormat.format("There is {0} student(s) in this class", (data.size() - 1));
+                numStudentsLabel.setText(numStudentsMessage);
+                DataModuleView.setColumns(new String[] { "Username", "Firstname", "Lastname", "Email" }, studentTable, studentModel);
+                
+                SwingUtilities.invokeLater(()->
+                {
+                    for(int i = 1; i < data.size(); i++)
+                    {
+                        JsonObject current  =   data.get(i).getAsJsonObject();
+                        Object[] row        =   DataModuleView.getDataFromResults(current, new String[] { "User ID", "First name", "Last name", "Email" });
+                        studentModel.addRow(row);
+                    }
+                });
+            }
+        }
+    }
+    
+    private class AssessmentsView extends JPanel
+    {
+        private final String ASSESS_LIST_VIEW   =   "assess_list_v";
+        private final String ASSES_SUB_VIEW     =   "assess_sub_v";
+        private JPanel assessmentViewPanel;
+        private AssessmentListView assessmentListView;
+        private JPanel submissionView;
+        private JButton backButton;
+        
+        public AssessmentsView()
+        {
+            assessmentViewPanel =   new JPanel(new CardLayout());
+            assessmentListView  =   new AssessmentListView();
+            submissionView      =   new JPanel();
+            
+            
+            assessmentViewPanel.setBackground(Color.WHITE);
+            submissionView.setBackground(Color.WHITE);
+            showAssessmentView(ASSESS_LIST_VIEW);
+        }
+        
+        private void showAssessmentView(String viewName)
+        {
+            CardLayout cLayout  =   (CardLayout) assessmentViewPanel.getLayout();
+            cLayout.show(assessmentViewPanel, viewName);
+        }
+        
+        private class AssessmentListView extends DataModuleView
+        {
+            private JButton goSubmissionsButton;
+            @Override
+            protected JsonArray getData()
+            {
+                return AssessmentModel.getAssessmentsForClass(classID);
+            }
+            
+            @Override
+            protected void initComponents()
+            {
+                super.initComponents();
+                goSubmissionsButton    =   new JButton("Submissions");
+                dataControls.add(goSubmissionsButton);
+            }
+            
+            @Override
+            protected void initListeners()
+            {
+                super.initListeners();
+                goSubmissionsButton.addActionListener(this);
+            }
+            
+            @Override
+            public void actionPerformed(ActionEvent e)
+            {
+                super.actionPerformed(e);
+                Object src = e.getSource();
+                
+                    
+            }
+            
+            @Override
+            protected void add()
+            {
+                AddAssessmentDialog dialog  =   new AddAssessmentDialog();
+                int option  =   JOptionPane.showConfirmDialog(null, dialog, "Add assessment", JOptionPane.OK_CANCEL_OPTION);
+                if(option == JOptionPane.OK_OPTION)
+                {
+                    ControllerMessage postData  =   new ControllerMessage();
+                    postData.add("assessName", dialog.assessName.getText());
+                    postData.add("assessDesc", dialog.assessDesc.getText());
+                    postData.add("assessWeight", dialog.assessWeight.getText());
+                    postData.add("assessDue", dialog.assessDue.getText());
+                    postData.add("assessClass", classID);
+                    
+                    ResponseDataView response   =   (ResponseDataView) RouteHandler.go("postCreateAssessment", postData);
+                    showResponseLabel(response.getRawResponseMessage(), response.getResponseStatus());
+
+                    if(response.getResponseStatus())
+                        loadData();
+                }
+            }
+
+            @Override
+            protected void remove() 
+            {
+                int selectedRow =   dataTable.getSelectedRow();
+                if(selectedRow == -1)
+                    JOptionPane.showMessageDialog(null, "Please select an assessment to remove");
+                else
+                {
+                    int assessID                =   Integer.parseInt(dataTable.getValueAt(selectedRow, 0).toString());
+                    ControllerMessage postData  =   new ControllerMessage();
+                    postData.add("assessId", assessID);
+                    
+                    ResponseDataView response   =   (ResponseDataView) RouteHandler.go("postDeleteAssessment", postData);
+                    showResponseLabel(response.getRawResponseMessage(), response.getResponseStatus());
+
+                    if(response.getResponseStatus())
+                        loadData();
+                }
+            }
+
+            @Override
+            protected void edit()
+            {
+                int selectedRow =   dataTable.getSelectedRow();
+                if(selectedRow == -1)
+                    JOptionPane.showMessageDialog(null, "Please select an assessment to edit");
+                else
+                {
+                    AddAssessmentDialog dialog  =   new AddAssessmentDialog();
+                    dialog.assessName.setText((String) dataTable.getValueAt(selectedRow, 1));
+                    dialog.assessDesc.setText((String) dataTable.getValueAt(selectedRow, 2));
+                    dialog.assessWeight.setText(dataTable.getValueAt(selectedRow, 3).toString());
+                    dialog.assessDue.setText((String) dataTable.getValueAt(selectedRow, 4));
+                    int option  =   JOptionPane.showConfirmDialog(null, dialog, "Add assessment", JOptionPane.OK_CANCEL_OPTION);
+                    if(option == JOptionPane.OK_OPTION)
+                    {
+                        ControllerMessage postData  =   new ControllerMessage();
+                        postData.add("assessId", dataTable.getValueAt(selectedRow, 0));
+                        postData.add("assessName", dialog.assessName.getText());
+                        postData.add("assessDesc", dialog.assessDesc.getText());
+                        postData.add("assessWeight", dialog.assessWeight.getText());
+                        postData.add("assessDue", dialog.assessDue.getText());
+                        postData.add("assessClass", classID);
+
+                        ResponseDataView response   =   (ResponseDataView) RouteHandler.go("postEditAssessment", postData);
+                        showResponseLabel(response.getRawResponseMessage(), response.getResponseStatus());
+
+                        if(response.getResponseStatus())
+                            loadData();
+                    }
+                }
+            }
+
+            @Override
+            protected void initColumns()
+            {
+                columnHeaders   =   new String[] { "ID", "Name", "Description", "Weight", "Due date" };
+                columnNames     =   new String[] { "Assessment ID", "name", "description", "Grade weight %", "Due date"};    
+            }
+            
+            private class AddAssessmentDialog extends JPanel
+            {
+                protected JTextField assessName, assessDesc, assessWeight, assessDue;
+                
+                public AddAssessmentDialog()
+                {
+                    setLayout(new GridLayout(4, 2, 0, 10));
+                    assessName      =   new JTextField();
+                    assessDesc      =   new JTextField();
+                    assessWeight    =   new JTextField();
+                    assessDue       =   new JTextField();
+                    
+                    add(new JLabel("Name"));
+                    add(assessName);
+                    add(new JLabel("Description"));
+                    add(assessDesc);
+                    add(new JLabel("Grade weight %"));
+                    add(assessWeight);
+                    add(new JLabel("Due date (yyyy-mm-dd)"));
+                    add(assessDue);
+                }
+            }
+        }
+        
+    }
+    
+    private class DetailsView extends JPanel
+    {
+        private JPanel classDetails;
+        private JPanel teacherDetails;
+        private JLabel teacherLabel;
+        private JLabel classLabel;
+        
+        public DetailsView()
+        {
+            setLayout(new GridLayout(2, 1, 0, 20));
+            classDetails    =   new JPanel();
+            teacherDetails  =   new JPanel();
+            teacherLabel    =   new JLabel("Teacher details");
+            classLabel      =   new JLabel("Class details");
+            
+            classDetails.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.LIGHT_GRAY));
+            teacherDetails.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.LIGHT_GRAY));
+            teacherLabel.setFont(new Font("Arial", Font.BOLD, 14));
+            classLabel.setFont(new Font("Arial", Font.BOLD, 14));
+            
+            JsonArray details    =   ClassesModel.getClassDetails(classID);
+            if(details != null && details.size() > 1)
+            {
+                JsonObject detailObj    =   details.get(1).getAsJsonObject();
+                JPanel classWrapper     =   new JPanel(new GridLayout(4, 2));
+                classWrapper.add(new JLabel("Class name"));
+                classWrapper.add(new JLabel(detailObj.get("CLASS_NAME").getAsString()));
+                classWrapper.add(new JLabel("Class description"));
+                classWrapper.add(new JLabel(detailObj.get("CLASS_DESC").getAsString()));
+                classWrapper.add(new JLabel("Department"));
+                classWrapper.add(new JLabel(detailObj.get("DEPT_NAME").getAsString()));
+                classWrapper.add(new JLabel("Date created"));
+                classWrapper.add(new JLabel(detailObj.get("CLASS_CREATED").getAsString()));
+                classWrapper.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+                classDetails.add(classWrapper);
+
+
+                JPanel teacherWrapper   =   new JPanel(new GridLayout(4, 2));
+                teacherWrapper.add(new JLabel("Name"));
+                teacherWrapper.add(new JLabel(detailObj.get("TEACHER_FIRSTNAME").getAsString() + " " + detailObj.get("TEACHER_LASTNAME").getAsString()));
+                teacherWrapper.add(new JLabel("Contact email"));
+                teacherWrapper.add(new JLabel(detailObj.get("TEACHER_EMAIL").getAsString()));
+                teacherWrapper.add(new JLabel("Contact phone"));
+                teacherWrapper.add(new JLabel(detailObj.get("TEACHER_PHONE").getAsString()));
+                teacherWrapper.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+                teacherDetails.add(teacherWrapper);
+
+                JPanel teacherOuterWrapper  =   new JPanel(new BorderLayout());
+                teacherOuterWrapper.add(teacherLabel, BorderLayout.NORTH);
+                teacherOuterWrapper.add(teacherDetails, BorderLayout.CENTER);
+
+                JPanel classOuterWrapper    =   new JPanel(new BorderLayout());
+                classOuterWrapper.add(classLabel, BorderLayout.NORTH);
+                classOuterWrapper.add(classDetails, BorderLayout.CENTER);
+
+                setBackground(Color.WHITE);
+                classWrapper.setBackground(Color.WHITE);
+                teacherWrapper.setBackground(Color.WHITE);
+                teacherDetails.setBackground(Color.WHITE);
+                classDetails.setBackground(Color.WHITE);
+                teacherOuterWrapper.setBackground(Color.WHITE);
+                classOuterWrapper.setBackground(Color.WHITE);
+
+                add(teacherOuterWrapper);
+                add(classOuterWrapper);
+            }
+        }
+    }
 }

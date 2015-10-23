@@ -52,6 +52,31 @@ public class ClassesModel extends Model
             return new JsonArray();
         }
     }
+    
+    public static JsonArray getClassDetails(int classID)
+    {
+        try
+        {
+            JsonArray results   =   new ClassesModel().builder()
+                                .join(new Join("classes", "users", "teacher_id", "username", Join.JoinType.INNERR_JOIN).filter(new Conditional("id", "=", "" + classID)))
+                                .join("classes", "department", "dept_id", "id", Join.JoinType.INNERR_JOIN)
+                                .select("department.name", "dept_name")
+                                .select("users.firstname", "teacher_firstname")
+                                .select("users.lastname", "teacher_lastname")
+                                .select("users.contact_ph", "teacher_phone")
+                                .select("users.contact_email", "teacher_email")
+                                .select("classes.name", "class_name")
+                                .select("classes.description", "class_desc")
+                                .select("classes.created_date", "class_created")
+                                .get();
+            return results;
+        }
+        
+        catch(SQLException e)
+        {
+            return new JsonArray();
+        }
+    }
 
     @Override
     protected void initTable() 

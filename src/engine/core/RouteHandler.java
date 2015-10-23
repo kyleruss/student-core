@@ -63,8 +63,6 @@ public class RouteHandler
         
         catch(NoSuchMethodException e)
         {
-           // ExceptionOutput.output("Address was not found", ExceptionOutput.OutputType.MESSAGE);
-         //   ExceptionOutput.output(e.getMessage(), ExceptionOutput.OutputType.DEBUG);
             return null;
         }
     }

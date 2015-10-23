@@ -109,7 +109,6 @@ public class UserController extends Controller
         
         catch(SQLException e)
         {
-         //   System.out.println("[SQL Exception] " + e.getMessage());
             return null;
         }
     }
@@ -118,18 +117,20 @@ public class UserController extends Controller
     {
         try
         {
-            JsonArray classDetails  =   new ClassesModel(classId).builder().where("id", "=", "1")
+            JsonArray classDetails  =   new ClassesModel().builder().where("id", "=", "" + classId)
                     .select("id", "Class ID")
                     .select("name", "Class name")
                     .select("teacher_id", "Teacher ID")
                     .select("created_date", "Date created")
                     .get();
-            return prepareView(new ClassPageView(new ControllerMessage(classDetails)));
+            
+            
+            if(!Agent.isGUIMode()) return prepareView(new ClassPageView(new ControllerMessage(classDetails)));
+            else return prepareView(new engine.views.gui.ClassPageView(new ControllerMessage(classDetails)));
         }
         
         catch(SQLException  e)
         {
-         //   System.out.println(e.getMessage());
             return null;
         }
         
