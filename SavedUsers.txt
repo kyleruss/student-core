@@ -5,7 +5,7 @@
       "username": "kyleruss",
       "password": "0Tupn6o7p+nnIS8tbunBhTgz7rE\u003d",
       "dateSaved": "2015-10-10",
-      "lastLogged": "2015-44-24"
+      "lastLogged": "2015-31-24"
     },
     "test12345": {
       "username": "test12345",

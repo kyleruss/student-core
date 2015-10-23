@@ -3,9 +3,12 @@ package engine.views.gui.layout;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import engine.config.AppConfig;
 import engine.core.Agent;
 import engine.core.authentication.Session;
 import engine.models.NotificationModel;
+import engine.views.gui.layout.Layout;
+import engine.views.gui.layout.Window;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
@@ -58,6 +61,8 @@ public class HeaderNavigation extends JPanel implements ActionListener
 
     private final JTextField addressBar;
     private final JButton addressSearchButton;
+    private int unreadNotifications;
+    private NotificationUpdater notificationUpdater;
     
     public HeaderNavigation()
     {
@@ -69,9 +74,11 @@ public class HeaderNavigation extends JPanel implements ActionListener
         ));
         
         initResources();
+        unreadNotifications =   0;
         viewNavigationPanel =   new JPanel(new GridLayout(1, 3));
         viewLocationPanel   =   new JPanel(new BorderLayout());
         userPanel           =   new JPanel(new GridLayout(1, 3));
+        notificationUpdater =   new NotificationUpdater();
         
         viewNavigationPanel.setPreferredSize(new Dimension(150, 25));
         viewLocationPanel.setPreferredSize(new Dimension(250, 40));
@@ -163,6 +170,7 @@ public class HeaderNavigation extends JPanel implements ActionListener
         disablePrevButton();
         disableNextButton();
         disableUserControls();
+        notificationUpdater.start();
     }
     
     private void initResources()
@@ -244,6 +252,37 @@ public class HeaderNavigation extends JPanel implements ActionListener
         }
     }
     
+    private class NotificationUpdater extends Thread
+    {
+        @Override
+        public void run()
+        {
+            while(true)
+            {
+                try
+                {
+                    sleep(AppConfig.NOTIFICATION_TIME);
+                    updateUserPanel();
+                }
+                
+                catch(InterruptedException e) {}
+            }
+        }
+    }
+    
+    private void checkUnreadNotifications(JsonArray results)
+    {
+        int tempUnreadNotifications     =   0;
+        for(int i = 1; i < results.size(); i++)
+        {
+            JsonObject current  =   results.get(i).getAsJsonObject();
+            if(current.get("UNREAD").getAsBoolean())
+                tempUnreadNotifications++;
+        }
+
+        unreadNotifications =   tempUnreadNotifications;
+    }
+    
     public void showNotificationWindow()
     {
         if(notificationModalOpen) return;
@@ -256,13 +295,15 @@ public class HeaderNavigation extends JPanel implements ActionListener
 
             JsonArray notifications         =   NotificationModel.getUserNotifications(Agent.getActiveSession().getUser().get("username").getNonLiteralValue().toString());
             int numNotifications            =   (notifications.size() > 0)? notifications.size() - 1 : 0;
+            checkUnreadNotifications(notifications);
+            
 
             JPanel notificationPanel        =   new JPanel(new BorderLayout());
             JButton backButton              =   new JButton();
             JTable notificationTable        =   new JTable(new DefaultTableModel());
             JPanel tableView                =   new JPanel();
             JPanel singleView               =   new JPanel();
-            JTextArea singleViewContent        =   new JTextArea(10, 10);
+            JTextArea singleViewContent     =   new JTextArea(10, 10);
             JPanel notificationDetailsPanel =   new JPanel();
             JPanel notificationViewPanel    =   new JPanel(new CardLayout());   
             JLabel notificationInfo         =   new JLabel("You have " + numNotifications + " notifications");
@@ -323,6 +364,8 @@ public class HeaderNavigation extends JPanel implements ActionListener
                     cLayout.show(notificationViewPanel, SINGLE_VIEW);
                     
                     NotificationModel.readNotificationMessage(id);
+                    if((boolean) model.getValueAt(row, 0)) unreadNotifications--;
+                    
                     model.setValueAt(false, row, 0);
                     model.fireTableCellUpdated(row, 0);
                 }
@@ -375,6 +418,10 @@ public class HeaderNavigation extends JPanel implements ActionListener
                 public void windowClosing(WindowEvent e)
                 {
                     notificationModalOpen = false;
+                    if(unreadNotifications <= 0)
+                        userNotificationsButton.setIcon(new ImageIcon(Layout.getImage("nonotificationsbutton.png")));
+                    else
+                        userNotificationsButton.setIcon(new ImageIcon(Layout.getImage("hasnotificationsbutton.png")));
                 }
             });
             

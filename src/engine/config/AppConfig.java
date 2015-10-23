@@ -20,5 +20,6 @@ public class AppConfig
     public static final int WINDOW_HEIGHT       =   648;
     public static final String RESOURCE_DIR     =   "/root/Dropbox/PDCAssignmentImages/";
     public static final boolean ALLOW_CRED_SAVE =   true;
+    public static final int NOTIFICATION_TIME   =   30000;
     public static final String CRED_SAVE_FILE   =   "SavedUsers.txt";
 }
