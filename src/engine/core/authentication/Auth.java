@@ -64,14 +64,14 @@ public class Auth
                 String passHash     =   Crypto.makeHash(salt, password);
                 
                 StoredCredentials credentials   =   Agent.getStoredCredentials();
-                
                 Credentials foundCredentials    =   credentials.getUserCredentials(username);
                 
                 //Compare hashed password with stored hash
                 //Log successful attempts
                 //Sets the session in agent if successful
                 //StoredCredentials stores pass hashes, if user is stored check matching hashes
-                if(passHash.equals(passStored) || ((foundCredentials != null && foundCredentials.getPassword().equals(passStored))))
+                if(passHash.equals(passStored) || 
+                ((foundCredentials != null && foundCredentials.getPassword().equals(passStored)) && foundCredentials.getPassword().equals(password)))
                 {
                     String logMessage   =   MessageFormat.format("User {0} has logged in", username);
                     Agent.setActiveSession(new Session(attempt));
@@ -110,7 +110,6 @@ public class Auth
         
         catch(Exception e)
         {
-           // System.out.println("login exception: " + e.getMessage());
             return null;
         }
     }

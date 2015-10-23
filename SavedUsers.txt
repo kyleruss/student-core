@@ -12,6 +12,12 @@
       "password": "Ul+Ko62A/J70IDaMLQpFVALUP8M\u003d",
       "dateSaved": "2015-34-19",
       "lastLogged": "2015-39-24"
+    },
+    "kyleruss": {
+      "username": "kyleruss",
+      "password": "0Tupn6o7p+nnIS8tbunBhTgz7rE\u003d",
+      "dateSaved": "2015-13-24",
+      "lastLogged": "2015-14-24"
     }
   }
 }
