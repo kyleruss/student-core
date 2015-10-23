@@ -254,7 +254,7 @@ public class HeaderNavigation extends JPanel implements ActionListener
             final String TABLE_VIEW         =   "table_v";
             final String SINGLE_VIEW        =   "single_v";
 
-            JsonArray notifications         =   NotificationModel.getUserNotifications("kyleruss");
+            JsonArray notifications         =   NotificationModel.getUserNotifications(Agent.getActiveSession().getUser().get("username").getNonLiteralValue().toString());
             int numNotifications            =   (notifications.size() > 0)? notifications.size() - 1 : 0;
 
             JPanel notificationPanel        =   new JPanel(new BorderLayout());

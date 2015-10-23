@@ -1,6 +1,7 @@
 
 package engine.controllers;
 
+import engine.core.Agent;
 import engine.core.Path;
 import engine.views.View;
 
@@ -22,8 +23,10 @@ public class BaseController extends Controller
     }
     
     
-    public View getErrorView()
+    public View getErrorView(String errorMessage)
     {
-        return prepareView(new engine.views.gui.layout.ViewNotFound());
+        ControllerMessage data  =   new ControllerMessage();
+        data.add("errorMessage", errorMessage);
+        return prepareView(new engine.views.gui.layout.ErrorView(data));
     }
 }

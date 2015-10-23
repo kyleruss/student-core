@@ -7,9 +7,12 @@
 package engine.controllers;
 
 import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import engine.core.Agent;
+import static engine.core.Agent.setView;
 import engine.core.DataConnector;
 import engine.core.Path;
+import engine.core.RouteHandler;
 import engine.core.authentication.Auth;
 import engine.core.database.Conditional;
 import engine.core.database.Join;
@@ -17,6 +20,7 @@ import engine.core.security.Crypto;
 import engine.models.ClassesModel;
 import engine.models.EmergencyContactModel;
 import engine.models.MedicalModel;
+import engine.models.NotificationModel;
 import engine.models.User;
 import engine.views.AbstractView;
 import engine.views.View;
@@ -145,16 +149,24 @@ public class UserController extends Controller
     
    public View getMyDepartment()
     {
-        User user            =   new User("kyleruss"); //Agent.getActiveSession().getUser();
+        User user            =    Agent.getActiveSession().getUser();
         String username      =   user.get("username").getColumnValue().toString();
+
+        if(user.getColumn("dept_id").getNonLiteralValue() == null)
+        {
+            View errorView = RouteHandler.go("getErrorPage", new Object[] { "You are not in a department" }, new Class<?>[] { String.class }, null);
+            System.out.println("no dept");
+            return errorView;
+        }
+        
         
         try
         {
-            JsonArray results   =   user.builder()
+           JsonArray results   =   new User().builder()
                     .join(new Join("users", "staff", "username", "user_id", Join.JoinType.INNERR_JOIN).filter(new Conditional("username", "=", username)))
                     .join("staff", "department", "dept_id", "id", Join.JoinType.INNERR_JOIN)
                     .select("department.*")
-                    .get();
+                    .get(); 
             
             if(!Agent.isGUIMode()) return prepareView(new DepartmentView(new ControllerMessage(results)));
             else return prepareView(new engine.views.gui.DepartmentView(new ControllerMessage(results)));
@@ -248,6 +260,8 @@ public class UserController extends Controller
                     if(user.save())
                     {
                         conn.commitTransaction();
+                        NotificationModel.sendNotification(postData.getMessage("registerUsername").toString(), 
+                                                            "Welcome to StudentCore! Thank you for registering");
                         return prepareView(new ResponseDataView(successMessage, true));
                     }
 

@@ -183,7 +183,10 @@ public final class Agent extends CommandInterpreter
                 if(!guiMode)
                     ExceptionOutput.output("View not found", ExceptionOutput.OutputType.MESSAGE);
                 else
-                    setView("getErrorPage");
+                {
+                    View errorView = RouteHandler.go("getErrorPage", new Object[] { "View not found" }, new Class<?>[] { String.class }, null);
+                    setView(errorView);
+                }
             }
 
             else

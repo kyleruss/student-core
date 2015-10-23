@@ -1,6 +1,7 @@
 
 package engine.views.gui.layout;
 
+import engine.controllers.ControllerMessage;
 import engine.core.Agent;
 import engine.views.GUIView;
 import java.awt.Color;
@@ -14,9 +15,18 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
-public class ViewNotFound extends GUIView
+public class ErrorView extends GUIView
 {
-
+    public ErrorView()
+    {
+        super();
+    }
+    
+    public ErrorView(ControllerMessage data)
+    {
+        super(data);
+    }
+    
     @Override
     protected void initComponents() 
     {
@@ -25,7 +35,13 @@ public class ViewNotFound extends GUIView
         JPanel innerPanel   =   new JPanel(new GridLayout(2, 1));
         innerPanel.setBackground(Color.WHITE);
         innerPanel.setBorder(BorderFactory.createEmptyBorder(180, 0, 0, 0));
-        JLabel errorLabel   =   new JLabel("View was not found");
+        
+        JLabel errorLabel   =   new JLabel();
+        if(!messages.hasMessages() || messages.getMessage("errorMessage") == null)
+            errorLabel.setText("Error");
+        else
+            errorLabel.setText(messages.getMessage("errorMessage").toString());
+            
         JLabel redirectMsg  =   new JLabel("You will be redirected back shortly");
         errorLabel.setHorizontalAlignment(JLabel.CENTER);
         redirectMsg.setHorizontalAlignment(JLabel.CENTER);

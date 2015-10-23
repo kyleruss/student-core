@@ -315,7 +315,7 @@ public class RegisterView extends GUIView implements ActionListener
                 validateIndexes.add(validateField(firstnameField, "[a-z]*", 3, 35, validBorder, invalidBorder));
                 validateIndexes.add(validateField(lastnameField, "[a-z]*", 3, 35, validBorder, invalidBorder));
                 validateIndexes.add(validateField(phoneField, "\\d*", 7, 12, validBorder, invalidBorder));
-                validateIndexes.add(validateField(emailField, "\\w*", 5, 40, validBorder, invalidBorder));
+                validateIndexes.add(validateField(emailField, "\\w*@?\\w*\\.?\\w*", 5, 40, validBorder, invalidBorder));
                 validateIndexes.add(validateField(birthdateField, "[0-9]{4}-[0-9]{2}-[0-9]{2}", 10, 10, validBorder, invalidBorder));
                 break;
                 
@@ -323,7 +323,7 @@ public class RegisterView extends GUIView implements ActionListener
                 validateIndexes.add(validateField(contactFirstname, "[a-z]*", 6, 18, validBorder, invalidBorder));
                 validateIndexes.add(validateField(contactLastname, "[a-z]*", 6, 25, validBorder, invalidBorder));
                 validateIndexes.add(validateField(contactPhone, "\\d*", 7, 12, validBorder, invalidBorder));
-                validateIndexes.add(validateField(contactEmail, "\\w*", 5, 40, validBorder, invalidBorder));
+                validateIndexes.add(validateField(contactEmail, "\\w*@?\\w*\\.?\\w*", 5, 40, validBorder, invalidBorder));
                 validateIndexes.add(validateField(contactRelationship, "[a-z]*", 5, 100, validBorder, invalidBorder));
                 validateIndexes.add(validateField(medicalDescription, "\\w*", 5, 100, validBorder, invalidBorder));
                 break;

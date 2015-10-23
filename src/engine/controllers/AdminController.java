@@ -9,7 +9,9 @@ package engine.controllers;
 import com.google.gson.JsonArray;
 import engine.core.Agent;
 import engine.core.DataConnector;
+import engine.core.ExceptionOutput;
 import engine.core.Path;
+import engine.core.RouteHandler;
 import engine.core.security.Crypto;
 import engine.models.AdminAnnouncementsModel;
 import engine.models.AssessmentModel;
@@ -22,6 +24,7 @@ import engine.models.DeptAnnouncementsModel;
 import engine.models.EmergencyContactModel;
 import engine.models.MedicalModel;
 import engine.models.Model;
+import engine.models.NotificationModel;
 import engine.models.Role;
 import engine.models.User;
 import engine.views.cui.AdminControlPanelView;
@@ -31,6 +34,7 @@ import engine.views.ResponseDataView;
 import engine.views.cui.StudentListView;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.MessageFormat;
 
 
 public class AdminController extends Controller
@@ -53,8 +57,29 @@ public class AdminController extends Controller
         
     public View getAdmincp()
     {
-        if(!Agent.isGUIMode()) return prepareView(new AdminControlPanelView());
-        else return prepareView(new engine.views.gui.admin.AdminControlPanelView());
+        final int MIN_PERM_LEVEL    =   8;
+        int permLevel              =   Role.getUserPermissionLevel(Agent.getActiveSession().getUser().get("username").getNonLiteralValue().toString());
+        if(permLevel < MIN_PERM_LEVEL)
+        {
+            if(!Agent.isGUIMode())
+            {
+                ExceptionOutput.output("You do not have permission to access this view", ExceptionOutput.OutputType.MESSAGE);
+                return null;
+            }
+            
+            else
+            {
+                View errorView = RouteHandler.go("getErrorPage", new Object[] { "You do not have permission" }, new Class<?>[] { String.class }, null);
+                return errorView;
+            }
+        }
+        else
+        {
+            if(!Agent.isGUIMode()) 
+                return prepareView(new AdminControlPanelView());
+
+            else return prepareView(new engine.views.gui.admin.AdminControlPanelView());
+        }
     }
     
     
@@ -182,7 +207,14 @@ public class AdminController extends Controller
             assessment.set("due_date", postData.getMessage("assessDue"));
                     
             if(assessment.save()) 
+            {
+                int classID             =   Integer.parseInt(postData.getMessage("assessClass").toString());
+                JsonArray classUsers    =   ClassEnrolmentModel.getStudentsEnrolledIn(classID);
+                String notification     =   MessageFormat.format("A new assessment \"{0}\" has been created in class {1}", 
+                                            postData.getMessage("assessName").toString(), classID);
+                NotificationModel.sendNotifications(classUsers, notification, "User ID");
                 return prepareView(new ResponseDataView(successMessage, true));
+            }
             else 
                 return prepareView(new ResponseDataView(failedMessage, false));
         }
@@ -392,7 +424,13 @@ public class AdminController extends Controller
             submission.set("mark", postData.getMessage("subMark"));
 
             if(submission.update())
+            {
+                String notification =   MessageFormat.format("Your submission for assessment \"{0}\" has been updated", 
+                                        postData.getMessage("assessID").toString());
+                
+                NotificationModel.sendNotification(notification, postData.getMessage("subUser").toString());
                 return prepareView(new ResponseDataView(successMessage, true));
+            }
             else 
                 return prepareView(new ResponseDataView(failedMessage, false));
         }
@@ -657,7 +695,11 @@ public class AdminController extends Controller
             {
                 user.set("role_id", roleID);
                 if(user.update())
+                {
+                    String notification =   MessageFormat.format("You have been assigned the {0} role", role.get("name").getNonLiteralValue().toString());
+                    NotificationModel.sendNotification(assignUser, notification);
                     return prepareView(new ResponseDataView(successMessage, true));
+                }
                 else
                     return prepareView(new ResponseDataView(failedMessage, false));
             }
@@ -980,7 +1022,12 @@ public class AdminController extends Controller
                     enrolmentModel.set("semester_num", postData.getMessage("semester"));
                     
                     if(enrolmentModel.save())
+                    {
+                        String notifaction  =   MessageFormat.format("You have been enrolled in class {0} for semester {1}",
+                                                postData.getMessage("classID").toString(), postData.getMessage("semester").toString());
+                        NotificationModel.sendNotification(postData.getMessage("userID").toString(), notifaction);
                         return prepareView(new ResponseDataView(successMessage, true)); 
+                    }
                     else
                         return prepareView(new ResponseDataView(failedMessage, false)); 
                 }
