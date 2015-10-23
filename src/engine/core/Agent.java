@@ -157,7 +157,7 @@ public final class Agent extends CommandInterpreter
     public static void setActiveSession(Session activeSession)
     {
         Agent.activeSession   =   activeSession;
-        if(activeSession != null)
+        if(activeSession != null && guiMode)
         {
             window.getAppLayout().getHeadNav().updateUserPanel();
             window.getAppLayout().getMenu().setEnableUserControls(true);

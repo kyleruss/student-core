@@ -14,7 +14,7 @@ public class AppConfig
     //                              CONFIG KEYS
     //---------------------------------------------------------------------
     public static final boolean DEBUG_MODE      =   true;
-    public static final boolean GUI_MODE        =   true;
+    public static final boolean GUI_MODE        =   false;
     public static final String APP_NAME         =   "StudentCore";
     public static final int WINDOW_WIDTH        =   768;
     public static final int WINDOW_HEIGHT       =   648;
