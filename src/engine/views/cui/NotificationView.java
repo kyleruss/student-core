@@ -3,10 +3,8 @@ package engine.views.cui;
 import com.google.gson.JsonArray;
 import engine.core.Agent;
 import engine.core.ExceptionOutput;
-import engine.core.RouteHandler;
 import engine.models.NotificationModel;
 import engine.views.AbstractView;
-import engine.views.View;
 import engine.views.cui.Utilities.CUITextTools;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +22,7 @@ public class NotificationView extends AbstractView
         {
             int unreadNotifications   =   NotificationModel.getNumUnreadNotifications(Agent.getActiveSession().getUser()
                                           .get("username").getNonLiteralValue().toString());
-            System.out.println(CUITextTools.changeColour("You have " + unreadNotifications + " unread notifications", CUITextTools.GREEN));
+            System.out.println(CUITextTools.changeColour("You have " + unreadNotifications + " unread notification(s)", CUITextTools.GREEN));
             CUITextTools.responseToTable(notifications);
         }
         
