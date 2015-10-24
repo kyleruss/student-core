@@ -29,8 +29,7 @@ public class DepartmentView extends AbstractView
         (
                 message,
                 message.getData().get(1).getAsJsonObject().get("name".toUpperCase()).getAsString() + " Department", 
-                "Access and manage your staff department" 
-               // "/"  + "department"//Agent.getActiveSession().getUser().get("USERNAME").getNonLiteralValue() + "/department/"
+                "Access and manage your department" 
         );
     }
     
@@ -44,12 +43,12 @@ public class DepartmentView extends AbstractView
     public void showDeptStaff()
     {
         int deptId      =   messages.getData().get(1).getAsJsonObject().get("ID").getAsInt();
-        JsonArray staff =   DepartmentModel.getStaffInDept(deptId);
+        JsonArray users =   DepartmentModel.getUsersInDeptFiltered(deptId);
         
-        if(staff != null || staff.size() > 1)
+        if(users != null || users.size() > 1)
         {
             System.out.println("\n" + CUITextTools.underline(CUITextTools.changeColour("Department staff", CUITextTools.MAGENTA)) + "\n");
-            CUITextTools.responseToTable(staff);
+            CUITextTools.responseToTable(users);
         }
     }
 

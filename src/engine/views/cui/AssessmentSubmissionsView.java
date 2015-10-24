@@ -10,10 +10,12 @@ import engine.views.ResponseDataView;
 import com.google.gson.JsonArray;
 import engine.controllers.ControllerMessage;
 import engine.core.RouteHandler;
+import engine.core.database.Column;
 import engine.models.AssessmentSubmissionsModel;
 import engine.views.AbstractView;
 import engine.views.cui.Utilities.CUITextTools;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -30,9 +32,8 @@ public class AssessmentSubmissionsView extends AbstractView
         super
         (
                 messages, 
-                ((messages.getData().size() > 1)? messages.getData().get(1).getAsJsonObject().get("NAME").getAsString() : "" )+ " submissions", 
+                ((messages.getData().size() > 1)? messages.getData().get(1).getAsJsonObject().get("NAME").getAsString() : "" ) + " submissions", 
                 "View and manage submissions for this assessment" 
-             //   "/" + ((messages.getData().size() > 1)? messages.getData().get(1).getAsJsonObject().get("NAME").getAsString() + "/" : "" ) +  "submissions/" 
         );
     }
     
@@ -55,9 +56,20 @@ public class AssessmentSubmissionsView extends AbstractView
     
     public void modifySubmission()
     {        
+        AssessmentSubmissionsModel submissionModel  =   new AssessmentSubmissionsModel();
+        Map<String, Column> cols                    =   submissionModel.getColumns();
+        String attrsStr                             =   "Attributes: ";
+        Iterator<Column> colIter                    =   cols.values().iterator();
+        while(colIter.hasNext())
+        {
+            Column next =   colIter.next();
+            if(!next.getColumnName().equalsIgnoreCase(submissionModel.getPrimaryKey()))
+            attrsStr    +=  next.getColumnName() + (colIter.hasNext()? ", " : "");
+        }
+        
         List<String> fieldTitles    =   new ArrayList<>();
         fieldTitles.add(CUITextTools.createFormField("Submission ID", "Enter the submission ID to change"));
-        fieldTitles.add(CUITextTools.createFormField("Change attribute", "What is the attribute you want to change?"));
+        fieldTitles.add(CUITextTools.createFormField("Change attribute", "What is the attribute you want to change?\n" + attrsStr));
         fieldTitles.add(CUITextTools.createFormField("New value", "What is the new value to change to?"));
         
         List<String> fieldKeys  =   new ArrayList<>();
@@ -95,7 +107,7 @@ public class AssessmentSubmissionsView extends AbstractView
     { 
         List<String> fieldTitles    =   new ArrayList<>();
         fieldTitles.add(CUITextTools.createFormField("Submission ID", "Enter the submission ID of the submission to mark"));
-        fieldTitles.add(CUITextTools.createFormField("Grade", "Enter the grade for this submission"));
+        fieldTitles.add(CUITextTools.createFormField("Grade", "Enter the grade for this submission (A+ - F)"));
         fieldTitles.add(CUITextTools.createFormField("Mark", "Enter the mark for this submission"));
         
         List<String> fieldKeys      =   new ArrayList<>();

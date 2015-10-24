@@ -11,11 +11,13 @@ import com.google.gson.JsonArray;
 import engine.controllers.ControllerMessage;
 import engine.core.Agent;
 import engine.core.RouteHandler;
+import engine.core.database.Column;
 import engine.models.AssessmentModel;
 import engine.views.AbstractView;
 import engine.views.View;
 import engine.views.cui.Utilities.CUITextTools;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -85,8 +87,20 @@ public class ClassAssessmentsView extends AbstractView
     public void modifyAssessment()
     {
         List<String> fieldTitles    =   new ArrayList<>();
+        
+        AssessmentModel assessmentModel             =   new AssessmentModel();
+        Map<String, Column> cols                    =   assessmentModel.getColumns();
+        String attrsStr                             =   "Attributes: ";
+        Iterator<Column> colIter                    =   cols.values().iterator();
+        while(colIter.hasNext())
+        {
+            Column next =   colIter.next();
+            if(!next.getColumnName().equalsIgnoreCase(assessmentModel.getPrimaryKey()))
+            attrsStr    +=  next.getColumnName() + (colIter.hasNext()? ", " : "");
+        }
+        
         fieldTitles.add(CUITextTools.createFormField("Assessment ID", "What is the ID fo the assessment to modify?"));
-        fieldTitles.add(CUITextTools.createFormField("Modify attribute", "What attribute are you modifying?"));
+        fieldTitles.add(CUITextTools.createFormField("Modify attribute", "What attribute are you modifying?\n" + attrsStr));
         fieldTitles.add(CUITextTools.createFormField("Modified value", "What is the new value for the field?"));
         
         List<String> fieldKeys      =   new ArrayList<>();

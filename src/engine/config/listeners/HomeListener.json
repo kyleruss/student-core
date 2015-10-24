@@ -26,6 +26,15 @@
             "className": "engine.views.cui.HomeView",
             "methodName": "showDepartment",
             "commandDescription": "Show department"
+        },
+        
+        "notifications":
+        {
+            "commandName": "notifications",
+            "paramTypes": [],
+            "className": "engine.views.cui.HomeView",
+            "methodName": "showNotifications",
+            "commandDescription": "Show notifications"
         }
     }
     

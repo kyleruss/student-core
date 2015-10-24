@@ -24,14 +24,13 @@ public class DepartmentModel extends Model
         super(id);
     }
     
-    public static JsonArray getStaffInDept(int deptID)
+    public static JsonArray getUsersInDeptFiltered(int deptID)
     {
         try
         {
-            JsonArray results   =   new StaffModel().builder()
-                    .join(new Join("staff", "users", "user_id", "username", Join.JoinType.INNERR_JOIN)
-                        .filter(new Conditional("dept_id", "=", "" + deptID)))
-                    .select("user_id", "Username")
+            JsonArray results   =   new User().builder()
+                    .where("dept_id", "=", "" + deptID)
+                    .select("username", "Username")
                     .select("users.firstname", "First name")
                     .select("users.lastname", "Last name")
                     .select("users.contact_ph", "Phone")

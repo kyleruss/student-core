@@ -41,7 +41,7 @@ public class LoginView extends AbstractView
     {       
         try
         {
-              Scanner inputScan   =   new Scanner(System.in);
+            Scanner inputScan   =   new Scanner(System.in);
             
             String usernameText =   CUITextTools.changeColour("Please enter your username", CUITextTools.GREEN);
             String passwordText =   CUITextTools.changeColour("Please enter your password", CUITextTools.GREEN);

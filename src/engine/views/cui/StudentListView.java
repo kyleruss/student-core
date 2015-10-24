@@ -10,11 +10,14 @@ import engine.views.ResponseDataView;
 import com.google.gson.JsonArray;
 import engine.controllers.ControllerMessage;
 import engine.core.RouteHandler;
+import engine.core.database.Column;
+import engine.models.AssessmentModel;
 import engine.models.User;
 import engine.views.AbstractView;
 import engine.views.cui.Utilities.CUITextTools;
 import java.text.MessageFormat;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -95,8 +98,19 @@ public class StudentListView extends AbstractView
     public void modifyStudent()
     {
         List<String> fieldTitles    =   new ArrayList<>();
+        
+        User userModel                   =   new User();
+        Map<String, Column> cols         =   userModel.getColumns();
+        String attrsStr                  =   "Attributes: ";
+        Iterator<Column> colIter         =   cols.values().iterator();
+        while(colIter.hasNext())
+        {
+            Column next =   colIter.next();
+            attrsStr    +=  next.getColumnName() + (colIter.hasNext()? ", " : "");
+        }
+        
         fieldTitles.add(CUITextTools.createFormField("Modify username", "The username of the user you wish to modify"));
-        fieldTitles.add(CUITextTools.createFormField("Modify attribute", "What is the attribute you want to modify?"));
+        fieldTitles.add(CUITextTools.createFormField("Modify attribute", "What is the attribute you want to modify?\n" + attrsStr));
         fieldTitles.add(CUITextTools.createFormField("New value", "The new attribute value to change"));
         
         List<String> fieldKeys      =   new ArrayList<>();
@@ -120,8 +134,20 @@ public class StudentListView extends AbstractView
     public void findStudent()
     {
        List<String> fieldTitles    =   new ArrayList<>();
-        fieldTitles.add(CUITextTools.createFormField("Search attribute", "What is the attribute you want to search for?"));
-        fieldTitles.add(CUITextTools.createFormField("Search operator", "What is the operator condition?"));
+       
+        User userModel                   =   new User();
+        Map<String, Column> cols         =   userModel.getColumns();
+        String attrsStr                  =   "Attributes: ";
+        Iterator<Column> colIter         =   cols.values().iterator();
+        while(colIter.hasNext())
+        {
+            Column next =   colIter.next();
+            if(!next.getColumnName().equalsIgnoreCase(userModel.getPrimaryKey()))
+                attrsStr    +=  next.getColumnName() + (colIter.hasNext()? ", " : "");
+        }
+       
+        fieldTitles.add(CUITextTools.createFormField("Search attribute", "What is the attribute you want to search for?\n" + attrsStr));
+        fieldTitles.add(CUITextTools.createFormField("Search operator", "What is the operator condition? (=, >, <)"));
         fieldTitles.add(CUITextTools.createFormField("Search value", "The attributes value you are searching for"));
         
         List<String> fieldKeys      =   new ArrayList<>();

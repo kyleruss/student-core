@@ -108,6 +108,24 @@ public class NotificationModel extends Model
         }
     }
     
+    public static JsonArray getUserNotificationsFiltered(String user)
+    {
+        try
+        {
+            return new NotificationModel().builder()
+                                    .where("username", "=", user, true)
+                                    .select("id", "Notification ID")
+                                    .select("sent_date", "Sent date")
+                                    .select("unread", "Unread")
+                                    .get();
+        }
+        
+        catch(SQLException e)
+        {
+            return new JsonArray();
+        }
+    }
+    
     public static String readNotificationMessage(int notificationId)
     {
         NotificationModel notification  =   new NotificationModel(notificationId);

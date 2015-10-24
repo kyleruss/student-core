@@ -36,9 +36,10 @@ public class Routes extends Router
             new Path("getHome", "UserController", "getHome", "/home"),
             new Path("postLogin", "UserController", "postLogin", "/postlogin"),
             new Path("getRegister", "UserController", "getRegister", "/register"),
-            new Path("getLogin", "UserController", "getLogin", "/"),
+            new Path("getLogin", "UserController", "getLogin", "/login"),
             new Path("postRegister", "UserController", "postRegister", "/postregister"),
-            new Path("logout", "UserController", "logout", "/logout")
+            new Path("logout", "UserController", "logout", "/logout"),
+            new Path("getNotifications", "UserController", "getNotifications", "/notifications")
         }));
         
         RouteGroup classes;

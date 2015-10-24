@@ -1,0 +1,13 @@
+{
+    "commands": 
+    {
+        "read":
+        {
+            "commandName": "read",
+            "paramTypes": [],
+            "className": "engine.views.cui.NotificationView",
+            "methodName": "readNotification",
+            "commandDescription": "Read a notification"
+        }
+    }
+}

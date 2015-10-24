@@ -29,7 +29,7 @@ public class ExceptionOutput
     public static void output(String message, OutputType outputType)
     {
         //Output to console
-        if(!AppConfig.DEBUG_MODE)
+        if(!AppConfig.GUI_MODE)
         {
             String prefix;
             if(outputType == OutputType.DEBUG)
@@ -48,7 +48,11 @@ public class ExceptionOutput
         //Output to GUI
         else
         {
-            JOptionPane.showMessageDialog(null, message);
+            //Only output to console messages to avoid spamming user
+            if(outputType == OutputType.MESSAGE)
+                JOptionPane.showMessageDialog(null, message);
+            else if(AppConfig.DEBUG_MODE)
+                System.out.println("[Debug] " + message);
         }
     }
     

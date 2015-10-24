@@ -8,9 +8,11 @@ package engine.controllers;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import engine.config.AppConfig;
 import engine.core.Agent;
 import static engine.core.Agent.setView;
 import engine.core.DataConnector;
+import engine.core.ExceptionOutput;
 import engine.core.Path;
 import engine.core.RouteHandler;
 import engine.core.authentication.Auth;
@@ -32,6 +34,7 @@ import engine.views.cui.MyClassesView;
 import engine.views.cui.RegisterView;
 import engine.views.ResponseDataView;
 import engine.views.cui.HomeView;
+import engine.views.cui.NotificationView;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -63,6 +66,11 @@ public class UserController extends Controller
     {
         if(!Agent.isGUIMode()) return prepareView(new HomeView());
         else return prepareView(new engine.views.gui.Home());
+    }
+    
+    public View getNotifications()
+    {
+        return prepareView(new NotificationView());
     }
     
     public View logout()
@@ -152,19 +160,23 @@ public class UserController extends Controller
         User user            =    Agent.getActiveSession().getUser();
         String username      =   user.get("username").getColumnValue().toString();
 
-        if(user.getColumn("dept_id").getNonLiteralValue() == null)
+        if(user.get("dept_id").getNonLiteralValue() == null)
         {
-            View errorView = RouteHandler.go("getErrorPage", new Object[] { "You are not in a department" }, new Class<?>[] { String.class }, null);
-            System.out.println("no dept");
-            return errorView;
+            if(AppConfig.GUI_MODE)
+                return RouteHandler.go("getErrorPage", new Object[] { "You are not in a department" }, new Class<?>[] { String.class }, null);
+            else
+            {
+                ExceptionOutput.output("You are not in a department", ExceptionOutput.OutputType.MESSAGE);
+                return null;
+            }
         }
         
         
         try
         {
            JsonArray results   =   new User().builder()
-                    .join(new Join("users", "staff", "username", "user_id", Join.JoinType.INNERR_JOIN).filter(new Conditional("username", "=", username)))
-                    .join("staff", "department", "dept_id", "id", Join.JoinType.INNERR_JOIN)
+                    .join(new Join("users", "department", "dept_id", "id", Join.JoinType.INNERR_JOIN)
+                           .filter(new Conditional("username", "=", username)))
                     .select("department.*")
                     .get(); 
             

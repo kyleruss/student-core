@@ -72,14 +72,25 @@ public class DataConnector implements AutoCloseable
             
             //Sets the active schema
             conn.setSchema(DatabaseConfig.SCHEMA);
-            System.out.println("connected");
         }
 
         catch(SQLException e)
         {
-            ExceptionOutput.output("Failed to connect to DB server\nError: " + e.getMessage(), ExceptionOutput.OutputType.MESSAGE);      
+            ExceptionOutput.output("Failed to connect to Database, application will now shutdown", ExceptionOutput.OutputType.MESSAGE);      
             close();
-        }                 
+            
+            if(!AppConfig.GUI_MODE)
+            {
+                try
+                {
+                    Thread.sleep(2000);
+                }
+
+                catch(InterruptedException ex) {}
+            }
+            
+            System.exit(0);
+        }                  
     }
     
     //Begins a transaction in the session
@@ -198,13 +209,15 @@ public class DataConnector implements AutoCloseable
     {
         try
         {    
+            //Connection closed
+            if(conn == null) return null;
+            
             //Logs the attempted query 
             //Logging config is checked in log()
             MainLogger.log(query, MainLogger.DATA_LOGGER);
       
             if(AppConfig.DEBUG_MODE)
-                System.out.println("[DEBUG] " + query);
-               // ExceptionOutput.output(query, ExceptionOutput.OutputType.DEBUG);
+                ExceptionOutput.output(query, ExceptionOutput.OutputType.DEBUG);
             
             PreparedStatement statement = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
             return statement;
@@ -212,8 +225,6 @@ public class DataConnector implements AutoCloseable
         
         catch(SQLException e)
         {
-          //  e.printStackTrace();
-         //   System.out.println("[SQL Exception] Error creating query - " + e.getMessage());
             closeConnection();
             return null;
         }

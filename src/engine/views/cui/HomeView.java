@@ -21,10 +21,9 @@ public class HomeView extends AbstractView
     {
         super
         (
-                message,
-                "Home", 
-                "Manage personal profile, administration and more" 
-               // "/"  + Agent.getActiveSession().getUser().get("USERNAME").getNonLiteralValue() + "/home/"
+            message,
+            "Home", 
+            "Personal profile, administration and more" 
         );
     }
     
@@ -47,6 +46,11 @@ public class HomeView extends AbstractView
     public void showDepartment()
     {
         Agent.setView("getMyDepartment");
+    }
+    
+    public void showNotifications()
+    {
+        Agent.setView("getNotifications");
     }
     
     @Override

@@ -10,9 +10,9 @@ import engine.views.ResponseDataView;
 import com.bethecoder.ascii_table.ASCIITable;
 import engine.controllers.ControllerMessage;
 import engine.core.Agent;
+import engine.core.ExceptionOutput;
 import engine.core.RouteHandler;
 import engine.views.AbstractView;
-import engine.views.View;
 import engine.views.cui.Utilities.CUITextTools;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -43,7 +43,6 @@ public class RegisterView extends AbstractView
         ControllerMessage postData  =   new ControllerMessage().addAll(accDetails).addAll(contactDetails).addAll(medicalDetails);
         ResponseDataView response   =   (ResponseDataView) RouteHandler.go("postRegister", postData);
         
-       // System.out.println("Registration complete!");
         System.out.println(response.getResponseMessage());
         
         if(response.getResponseStatus())
@@ -58,6 +57,8 @@ public class RegisterView extends AbstractView
 
             Agent.setView("getLogin");
         }
+        
+        else Agent.setView("getLogin");
         
         
         Agent.commandFinished();
@@ -86,8 +87,9 @@ public class RegisterView extends AbstractView
                         }
                     } 
                     
-                    catch (InterruptedException ex) 
+                    catch (InterruptedException ex)  
                     {
+                        ExceptionOutput.output("Interrupted: " + ex.getMessage(), ExceptionOutput.OutputType.DEBUG);
                     }
                 }
                 
@@ -100,7 +102,7 @@ public class RegisterView extends AbstractView
         try{ inputThread.join(); }   
         catch(InterruptedException e)
         {
-            System.out.println("Error: " + e.getMessage());
+            ExceptionOutput.output("Interrupted: " + e.getMessage(), ExceptionOutput.OutputType.DEBUG);
         }
         
         return form;

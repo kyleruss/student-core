@@ -12,6 +12,7 @@ import engine.parsers.JsonParser;
 import engine.config.DatabaseConfig;
 import engine.core.database.Column;
 import engine.core.DataConnector;
+import engine.core.ExceptionOutput;
 import engine.core.database.QueryBuilder;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
@@ -93,7 +94,7 @@ public abstract class Model
         
         catch(SQLException e)
         {
-            System.out.println("[SQL EXCEPTION] Failed to init columns - " + e.getMessage());
+            ExceptionOutput.output("[SQL EXCEPTION] Failed to init columns - " + e.getMessage(), ExceptionOutput.OutputType.DEBUG);
         } 
     }
     
@@ -106,6 +107,16 @@ public abstract class Model
             String colType  =   colTypes.get(colIndex).getAsString();
             columns.put(colName, new Column(colName, colType));      
         }
+    }
+    
+    public Map<String, Column> getColumns()
+    {
+        return columns;
+    }
+    
+    public Map<String, Column> getData()
+    {
+        return data;
     }
     
     public void setActiveConnection(DataConnector liveConnection)
