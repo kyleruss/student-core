@@ -23,7 +23,6 @@ import java.util.Scanner;
 
 public class RegisterView extends AbstractView
 {
-
     @Override
     public void display()
     {
@@ -187,9 +186,7 @@ public class RegisterView extends AbstractView
         String[] headers    =   { "Medical description" };
         
         return getFormInput(fieldTitles, inputKeys, headers);
-        
     } 
-    
     
     public String createFormField(String title, String description)
     {
@@ -206,16 +203,4 @@ public class RegisterView extends AbstractView
     {
         return "/engine/config/listeners/RegisterListener.json";
     }
-    
-    
-    public static void main(String[] args)
-    {
-          String [] header = { "User Name", "asdsd" };
-                
-            String[][] data = { {"asdsad","Aasdsd"}};
-
-
-            ASCIITable.getInstance().printTable(header, data);
-    }
-    
 }

@@ -163,13 +163,9 @@ public class LoginView extends GUIView implements ActionListener, KeyListener
         statusLabel                 =   new JLabel();
         JLabel processText          =   new JLabel("Processing...");
         processText.setIcon(Transition.getSmallSpinner());
-      //  JLabel processSpinner       =   new JLabel(Transition.getSmallSpinner());
-        
-       // processSpinner.setHorizontalAlignment(JLabel.CENTER);
         processText.setHorizontalAlignment(JLabel.CENTER);
         loginStatusPanel.setBackground(Color.WHITE);
         loginProcessPanel.setBackground(Color.WHITE);
-        //loginProcessPanel.add(processSpinner, BorderLayout.WEST);
         loginProcessPanel.add(processText);
         loginStatusPanel.add(statusLabel);
         
@@ -206,7 +202,7 @@ public class LoginView extends GUIView implements ActionListener, KeyListener
         loginPanel.add(loginPanelButtonWrap, BorderLayout.SOUTH);
         
         
-        panel.setBorder(BorderFactory.createEmptyBorder(50, 0, 0, 0));//.add(Box.createRigidArea(new Dimension(0, 350)));
+        panel.setBorder(BorderFactory.createEmptyBorder(50, 0, 0, 0));
         panel.add(loginPanel);
         
         fillStoredCredentials();
@@ -268,8 +264,6 @@ public class LoginView extends GUIView implements ActionListener, KeyListener
 
             statusTimer.setRepeats(false);
             statusTimer.start();
-
-
         });
 
         loginTimer.setRepeats(false);

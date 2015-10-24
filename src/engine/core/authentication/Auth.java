@@ -6,9 +6,6 @@
 
 package engine.core.authentication;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import engine.config.AppConfig;
 import engine.config.AuthConfig;
 import engine.core.Agent;
 import engine.core.ExceptionOutput;
@@ -16,14 +13,10 @@ import engine.core.loggers.MainLogger;
 import engine.core.security.Crypto;
 import engine.core.security.Input;
 import engine.models.User;
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
 import java.text.DateFormat;
 import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import javax.swing.text.DateFormatter;
 
 //---------------------------------------
 //              AUTH
@@ -110,6 +103,7 @@ public class Auth
         
         catch(Exception e)
         {
+            ExceptionOutput.output("Login Failed: " + e.getMessage(), ExceptionOutput.OutputType.DEBUG);
             return null;
         }
     }

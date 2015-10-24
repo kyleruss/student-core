@@ -121,10 +121,4 @@ public class DataConnection
     {
         return attributes;
     }
-    
-    public static void main(String[] args)
-    {
-        DataConnection conn = new DataConnection();
-        System.out.println(conn.getConnectionString());
-    }
 }

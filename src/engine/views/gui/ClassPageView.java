@@ -5,15 +5,12 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import engine.config.AppConfig;
 import engine.controllers.ControllerMessage;
-import engine.core.Agent;
 import engine.core.RouteHandler;
-import engine.core.database.Column;
 import engine.models.AssessmentModel;
 import engine.models.AssessmentSubmissionsModel;
 import engine.models.ClassAnnouncementsModel;
 import engine.models.ClassEnrolmentModel;
 import engine.models.ClassesModel;
-import engine.models.DeptAnnouncementsModel;
 import engine.views.GUIView;
 import engine.views.ResponseDataView;
 import engine.views.gui.admin.modules.DataModuleView;
@@ -110,8 +107,6 @@ public class ClassPageView extends GUIView implements ActionListener
         };
         
         initPassedData();
-        try
-        {
         classPagePanel      =   new JPanel(new BorderLayout());
         leftPane            =   new JPanel();
         rightPane           =   new JPanel();
@@ -130,12 +125,6 @@ public class ClassPageView extends GUIView implements ActionListener
         viewPanel.add(assessmentsView, ASSESS_VIEW);
         viewPanel.add(studentsView, STUDENT_VIEW);
         viewPanel.add(noticeView.getAnnouncementViewPanel(), NOTICE_VIEW);
-        }
-        
-        catch(Exception e)
-        {
-            e.printStackTrace();
-        }
         
         JPanel controlWrapper   =   new JPanel(new GridLayout(4, 1));
         controlWrapper.setPreferredSize(new Dimension(230, 200));
@@ -343,8 +332,6 @@ public class ClassPageView extends GUIView implements ActionListener
                 panel.setPreferredSize(new Dimension(400, 320)); 
                 tableScroller.setPreferredSize(new Dimension(400, 250));
                 header.setPreferredSize(new Dimension(1, 90));
-                        
-                        
             }
             
             @Override

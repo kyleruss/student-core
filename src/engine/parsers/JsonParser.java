@@ -12,6 +12,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
+import engine.core.ExceptionOutput;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
@@ -77,7 +78,7 @@ public class JsonParser
         
         catch(SQLException e)
         {
-           // System.out.println("[SQL EXCEPTION] Failed to parse result set - " + e.getMessage());
+            ExceptionOutput.output("[SQL EXCEPTION] Failed to parse result set - " + e.getMessage(), ExceptionOutput.OutputType.DEBUG);
             return null;
         }
     }

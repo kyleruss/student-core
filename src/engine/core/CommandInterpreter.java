@@ -63,7 +63,7 @@ public abstract class CommandInterpreter implements CommandExecute
         String message  =   "Command was not recognized!";
         message         =   CUITextTools.changeColour(message, errorColour);
         
-        System.out.println(message);
+        ExceptionOutput.output(message, ExceptionOutput.OutputType.MESSAGE);
     }
     
     //Displays a table of available commands from the listener
@@ -107,7 +107,7 @@ public abstract class CommandInterpreter implements CommandExecute
     }
     
     //Implementors should return the path to the listeners json file
-    //Listeners can be found in engine\config\listeners\
+    //Listeners can be found in engine\config\listeners
     protected abstract String getCommandsFile();
     
     

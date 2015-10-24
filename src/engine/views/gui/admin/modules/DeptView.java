@@ -3,11 +3,10 @@ package engine.views.gui.admin.modules;
 
 import com.google.gson.JsonArray;
 import engine.controllers.ControllerMessage;
+import engine.core.ExceptionOutput;
 import engine.core.RouteHandler;
 import engine.models.DepartmentModel;
-import engine.models.Role;
 import engine.views.ResponseDataView;
-import engine.views.gui.admin.AdminControlPanelView;
 import engine.views.gui.layout.Layout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -106,15 +105,15 @@ public class DeptView extends DataModuleView
     @Override
     protected void edit() 
     {
-        AddDeptDialog dialog    =   new AddDeptDialog();
-        int selectedRow         =   dataTable.getSelectedRow();
+        AddDeptDialog dialog        =   new AddDeptDialog();
+        int selectedRow             =   dataTable.getSelectedRow();
         if(selectedRow == -1)
             JOptionPane.showMessageDialog(null, "Please select a department to edit");
         else
         {
-            String currentName          =   (String) dataTable.getValueAt(selectedRow, 1);
-            String currentDesc          =   (String) dataTable.getValueAt(selectedRow, 2);
-            String currentHOD           =   (String) dataTable.getValueAt(selectedRow, 3);
+            String currentName      =   (String) dataTable.getValueAt(selectedRow, 1);
+            String currentDesc      =   (String) dataTable.getValueAt(selectedRow, 2);
+            String currentHOD       =   (String) dataTable.getValueAt(selectedRow, 3);
             
             dialog.deptName.setText(currentName);
             dialog.deptDesc.setText(currentDesc);
@@ -190,7 +189,7 @@ public class DeptView extends DataModuleView
         
         catch(IOException e)
         {
-            
+            ExceptionOutput.output("Failed to load resources: " + e.getMessage(), ExceptionOutput.OutputType.MESSAGE);
         }
     }
     

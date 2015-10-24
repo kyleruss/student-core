@@ -7,8 +7,6 @@ import engine.controllers.ControllerMessage;
 import engine.core.Agent;
 import engine.core.ExceptionOutput;
 import engine.core.RouteHandler;
-import engine.core.database.Conditional;
-import engine.core.database.Join;
 import engine.models.ClassEnrolmentModel;
 import engine.models.Role;
 import engine.models.User;
@@ -28,7 +26,6 @@ import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.sql.SQLException;
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -69,8 +66,6 @@ public class Home extends GUIView implements ActionListener
     private JLabel nameLabel;
     private JLabel roleLabel;
     private JLabel usernameLabel;
-    
-    
     
     public Home()
     {
@@ -167,7 +162,6 @@ public class Home extends GUIView implements ActionListener
         userDetailsPanel.add(usernameLabel);
         userDetailsPanel.add(roleLabel);
         
-        
         avatar      =   new JLabel(new ImageIcon(userAvatarImage));
         userPanel.add(avatar);
         userPanel.add(Box.createRigidArea(new Dimension(100, 20)));
@@ -194,15 +188,14 @@ public class Home extends GUIView implements ActionListener
             homeLabelImage                      =   ImageIO.read(new File(Layout.getImage("home_icon.png")));
             notificationImage                   =   ImageIO.read(new File(Layout.getImage("notifications_small_icon.png")));
             
-            int gender                          =    Integer.parseInt(Agent.getActiveSession().getUser().get("GENDER").getColumnValue().toString());
-            
+            int gender                          =   Integer.parseInt(Agent.getActiveSession().getUser().get("GENDER").getColumnValue().toString());
             if(gender == 1) userAvatarImage     =   ImageIO.read(new File(Layout.getImage("avatar_male.png")));
             else userAvatarImage                =   ImageIO.read(new File(Layout.getImage("avatar_female.png")));
         }
         
         catch(IOException e)
         {
-            ExceptionOutput.output("Failed to load resources: " + e.getMessage(), ExceptionOutput.OutputType.DEBUG);
+            ExceptionOutput.output("Failed to load resources: " + e.getMessage(), ExceptionOutput.OutputType.MESSAGE);
         }
     }
     

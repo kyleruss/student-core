@@ -183,7 +183,6 @@ public class AdminController extends Controller
            
            catch(SQLException e)
            {
-          //     e.printStackTrace();
                return prepareView(new ResponseDataView(failedMessage, false));
            }
        }
@@ -395,7 +394,6 @@ public class AdminController extends Controller
             }
             catch(Exception e)
             {
-                e.printStackTrace();
                 return prepareView(new ResponseDataView(failedMessage, false));
             }
             
@@ -581,8 +579,6 @@ public class AdminController extends Controller
                     {
                         model = new DeptAnnouncementsModel(postData.getMessage("announceID"));
                         break;
-                   //     model.set("dept_id", postData.getMessage("deptID"));
-                     //   break;
                     }
                 
                 case "CLASS":
@@ -592,7 +588,6 @@ public class AdminController extends Controller
                     {
                         model   =   new ClassAnnouncementsModel(postData.getMessage("announceID"));
                         break;
-                  //      model.set("class_id", postData.getMessage("classID"));
                     }
                 
                 default: return prepareView(new ResponseDataView(codeNotFound, false)); 
@@ -773,7 +768,6 @@ public class AdminController extends Controller
             return prepareView(new ResponseDataView(invalidInputMessage, false));
         else
         {
-            System.out.println("EDIT--");
             User user               =   new User(postData.getMessage("deptHOD"));
             DepartmentModel dept    =   new DepartmentModel(postData.getMessage("deptID"));
             if(!user.exists())

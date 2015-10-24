@@ -1,14 +1,8 @@
 
 package engine.views.gui.admin;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
 import engine.controllers.ControllerMessage;
-import engine.core.Agent;
 import engine.core.ExceptionOutput;
-import engine.core.RouteHandler;
-import engine.models.AdminAnnouncementsModel;
-import engine.models.Role;
 import engine.views.GUIView;
 import engine.views.gui.admin.modules.ClassesView;
 import engine.views.gui.admin.modules.DeptView;
@@ -32,17 +26,11 @@ import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.JTextField;
 import javax.swing.SwingConstants;
-import javax.swing.SwingUtilities;
-import javax.swing.Timer;
-import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
 
@@ -71,27 +59,11 @@ public class AdminControlPanelView extends GUIView implements ActionListener
     private NoticesView announcementsView;
     
     private JPanel classesView;
-    private JTable usersTable;
-    
     private JPanel usersView;
     
-    
     private JPanel departmentView;
-    private JPanel departmentControls;
-    private JButton addDeptButton, removeDeptButton;
-    private JButton editDeptButton, assignDeptHeadButton;
-    private JTable deptTable;
-    private DefaultTableModel deptModel;
-    private JLabel deptStatusLabel;
     
     private JPanel rolesView;
-    private JPanel roleControls;
-    private JButton addRoleButton, removeRoleButton;
-    private JButton editRoleButton, assignRoleButton;
-    private JTable rolesTable;
-    private DefaultTableModel rolesModel;
-    private JLabel roleStatusLabel;
-    
     private JButton showUsersButton;
     private JButton showClassesButton;
     private JButton showDepartmentButton;
@@ -249,10 +221,5 @@ public class AdminControlPanelView extends GUIView implements ActionListener
     {
         CardLayout cLayout  =   (CardLayout) adminPaneView.getLayout();
         cLayout.show(adminPaneView, viewName);
-    }
-    
-    public static void main(String[] args)
-    {
-        AdminControlPanelView view  =   new AdminControlPanelView();
     }
 }

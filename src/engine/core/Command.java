@@ -72,10 +72,7 @@ public class Command
         
         catch(ClassNotFoundException | NoSuchMethodException | IllegalAccessException | InvocationTargetException | InstantiationException e)
         {
-           // e.printStackTrace();
-        //    System.out.println("Listener method was not found, or the paramaters do not match: " + e.getMessage());
-        //    System.out.println("method: " + methodName);
-        //    System.out.println("class: " + className);
+            ExceptionOutput.output(e.getMessage(), ExceptionOutput.OutputType.DEBUG);
             return null;
         }
     }

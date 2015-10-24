@@ -7,8 +7,6 @@ import engine.config.AppConfig;
 import engine.core.Agent;
 import engine.core.authentication.Session;
 import engine.models.NotificationModel;
-import engine.views.gui.layout.Layout;
-import engine.views.gui.layout.Window;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
@@ -293,7 +291,8 @@ public class HeaderNavigation extends JPanel implements ActionListener
             final String TABLE_VIEW         =   "table_v";
             final String SINGLE_VIEW        =   "single_v";
 
-            JsonArray notifications         =   NotificationModel.getUserNotifications(Agent.getActiveSession().getUser().get("username").getNonLiteralValue().toString());
+            JsonArray notifications         =   NotificationModel.getUserNotifications(Agent.getActiveSession().getUser()
+                                                .get("username").getNonLiteralValue().toString());
             int numNotifications            =   (notifications.size() > 0)? notifications.size() - 1 : 0;
             checkUnreadNotifications(notifications);
             
@@ -475,9 +474,6 @@ public class HeaderNavigation extends JPanel implements ActionListener
             Agent.setView("getHome");
         
         else if(src == userNotificationsButton)
-        {
             showNotificationWindow();
-          //  notificationModalOpen   = true;
-        }
     }
 }

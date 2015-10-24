@@ -24,7 +24,6 @@ public class Layout extends JPanel
         viewPane    =   new ViewPane();
         menu        =   new Menu();
         
-        
         add(headNav, BorderLayout.NORTH);
         add(viewPane, BorderLayout.CENTER);
     }

@@ -22,9 +22,9 @@ public class AdminControlPanelView extends AbstractView
     {
         super
         (
-                messages, 
-                "Administrator control panel", 
-                "Manage user accounts, student grades and more"
+            messages, 
+            "Administrator control panel", 
+            "Manage user accounts, student grades and more"
         );
     }
     

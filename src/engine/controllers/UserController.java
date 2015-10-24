@@ -7,10 +7,8 @@
 package engine.controllers;
 
 import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
 import engine.config.AppConfig;
 import engine.core.Agent;
-import static engine.core.Agent.setView;
 import engine.core.DataConnector;
 import engine.core.ExceptionOutput;
 import engine.core.Path;
@@ -170,7 +168,6 @@ public class UserController extends Controller
                 return null;
             }
         }
-        
         
         try
         {

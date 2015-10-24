@@ -31,9 +31,9 @@ public class AssessmentSubmissionsView extends AbstractView
     {
         super
         (
-                messages, 
-                ((messages.getData().size() > 1)? messages.getData().get(1).getAsJsonObject().get("NAME").getAsString() : "" ) + " submissions", 
-                "View and manage submissions for this assessment" 
+            messages, 
+            ((messages.getData().size() > 1)? messages.getData().get(1).getAsJsonObject().get("NAME").getAsString() : "" ) + " submissions", 
+            "View and manage submissions for this assessment" 
         );
     }
     
@@ -162,7 +162,8 @@ public class AssessmentSubmissionsView extends AbstractView
     
     public static void main(String[] args)
     {
-        AssessmentSubmissionsView subView    =   (AssessmentSubmissionsView) RouteHandler.go("getAssessmentSubmissions", new Object[] { 3 }, new Class<?>[] { Integer.class }, null);
+        AssessmentSubmissionsView subView    =   (AssessmentSubmissionsView) RouteHandler.go("getAssessmentSubmissions", 
+                                                 new Object[] { 3 }, new Class<?>[] { Integer.class }, null);
         subView.display();
         subView.modifySubmission();
     }

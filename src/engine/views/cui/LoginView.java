@@ -12,7 +12,6 @@ import engine.core.Agent;
 import static engine.core.Agent.commandFinished;
 import engine.core.RouteHandler;
 import engine.views.AbstractView;
-import engine.views.View;
 import engine.views.cui.Utilities.CUITextTools;
 import java.util.Scanner;
 
@@ -26,7 +25,7 @@ public class LoginView extends AbstractView
     
     public LoginView(ControllerMessage messages)
     {
-        super(messages, "Welcome to Student core by Kyle Russell", "Explore a great DMS");
+        super(messages, "Welcome to StudentCore, the student administration system", "By Kyle Russell");
     }
 
     @Override

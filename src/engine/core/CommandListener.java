@@ -39,14 +39,14 @@ public class CommandListener
         try
         {
             Gson gson                   =   new Gson();
-            String listenerPath           =   getClass().getResource(listenerFile).getFile();
+            String listenerPath         =   getClass().getResource(listenerFile).getFile();
             CommandListener listener    =   gson.fromJson(new JsonReader(new FileReader(listenerPath)), CommandListener.class);
             return listener;
         }
         
         catch(FileNotFoundException e)
         {
-           // System.out.println(e.getMessage());
+            ExceptionOutput.output("Failed to load resources: " + e.getMessage(), ExceptionOutput.OutputType.MESSAGE);
             return null;
         }
     }

@@ -7,6 +7,7 @@
 package engine.core.security;
 
 import engine.config.AuthConfig;
+import engine.core.ExceptionOutput;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -49,7 +50,7 @@ public class Crypto
         
         catch (NoSuchAlgorithmException | UnsupportedEncodingException e)
         {
-            System.out.println("Failed to make hash, error: " + e.getMessage());
+            ExceptionOutput.output("Failed to make hash, error: " + e.getMessage(), ExceptionOutput.OutputType.DEBUG);
             return null;
         }
     }

@@ -11,7 +11,6 @@ import com.google.gson.JsonArray;
 import engine.controllers.ControllerMessage;
 import engine.core.RouteHandler;
 import engine.core.database.Column;
-import engine.models.AssessmentModel;
 import engine.models.User;
 import engine.views.AbstractView;
 import engine.views.cui.Utilities.CUITextTools;
@@ -37,10 +36,9 @@ public class StudentListView extends AbstractView
     {
         super
         (
-                messages, 
-                "Students", 
-                "Find, remove, modify students in the school"
-               // "/" //+ Agent.getActiveSession().getUser().get("USERNAME").getNonLiteralValue() + "/students/"
+            messages, 
+            "Students", 
+            "View, find, remove and modify students in the school"
         );
         
         currentPage =   1;
@@ -193,17 +191,4 @@ public class StudentListView extends AbstractView
     {
         return "/engine/config/listeners/StudentListListener.json";
     }
-    
-    public static void main(String[] args)
-    {
-      //  ResponseDataView results = (ResponseDataView) RouteHandler.go("getStudentList", new Object[] { 1 }, new Class<?>[] { Integer.class }, null);
-        StudentListView view    =   new StudentListView();
-        view.prevPage();
-      //  view.display();
-     //   view.nextPage();
-     //   view.prevPage();
-        //view.findStudent();
-     // view.deleteStudent();
-    }
-    
 }

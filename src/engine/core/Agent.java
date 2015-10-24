@@ -347,7 +347,10 @@ public final class Agent extends CommandInterpreter
         
       
             try { Thread.sleep(5000); } 
-            catch (InterruptedException ex)  {}
+            catch (InterruptedException ex) 
+            {
+                ExceptionOutput.output("[Interrupted in logout] " + ex.getMessage(), ExceptionOutput.OutputType.DEBUG);
+            }
         }
         
         else
@@ -365,7 +368,7 @@ public final class Agent extends CommandInterpreter
     //Sets the current context of agent
     public void switchContext(Context context)
     {
-        this.activeContext  =   context;
+        activeContext  =   context;
     }
 
     //Checks if the command is an agent context command or if activeContext

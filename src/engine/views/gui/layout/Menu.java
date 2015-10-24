@@ -83,7 +83,6 @@ public class Menu implements ActionListener
         prev.setEnabled(false);
         next.setEnabled(false);
         setEnableUserControls(false);
-        
     }
     
     public void attachTo(JFrame frame)

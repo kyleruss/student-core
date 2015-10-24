@@ -34,10 +34,9 @@ public class ClassAssessmentsView extends AbstractView
     {
         super
         (
-                messages, 
-                messages.getData().get(1).getAsJsonObject().get("Class name").getAsString() + " assessments", 
-                "View and manage assessments for this class" 
-            //    "/" + "assessments"//Agent.getActiveSession().getUser().get("USERNAME").getNonLiteralValue() + "/students/"
+            messages, 
+            messages.getData().get(1).getAsJsonObject().get("Class name").getAsString() + " assessments", 
+            "View and manage assessments for this class" 
         );
     }
     
@@ -159,9 +158,6 @@ public class ClassAssessmentsView extends AbstractView
         ClassAssessmentsView v  =   (ClassAssessmentsView) RouteHandler.go("getClassAssessments",new Object[] { 1 }, new Class<?>[] { Integer.class }, null);
         v.display();
         v.showSubmissions();
-       // v.makeAssessment();
-     //   v.removeAssessment();
-       // v.makeAssessment("Assignemt2", "Complete the graph problems", 10, "2015-09-10");
     }
     
 }

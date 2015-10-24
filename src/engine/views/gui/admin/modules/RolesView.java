@@ -6,7 +6,6 @@ import engine.controllers.ControllerMessage;
 import engine.core.RouteHandler;
 import engine.models.Role;
 import engine.views.ResponseDataView;
-import engine.views.gui.admin.AdminControlPanelView;
 import engine.views.gui.layout.Layout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -244,5 +243,4 @@ public class RolesView extends DataModuleView
                 permLevel.addItem(i);
         }
     }
-        
 }

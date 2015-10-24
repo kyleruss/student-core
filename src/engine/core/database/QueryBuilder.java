@@ -9,6 +9,7 @@ package engine.core.database;
 import com.google.gson.JsonArray;
 import engine.parsers.JsonParser;
 import engine.core.DataConnector;
+import engine.core.ExceptionOutput;
 import engine.core.database.Join.JoinType;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -229,7 +230,7 @@ public class QueryBuilder
         
         catch(SQLException e)
         {
-            System.out.println(e.getMessage());
+            ExceptionOutput.output(e.getMessage(), ExceptionOutput.OutputType.DEBUG);
             return 0;
         }
     }

@@ -3,7 +3,6 @@ package engine.views.gui.admin.modules;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import engine.models.Role;
 import engine.views.GUIView;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -89,9 +88,7 @@ public abstract class DataModuleView extends GUIView implements ActionListener
     }
 
     @Override
-    protected void initResources()
-    {
-    }
+    protected void initResources() {}
 
     @Override
     protected void initListeners() 
@@ -153,16 +150,6 @@ public abstract class DataModuleView extends GUIView implements ActionListener
     
     protected void setColumns()
     {
-       /* DefaultTableCellRenderer renderer   =   new DefaultTableCellRenderer();
-        renderer.setHorizontalAlignment(JLabel.CENTER);
-        
-        for (String columnHeader : columnHeaders) 
-            dataModel.addColumn(columnHeader);
-        
-        
-        for(int i = 0; i < dataTable.getColumnCount(); i++)
-            dataTable.getColumnModel().getColumn(i).setCellRenderer(renderer); */
-        
         setColumns(columnHeaders, dataTable, dataModel);
     }
     

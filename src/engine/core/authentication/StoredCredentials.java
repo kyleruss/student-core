@@ -83,8 +83,6 @@ public class StoredCredentials
         }
     }
     
-    //TODO: get saved credentials of pertricular user
-    
    public synchronized static StoredCredentials getSavedCredentials()
     {
         if(AppConfig.ALLOW_CRED_SAVE)

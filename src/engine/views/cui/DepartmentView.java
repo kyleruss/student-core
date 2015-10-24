@@ -27,9 +27,9 @@ public class DepartmentView extends AbstractView
     {
         super
         (
-                message,
-                message.getData().get(1).getAsJsonObject().get("name".toUpperCase()).getAsString() + " Department", 
-                "Access and manage your department" 
+            message,
+            message.getData().get(1).getAsJsonObject().get("name".toUpperCase()).getAsString() + " Department", 
+            "Access and manage your department" 
         );
     }
     

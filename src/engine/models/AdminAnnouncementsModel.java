@@ -19,7 +19,7 @@ public class AdminAnnouncementsModel extends Model
     protected void initTable() 
     {
         table       =   "admin_announcements";
-        primaryKey =   "id";   
+        primaryKey  =   "id";   
     }
 
     public static JsonArray getAllAnnouncements()

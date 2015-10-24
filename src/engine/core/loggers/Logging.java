@@ -7,7 +7,6 @@
 package engine.core.loggers;
 
 import java.io.IOException;
-import java.util.Date;
 import java.util.logging.Handler;
 import java.util.logging.SimpleFormatter;
 
@@ -22,9 +21,4 @@ public interface Logging
     
     //Returns the loggers formatter
     public SimpleFormatter getFormatter();
-    
-    //Returns the log at log_date if it exists
-    public String readLog(Date log_date);
-    
-    
 }

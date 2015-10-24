@@ -72,48 +72,26 @@ public class NoticesView extends AnnouncementView
         @Override
         protected void submitAddAnnouncement() 
         {
-           /* String title    =   modifyPanel.getTitle();
-            String content  =   modifyPanel.getContent();
-            
-            if(title.equals("") || content.equals(""))
-                JOptionPane.showMessageDialog(null, "Please fill in all the fields");
-            else
+            ControllerMessage postData  =   prepareAddPost();
+            if(postData == null) return;
+
+            ResponseDataView response   =   (ResponseDataView) RouteHandler.go("postAddAdminAnnouncement", postData);
+            Timer responseTimer =   new Timer(2000, (ActionEvent e)->
             {
-                String username =   Agent.getActiveSession().getUser().get("username").getNonLiteralValue().toString();
-                showProcessing();
-                ControllerMessage postData  =   new ControllerMessage();
-                postData.add("announcePoster", username);
-                postData.add("announceContent", content);
-                postData.add("announceTitle", title);
-                postData.add("announceCode", announcementCode);  */
-            
-                ControllerMessage postData  =   prepareAddPost();
-                if(postData == null) return;
-                
-                ResponseDataView response   =   (ResponseDataView) RouteHandler.go("postAddAdminAnnouncement", postData);
-                Timer responseTimer =   new Timer(2000, (ActionEvent e)->
-                {
-                    showStatusLabel(response.getRawResponseMessage(), response.getResponseStatus());
-                    back();
-                });
-                
-                responseTimer.setRepeats(false);
-                responseTimer.start();
-                
-                if(response.getResponseStatus())
-                    initData();
-          //  }
+                showStatusLabel(response.getRawResponseMessage(), response.getResponseStatus());
+                back();
+            });
+
+            responseTimer.setRepeats(false);
+            responseTimer.start();
+
+            if(response.getResponseStatus())
+                initData();
         }
 
         @Override
         protected void submitRemoveAnnouncement()  
         {
-            /*JsonObject value            =   (JsonObject) announcementList.getSelectedValue();
-            int announceID              =   value.get("ID").getAsInt();
-            ControllerMessage postData  =   new ControllerMessage();
-            postData.add("announceID", announceID);
-            postData.add("announceCode", announcementCode); */
-            
             ControllerMessage postData  =   prepareRemovePost();
             if(postData == null) return;
             
@@ -197,35 +175,20 @@ public class NoticesView extends AnnouncementView
         @Override
         protected void submitEditAnnouncement() 
         {
-            /*String title    =   modifyPanel.getTitle();
-            String content  =   modifyPanel.getContent();
-            int id          =   getSelectedValue().get("ID").getAsInt();
-            
-            if(title.equals("") || content.equals(""))
-                JOptionPane.showMessageDialog(null, "Please fill in all the fields");
-            else
+            ControllerMessage postData  =   prepareEditPost();
+            if(postData == null) return;
+
+            ResponseDataView response   =   (ResponseDataView) RouteHandler.go("postEditAdminAnnouncement", postData);
+            Timer responseTimer =   new Timer(2000, (ActionEvent e)->
             {
-                showProcessing();
-                ControllerMessage postData  =   new ControllerMessage();
-                postData.add("announceID", id);
-                postData.add("announceContent", content);
-                postData.add("announceTitle", title);
-                postData.add("announceCode", announcementCode); */
-                
-                ControllerMessage postData  =   prepareEditPost();
-                if(postData == null) return;
-                
-                ResponseDataView response   =   (ResponseDataView) RouteHandler.go("postEditAdminAnnouncement", postData);
-                Timer responseTimer =   new Timer(2000, (ActionEvent e)->
-                {
-                    showStatusLabel(response.getRawResponseMessage(), response.getResponseStatus());
-                    back();
-                });
-                
-                responseTimer.setRepeats(false);
-                responseTimer.start();
-                
-                if(response.getResponseStatus())
-                    initData();
+                showStatusLabel(response.getRawResponseMessage(), response.getResponseStatus());
+                back();
+            });
+
+            responseTimer.setRepeats(false);
+            responseTimer.start();
+
+            if(response.getResponseStatus())
+                initData();
         }
     }

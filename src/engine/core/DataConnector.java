@@ -281,9 +281,4 @@ public class DataConnector implements AutoCloseable
     {
         closeConnection();
     }
-    
-    public static void main(String[] args)
-    {
-        DataConnector connector =   new DataConnector();
-    }
 }

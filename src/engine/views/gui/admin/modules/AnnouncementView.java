@@ -4,7 +4,6 @@ package engine.views.gui.admin.modules;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import engine.controllers.ControllerMessage;
-import engine.models.AdminAnnouncementsModel;
 import engine.views.GUIView;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
@@ -113,8 +112,6 @@ public abstract class AnnouncementView extends GUIView implements ActionListener
         announcementInnerWrapper.add(announcementScroller);
         announcementsWrapper.add(announcementScroller);
         
-        
-        
         announcementHeader.add(announcementControls);
         announcementHeader.add(statusWrapper);
         announcementHeader.setPreferredSize(new Dimension(1, 90));
@@ -128,12 +125,9 @@ public abstract class AnnouncementView extends GUIView implements ActionListener
         initData();
         showAnnouncementView(ANNOUNCEMENT_VIEW);
     }
-    
 
     @Override
-    protected void initResources()
-    {
-    }
+    protected void initResources() {}
 
     @Override
     protected void initListeners()
@@ -198,7 +192,6 @@ public abstract class AnnouncementView extends GUIView implements ActionListener
     {
         showAnnouncementView(ANNOUNCEMENT_VIEW);
     }
-    
     
     public JPanel getAnnouncementViewPanel()
     {

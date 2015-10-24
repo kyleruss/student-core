@@ -104,9 +104,7 @@ public class UsersView extends GUIView implements ActionListener
         subView.setBackground(Color.WHITE);
         asideView.setBackground(Color.WHITE);
         
-        
         showSubViews(false);
-        
     }
 
     @Override
@@ -130,17 +128,7 @@ public class UsersView extends GUIView implements ActionListener
         backButton.addActionListener(this);
         searchButton.addActionListener(this);
     }
-    
-    private void initAddView()
-    {
-        
-    }
-    
-    private void initSearchView()
-    {
-        
-    }
-    
+
     private void showUserView(String viewName)
     {
         showSubViews(true);
@@ -376,7 +364,6 @@ public class UsersView extends GUIView implements ActionListener
                 form.getContactEmail().setText(current.get("E_CONTACT_EMAIL").getAsString());
                 form.getContactRelationship().setText(current.get("E_CONTACT_RELATIONSHIP").getAsString());
                 form.getMedicalDescription().setText(current.get("MEDICAL_DESC").getAsString()); 
-                
             });
         }
         

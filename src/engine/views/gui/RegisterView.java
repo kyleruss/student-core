@@ -42,7 +42,6 @@ import javax.swing.Timer;
 import javax.swing.border.Border;
 import org.jdesktop.xswingx.PromptSupport;
 
-
 public class RegisterView extends GUIView implements ActionListener
 {
     private JPanel userFormPanel;
@@ -243,11 +242,8 @@ public class RegisterView extends GUIView implements ActionListener
         PromptSupport.setPrompt(" Contact relationship", contactRelationship);
         PromptSupport.setPrompt(" Enter medical information", medicalDescription);
         
-        
         formPanel.add(userFormPanel, FIRST_FORM);
         formPanel.add(medicalFormPanel, SECOND_FORM);
-        //formPanel.revalidate();
-        
         
         // STATUS COMPONENTS
         statusPanel =   new JPanel();
@@ -276,10 +272,7 @@ public class RegisterView extends GUIView implements ActionListener
     }
     
     @Override
-    protected void initListeners()
-    {
-        
-    }
+    protected void initListeners() {}
     
     private boolean validateField(JTextField field, String regex, int minLength, int maxLength, Border valid, Border invalid)
     {
@@ -401,20 +394,6 @@ public class RegisterView extends GUIView implements ActionListener
         return contactDetails;
     }
     
-    private void attemptLoginRedirect()
-    {
-        ControllerMessage postData   =   new ControllerMessage();
-        postData.add("loginUsername", usernameField.getText());
-        postData.add("loginPassword", passwordField.getText()); 
-
-        ResponseDataView response   =   (ResponseDataView) RouteHandler.go("postLogin", postData); 
-        
-        if(response.getResponseStatus())
-            Agent.setView("getHome");
-        else
-            Agent.setView("getLogin");
-    }
-    
     private void showInvalidForm()
     {
         statusIcon.setIcon(new ImageIcon(Layout.getImage("failicon.png")));
@@ -449,7 +428,7 @@ public class RegisterView extends GUIView implements ActionListener
                 statusText.setText("Registration successful!");
                 Timer redirectTimer =   new Timer(1500, (ActionEvent ev) ->
                 {
-                    Agent.setView("getLogin");//attemptLoginRedirect();
+                    Agent.setView("getLogin");
                 });
                 
                 redirectTimer.setRepeats(false);
@@ -665,10 +644,4 @@ public class RegisterView extends GUIView implements ActionListener
             ExceptionOutput.output("Failed to load resources: " + e.getMessage(), ExceptionOutput.OutputType.DEBUG);
         }
     }
-    
-    private JPanel createFormField(JTextField field, String description)
-    {
-        return null;
-    }
-    
 }

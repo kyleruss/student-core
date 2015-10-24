@@ -1,8 +1,5 @@
 package engine.core.loggers;
 
-
-import engine.core.loggers.AbstractLogger;
-import engine.core.loggers.MainLogger;
 import java.io.IOException;
 import java.util.logging.Logger;
 

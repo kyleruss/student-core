@@ -7,6 +7,7 @@
 package engine.core.loggers;
 
 import engine.config.LoggingConfig;
+import engine.core.ExceptionOutput;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -48,7 +49,7 @@ public final class MainLogger
         
         catch(IOException e)
         {
-            System.out.println("[" + log_type + "] Default log file cannot be found");
+            ExceptionOutput.output("[" + log_type + "] Default log file cannot be found", ExceptionOutput.OutputType.DEBUG);
             return null;
         }
     }
@@ -88,7 +89,7 @@ public final class MainLogger
 
             catch(IOException | SecurityException e)
             {
-                System.out.println("Failed to commit log: " + e.getMessage());
+                ExceptionOutput.output("Failed to commit log: " + e.getMessage(), ExceptionOutput.OutputType.DEBUG);
             }
 
             //flush and close handlers

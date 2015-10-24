@@ -27,9 +27,9 @@ public class MyClassesView extends AbstractView
     {
         super
         (
-                messages, 
-                "My classes", 
-                "View and manage your classes" 
+            messages, 
+            "My classes", 
+            "View and manage your classes" 
         );
     }
     

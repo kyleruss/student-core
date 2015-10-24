@@ -74,12 +74,4 @@ public abstract class AbstractLogger implements Logging
     {
         return log_formatter;
     }
-
-    //Returns the output of the lag at date log_date
-    //Returns the latest log if log of log_date !exists
-    @Override
-    public String readLog(Date log_date) 
-    {
-        return "";
-    }
 }

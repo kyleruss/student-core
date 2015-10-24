@@ -1,7 +1,6 @@
 
 package engine.controllers;
 
-import engine.core.Agent;
 import engine.core.Path;
 import engine.views.View;
 

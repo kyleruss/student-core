@@ -5,12 +5,10 @@ import engine.controllers.ControllerMessage;
 import engine.core.Agent;
 import engine.views.GUIView;
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import javax.swing.BorderFactory;
-import javax.swing.Box;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.Timer;
@@ -63,15 +61,8 @@ public class ErrorView extends GUIView
     }
     
     @Override
-    protected void initResources() 
-    {
-        
-    }
+    protected void initResources()  {}
 
     @Override
-    protected void initListeners()
-    {
-        
-    }
-    
+    protected void initListeners() {}
 }

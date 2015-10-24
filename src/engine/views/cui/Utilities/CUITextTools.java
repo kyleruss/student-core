@@ -4,6 +4,7 @@ package engine.views.cui.Utilities;
 import com.bethecoder.ascii_table.ASCIITable;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import engine.core.ExceptionOutput;
 import java.text.MessageFormat;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -145,7 +146,7 @@ public class CUITextTools
                         try { wait(300); }
                         catch(InterruptedException e)
                         {
-                            System.out.println(e.getMessage());
+                            ExceptionOutput.output(e.getMessage(), ExceptionOutput.OutputType.DEBUG);
                         }
                     }
                 }
@@ -208,7 +209,7 @@ public class CUITextTools
         try{ inputThread.join(); }   
         catch(InterruptedException e)
         {
-            System.out.println("Error: " + e.getMessage());
+            ExceptionOutput.output("[Interrupted] Error: " + e.getMessage(), ExceptionOutput.OutputType.DEBUG);
         }
         
         return form;

@@ -23,15 +23,25 @@ public class ClassesModel extends Model
         super(id);
     }
     
-    public static JsonArray getTeacherContact(int classId) throws SQLException
+    public static JsonArray getTeacherContact(int classId)
     {
-        return new ClassesModel().builder()
-                .join(new Join("classes", "users", "teacher_id", "username", Join.JoinType.INNERR_JOIN).filter(new Conditional("id", "=", "" + classId)))
-                .select("users.firstname", "First name")
-                .select("users.lastname", "Last name")
-                .select("users.contact_ph", "Contact phone")
-                .select("users.contact_email", "Contact email")
-                .get();
+        try
+        {
+            JsonArray results =  new ClassesModel().builder()
+                    .join(new Join("classes", "users", "teacher_id", "username", Join.JoinType.INNERR_JOIN).filter(new Conditional("id", "=", "" + classId)))
+                    .select("users.firstname", "First name")
+                    .select("users.lastname", "Last name")
+                    .select("users.contact_ph", "Contact phone")
+                    .select("users.contact_email", "Contact email")
+                    .get();
+            
+            return results;
+        }
+        
+        catch(SQLException e)
+        {
+            return new JsonArray();
+        }
     }
     
     public static JsonArray getAllClasses()

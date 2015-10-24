@@ -6,11 +6,9 @@ import engine.config.AppConfig;
 import engine.controllers.ControllerMessage;
 import engine.core.Agent;
 import engine.core.database.Column;
-import engine.models.AdminAnnouncementsModel;
 import engine.models.DepartmentModel;
 import engine.models.DeptAnnouncementsModel;
 import engine.views.GUIView;
-import engine.views.gui.admin.modules.AnnouncementView;
 import engine.views.gui.admin.modules.NoticesView;
 import engine.views.gui.layout.Layout;
 import java.awt.BorderLayout;
@@ -53,7 +51,6 @@ public class DepartmentView extends GUIView implements ActionListener
     private JPanel deptHeader;
     private JLabel deptLabel;
     private JButton showNoticesButton, showUsersButton, showContactButton;
-    
     
     public DepartmentView()
     {
@@ -351,11 +348,5 @@ public class DepartmentView extends GUIView implements ActionListener
             if(dept_col == null)   return new JsonArray();
             else return DeptAnnouncementsModel.getDeptAnnouncementsFor(Integer.parseInt(dept_col.getNonLiteralValue().toString()));
         }
-                
     }
-    
-        public static void main(String[] args)
-        {
-            DepartmentView view =   new DepartmentView();
-        }
 }

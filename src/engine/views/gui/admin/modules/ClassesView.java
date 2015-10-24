@@ -159,7 +159,6 @@ public class ClassesView extends GUIView implements ActionListener
                 postData.add("semester", dialog.semesterField.getSelectedItem());
                 
                 ResponseDataView response   =   (ResponseDataView) RouteHandler.go("postAddEnrolment", postData);
-                
                 if(response != null)
                 {
                     showResponseLabel(response.getRawResponseMessage(), response.getResponseStatus());
@@ -195,7 +194,7 @@ public class ClassesView extends GUIView implements ActionListener
         @Override
         protected void initColumns() 
         {
-            columnHeaders   =   new String[] { "ID", "Username", "Class", "Semester"};   
+            columnHeaders   =   new String[] { "ID", "Username", "Class", "Semester" };   
             columnNames     =   new String[] { "enrol_id", "User ID", "class_name", "semester" };
         }
         
@@ -271,8 +270,8 @@ public class ClassesView extends GUIView implements ActionListener
                 JOptionPane.showMessageDialog(null, "Please select a class to remove");
             else
             {
-                int option                  =   JOptionPane.showConfirmDialog(null, "Are you sure you want to delete this class?", 
-                                                "Confirm class removal", JOptionPane.YES_NO_OPTION);
+                int option    =   JOptionPane.showConfirmDialog(null, "Are you sure you want to delete this class?", 
+                                  "Confirm class removal", JOptionPane.YES_NO_OPTION);
                 if(option == JOptionPane.YES_OPTION)
                 {
                     ControllerMessage postData  =   new ControllerMessage();

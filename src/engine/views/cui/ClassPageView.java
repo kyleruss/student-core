@@ -15,7 +15,6 @@ import engine.models.ClassesModel;
 import engine.views.AbstractView;
 import engine.views.View;
 import engine.views.cui.Utilities.CUITextTools;
-import java.sql.SQLException;
 
 public class ClassPageView extends AbstractView
 {
@@ -28,9 +27,9 @@ public class ClassPageView extends AbstractView
     {
         super
         (
-                messages, 
-                messages.getData().get(1).getAsJsonObject().get("Class name").getAsString(), 
-                "Class homepage, view and manage this class" 
+            messages, 
+            messages.getData().get(1).getAsJsonObject().get("Class name").getAsString(), 
+            "Class homepage, view and manage this class" 
         );
     }
     
@@ -58,21 +57,12 @@ public class ClassPageView extends AbstractView
     public void showTeacherContact()
     {
         int classId =   messages.getData().get(1).getAsJsonObject().get("Class ID").getAsInt();
-        try
+        JsonArray teacher   =   ClassesModel.getTeacherContact(classId);
+
+        if(teacher != null && teacher.size() > 1)
         {
-            JsonArray teacher   =   ClassesModel.getTeacherContact(classId);
-            
-            if(teacher.size() > 1)
-            {
-                System.out.println("\n" + CUITextTools.underline(CUITextTools.changeColour("Teacher contact details", CUITextTools.CYAN)));
-                CUITextTools.responseToTable(teacher);
-            }
-        }
-        
-        catch(SQLException e)
-        {
-            //System.out.println(e.getMessage());
-            System.out.println(CUITextTools.changeColour("No teacher found", CUITextTools.RED));
+            System.out.println("\n" + CUITextTools.underline(CUITextTools.changeColour("Teacher contact details", CUITextTools.CYAN)));
+            CUITextTools.responseToTable(teacher);
         }
     }
     
@@ -81,7 +71,7 @@ public class ClassPageView extends AbstractView
         View assessView  =   RouteHandler.go("getClassAssessments",
                 new Object[] { messages.getData().get(1).getAsJsonObject().get("Class ID").getAsInt() }, 
                 new Class<?>[] { Integer.class }, null);
-        //assessView.display();
+        
         Agent.setView(assessView);
     }
 
