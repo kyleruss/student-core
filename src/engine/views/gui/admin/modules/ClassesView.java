@@ -142,7 +142,6 @@ public class ClassesView extends GUIView implements ActionListener
             else
             {
                 JsonArray data = ClassEnrolmentModel.getStudentsEnrolledIn(classID);
-                System.out.println(data);
                 return data;
             }
         }

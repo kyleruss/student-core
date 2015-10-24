@@ -162,7 +162,6 @@ public abstract class AnnouncementView extends GUIView implements ActionListener
     protected void initData()
     {
         JsonArray announcements =   getData();
-        System.out.println(announcements);
         SwingUtilities.invokeLater(()->
         {
             announcementModel.removeAllElements();

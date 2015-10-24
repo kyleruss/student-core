@@ -84,7 +84,6 @@ public abstract class Controller
     public View prepareView(View view)
     {
         view.setPath(path);
-        System.out.println("V: " + view);
         return view;
     }
     
@@ -97,10 +96,8 @@ public abstract class Controller
             boolean validate = true;
             for(String name : expectedNames)
                 if(!postData.messageExists(name)) 
-                {
-                    System.out.println("FAIL: " + name);
                     validate = false;
-                }
+            
             return validate;
         }
     }

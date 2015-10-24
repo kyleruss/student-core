@@ -83,8 +83,7 @@ public class RouteHandler
         
         catch(ClassNotFoundException | NoSuchMethodException | IllegalAccessException | InvocationTargetException | InstantiationException e)
         {
-         //   ExceptionOutput.output("Address was not found", ExceptionOutput.OutputType.MESSAGE);
-          //  ExceptionOutput.output(e, true,ExceptionOutput.OutputType.DEBUG);
+            ExceptionOutput.output(e.getMessage(),ExceptionOutput.OutputType.DEBUG);
             return null;
         }
     }

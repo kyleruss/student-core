@@ -175,78 +175,73 @@ public final class Agent extends CommandInterpreter
     //Handles ViewExplorer pointers for navigation
     public static void setView(View view)
     {
-       // synchronized(agentThread)
-      //  {
-            
-            if(view == null)
-            {
-                if(!guiMode)
-                    ExceptionOutput.output("View not found", ExceptionOutput.OutputType.MESSAGE);
-                else
-                {
-                    View errorView = RouteHandler.go("getErrorPage", new Object[] { "View not found" }, new Class<?>[] { String.class }, null);
-                    setView(errorView);
-                }
-            }
-
+        if(view == null)
+        {
+            if(!guiMode)
+                ExceptionOutput.output("View not found", ExceptionOutput.OutputType.MESSAGE);
             else
             {
-                if(activeView != null && view != activeView)
-                {
-                    //prevent creating paradox
-                    if(view.getNextView() != activeView)
-                        view.setPrevView(activeView);
-                    
-                    if(activeView.getPrevView() != view)
-                        activeView.setNextView(view);
-                }
-               
-                activeView =   view;
-                
-                if(guiMode)
-                {
-                    Layout layout               =   window.getAppLayout();
-                    HeaderNavigation headNav    =   layout.getHeadNav();
-                    headNav.setViewAddress(view.getPath().getFullURL());
-                    
-                    if(activeView.getPrevView() != null) 
-                    {
-                        headNav.enablePrevButton();
-                        layout.getMenu().setEnablePrev(true);
-                    }
-                    
-                    else
-                    {
-                        headNav.disablePrevButton();
-                        layout.getMenu().setEnablePrev(false);
-                    }
-                    
-                    if(activeView.getNextView() != null)
-                    {
-                        headNav.enableNextButton();
-                        layout.getMenu().setEnableNext(true);
-                    }
-                    
-                    else 
-                    {
-                        headNav.disableNextButton();
-                        layout.getMenu().setEnableNext(false);
-                    }
-                    
-                    layout.getViewPane().showTransition();
-                    Timer transitionTimer    =   new Timer(100, (ActionEvent e) -> 
-                    {
-                        window.setActiveView((GUIView) activeView);
-                        layout.getViewPane().hideTransition();
-                    });
+                View errorView = RouteHandler.go("getErrorPage", new Object[] { "View not found" }, new Class<?>[] { String.class }, null);
+                setView(errorView);
+            }
+        }
 
-                    transitionTimer.setRepeats(false);
-                    transitionTimer.start(); 
+        else
+        {
+            if(activeView != null && view != activeView)
+            {
+                //prevent creating paradox
+                if(view.getNextView() != activeView)
+                    view.setPrevView(activeView);
+
+                if(activeView.getPrevView() != view)
+                    activeView.setNextView(view);
+            }
+
+            activeView =   view;
+
+            if(guiMode)
+            {
+                Layout layout               =   window.getAppLayout();
+                HeaderNavigation headNav    =   layout.getHeadNav();
+                headNav.setViewAddress(view.getPath().getFullURL());
+
+                if(activeView.getPrevView() != null) 
+                {
+                    headNav.enablePrevButton();
+                    layout.getMenu().setEnablePrev(true);
                 }
-                
-                else view.display(); 
-              //  agentThread.notify();
-           // }
+
+                else
+                {
+                    headNav.disablePrevButton();
+                    layout.getMenu().setEnablePrev(false);
+                }
+
+                if(activeView.getNextView() != null)
+                {
+                    headNav.enableNextButton();
+                    layout.getMenu().setEnableNext(true);
+                }
+
+                else 
+                {
+                    headNav.disableNextButton();
+                    layout.getMenu().setEnableNext(false);
+                }
+
+                layout.getViewPane().showTransition();
+                Timer transitionTimer    =   new Timer(100, (ActionEvent e) -> 
+                {
+                    window.setActiveView((GUIView) activeView);
+                    layout.getViewPane().hideTransition();
+                });
+
+                transitionTimer.setRepeats(false);
+                transitionTimer.start(); 
+            }
+
+            else view.display(); 
         }
     }
     
@@ -430,7 +425,7 @@ public final class Agent extends CommandInterpreter
             
             catch(InterruptedException e)
             {
-                //e.printStackTrace();
+                ExceptionOutput.output("[Agent listener interrupted] " + e.getMessage(), ExceptionOutput.OutputType.DEBUG);
             }     
         }
     };

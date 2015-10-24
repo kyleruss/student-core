@@ -29,7 +29,6 @@ public class ViewPane extends JPanel
         transitionView.setPreferredSize(getPreferredSize());
         add(transitionView, TRANSITION_VIEW);
         
-        //setLayout(new BorderLayout());
         setBackground(Color.WHITE);
     }
     

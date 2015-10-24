@@ -46,7 +46,6 @@ public class Auth
             //Clean username & password input
             username        =   Input.clean(username);
             password        =   Input.clean(password);
-            System.out.println("USER: " + username + " pass: " + password);
             
             //Get user and password column names
             String userCol  =   AuthConfig.USERNAME_COL.toUpperCase();

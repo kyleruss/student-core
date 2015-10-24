@@ -336,7 +336,6 @@ public class RegisterView extends GUIView implements ActionListener
     {
         if(validateForm(step)) 
         {
-            System.out.println("invalid");
             showInvalidForm();
             return;
         }
@@ -361,7 +360,6 @@ public class RegisterView extends GUIView implements ActionListener
         if(step - 1 >= 0)
         {
             step--;
-            System.out.println("PREV: " + forms.get(step));
             CardLayout cLayout  =   (CardLayout) formPanel.getLayout();
             cLayout.show(formPanel, forms.get(step));
             registerScroll.getVerticalScrollBar().setValue(0);
@@ -414,10 +412,7 @@ public class RegisterView extends GUIView implements ActionListener
         if(response.getResponseStatus())
             Agent.setView("getHome");
         else
-        {
-            System.out.println("FAILED TO LOGIN: " + response.getRawResponseMessage());
             Agent.setView("getLogin");
-        }
     }
     
     private void showInvalidForm()

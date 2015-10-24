@@ -226,7 +226,7 @@ public abstract class Model
         
         catch(SQLException e)
         {
-            System.out.println("[SQL EXCEPTION] Failed to find this model - " + e.getMessage());
+            ExceptionOutput.output("[SQL EXCEPTION] Failed to find this model - " + e.getMessage(), ExceptionOutput.OutputType.DEBUG);
             return null;
         }
     }

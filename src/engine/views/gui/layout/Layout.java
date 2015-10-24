@@ -1,6 +1,7 @@
 package engine.views.gui.layout;
 
 import engine.config.AppConfig;
+import engine.core.ExceptionOutput;
 import java.awt.BorderLayout;
 import javax.swing.JButton;
 import javax.swing.JPanel;
@@ -37,7 +38,7 @@ public class Layout extends JPanel
         
         catch(ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException e)
         {
-            System.out.println("[Exception] Failed to load LookAndFeel: " + e.getMessage());
+            ExceptionOutput.output("[Exception] Failed to load LookAndFeel: " + e.getMessage(), ExceptionOutput.OutputType.DEBUG);
         }
     }
     

@@ -7,6 +7,7 @@
 package engine.models;
 
 import com.google.gson.JsonArray;
+import engine.core.ExceptionOutput;
 import java.sql.SQLException;
 
 public class AssessmentModel extends Model
@@ -37,7 +38,7 @@ public class AssessmentModel extends Model
         
         catch(SQLException e)
         {
-            System.out.println("[SQL Exception] " + e.getMessage());
+            ExceptionOutput.output("[SQL Exception] " + e.getMessage(), ExceptionOutput.OutputType.DEBUG);
             return new JsonArray();
         }
     }

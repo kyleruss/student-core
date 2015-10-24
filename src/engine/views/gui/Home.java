@@ -131,7 +131,6 @@ public class Home extends GUIView implements ActionListener
         homeLabel.setIcon(new ImageIcon(homeLabelImage));
         innerHomeDisplayPanel.add(homeLabel);
         
-        //homeDisplayPanel.add(innerHomeDisplayPanel);
         homeDisplayPanel.add(classPanel);
         
         userPanel           =   new JPanel();
@@ -269,7 +268,6 @@ public class Home extends GUIView implements ActionListener
             
             if(results != null && results.size() > 1)
             {
-                System.out.println(results);
                 SwingUtilities.invokeLater(()->
                 {
                     for(int i = 1; i < results.size(); i++)
