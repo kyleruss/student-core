@@ -1,0 +1,9 @@
+CREATE TABLE admin_announcements
+(
+    id INTEGER NOT NULL PRIMARY KEY GENERATED ALWAYS AS IDENTITY(START WITH 1, INCREMENT BY 1),
+    announcer varchar(16) NOT NULL,
+    content varchar(1500),
+	title varchar(50),
+    announce_date DATE DEFAULT CURRENT DATE,
+    FOREIGN KEY(announcer) REFERENCES Users(username) ON DELETE CASCADE
+)

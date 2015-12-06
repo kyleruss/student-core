@@ -1,0 +1,7 @@
+CREATE TABLE medical
+(
+    id INTEGER NOT NULL PRIMARY KEY GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),
+    contact_id INTEGER,
+    description varchar(1000),
+    FOREIGN KEY (contact_id) REFERENCES emergency_contact(id) ON DELETE SET NULL
+);

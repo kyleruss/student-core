@@ -1,0 +1,9 @@
+CREATE TABLE Notifications
+(
+    id integer NOT NULL PRIMARY KEY GENERATED ALWAYS AS IDENTITY(START WITH 1, INCREMENT BY 1),
+    username varchar(16) NOT NULL,
+    content varchar(500),
+    sent_date date DEFAULT CURRENT DATE,
+    unread boolean DEFAULT TRUE,
+    FOREIGN KEY(username) REFERENCES users(username) ON DELETE CASCADE
+);

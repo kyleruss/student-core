@@ -1,0 +1,8 @@
+CREATE TABLE staff
+(
+    user_id varchar(16) NOT NULL PRIMARY KEY,
+    salary INTEGER,
+    title varchar(40),
+    dept_id INTEGER,
+    FOREIGN KEY(user_id) REFERENCES users(username) ON DELETE CASCADE
+);
