@@ -1,3 +1,8 @@
+//====================================
+//  KYLE RUSSELL
+//  13831056
+//  PDC Project
+//====================================
 
 package engine.views.gui.layout;
 
@@ -18,7 +23,7 @@ public class Menu implements ActionListener
 {
     private JMenuBar menuBar;
     private JMenu file, about, view, user;
-    private JMenuItem exit, minimize, author, info;
+    private JMenuItem exit, minimize, author;
     private JMenuItem profile, notifications, logout;
     private JMenuItem refresh, next, prev;
     private JMenuItem login, register;
@@ -40,7 +45,6 @@ public class Menu implements ActionListener
         exit            =   new JMenuItem("Exit");
         minimize        =   new JMenuItem("Minimize");
         author          =   new JMenuItem("Author");
-        info            =   new JMenuItem("About StudentCore");
         profile         =   new JMenuItem("Profile");
         notifications   =   new JMenuItem("Notifications");
         logout          =   new JMenuItem("Logout");
@@ -63,7 +67,6 @@ public class Menu implements ActionListener
         file.add(exit);
         file.add(minimize);
         
-        about.add(info);
         about.add(author);
         
         profile.addActionListener(this);
@@ -76,8 +79,6 @@ public class Menu implements ActionListener
         prev.addActionListener(this);
         exit.addActionListener(this);
         minimize.addActionListener(this);
-        info.addActionListener(this);
-        info.addActionListener(this);
         author.addActionListener(this);
         
         prev.setEnabled(false);
@@ -126,11 +127,6 @@ public class Menu implements ActionListener
         prev.setEnabled(eanble);
     }
     
-    private void showAboutDetails()
-    {
-        
-    }
-    
     @Override
     public void actionPerformed(ActionEvent e)
     {
@@ -162,9 +158,6 @@ public class Menu implements ActionListener
         
         else if(src == author)
             showAuthorDetails();
-        
-        else if(src == info)
-            showAboutDetails();
         
         else if(src == profile)
             Agent.setView("getHome");

@@ -1,3 +1,8 @@
+//====================================
+//  KYLE RUSSELL
+//  13831056
+//  PDC Project
+//====================================
 
 package engine.views.gui;
 
@@ -43,7 +48,6 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
-
 
 public class ClassPageView extends GUIView implements ActionListener
 {

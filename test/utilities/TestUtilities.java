@@ -1,3 +1,8 @@
+//====================================
+//  KYLE RUSSELL
+//  13831056
+//  PDC Project
+//====================================
 
 package utilities;
 
@@ -11,7 +16,6 @@ import java.text.MessageFormat;
 
 public class TestUtilities 
 {
-    
     //Prints a header with outline
     //pads title inside outline
     public static void formatHeader(String title)

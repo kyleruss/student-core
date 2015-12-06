@@ -10,6 +10,7 @@ import engine.views.ResponseDataView;
 import com.google.gson.JsonArray;
 import engine.controllers.ControllerMessage;
 import engine.core.Agent;
+import engine.core.ExceptionOutput;
 import engine.core.RouteHandler;
 import engine.core.database.Column;
 import engine.models.AssessmentModel;
@@ -110,9 +111,14 @@ public class ClassAssessmentsView extends AbstractView
         String[] headers                =   { "Assessment ID", "Modify attribute", "New value" };   
         Map<String, String> inputData   =   CUITextTools.getFormInput(fieldTitles, fieldKeys, headers);
         
-        ControllerMessage postData  =   new ControllerMessage().addAll(inputData);
-        ResponseDataView response   =   (ResponseDataView) RouteHandler.go("postModifyAssessment", postData);
-        System.out.println(response.getResponseMessage());
+        if(cols.keySet().contains(inputData.get("assessAttr").toUpperCase()))
+        {
+            ControllerMessage postData  =   new ControllerMessage().addAll(inputData);
+            ResponseDataView response   =   (ResponseDataView) RouteHandler.go("postModifyAssessment", postData);
+            System.out.println(response.getResponseMessage());
+        }
+        
+        else ExceptionOutput.output("Invalid attribute", ExceptionOutput.OutputType.MESSAGE);
     }
     
     public void showSubmissions()

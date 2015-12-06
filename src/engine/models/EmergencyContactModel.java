@@ -26,5 +26,4 @@ public class EmergencyContactModel extends Model
         table       =   "emergency_contact";
         primaryKey  =   "id";
     }
-    
 }

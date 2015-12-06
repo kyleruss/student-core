@@ -10,8 +10,6 @@ import engine.config.AuthConfig;
 import engine.core.Agent;
 import engine.core.ExceptionOutput;
 import engine.core.loggers.MainLogger;
-import engine.core.security.Crypto;
-import engine.core.security.Input;
 import engine.models.User;
 import java.text.DateFormat;
 import java.text.MessageFormat;
@@ -36,10 +34,6 @@ public class Auth
     {
         try
         {
-            //Clean username & password input
-            username        =   Input.clean(username);
-            password        =   Input.clean(password);
-            
             //Get user and password column names
             String userCol  =   AuthConfig.USERNAME_COL.toUpperCase();
             String passCol  =   AuthConfig.PASSWORD_COL.toUpperCase();

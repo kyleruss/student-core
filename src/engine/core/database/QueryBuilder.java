@@ -7,7 +7,7 @@
 package engine.core.database;
 
 import com.google.gson.JsonArray;
-import engine.parsers.JsonParser;
+import engine.core.JsonParser;
 import engine.core.DataConnector;
 import engine.core.ExceptionOutput;
 import engine.core.database.Join.JoinType;

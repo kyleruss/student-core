@@ -16,7 +16,7 @@ import engine.core.RouteHandler;
 import engine.core.authentication.Auth;
 import engine.core.database.Conditional;
 import engine.core.database.Join;
-import engine.core.security.Crypto;
+import engine.core.authentication.Crypto;
 import engine.models.ClassesModel;
 import engine.models.EmergencyContactModel;
 import engine.models.MedicalModel;
@@ -54,29 +54,36 @@ public class UserController extends Controller
         super(postData, requestType, path);
     }
     
+    //Returns the login view
     public View getLogin()
     {
         if(!Agent.isGUIMode()) return prepareView(new LoginView());
         else return prepareView(new engine.views.gui.LoginView());
     }
     
+    //Returns the home view
+    //Requires authenticated user
     public View getHome()
     {
         if(!Agent.isGUIMode()) return prepareView(new HomeView());
         else return prepareView(new engine.views.gui.Home());
     }
     
+    //Returns the users notifications
+    //CUI only (GUI handles seperately)
     public View getNotifications()
     {
         return prepareView(new NotificationView());
     }
     
+    //Logs the user out
     public View logout()
     {
         Agent.setActiveSession(null);
         return getLogin();
     }
     
+    //Attempts to log the user in
     public View postLogin()
     {
         final String invalidInputMesage         =   "Invalid information, please check your fields";
@@ -98,6 +105,7 @@ public class UserController extends Controller
         }
     }
     
+    //Returns the authenticated users enrolled classes
     public View getMyClasses()
     {
         User user       =   Agent.getActiveSession().getUser();
@@ -114,7 +122,7 @@ public class UserController extends Controller
             .get();
             
             if(!Agent.isGUIMode()) return prepareView(new MyClassesView(new ControllerMessage(results))); 
-            else return prepareView(new engine.views.gui.MyClassesView(new ControllerMessage(results)));
+            else return null;
         }
         
         catch(SQLException e)
@@ -123,6 +131,7 @@ public class UserController extends Controller
         }
     }
     
+    //Returns the class page of the class
     public View getClassPage(Integer classId)
     {
         try
@@ -143,9 +152,9 @@ public class UserController extends Controller
         {
             return null;
         }
-        
     }
     
+    //Returns the assessments of the class
     public View getClassAssessments(Integer classId)
     {
         AbstractView classPage      =   (AbstractView) getClassPage(classId);
@@ -153,12 +162,15 @@ public class UserController extends Controller
         return prepareView(new ClassAssessmentsView(new ControllerMessage(details)));
     }
     
+    //Returns the department of the authenticated user
+    //User is denied if they do not belong to a department
    public View getMyDepartment()
-    {
+   {
         User user            =    Agent.getActiveSession().getUser();
         String username      =   user.get("username").getColumnValue().toString();
 
-        if(user.get("dept_id").getNonLiteralValue() == null)
+        //User doesn't belong to a department
+        if(user.get("dept_id") == null || user.get("dept_id").getNonLiteralValue() == null)
         {
             if(AppConfig.GUI_MODE)
                 return RouteHandler.go("getErrorPage", new Object[] { "You are not in a department" }, new Class<?>[] { String.class }, null);
@@ -187,12 +199,15 @@ public class UserController extends Controller
         }
     } 
     
+   //Returns the register view
     public View getRegister()
     {
         if(!Agent.isGUIMode()) return prepareView(new RegisterView());
         else return prepareView(new engine.views.gui.RegisterView());
     }
     
+    //Attempts to register a user
+    //User will be redirected to the login view if successful
     public View postRegister()
     {
         final String invalidInputMesage         =   "Invalid information, please check your fields";

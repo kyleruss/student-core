@@ -128,6 +128,8 @@ public class Join
         return toPK;
     }
     
+    //Adds a conditional to the join
+    //join conditionals can be chained similalry to normal conditionals
     public Join filter(Conditional condition)
     {
         joinConditionals.add(condition);

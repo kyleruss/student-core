@@ -1,8 +1,14 @@
+//====================================
+//  KYLE RUSSELL
+//  13831056
+//  PDC Project
+//====================================
 
 package engine.views.gui.admin.modules;
 
 import com.google.gson.JsonArray;
 import engine.controllers.ControllerMessage;
+import engine.core.ExceptionOutput;
 import engine.core.RouteHandler;
 import engine.models.Role;
 import engine.views.ResponseDataView;
@@ -184,7 +190,7 @@ public class RolesView extends DataModuleView
         
         catch(IOException e)
         {
-            
+            JOptionPane.showMessageDialog(null, "Failed to load resources: " + e.getMessage());
         }
     }
     

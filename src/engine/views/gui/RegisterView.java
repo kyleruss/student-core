@@ -1,3 +1,8 @@
+//====================================
+//  KYLE RUSSELL
+//  13831056
+//  PDC Project
+//====================================
 
 package engine.views.gui;
 
@@ -54,6 +59,7 @@ public class RegisterView extends GUIView implements ActionListener
     private JPanel controlWrapper;
 
     private List<String> forms;
+    private List<String> formLabels;
     private int step;
     private final String FIRST_FORM     = "user";
     private final String SECOND_FORM    = "medical";
@@ -115,9 +121,12 @@ public class RegisterView extends GUIView implements ActionListener
         controlWrapper      =   new JPanel(new GridLayout(2, 1));
         
         forms               =   new ArrayList<>();
+        formLabels          =   new ArrayList<>();
         step                =   0;
         forms.add(FIRST_FORM);
         forms.add(SECOND_FORM);
+        formLabels.add("User details");
+        formLabels.add("Medical & contact details");
         
         registerPanel.setBackground(Color.WHITE);
         registerPanel.setPreferredSize(new Dimension(350, 450));
@@ -339,6 +348,7 @@ public class RegisterView extends GUIView implements ActionListener
             CardLayout cLayout  =   (CardLayout) formPanel.getLayout();
             cLayout.show(formPanel, forms.get(step));
             registerScroll.getVerticalScrollBar().setValue(0);
+            stepLabel.setText("Step " + (step + 1) + " " + formLabels.get(step));
             
             if(step == forms.size() - 1) 
                 nextStep.setText("Finish");
@@ -356,6 +366,7 @@ public class RegisterView extends GUIView implements ActionListener
             CardLayout cLayout  =   (CardLayout) formPanel.getLayout();
             cLayout.show(formPanel, forms.get(step));
             registerScroll.getVerticalScrollBar().setValue(0);
+            stepLabel.setText("Step " + (step + 1) +  " " + formLabels.get(step));
             
             if(step < forms.size())
                 nextStep.setText("Next");
@@ -422,7 +433,7 @@ public class RegisterView extends GUIView implements ActionListener
         
         Timer registerTimer =   new Timer(2000, (ActionEvent e) ->
         {
-            if(response.getResponseStatus())
+            if(response != null && response.getResponseStatus())
             {
                 statusIcon.setIcon(new ImageIcon(Layout.getImage("successicon.png")));
                 statusText.setText("Registration successful!");

@@ -8,7 +8,6 @@ package engine.views.cui;
 
 import com.google.gson.JsonArray;
 import engine.controllers.ControllerMessage;
-import engine.core.Agent;
 import engine.core.RouteHandler;
 import engine.models.DepartmentModel;
 import engine.views.AbstractView;

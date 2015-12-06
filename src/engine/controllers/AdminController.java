@@ -12,7 +12,7 @@ import engine.core.DataConnector;
 import engine.core.ExceptionOutput;
 import engine.core.Path;
 import engine.core.RouteHandler;
-import engine.core.security.Crypto;
+import engine.core.authentication.Crypto;
 import engine.models.AdminAnnouncementsModel;
 import engine.models.AssessmentModel;
 import engine.models.AssessmentSubmissionsModel;
@@ -32,10 +32,8 @@ import engine.views.View;
 import engine.views.cui.AssessmentSubmissionsView;
 import engine.views.ResponseDataView;
 import engine.views.cui.StudentListView;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.MessageFormat;
-
 
 public class AdminController extends Controller
 {
@@ -54,11 +52,17 @@ public class AdminController extends Controller
         super(postData, requestType, path);
     }
     
-        
+    //Returns the administrator control panel view
+    //CUI: engine/views/cui/AdministratorControlPanelView
+    //GUI: engine/views/gui/admin/AdministratorControlPanelView
     public View getAdmincp()
     {
+        //Minimum permission level of the users role
+        //User will be denied access if their permnission level is lower
         final int MIN_PERM_LEVEL    =   8;
-        int permLevel              =   Role.getUserPermissionLevel(Agent.getActiveSession().getUser().get("username").getNonLiteralValue().toString());
+        int permLevel               =   Role.getUserPermissionLevel(Agent.getActiveSession().getUser().get("username").getNonLiteralValue().toString());
+        
+        //Insufficient priveleges
         if(permLevel < MIN_PERM_LEVEL)
         {
             if(!Agent.isGUIMode())
@@ -73,21 +77,24 @@ public class AdminController extends Controller
                 return errorView;
             }
         }
+        
+        //Sufficient privileges allow access to panel
         else
         {
             if(!Agent.isGUIMode()) 
                 return prepareView(new AdminControlPanelView());
-
-            else return prepareView(new engine.views.gui.admin.AdminControlPanelView());
+            else
+                return prepareView(new engine.views.gui.admin.AdminControlPanelView());
         }
     }
-    
     
     public View getStudents()
     {
         return prepareView(new StudentListView());
     }
     
+    //Returns all users in the school
+   //Limited by numResults
     public View getStudentList(Integer page, Integer numResults)
     {
         try
@@ -103,6 +110,7 @@ public class AdminController extends Controller
         }
     }
     
+    //Removes a user 
     public View postRemoveStudent()
     {
         final String invalidInputMesage         =   "Invalid information, please check your fields";
@@ -122,6 +130,8 @@ public class AdminController extends Controller
     }
     
      
+    //Changes the attributed passed to a new value
+    //Attributes and values should be validated before sending
     public View postModifyStudent()
     {
         final String invalidInputMesage         =   "Invalid information, please check your fields";
@@ -149,7 +159,9 @@ public class AdminController extends Controller
         }
     }
     
-    
+    //Searches and returns the found student
+    //Allows user to specify a search attribute, search value and operator
+    //Attributes and values should be validated before sending
     public View postSearchStudent()
     {
         final String invalidInputMesage         =   "Invalid information, please check your fields";
@@ -188,6 +200,7 @@ public class AdminController extends Controller
        }
     }
     
+    //Creates a new assessment 
     public View postCreateAssessment()
     {
         final String invalidInputMesage         =   "Invalid input, please check your fields";
@@ -219,6 +232,8 @@ public class AdminController extends Controller
         }
     }
     
+    //Changes the attribute of an asessment to a new value
+    //Attributes and values should be validated before sending
     public View postModifyAssessment()
     {
         final String invalidInputMesage         =   "Invalid input, please check your fields";
@@ -245,6 +260,9 @@ public class AdminController extends Controller
         }
     }
     
+    //Changes an assessment on all values
+    //postModifyAssessment is better suited for CUI
+    //Attributes and values should be validated before sending
     public View postEditAssessment()
     {
         final String invalidInputMesage         =   "Invalid input, please check your fields";
@@ -273,6 +291,7 @@ public class AdminController extends Controller
         }
     }
     
+    //Removes an assessment if it exists
     public View postDeleteAssessment()
     {
         final String invalidInputMesage         =   "Invalid input, please check your fields";
@@ -292,12 +311,15 @@ public class AdminController extends Controller
         }
     }
     
+    //Returns the submissions for the assessment
     public View getAssessmentSubmissions(Integer assessId)
     {
         JsonArray assessmentDetails =   AssessmentSubmissionsModel.getSubmissionDetails(assessId);
         return prepareView(new AssessmentSubmissionsView(new ControllerMessage(assessmentDetails)));
     }
     
+    //Changes the attribute of a submission to a new value
+    //Attributes and values should be validated before sending
     public View postModifySubmission()
     {
         final String invalidInputMesage         =   "Invalid input, please check your fields";
@@ -318,6 +340,7 @@ public class AdminController extends Controller
         }
     }
     
+    //Removes a submission if it exisits
     public View postRemoveSubmission()
     {
         final String invalidInputMesage         =   "Invalid input, please check your fields";
@@ -337,6 +360,8 @@ public class AdminController extends Controller
         }
     }
     
+    //Changes the grade and mark of a submission
+    //Submission must already exist
     public View postMarkSubmission()
     {
         final String invalidInputMesage         =   "Invalid input, please check your fields";
@@ -358,6 +383,7 @@ public class AdminController extends Controller
         }
     }
     
+    //Creates a new submission
     public View postAddSubmission()
     {
         final String invalidInputMesage         =   "Invalid input, please check your fields";
@@ -400,6 +426,7 @@ public class AdminController extends Controller
         }
     }
     
+    //Changes a submission on all attributes
     public View postEditSubmission()
     {
         final String invalidInputMesage         =   "Invalid input, please check your fields";
@@ -434,6 +461,7 @@ public class AdminController extends Controller
         }
     }
     
+    //Returns the submission of an assessment for a student 
     public View postFindStudentSubmission()
     {
         final String invalidInputMesage         =   "Invalid input, please check your fields";
@@ -454,6 +482,8 @@ public class AdminController extends Controller
         }
     }
     
+    //Adds an announcement 
+    //Adjusted to be used by all announcements
     public View postAddAdminAnnouncement()
     {
         final String invalidInputMessage    =   "Invalid input";
@@ -504,6 +534,8 @@ public class AdminController extends Controller
         }
     }
     
+    //Changes an announcement
+    //Adjusted to be used by all announcements
     public View postEditAdminAnnouncement()
     {
         final String invalidInputMessage    =   "Invalid input";
@@ -554,6 +586,8 @@ public class AdminController extends Controller
         }
     }
     
+    //Removes an announcement
+    //Adjusted to be used by all announcements
     public View postRemoveAdminAnnouncement()
     {
         final String invalidInputMessage    =   "Invalid input";
@@ -600,6 +634,7 @@ public class AdminController extends Controller
         }
     }
     
+    //Removes a role 
     public View postRemoveRole()
     {
         final String invalidInputMessage    =   "Invalid input";
@@ -619,6 +654,7 @@ public class AdminController extends Controller
         }
     }
     
+    //Creates a new role
     public View postAddRole()
     {
         final String invalidInputMessage    =   "Invalid input";
@@ -641,6 +677,7 @@ public class AdminController extends Controller
         }
     }
     
+    //Changes a role on all attributes
     public View postEditRole()
     {
         final String invalidInputMessage    =   "Invalid input";
@@ -665,6 +702,8 @@ public class AdminController extends Controller
         }
     }
     
+    //Assigned the role passed to the user
+    //Users role will be overriden
     public View postAssignRole()
     {
         final String invalidInputMessage    =   "Invalid input";
@@ -701,6 +740,7 @@ public class AdminController extends Controller
         }
     }
     
+    //Creates a new department
     public View postAddDepartment()
     {
         final String invalidInputMessage    =   "Invalid input";
@@ -731,6 +771,7 @@ public class AdminController extends Controller
         }
     }
     
+    //Removes a department
     public View postRemoveDepartment()
     {
         final String invalidInputMessage    =   "Invalid input";
@@ -788,6 +829,7 @@ public class AdminController extends Controller
         }
     }
     
+    //Creates a new class
     public View postAddClass()
     {
         final String invalidInputMessage    =   "Invalid input";
@@ -816,9 +858,10 @@ public class AdminController extends Controller
                     return prepareView(new ResponseDataView(failedMessage, false));
             }
         }
-            
     }
     
+
+    //Removes a class
     public View postRemoveClass()
     {
         final String invalidInputMessage    =   "Invalid input";
@@ -843,6 +886,7 @@ public class AdminController extends Controller
         }
     }
     
+    //Changes a class on all attributes
     public View postEditClass()
     {
         final String invalidInputMessage    =   "Invalid input";
@@ -877,6 +921,7 @@ public class AdminController extends Controller
         }
     }
     
+    //Changes a user on all attributes
     public View postEditUser()
     {
         final String invalidInputMesage         =   "Invalid information, please check your fields";
@@ -963,6 +1008,7 @@ public class AdminController extends Controller
         }
     }
     
+    //Removes a students enrolment in a class
     public View postRemoveEnrolment()
     {
         final String invalidInputMesage         =   "Invalid information, please check your fields";
@@ -987,6 +1033,7 @@ public class AdminController extends Controller
         }
     }
     
+    //Creates a new enrolment
     public View postAddEnrolment()
     {
         final String invalidInputMesage         =   "Invalid information, please check your fields";
@@ -1001,11 +1048,11 @@ public class AdminController extends Controller
             ClassEnrolmentModel enrolmentModel  =   new ClassEnrolmentModel();
             try
             {
-                JsonArray results                   =   enrolmentModel.builder()
-                                                        .where("user_id", "=",  postData.getMessage("userID").toString())
-                                                        .where("class_id", "=", postData.getMessage("classID").toString())
-                                                        .where("semester_num", "=", postData.getMessage("semester").toString())
-                                                        .get();
+                JsonArray results    =   enrolmentModel.builder()
+                                        .where("user_id", "=",  postData.getMessage("userID").toString())
+                                        .where("class_id", "=", postData.getMessage("classID").toString())
+                                        .where("semester_num", "=", postData.getMessage("semester").toString())
+                                        .get();
                 
                 if(results != null && results.size() > 1)
                     return prepareView(new ResponseDataView(userEnroled, false)); 

@@ -1,3 +1,8 @@
+//====================================
+//  KYLE RUSSELL
+//  13831056
+//  PDC Project
+//====================================
 
 package engine.views.gui;
 
@@ -152,7 +157,7 @@ public class Home extends GUIView implements ActionListener
         nameLabel.setFont(new Font("Arial", Font.PLAIN, 14));
         
         JLabel nameTitleLabel       =   new JLabel("Name", SwingConstants.CENTER);
-        JLabel usernameTitleLabel  =   new JLabel("Username", SwingConstants.CENTER);
+        JLabel usernameTitleLabel   =   new JLabel("Username", SwingConstants.CENTER);
         JLabel roleTitleLabel       =   new JLabel("Role", SwingConstants.CENTER);
         nameTitleLabel.setFont(new Font("Arial", Font.PLAIN, 16));
         usernameTitleLabel.setFont(new Font("Arial", Font.PLAIN, 16));

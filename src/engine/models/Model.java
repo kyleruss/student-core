@@ -8,7 +8,7 @@ package engine.models;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import engine.parsers.JsonParser;
+import engine.core.JsonParser;
 import engine.config.DatabaseConfig;
 import engine.core.database.Column;
 import engine.core.DataConnector;

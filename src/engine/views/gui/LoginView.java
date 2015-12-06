@@ -1,3 +1,9 @@
+//====================================
+//  KYLE RUSSELL
+//  13831056
+//  PDC Project
+//====================================
+
 package engine.views.gui;
 
 import engine.controllers.ControllerMessage;
@@ -235,7 +241,7 @@ public class LoginView extends GUIView implements ActionListener, KeyListener
         CardLayout cLayout  =   (CardLayout) loginButtonsPanel.getLayout();
         cLayout.show(loginButtonsPanel, PROCESSING_KEY);
 
-        Timer loginTimer    =   new Timer(500, (ActionEvent e) -> 
+        Timer loginTimer    =   new Timer(1500, (ActionEvent e) -> 
         {
             ControllerMessage postData   =   new ControllerMessage();
             postData.add("loginUsername", username);
@@ -251,7 +257,7 @@ public class LoginView extends GUIView implements ActionListener, KeyListener
                 statusLabel.setIcon(new ImageIcon(failImage));
 
             cLayout.show(loginButtonsPanel, STATUS_KEY);
-            Timer statusTimer   =   new Timer(500, (ActionEvent ex)->
+            Timer statusTimer   =   new Timer(1000, (ActionEvent ex)->
             {
                 cLayout.show(loginButtonsPanel, BUTTON_KEY);
                 if(response.getResponseStatus())

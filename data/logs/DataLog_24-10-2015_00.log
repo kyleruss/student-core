@@ -1,0 +1,446 @@
+Oct 24, 2015 9:06:59 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM users   FETCH FIRST 1 ROWS ONLY 
+Oct 24, 2015 9:06:59 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM users WHERE username = 'kyleruss'  
+Oct 24, 2015 9:06:59 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications   FETCH FIRST 1 ROWS ONLY 
+Oct 24, 2015 9:06:59 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications WHERE username = 'kyleruss' AND unread = true  
+Oct 24, 2015 9:07:00 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM class_enrolments   FETCH FIRST 1 ROWS ONLY 
+Oct 24, 2015 9:07:00 PM engine.core.loggers.MainLogger log
+FINE: SELECT class_enrolments.*, classes.name AS class_name, classes.description AS class_desc, classes.id AS class_id FROM class_enrolments  INNER JOIN classes ON class_enrolments.class_id = classes.id  and  user_id = 'kyleruss'  
+Oct 24, 2015 9:07:00 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM users   FETCH FIRST 1 ROWS ONLY 
+Oct 24, 2015 9:07:00 PM engine.core.loggers.MainLogger log
+FINE: SELECT role.name FROM users  INNER JOIN role ON users.role_id = role.id  and  users.username = 'kyleruss'  
+Oct 24, 2015 9:07:04 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM users   FETCH FIRST 1 ROWS ONLY 
+Oct 24, 2015 9:07:04 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM users  INNER JOIN role ON users.role_id = role.id  and  users.username = 'kyleruss'  
+Oct 24, 2015 9:07:05 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM department   FETCH FIRST 1 ROWS ONLY 
+Oct 24, 2015 9:07:05 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM department   
+Oct 24, 2015 9:07:05 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM classes   FETCH FIRST 1 ROWS ONLY 
+Oct 24, 2015 9:07:05 PM engine.core.loggers.MainLogger log
+FINE: SELECT classes.*, department.name AS dept_name FROM classes  INNER JOIN department ON classes.dept_id = department.id   
+Oct 24, 2015 9:07:05 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM class_enrolments   FETCH FIRST 1 ROWS ONLY 
+Oct 24, 2015 9:07:05 PM engine.core.loggers.MainLogger log
+FINE: SELECT class_enrolments.id AS enrol_id, users.username AS "User ID", users.firstname AS "First name", users.lastname AS "Last name", users.contact_email AS Email, class_enrolments.semester_num AS semester, classes.name AS class_name FROM class_enrolments  INNER JOIN users ON class_enrolments.user_id = users.username  and  class_id = 0 INNER JOIN classes ON class_enrolments.class_id = classes.id   
+Oct 24, 2015 9:07:05 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM users   FETCH FIRST 1 ROWS ONLY 
+Oct 24, 2015 9:07:05 PM engine.core.loggers.MainLogger log
+FINE: SELECT users.*, role.name AS role_name FROM users  INNER JOIN role ON users.role_id = role.id   
+Oct 24, 2015 9:07:05 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM role   FETCH FIRST 1 ROWS ONLY 
+Oct 24, 2015 9:07:05 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM role   
+Oct 24, 2015 9:07:05 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM admin_announcements   FETCH FIRST 1 ROWS ONLY 
+Oct 24, 2015 9:07:05 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM admin_announcements   
+Oct 24, 2015 9:07:28 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications   FETCH FIRST 1 ROWS ONLY 
+Oct 24, 2015 9:07:28 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications WHERE username = 'kyleruss' AND unread = true  
+Oct 24, 2015 9:07:58 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications   FETCH FIRST 1 ROWS ONLY 
+Oct 24, 2015 9:07:58 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications WHERE username = 'kyleruss' AND unread = true  
+Oct 24, 2015 9:08:28 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications   FETCH FIRST 1 ROWS ONLY 
+Oct 24, 2015 9:08:28 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications WHERE username = 'kyleruss' AND unread = true  
+Oct 24, 2015 9:08:58 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications   FETCH FIRST 1 ROWS ONLY 
+Oct 24, 2015 9:08:58 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications WHERE username = 'kyleruss' AND unread = true  
+Oct 24, 2015 9:09:28 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications   FETCH FIRST 1 ROWS ONLY 
+Oct 24, 2015 9:09:28 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications WHERE username = 'kyleruss' AND unread = true  
+Oct 24, 2015 9:09:58 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications   FETCH FIRST 1 ROWS ONLY 
+Oct 24, 2015 9:09:58 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications WHERE username = 'kyleruss' AND unread = true  
+Oct 24, 2015 9:10:28 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications   FETCH FIRST 1 ROWS ONLY 
+Oct 24, 2015 9:10:28 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications WHERE username = 'kyleruss' AND unread = true  
+Oct 24, 2015 9:10:52 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM users   FETCH FIRST 1 ROWS ONLY 
+Oct 24, 2015 9:10:52 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM users WHERE username = 'kyleruss'  
+Oct 24, 2015 9:10:52 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications   FETCH FIRST 1 ROWS ONLY 
+Oct 24, 2015 9:10:52 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications WHERE username = 'kyleruss' AND unread = true  
+Oct 24, 2015 9:10:53 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM class_enrolments   FETCH FIRST 1 ROWS ONLY 
+Oct 24, 2015 9:10:53 PM engine.core.loggers.MainLogger log
+FINE: SELECT class_enrolments.*, classes.name AS class_name, classes.description AS class_desc, classes.id AS class_id FROM class_enrolments  INNER JOIN classes ON class_enrolments.class_id = classes.id  and  user_id = 'kyleruss'  
+Oct 24, 2015 9:10:53 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM users   FETCH FIRST 1 ROWS ONLY 
+Oct 24, 2015 9:10:53 PM engine.core.loggers.MainLogger log
+FINE: SELECT role.name FROM users  INNER JOIN role ON users.role_id = role.id  and  users.username = 'kyleruss'  
+Oct 24, 2015 9:10:54 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM users   FETCH FIRST 1 ROWS ONLY 
+Oct 24, 2015 9:10:54 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM users  INNER JOIN role ON users.role_id = role.id  and  users.username = 'kyleruss'  
+Oct 24, 2015 9:10:54 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM department   FETCH FIRST 1 ROWS ONLY 
+Oct 24, 2015 9:10:54 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM department   
+Oct 24, 2015 9:10:54 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM classes   FETCH FIRST 1 ROWS ONLY 
+Oct 24, 2015 9:10:54 PM engine.core.loggers.MainLogger log
+FINE: SELECT classes.*, department.name AS dept_name FROM classes  INNER JOIN department ON classes.dept_id = department.id   
+Oct 24, 2015 9:10:54 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM class_enrolments   FETCH FIRST 1 ROWS ONLY 
+Oct 24, 2015 9:10:54 PM engine.core.loggers.MainLogger log
+FINE: SELECT class_enrolments.id AS enrol_id, users.username AS "User ID", users.firstname AS "First name", users.lastname AS "Last name", users.contact_email AS Email, class_enrolments.semester_num AS semester, classes.name AS class_name FROM class_enrolments  INNER JOIN users ON class_enrolments.user_id = users.username  and  class_id = 0 INNER JOIN classes ON class_enrolments.class_id = classes.id   
+Oct 24, 2015 9:10:54 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM users   FETCH FIRST 1 ROWS ONLY 
+Oct 24, 2015 9:10:54 PM engine.core.loggers.MainLogger log
+FINE: SELECT users.*, role.name AS role_name FROM users  INNER JOIN role ON users.role_id = role.id   
+Oct 24, 2015 9:10:54 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM role   FETCH FIRST 1 ROWS ONLY 
+Oct 24, 2015 9:10:54 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM role   
+Oct 24, 2015 9:10:54 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM admin_announcements   FETCH FIRST 1 ROWS ONLY 
+Oct 24, 2015 9:10:55 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM admin_announcements   
+Oct 24, 2015 9:23:45 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM users   FETCH FIRST 1 ROWS ONLY 
+Oct 24, 2015 9:23:45 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM users WHERE username = 'kyleruss'  
+Oct 24, 2015 9:23:45 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications   FETCH FIRST 1 ROWS ONLY 
+Oct 24, 2015 9:23:45 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications WHERE username = 'kyleruss' AND unread = true  
+Oct 24, 2015 9:23:46 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM class_enrolments   FETCH FIRST 1 ROWS ONLY 
+Oct 24, 2015 9:23:46 PM engine.core.loggers.MainLogger log
+FINE: SELECT class_enrolments.*, classes.name AS class_name, classes.description AS class_desc, classes.id AS class_id FROM class_enrolments  INNER JOIN classes ON class_enrolments.class_id = classes.id  and  user_id = 'kyleruss'  
+Oct 24, 2015 9:23:46 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM users   FETCH FIRST 1 ROWS ONLY 
+Oct 24, 2015 9:23:46 PM engine.core.loggers.MainLogger log
+FINE: SELECT role.name FROM users  INNER JOIN role ON users.role_id = role.id  and  users.username = 'kyleruss'  
+Oct 24, 2015 9:24:40 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM users   FETCH FIRST 1 ROWS ONLY 
+Oct 24, 2015 9:24:40 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM users WHERE username = 'kyleruss'  
+Oct 24, 2015 9:24:40 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications   FETCH FIRST 1 ROWS ONLY 
+Oct 24, 2015 9:24:40 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications WHERE username = 'kyleruss' AND unread = true  
+Oct 24, 2015 9:24:41 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM class_enrolments   FETCH FIRST 1 ROWS ONLY 
+Oct 24, 2015 9:24:41 PM engine.core.loggers.MainLogger log
+FINE: SELECT class_enrolments.*, classes.name AS class_name, classes.description AS class_desc, classes.id AS class_id FROM class_enrolments  INNER JOIN classes ON class_enrolments.class_id = classes.id  and  user_id = 'kyleruss'  
+Oct 24, 2015 9:24:41 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM users   FETCH FIRST 1 ROWS ONLY 
+Oct 24, 2015 9:24:41 PM engine.core.loggers.MainLogger log
+FINE: SELECT role.name FROM users  INNER JOIN role ON users.role_id = role.id  and  users.username = 'kyleruss'  
+Oct 24, 2015 9:24:43 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM users   FETCH FIRST 1 ROWS ONLY 
+Oct 24, 2015 9:24:43 PM engine.core.loggers.MainLogger log
+FINE: SELECT department.* FROM users  INNER JOIN department ON users.dept_id = department.id  and  username = 'kyleruss'  
+Oct 24, 2015 9:24:43 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM dept_announcements   FETCH FIRST 1 ROWS ONLY 
+Oct 24, 2015 9:24:43 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM dept_announcements WHERE dept_id = 2  
+Oct 24, 2015 9:24:43 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM department   FETCH FIRST 1 ROWS ONLY 
+Oct 24, 2015 9:24:43 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM department WHERE id = 2  
+Oct 24, 2015 9:24:43 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM department   FETCH FIRST 1 ROWS ONLY 
+Oct 24, 2015 9:24:43 PM engine.core.loggers.MainLogger log
+FINE: SELECT users.*, role.name AS role_name FROM department  INNER JOIN users ON department.dept_head = users.username  and  dept_id = 2 INNER JOIN role ON users.role_id = role.id   
+Oct 24, 2015 9:24:43 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM users   FETCH FIRST 1 ROWS ONLY 
+Oct 24, 2015 9:24:43 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM users WHERE dept_id = 2  
+Oct 24, 2015 9:24:50 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications   FETCH FIRST 1 ROWS ONLY 
+Oct 24, 2015 9:24:50 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications WHERE username = 'kyleruss'  
+Oct 24, 2015 9:25:08 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications   FETCH FIRST 1 ROWS ONLY 
+Oct 24, 2015 9:25:08 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications WHERE username = 'kyleruss' AND unread = true  
+Oct 24, 2015 9:25:38 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications   FETCH FIRST 1 ROWS ONLY 
+Oct 24, 2015 9:25:38 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications WHERE username = 'kyleruss' AND unread = true  
+Oct 24, 2015 9:25:40 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM users   FETCH FIRST 1 ROWS ONLY 
+Oct 24, 2015 9:25:40 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM users  INNER JOIN role ON users.role_id = role.id  and  users.username = 'kyleruss'  
+Oct 24, 2015 9:25:40 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM department   FETCH FIRST 1 ROWS ONLY 
+Oct 24, 2015 9:25:40 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM department   
+Oct 24, 2015 9:25:40 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM classes   FETCH FIRST 1 ROWS ONLY 
+Oct 24, 2015 9:25:40 PM engine.core.loggers.MainLogger log
+FINE: SELECT classes.*, department.name AS dept_name FROM classes  INNER JOIN department ON classes.dept_id = department.id   
+Oct 24, 2015 9:25:40 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM class_enrolments   FETCH FIRST 1 ROWS ONLY 
+Oct 24, 2015 9:25:40 PM engine.core.loggers.MainLogger log
+FINE: SELECT class_enrolments.id AS enrol_id, users.username AS "User ID", users.firstname AS "First name", users.lastname AS "Last name", users.contact_email AS Email, class_enrolments.semester_num AS semester, classes.name AS class_name FROM class_enrolments  INNER JOIN users ON class_enrolments.user_id = users.username  and  class_id = 0 INNER JOIN classes ON class_enrolments.class_id = classes.id   
+Oct 24, 2015 9:25:41 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM users   FETCH FIRST 1 ROWS ONLY 
+Oct 24, 2015 9:25:41 PM engine.core.loggers.MainLogger log
+FINE: SELECT users.*, role.name AS role_name FROM users  INNER JOIN role ON users.role_id = role.id   
+Oct 24, 2015 9:25:41 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM role   FETCH FIRST 1 ROWS ONLY 
+Oct 24, 2015 9:25:41 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM role   
+Oct 24, 2015 9:25:41 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM admin_announcements   FETCH FIRST 1 ROWS ONLY 
+Oct 24, 2015 9:25:41 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM admin_announcements   
+Oct 24, 2015 9:26:08 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications   FETCH FIRST 1 ROWS ONLY 
+Oct 24, 2015 9:26:08 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications WHERE username = 'kyleruss' AND unread = true  
+Oct 24, 2015 9:26:15 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM users   FETCH FIRST 1 ROWS ONLY 
+Oct 24, 2015 9:26:15 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM users WHERE username = 'kyleruss'  
+Oct 24, 2015 9:26:15 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications   FETCH FIRST 1 ROWS ONLY 
+Oct 24, 2015 9:26:15 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications WHERE username = 'kyleruss' AND unread = true  
+Oct 24, 2015 9:26:15 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM class_enrolments   FETCH FIRST 1 ROWS ONLY 
+Oct 24, 2015 9:26:16 PM engine.core.loggers.MainLogger log
+FINE: SELECT class_enrolments.*, classes.name AS class_name, classes.description AS class_desc, classes.id AS class_id FROM class_enrolments  INNER JOIN classes ON class_enrolments.class_id = classes.id  and  user_id = 'kyleruss'  
+Oct 24, 2015 9:26:16 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM users   FETCH FIRST 1 ROWS ONLY 
+Oct 24, 2015 9:26:16 PM engine.core.loggers.MainLogger log
+FINE: SELECT role.name FROM users  INNER JOIN role ON users.role_id = role.id  and  users.username = 'kyleruss'  
+Oct 24, 2015 9:26:17 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM users   FETCH FIRST 1 ROWS ONLY 
+Oct 24, 2015 9:26:17 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM users  INNER JOIN role ON users.role_id = role.id  and  users.username = 'kyleruss'  
+Oct 24, 2015 9:26:17 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM department   FETCH FIRST 1 ROWS ONLY 
+Oct 24, 2015 9:26:17 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM department   
+Oct 24, 2015 9:26:17 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM classes   FETCH FIRST 1 ROWS ONLY 
+Oct 24, 2015 9:26:17 PM engine.core.loggers.MainLogger log
+FINE: SELECT classes.*, department.name AS dept_name FROM classes  INNER JOIN department ON classes.dept_id = department.id   
+Oct 24, 2015 9:26:17 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM class_enrolments   FETCH FIRST 1 ROWS ONLY 
+Oct 24, 2015 9:26:17 PM engine.core.loggers.MainLogger log
+FINE: SELECT class_enrolments.id AS enrol_id, users.username AS "User ID", users.firstname AS "First name", users.lastname AS "Last name", users.contact_email AS Email, class_enrolments.semester_num AS semester, classes.name AS class_name FROM class_enrolments  INNER JOIN users ON class_enrolments.user_id = users.username  and  class_id = 0 INNER JOIN classes ON class_enrolments.class_id = classes.id   
+Oct 24, 2015 9:26:17 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM users   FETCH FIRST 1 ROWS ONLY 
+Oct 24, 2015 9:26:17 PM engine.core.loggers.MainLogger log
+FINE: SELECT users.*, role.name AS role_name FROM users  INNER JOIN role ON users.role_id = role.id   
+Oct 24, 2015 9:26:17 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM role   FETCH FIRST 1 ROWS ONLY 
+Oct 24, 2015 9:26:17 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM role   
+Oct 24, 2015 9:26:17 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM admin_announcements   FETCH FIRST 1 ROWS ONLY 
+Oct 24, 2015 9:26:17 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM admin_announcements   
+Oct 24, 2015 9:26:39 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM users   FETCH FIRST 1 ROWS ONLY 
+Oct 24, 2015 9:26:39 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM users WHERE username = 'kyleruss'  
+Oct 24, 2015 9:26:39 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications   FETCH FIRST 1 ROWS ONLY 
+Oct 24, 2015 9:26:39 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications WHERE username = 'kyleruss' AND unread = true  
+Oct 24, 2015 9:26:40 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM class_enrolments   FETCH FIRST 1 ROWS ONLY 
+Oct 24, 2015 9:26:40 PM engine.core.loggers.MainLogger log
+FINE: SELECT class_enrolments.*, classes.name AS class_name, classes.description AS class_desc, classes.id AS class_id FROM class_enrolments  INNER JOIN classes ON class_enrolments.class_id = classes.id  and  user_id = 'kyleruss'  
+Oct 24, 2015 9:26:40 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM users   FETCH FIRST 1 ROWS ONLY 
+Oct 24, 2015 9:26:40 PM engine.core.loggers.MainLogger log
+FINE: SELECT role.name FROM users  INNER JOIN role ON users.role_id = role.id  and  users.username = 'kyleruss'  
+Oct 24, 2015 9:26:41 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM users   FETCH FIRST 1 ROWS ONLY 
+Oct 24, 2015 9:26:41 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM users  INNER JOIN role ON users.role_id = role.id  and  users.username = 'kyleruss'  
+Oct 24, 2015 9:26:41 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM department   FETCH FIRST 1 ROWS ONLY 
+Oct 24, 2015 9:26:41 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM department   
+Oct 24, 2015 9:26:41 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM classes   FETCH FIRST 1 ROWS ONLY 
+Oct 24, 2015 9:26:41 PM engine.core.loggers.MainLogger log
+FINE: SELECT classes.*, department.name AS dept_name FROM classes  INNER JOIN department ON classes.dept_id = department.id   
+Oct 24, 2015 9:26:41 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM class_enrolments   FETCH FIRST 1 ROWS ONLY 
+Oct 24, 2015 9:26:41 PM engine.core.loggers.MainLogger log
+FINE: SELECT class_enrolments.id AS enrol_id, users.username AS "User ID", users.firstname AS "First name", users.lastname AS "Last name", users.contact_email AS Email, class_enrolments.semester_num AS semester, classes.name AS class_name FROM class_enrolments  INNER JOIN users ON class_enrolments.user_id = users.username  and  class_id = 0 INNER JOIN classes ON class_enrolments.class_id = classes.id   
+Oct 24, 2015 9:26:41 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM users   FETCH FIRST 1 ROWS ONLY 
+Oct 24, 2015 9:26:41 PM engine.core.loggers.MainLogger log
+FINE: SELECT users.*, role.name AS role_name FROM users  INNER JOIN role ON users.role_id = role.id   
+Oct 24, 2015 9:26:41 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM role   FETCH FIRST 1 ROWS ONLY 
+Oct 24, 2015 9:26:41 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM role   
+Oct 24, 2015 9:26:41 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM admin_announcements   FETCH FIRST 1 ROWS ONLY 
+Oct 24, 2015 9:26:41 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM admin_announcements   
+Oct 24, 2015 9:27:00 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM class_enrolments   FETCH FIRST 1 ROWS ONLY 
+Oct 24, 2015 9:27:00 PM engine.core.loggers.MainLogger log
+FINE: SELECT class_enrolments.*, classes.name AS class_name, classes.description AS class_desc, classes.id AS class_id FROM class_enrolments  INNER JOIN classes ON class_enrolments.class_id = classes.id  and  user_id = 'kyleruss'  
+Oct 24, 2015 9:27:00 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM users   FETCH FIRST 1 ROWS ONLY 
+Oct 24, 2015 9:27:00 PM engine.core.loggers.MainLogger log
+FINE: SELECT role.name FROM users  INNER JOIN role ON users.role_id = role.id  and  users.username = 'kyleruss'  
+Oct 24, 2015 9:36:01 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM users   FETCH FIRST 1 ROWS ONLY 
+Oct 24, 2015 9:36:01 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM users WHERE username = 'kyleruss'  
+Oct 24, 2015 9:37:03 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM users   FETCH FIRST 1 ROWS ONLY 
+Oct 24, 2015 9:37:03 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM users  INNER JOIN role ON users.role_id = role.id  and  users.username = 'kyleruss'  
+Oct 24, 2015 9:38:45 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM users   FETCH FIRST 1 ROWS ONLY 
+Oct 24, 2015 9:38:45 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM users WHERE username = 'demouser'  
+Oct 24, 2015 9:39:28 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM users   FETCH FIRST 1 ROWS ONLY 
+Oct 24, 2015 9:39:28 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM users  INNER JOIN role ON users.role_id = role.id  and  users.username = 'demouser'  
+Oct 24, 2015 9:43:46 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM users   FETCH FIRST 1 ROWS ONLY 
+Oct 24, 2015 9:43:46 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM users WHERE username = 'demouser'  
+Oct 24, 2015 9:50:23 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM users   FETCH FIRST 1 ROWS ONLY 
+Oct 24, 2015 9:50:23 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM users WHERE username = 'kyleruss'  
+Oct 24, 2015 9:50:38 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM users   FETCH FIRST 1 ROWS ONLY 
+Oct 24, 2015 9:50:38 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM users  INNER JOIN role ON users.role_id = role.id  and  users.username = 'kyleruss'  
+Oct 24, 2015 9:50:41 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM users   FETCH FIRST 1 ROWS ONLY 
+Oct 24, 2015 9:50:41 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM users   
+Oct 24, 2015 9:50:41 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM users   FETCH FIRST 1 ROWS ONLY 
+Oct 24, 2015 9:50:41 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM users   
+Oct 24, 2015 9:50:41 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM users   OFFSET 0 ROWS FETCH FIRST 5 ROWS ONLY 
+Oct 24, 2015 9:50:48 PM engine.core.loggers.MainLogger log
+FINE: SELECT classes.id AS "Class ID", classes.name AS "Class name", classes.description AS "Class description", class_enrolments.semester_num AS Semester FROM users  INNER JOIN class_enrolments ON users.username = class_enrolments.user_id  and  username = 'kyleruss' INNER JOIN classes ON class_enrolments.class_id = classes.id   
+Oct 24, 2015 9:50:56 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM classes   FETCH FIRST 1 ROWS ONLY 
+Oct 24, 2015 9:50:56 PM engine.core.loggers.MainLogger log
+FINE: SELECT id AS "Class ID", name AS "Class name", teacher_id AS "Teacher ID", created_date AS "Date created" FROM classes WHERE id = 1  
+Oct 24, 2015 9:51:03 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM classes   FETCH FIRST 1 ROWS ONLY 
+Oct 24, 2015 9:51:03 PM engine.core.loggers.MainLogger log
+FINE: SELECT id AS "Class ID", name AS "Class name", teacher_id AS "Teacher ID", created_date AS "Date created" FROM classes WHERE id = 1  
+Oct 24, 2015 9:51:03 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM assessment   FETCH FIRST 1 ROWS ONLY 
+Oct 24, 2015 9:51:03 PM engine.core.loggers.MainLogger log
+FINE: SELECT id AS "Assessment ID", name, description, weight AS "Grade weight %", due_date AS "Due date" FROM assessment WHERE class_id = 1  
+Oct 24, 2015 9:51:12 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM assessment_submissions   FETCH FIRST 1 ROWS ONLY 
+Oct 24, 2015 9:51:12 PM engine.core.loggers.MainLogger log
+FINE: SELECT assessment.* FROM assessment_submissions  INNER JOIN assessment ON assessment_submissions.assessment_id = assessment.id  and  assessment_id = 3  
+Oct 24, 2015 9:51:12 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM assessment_submissions   FETCH FIRST 1 ROWS ONLY 
+Oct 24, 2015 9:51:12 PM engine.core.loggers.MainLogger log
+FINE: SELECT assessment_submissions.id AS "Submission ID", user_id AS Username, users.firstname AS "First name", users.lastname AS "Last name", date_submitted AS "Date submitted", alpha_grade AS Grade, mark, comments FROM assessment_submissions  INNER JOIN users ON assessment_submissions.user_id = users.username  and  assessment_id = 3  
+Oct 24, 2015 9:51:27 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM assessment_submissions   FETCH FIRST 1 ROWS ONLY 
+Oct 24, 2015 9:51:43 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM assessment_submissions   FETCH FIRST 1 ROWS ONLY 
+Oct 24, 2015 9:52:00 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM assessment_submissions   FETCH FIRST 1 ROWS ONLY 
+Oct 24, 2015 9:52:00 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM assessment_submissions WHERE id = 1  
+Oct 24, 2015 9:52:00 PM engine.core.loggers.MainLogger log
+FINE: UPDATE assessment_submissions SET ASSESSMENT_ID = 3, USER_ID = 'kyleruss', DATE_SUBMITTED = '2015-04-18', COMMENTS = 'Good job', ALPHA_GRADE = 'A+', MARK = 100  WHERE id = 1
+Oct 24, 2015 11:31:22 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM users   FETCH FIRST 1 ROWS ONLY 
+Oct 24, 2015 11:31:22 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM users WHERE username = 'kyleruss'  
+Oct 24, 2015 11:31:22 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications   FETCH FIRST 1 ROWS ONLY 
+Oct 24, 2015 11:31:22 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications WHERE username = 'kyleruss' AND unread = true  
+Oct 24, 2015 11:31:23 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM class_enrolments   FETCH FIRST 1 ROWS ONLY 
+Oct 24, 2015 11:31:23 PM engine.core.loggers.MainLogger log
+FINE: SELECT class_enrolments.*, classes.name AS class_name, classes.description AS class_desc, classes.id AS class_id FROM class_enrolments  INNER JOIN classes ON class_enrolments.class_id = classes.id  and  user_id = 'kyleruss'  
+Oct 24, 2015 11:31:23 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM users   FETCH FIRST 1 ROWS ONLY 
+Oct 24, 2015 11:31:23 PM engine.core.loggers.MainLogger log
+FINE: SELECT role.name FROM users  INNER JOIN role ON users.role_id = role.id  and  users.username = 'kyleruss'  
+Oct 24, 2015 11:31:28 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM users   FETCH FIRST 1 ROWS ONLY 
+Oct 24, 2015 11:31:28 PM engine.core.loggers.MainLogger log
+FINE: SELECT department.* FROM users  INNER JOIN department ON users.dept_id = department.id  and  username = 'kyleruss'  
+Oct 24, 2015 11:31:28 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM dept_announcements   FETCH FIRST 1 ROWS ONLY 
+Oct 24, 2015 11:31:28 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM dept_announcements WHERE dept_id = 2  
+Oct 24, 2015 11:31:28 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM department   FETCH FIRST 1 ROWS ONLY 
+Oct 24, 2015 11:31:28 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM department WHERE id = 2  
+Oct 24, 2015 11:31:28 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM department   FETCH FIRST 1 ROWS ONLY 
+Oct 24, 2015 11:31:28 PM engine.core.loggers.MainLogger log
+FINE: SELECT users.*, role.name AS role_name FROM department  INNER JOIN users ON department.dept_head = users.username  and  dept_id = 2 INNER JOIN role ON users.role_id = role.id   
+Oct 24, 2015 11:31:28 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM users   FETCH FIRST 1 ROWS ONLY 
+Oct 24, 2015 11:31:28 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM users WHERE dept_id = 2  
+Oct 24, 2015 11:34:23 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM users   FETCH FIRST 1 ROWS ONLY 
+Oct 24, 2015 11:34:23 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM users WHERE username = 'kyleruss'  
+Oct 24, 2015 11:34:23 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications   FETCH FIRST 1 ROWS ONLY 
+Oct 24, 2015 11:34:23 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications WHERE username = 'kyleruss' AND unread = true  
+Oct 24, 2015 11:34:24 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM class_enrolments   FETCH FIRST 1 ROWS ONLY 
+Oct 24, 2015 11:34:24 PM engine.core.loggers.MainLogger log
+FINE: SELECT class_enrolments.*, classes.name AS class_name, classes.description AS class_desc, classes.id AS class_id FROM class_enrolments  INNER JOIN classes ON class_enrolments.class_id = classes.id  and  user_id = 'kyleruss'  
+Oct 24, 2015 11:34:24 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM users   FETCH FIRST 1 ROWS ONLY 
+Oct 24, 2015 11:34:24 PM engine.core.loggers.MainLogger log
+FINE: SELECT role.name FROM users  INNER JOIN role ON users.role_id = role.id  and  users.username = 'kyleruss'  
+Oct 24, 2015 11:34:36 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM users   FETCH FIRST 1 ROWS ONLY 
+Oct 24, 2015 11:34:36 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM users WHERE username = 'kyleruss'  
+Oct 24, 2015 11:34:36 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications   FETCH FIRST 1 ROWS ONLY 
+Oct 24, 2015 11:34:36 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications WHERE username = 'kyleruss' AND unread = true  
+Oct 24, 2015 11:34:37 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM class_enrolments   FETCH FIRST 1 ROWS ONLY 
+Oct 24, 2015 11:34:37 PM engine.core.loggers.MainLogger log
+FINE: SELECT class_enrolments.*, classes.name AS class_name, classes.description AS class_desc, classes.id AS class_id FROM class_enrolments  INNER JOIN classes ON class_enrolments.class_id = classes.id  and  user_id = 'kyleruss'  
+Oct 24, 2015 11:34:37 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM users   FETCH FIRST 1 ROWS ONLY 
+Oct 24, 2015 11:34:37 PM engine.core.loggers.MainLogger log
+FINE: SELECT role.name FROM users  INNER JOIN role ON users.role_id = role.id  and  users.username = 'kyleruss'  

@@ -1,20 +1,17 @@
-//####################################
+//====================================
 //  KYLE RUSSELL
 //  13831056
 //  PDC Project
-//####################################
-/*
+//====================================
+
 package engine.core.database;
 
 import com.google.gson.JsonArray;
-import engine.Models.Model;
-import engine.Models.TestModel;
-import engine.parsers.JsonParser;
-import engine.core.DataConnector;
-import java.sql.ResultSet;
+import engine.core.JsonParser;
+import engine.models.Model;
+import engine.models.TestModel;
 import java.sql.SQLException;
 import static org.junit.Assert.*;
-
 import org.junit.Test;
 import utilities.TestUtilities;
 
@@ -158,6 +155,7 @@ public class QueryBuilderTest
         {
             TestUtilities.formatHeader("TEST OFFSET");
             JsonArray results   =   testModel.builder().offset(OFFSET).get();
+            assertTrue(results.size() > OFFSET);
             
             //numeric ID's should be follow after the offset 
             int id              =   results.get(1).getAsJsonObject().get("ID").getAsInt();
@@ -237,7 +235,7 @@ public class QueryBuilderTest
             JsonArray results   =   testModel.builder().first().get();
             
             assertNotNull(results);
-            assertTrue(results.size() <= 2);
+            assertTrue(results.size() == 2);
             System.out.println(JsonParser.parsePretty(results));
             
             int id  =   results.get(1).getAsJsonObject().get("ID").getAsInt();
@@ -315,4 +313,3 @@ public class QueryBuilderTest
     }  
     
 }
-*/

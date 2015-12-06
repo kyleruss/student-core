@@ -25,5 +25,4 @@ public class MedicalModel extends Model
         table       =   "medical";
         primaryKey  =   "id";
     }
-    
 }

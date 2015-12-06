@@ -33,11 +33,11 @@ public final class MainLogger
     
     
     //Returns a logger of known type
-    public static AbstractLogger create(String log_type)
+    public static AbstractLogger create(String logName)
     {
         try
         {
-            switch(log_type)
+            switch(logName)
             {
                 case AUTH_LOGGER: return new AuthLogger();
                 case ADMIN_LOGGER: return new AdminLogger();
@@ -49,7 +49,7 @@ public final class MainLogger
         
         catch(IOException e)
         {
-            ExceptionOutput.output("[" + log_type + "] Default log file cannot be found", ExceptionOutput.OutputType.DEBUG);
+            ExceptionOutput.output("[" + logName + "] Default log file cannot be found", ExceptionOutput.OutputType.DEBUG);
             return null;
         }
     }

@@ -1,3 +1,8 @@
+//====================================
+//  KYLE RUSSELL
+//  13831056
+//  PDC Project
+//====================================
 
 package engine.core.authentication;
 
@@ -15,8 +20,8 @@ import java.util.Map;
 
 public class StoredCredentials
 {
-    private String lastAccessed;
-    private Map<String, Credentials> credentials;
+    private String lastAccessed; //the username of the last accessed credentials
+    private Map<String, Credentials> credentials; //the stored credentials
     
     public StoredCredentials()
     {
@@ -24,6 +29,51 @@ public class StoredCredentials
         credentials     =   new HashMap<>();
     }
     
+    //Saves the stored credentials
+    public synchronized void saveCredentials()
+    {
+        if(AppConfig.ALLOW_CRED_SAVE)
+        {
+            //Credentials are saved in JSON
+            Gson gson           =   new GsonBuilder().setPrettyPrinting().create();
+            String storedCreds  =   gson.toJson(this);
+            
+            //Write saved credentials
+            try(BufferedWriter bw   =   new BufferedWriter(new FileWriter(AppConfig.CRED_SAVE_FILE)))
+            {
+                bw.write(storedCreds);
+            }
+            
+            catch(IOException e)
+            {
+                ExceptionOutput.output("Failed to load resource, " + e.getMessage(), ExceptionOutput.OutputType.DEBUG);
+            }
+        }
+    }
+    
+    //Loads and returns the stored credentials
+   public synchronized static StoredCredentials getSavedCredentials()
+   {
+        if(AppConfig.ALLOW_CRED_SAVE)
+        {
+            //Read saved credentials
+            //Parse file in JSON
+            try(BufferedReader br   =   new BufferedReader(new FileReader(AppConfig.CRED_SAVE_FILE)))
+            {
+                Gson gson   =   new Gson();
+                return gson.fromJson(br, StoredCredentials.class);
+            }
+            
+            catch(IOException e)
+            {
+                ExceptionOutput.output("Failed to oepn resourse, " + e.getMessage(), ExceptionOutput.OutputType.DEBUG);
+                return null;
+            }
+        }
+        
+        else return null;
+    } 
+   
     public String getLastAccessed()
     {
         return lastAccessed;
@@ -63,58 +113,4 @@ public class StoredCredentials
     {
         return credentials.get(username);
     }
-    
-    public synchronized void saveCredentials()
-    {
-        if(AppConfig.ALLOW_CRED_SAVE)
-        {
-            Gson gson           =   new GsonBuilder().setPrettyPrinting().create();
-            String storedCreds  =   gson.toJson(this);
-            
-            try(BufferedWriter bw   =   new BufferedWriter(new FileWriter(AppConfig.CRED_SAVE_FILE)))
-            {
-                bw.write(storedCreds);
-            }
-            
-            catch(IOException e)
-            {
-                ExceptionOutput.output("Failed to load resource, " + e.getMessage(), ExceptionOutput.OutputType.DEBUG);
-            }
-        }
-    }
-    
-   public synchronized static StoredCredentials getSavedCredentials()
-    {
-        if(AppConfig.ALLOW_CRED_SAVE)
-        {
-            
-            try(BufferedReader br   =   new BufferedReader(new FileReader(AppConfig.CRED_SAVE_FILE)))
-            {
-                
-                Gson gson   =   new Gson();
-                return gson.fromJson(br, StoredCredentials.class);
-            }
-            
-            catch(IOException e)
-            {
-                ExceptionOutput.output("Failed to oepn resourse, " + e.getMessage(), ExceptionOutput.OutputType.DEBUG);
-                return null;
-            }
-        }
-        
-        else return null;
-    } 
-   
-   public static void main(String[] args)
-   {
-       StoredCredentials cred   =   new StoredCredentials();
-       cred.setLastAccessed("asdsad");
-       cred.addCredential("test", new Credentials("username", "pass", "223sad", "a2342"));
-       cred.addCredential("test2", new Credentials("username", "pass", "223sad", "a2342")); 
-       
-       Gson gson    =   new GsonBuilder().setPrettyPrinting().create();
-       
-       System.out.println(gson.toJson(cred));
-       
-   }
 }

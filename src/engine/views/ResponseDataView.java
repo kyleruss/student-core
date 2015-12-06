@@ -115,6 +115,4 @@ public class ResponseDataView implements DataView
 
     @Override
     public void setNextView(View nextView) {}
-    
-    
 }

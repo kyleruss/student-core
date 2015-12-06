@@ -1,18 +1,15 @@
 //====================================
 //  KYLE RUSSELL
-//  13831056
-//  PDC Project
+//	StudentCore
+//	LoggingConfig
 //====================================
 
 package engine.config;
 
-import engine.core.loggers.MainLogger;
-import java.util.Properties;
-
 public class LoggingConfig
 {
     //--------------------------------------------------------------------
-    //                          CONFIG KEYS
+    //                          CONFIG CONFIG
     //--------------------------------------------------------------------
     //enables/disables logging of all admin activities in system
     public static final boolean ENABLE_AUTH_LOG       =       true;
@@ -30,7 +27,7 @@ public class LoggingConfig
     public static final int LOG_MAX_SIZE              =       5242880;
     
     //set the logs directory
-    public static final String LOG_PATH               =       "logs/";
+    public static final String LOG_PATH               =       "data/logs/";
     
     //set the max number of log files created after hitting max size
     public static final int LOG_FILE_MAX_COUNT        =       1;

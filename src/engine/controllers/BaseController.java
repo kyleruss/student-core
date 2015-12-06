@@ -22,6 +22,9 @@ public class BaseController extends Controller
     }
     
     
+    //Returns an error view
+    //The passed errorMessage is displayed in the views title
+    //GUI Only - CUI should report errors normally
     public View getErrorView(String errorMessage)
     {
         ControllerMessage data  =   new ControllerMessage();

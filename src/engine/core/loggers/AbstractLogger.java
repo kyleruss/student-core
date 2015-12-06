@@ -8,8 +8,6 @@ package engine.core.loggers;
 
 import engine.config.LoggingConfig;
 import java.io.IOException;
-import java.util.Date;
-
 import java.util.logging.FileHandler;
 import java.util.logging.Handler;
 import java.util.logging.SimpleFormatter;

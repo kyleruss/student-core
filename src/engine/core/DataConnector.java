@@ -8,7 +8,6 @@ package engine.core;
 
 import engine.config.AppConfig;
 import engine.config.DatabaseConfig;
-import engine.core.database.Query;
 import engine.core.loggers.MainLogger;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -30,23 +29,23 @@ public class DataConnector implements AutoCloseable
     }
     
     private Connection conn; //Connection obj used in session
-    private DataConnection connection_conifg;
-    private String connection_url;
-    private ResultSet results;
-    private volatile PreparedStatement activeQuery;
-    private QueryType queryType;
+    private ConnectionParams connection_conifg; //parameters used to connect
+    private String connectionURL; //the connection string used to connect
+    private ResultSet results; //The results stored after a mutator query (null after close)
+    private volatile PreparedStatement activeQuery; //the current query being operated on
+    private QueryType queryType; //The connectors query type (mutator queries: MUTATOR, otherwise ACCESSOR)
     
     //Creates a DataConnector with default config
     public DataConnector()
     {
-        this(new DataConnection());
+        this(new ConnectionParams());
     }
     
     //Creates a DataConnector with custom config
-    public DataConnector(DataConnection db_config)
+    public DataConnector(ConnectionParams config)
     {
-        this.connection_conifg      =   db_config;
-        this.connection_url         =   db_config.getConnectionString();
+        this.connection_conifg      =   config;
+        this.connectionURL          =   config.getConnectionString();
         this.queryType              =   QueryType.ACCESSOR;
         connect();
         
@@ -68,7 +67,7 @@ public class DataConnector implements AutoCloseable
             
             //Initializes the connection
             //connection_url is created from the active DataConnection
-            conn    =   DriverManager.getConnection(connection_url);
+            conn    =   DriverManager.getConnection(connectionURL);
             
             //Sets the active schema
             conn.setSchema(DatabaseConfig.SCHEMA);
@@ -113,7 +112,7 @@ public class DataConnector implements AutoCloseable
         }
         catch(SQLException e)
         {
-          //  System.out.println("[SQL exception] Failed to commit transaction, error: " + e.getMessage());
+          ExceptionOutput.output("[SQL exception] Failed to commit transaction, error: " + e.getMessage(), ExceptionOutput.OutputType.DEBUG);
         }
     }
     
@@ -130,7 +129,7 @@ public class DataConnector implements AutoCloseable
         
         catch(SQLException e)
         {
-            //System.out.println("[SQL exception] Failed to rollback transaction, error: " + e.getMessage());
+            ExceptionOutput.output("[SQL exception] Failed to rollback transaction, error: " + e.getMessage(), ExceptionOutput.OutputType.DEBUG);
         }
     }
     
@@ -225,15 +224,10 @@ public class DataConnector implements AutoCloseable
         
         catch(SQLException e)
         {
+            ExceptionOutput.output("[SQL exception] " + e.getMessage(), ExceptionOutput.OutputType.DEBUG);
             closeConnection();
             return null;
         }
-    }
-    
-    //Executes a batch of queries
-    public boolean executeBatch(Query[] queries)
-    {
-        return true;
     }
     
     //Returns the DataConnectors connection obj
@@ -245,7 +239,7 @@ public class DataConnector implements AutoCloseable
     
     //Returns the DataConnectors connection config
     //Can be used to fetch properties of the current connection
-    public DataConnection getConnectionConfig()
+    public ConnectionParams getConnectionConfig()
     {
         return connection_conifg;
     }
@@ -254,8 +248,6 @@ public class DataConnector implements AutoCloseable
     //Handling of results must be used before closure
     public ResultSet getResults()
     {
-        //Finish running queries/connections
-        //join();
         return results;
     }
     

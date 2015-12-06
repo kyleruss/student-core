@@ -7,7 +7,7 @@
 package engine.core.database;
 
 import com.google.gson.annotations.SerializedName;
-import engine.parsers.JsonParser;
+import engine.core.JsonParser;
 import java.util.ArrayList;
 import java.util.List;
 

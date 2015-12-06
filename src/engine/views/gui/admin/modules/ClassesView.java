@@ -1,3 +1,8 @@
+//====================================
+//  KYLE RUSSELL
+//  13831056
+//  PDC Project
+//====================================
 
 package engine.views.gui.admin.modules;
 
@@ -40,7 +45,7 @@ public class ClassesView extends GUIView implements ActionListener
     private ClassEnrolmentView enrolmentView;
     private JPanel enrolmentWrapper;
     private JLabel enrolmentLabel;
-    private BufferedImage backImage;
+    private BufferedImage backImage, enrolmentImage;
     
     
     @Override
@@ -76,7 +81,8 @@ public class ClassesView extends GUIView implements ActionListener
     {
         try
         {
-            backImage   =   ImageIO.read(new File(Layout.getImage("back_icon.png")));
+            backImage       =   ImageIO.read(new File(Layout.getImage("back_icon.png")));
+            enrolmentImage  =   ImageIO.read(new File(Layout.getImage("enrolment_icon.png")));
         }
         
         catch(IOException e)
@@ -231,6 +237,7 @@ public class ClassesView extends GUIView implements ActionListener
         {
             super.initComponents();
             enrolmentsButton    =   new JButton("Enrolments");
+            enrolmentsButton.setIcon(new ImageIcon(enrolmentImage));
             dataControls.add(enrolmentsButton);
         }
 

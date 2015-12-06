@@ -1,9 +1,15 @@
+//====================================
+//  KYLE RUSSELL
+//  13831056
+//  PDC Project
+//====================================
 
 package engine.views.cui.Utilities;
 
 import com.bethecoder.ascii_table.ASCIITable;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import engine.config.AppConfig;
 import engine.core.ExceptionOutput;
 import java.text.MessageFormat;
 import java.util.LinkedHashMap;
@@ -13,7 +19,7 @@ import java.util.Scanner;
 import org.apache.commons.lang3.StringUtils;
 
 //-------------------------------------------
-//              CUITEXTTOOLS
+//              CUI TEXT TOOLS
 //-------------------------------------------
 //- Provides useful utilities for CUI displays
 //- Has methods for drawing buttons, headers
@@ -159,7 +165,8 @@ public class CUITextTools
     //colour must be a valid ascii colour code - see above colour section
     public static String changeColour(String text, int colour)
     {
-        return ((char)27 + "[" + colour + "m"  + text + (char)27 + "[0m");
+        if(!AppConfig.CUI_COLOURS) return text;
+        else return ((char)27 + "[" + colour + "m"  + text + (char)27 + "[0m");
     }
     
     //Provides a useful form style of input

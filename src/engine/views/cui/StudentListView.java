@@ -9,6 +9,7 @@ package engine.views.cui;
 import engine.views.ResponseDataView;
 import com.google.gson.JsonArray;
 import engine.controllers.ControllerMessage;
+import engine.core.ExceptionOutput;
 import engine.core.RouteHandler;
 import engine.core.database.Column;
 import engine.models.User;
@@ -120,13 +121,18 @@ public class StudentListView extends AbstractView
         String[] headers    =   { "Modify Username", "Attribute name", "New value" };
         Map<String, String> inputData   =   CUITextTools.getFormInput(fieldTitles, fieldKeys, headers);
         
-        ControllerMessage postData      =   new ControllerMessage();
-        postData.addAll(inputData);
+        if(cols.keySet().contains(inputData.get("modifyAttribute").toUpperCase()))
+        {
+            ControllerMessage postData      =   new ControllerMessage();
+            postData.addAll(inputData);
+
+            ResponseDataView response   =   (ResponseDataView) RouteHandler.go("postModifyStudent", postData);
+
+            if(response != null)
+                System.out.println(response.getResponseMessage());
+        }
         
-        ResponseDataView response   =   (ResponseDataView) RouteHandler.go("postModifyStudent", postData);
-        
-        if(response != null)
-            System.out.println(response.getResponseMessage());
+        else ExceptionOutput.output("Invalid attribute", ExceptionOutput.OutputType.MESSAGE);
     }
     
     public void findStudent()
@@ -135,6 +141,7 @@ public class StudentListView extends AbstractView
        
         User userModel                   =   new User();
         Map<String, Column> cols         =   userModel.getColumns();
+        List<String> operators           =   new ArrayList<>();
         String attrsStr                  =   "Attributes: ";
         Iterator<Column> colIter         =   cols.values().iterator();
         while(colIter.hasNext())
@@ -143,6 +150,10 @@ public class StudentListView extends AbstractView
             if(!next.getColumnName().equalsIgnoreCase(userModel.getPrimaryKey()))
                 attrsStr    +=  next.getColumnName() + (colIter.hasNext()? ", " : "");
         }
+        
+        operators.add(">");
+        operators.add("=");
+        operators.add("<");
        
         fieldTitles.add(CUITextTools.createFormField("Search attribute", "What is the attribute you want to search for?\n" + attrsStr));
         fieldTitles.add(CUITextTools.createFormField("Search operator", "What is the operator condition? (=, >, <)"));
@@ -157,14 +168,22 @@ public class StudentListView extends AbstractView
         String[] headers    =   { "Search attribute", "Search value", "Search operator" };
         Map<String, String> inputData   =   CUITextTools.getFormInput(fieldTitles, fieldKeys, headers); 
         
-        ControllerMessage postData      =   new ControllerMessage();
-        postData.addAll(inputData);
-             
-        ResponseDataView response   =   (ResponseDataView) RouteHandler.go("postSearchStudent", postData);
-        System.out.println(response.getResponseMessage());
+        if(!cols.keySet().contains(inputData.get("searchAttribute").toUpperCase()))
+            ExceptionOutput.output("Invalid attribute", ExceptionOutput.OutputType.MESSAGE);
         
-        JsonArray responseData  =   response.getResponseData().getData();
-        CUITextTools.responseToTable(responseData);
+        else if(!operators.contains(inputData.get("searchOperator")))
+            ExceptionOutput.output("Invalid operator", ExceptionOutput.OutputType.MESSAGE);
+        else
+        {
+            ControllerMessage postData      =   new ControllerMessage();
+            postData.addAll(inputData);
+
+            ResponseDataView response   =   (ResponseDataView) RouteHandler.go("postSearchStudent", postData);
+            System.out.println(response.getResponseMessage());
+
+            JsonArray responseData  =   response.getResponseData().getData();
+            CUITextTools.responseToTable(responseData);
+        }
     }
     
     public void nextPage()

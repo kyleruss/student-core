@@ -4,7 +4,6 @@
 //  PDC Project
 //====================================
 
-
 package engine.core.loggers;
 
 import java.io.IOException;

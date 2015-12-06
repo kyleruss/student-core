@@ -38,7 +38,7 @@ public class TestModel extends Model
     @Override
     protected void initTable()
     {
-        table       =   "app.testtable";
+        table       =   "testtable";
         primaryKey  =   "id";
     }
     
