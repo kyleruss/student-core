@@ -1,7 +1,6 @@
 ===================
     KYLE RUSSELL
-     13831056
-   PDC Assignment
+	StudentCore
 ===================
 
 # Database ReadMe
@@ -18,9 +17,4 @@ driver class: ClientDriver
 Database login details:
 Username: kyleruss
 Password: fgsmg2
-
-
-- Project details:
-Project ID: 1
-Members: Kyle Russell (13831056)
 
