@@ -1,7 +1,7 @@
 //====================================
-//  KYLE RUSSELL
-//  13831056
-//  PDC Project
+//	Kyle Russell
+//	StudentCore
+//	UsersView
 //====================================
 
 package engine.views.gui.admin.modules;

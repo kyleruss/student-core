@@ -1,9 +1,8 @@
 //====================================
-//  KYLE RUSSELL
-//  13831056
-//  PDC Project
+//	Kyle Russell
+//	StudentCore
+//	ViewPane
 //====================================
-
 package engine.views.gui.layout;
 
 import engine.views.GUIView;

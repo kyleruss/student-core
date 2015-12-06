@@ -1,7 +1,7 @@
 //====================================
-//  KYLE RUSSELL
-//  13831056
-//  PDC Project
+//	Kyle Russell
+//	jdamvc
+//	AbstractLogger
 //====================================
 
 package engine.core.loggers;

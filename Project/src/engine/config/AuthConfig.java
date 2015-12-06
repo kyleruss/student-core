@@ -1,6 +1,6 @@
 //====================================
-//  KYLE RUSSELL
-//	StudentCore
+//	Kyle Russell
+//	jdamvc
 //	AuthConfig
 //====================================
 
