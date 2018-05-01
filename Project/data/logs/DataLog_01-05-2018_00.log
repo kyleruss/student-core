@@ -1,0 +1,550 @@
+May 01, 2018 6:55:45 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM emergency_contact   FETCH FIRST 1 ROWS ONLY 
+May 01, 2018 6:55:45 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM medical   FETCH FIRST 1 ROWS ONLY 
+May 01, 2018 6:55:45 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM users   FETCH FIRST 1 ROWS ONLY 
+May 01, 2018 6:55:45 PM engine.core.loggers.MainLogger log
+FINE: INSERT INTO emergency_contact (FIRSTNAME, LASTNAME, CONTACT_PH, CONTACT_EMAIL, RELATIONSHIP) VALUES ('jeannine', 'goddard', '123354234', 'jgoddard@gmail.com', 'Doctor')
+May 01, 2018 6:55:45 PM engine.core.loggers.MainLogger log
+FINE: INSERT INTO medical (DESCRIPTION, CONTACT_ID) VALUES ('qweqwe', 308)
+May 01, 2018 6:55:45 PM engine.core.loggers.MainLogger log
+FINE: INSERT INTO users (USERNAME, PASSWORD, FIRSTNAME, LASTNAME, GENDER, BIRTHDATE, CONTACT_PH, CONTACT_EMAIL, ETHNICITY, ROLE_ID, MEDICAL_ID) VALUES ('kyjruss', 'mvr1yZgTG/ckEvNcGQ3g0gaCWNg=', 'kyle', 'russell', 1, '1995-04-12', '0213254235', 'kyjruss@gmail.com', 'European', 1, 306)
+May 01, 2018 6:55:45 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications   FETCH FIRST 1 ROWS ONLY 
+May 01, 2018 6:55:45 PM engine.core.loggers.MainLogger log
+FINE: INSERT INTO notifications (USERNAME, CONTENT) VALUES ('kyjruss', 'Welcome to StudentCore! Thank you for registering')
+May 01, 2018 6:56:17 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM users   FETCH FIRST 1 ROWS ONLY 
+May 01, 2018 6:56:17 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM users WHERE username = 'kyleruss'  
+May 01, 2018 6:56:17 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications   FETCH FIRST 1 ROWS ONLY 
+May 01, 2018 6:56:17 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications WHERE username = 'kyleruss' AND unread = true  
+May 01, 2018 6:56:18 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM class_enrolments   FETCH FIRST 1 ROWS ONLY 
+May 01, 2018 6:56:18 PM engine.core.loggers.MainLogger log
+FINE: SELECT class_enrolments.*, classes.name AS class_name, classes.description AS class_desc, classes.id AS class_id FROM class_enrolments  INNER JOIN classes ON class_enrolments.class_id = classes.id  and  user_id = 'kyleruss'  
+May 01, 2018 6:56:18 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM users   FETCH FIRST 1 ROWS ONLY 
+May 01, 2018 6:56:18 PM engine.core.loggers.MainLogger log
+FINE: SELECT role.name FROM users  INNER JOIN role ON users.role_id = role.id  and  users.username = 'kyleruss'  
+May 01, 2018 6:56:37 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications   FETCH FIRST 1 ROWS ONLY 
+May 01, 2018 6:56:37 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications WHERE username = 'kyleruss' AND unread = true  
+May 01, 2018 6:56:50 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM classes   FETCH FIRST 1 ROWS ONLY 
+May 01, 2018 6:56:50 PM engine.core.loggers.MainLogger log
+FINE: SELECT id AS "Class ID", name AS "Class name", teacher_id AS "Teacher ID", created_date AS "Date created" FROM classes WHERE id = 2  
+May 01, 2018 6:56:50 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM classes   FETCH FIRST 1 ROWS ONLY 
+May 01, 2018 6:56:50 PM engine.core.loggers.MainLogger log
+FINE: SELECT department.name AS dept_name, users.firstname AS teacher_firstname, users.lastname AS teacher_lastname, users.contact_ph AS teacher_phone, users.contact_email AS teacher_email, classes.name AS class_name, classes.description AS class_desc, classes.created_date AS class_created FROM classes  INNER JOIN users ON classes.teacher_id = users.username  and  id = 2 INNER JOIN department ON classes.dept_id = department.id   
+May 01, 2018 6:56:50 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM assessment   FETCH FIRST 1 ROWS ONLY 
+May 01, 2018 6:56:50 PM engine.core.loggers.MainLogger log
+FINE: SELECT id AS "Assessment ID", name, description, weight AS "Grade weight %", due_date AS "Due date" FROM assessment WHERE class_id = 2  
+May 01, 2018 6:56:50 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM class_enrolments   FETCH FIRST 1 ROWS ONLY 
+May 01, 2018 6:56:50 PM engine.core.loggers.MainLogger log
+FINE: SELECT class_enrolments.id AS enrol_id, users.username AS "User ID", users.firstname AS "First name", users.lastname AS "Last name", users.contact_email AS Email, class_enrolments.semester_num AS semester, classes.name AS class_name FROM class_enrolments  INNER JOIN users ON class_enrolments.user_id = users.username  and  class_id = 2 INNER JOIN classes ON class_enrolments.class_id = classes.id   
+May 01, 2018 6:56:50 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM class_announcements   FETCH FIRST 1 ROWS ONLY 
+May 01, 2018 6:56:50 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM class_announcements WHERE class_id = 2  
+May 01, 2018 6:57:07 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications   FETCH FIRST 1 ROWS ONLY 
+May 01, 2018 6:57:07 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications WHERE username = 'kyleruss' AND unread = true  
+May 01, 2018 6:57:09 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM users   FETCH FIRST 1 ROWS ONLY 
+May 01, 2018 6:57:09 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM users WHERE username = 'kyleruss'  
+May 01, 2018 6:57:09 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications   FETCH FIRST 1 ROWS ONLY 
+May 01, 2018 6:57:09 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications WHERE username = 'kyleruss' AND unread = true  
+May 01, 2018 6:57:10 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM class_enrolments   FETCH FIRST 1 ROWS ONLY 
+May 01, 2018 6:57:10 PM engine.core.loggers.MainLogger log
+FINE: SELECT class_enrolments.*, classes.name AS class_name, classes.description AS class_desc, classes.id AS class_id FROM class_enrolments  INNER JOIN classes ON class_enrolments.class_id = classes.id  and  user_id = 'kyleruss'  
+May 01, 2018 6:57:10 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM users   FETCH FIRST 1 ROWS ONLY 
+May 01, 2018 6:57:10 PM engine.core.loggers.MainLogger log
+FINE: SELECT role.name FROM users  INNER JOIN role ON users.role_id = role.id  and  users.username = 'kyleruss'  
+May 01, 2018 6:57:37 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications   FETCH FIRST 1 ROWS ONLY 
+May 01, 2018 6:57:37 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications WHERE username = 'kyleruss' AND unread = true  
+May 01, 2018 6:57:38 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM users   FETCH FIRST 1 ROWS ONLY 
+May 01, 2018 6:57:38 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM users  INNER JOIN role ON users.role_id = role.id  and  users.username = 'kyleruss'  
+May 01, 2018 6:57:38 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM department   FETCH FIRST 1 ROWS ONLY 
+May 01, 2018 6:57:38 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM department   
+May 01, 2018 6:57:38 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM classes   FETCH FIRST 1 ROWS ONLY 
+May 01, 2018 6:57:38 PM engine.core.loggers.MainLogger log
+FINE: SELECT classes.*, department.name AS dept_name FROM classes  INNER JOIN department ON classes.dept_id = department.id   
+May 01, 2018 6:57:38 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM class_enrolments   FETCH FIRST 1 ROWS ONLY 
+May 01, 2018 6:57:38 PM engine.core.loggers.MainLogger log
+FINE: SELECT class_enrolments.id AS enrol_id, users.username AS "User ID", users.firstname AS "First name", users.lastname AS "Last name", users.contact_email AS Email, class_enrolments.semester_num AS semester, classes.name AS class_name FROM class_enrolments  INNER JOIN users ON class_enrolments.user_id = users.username  and  class_id = 0 INNER JOIN classes ON class_enrolments.class_id = classes.id   
+May 01, 2018 6:57:38 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM users   FETCH FIRST 1 ROWS ONLY 
+May 01, 2018 6:57:38 PM engine.core.loggers.MainLogger log
+FINE: SELECT users.*, role.name AS role_name FROM users  INNER JOIN role ON users.role_id = role.id   
+May 01, 2018 6:57:38 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM role   FETCH FIRST 1 ROWS ONLY 
+May 01, 2018 6:57:38 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM role   
+May 01, 2018 6:57:38 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM admin_announcements   FETCH FIRST 1 ROWS ONLY 
+May 01, 2018 6:57:38 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM admin_announcements   
+May 01, 2018 6:58:07 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications   FETCH FIRST 1 ROWS ONLY 
+May 01, 2018 6:58:07 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications WHERE username = 'kyleruss' AND unread = true  
+May 01, 2018 6:58:37 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications   FETCH FIRST 1 ROWS ONLY 
+May 01, 2018 6:58:37 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications WHERE username = 'kyleruss' AND unread = true  
+May 01, 2018 6:59:07 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications   FETCH FIRST 1 ROWS ONLY 
+May 01, 2018 6:59:07 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications WHERE username = 'kyleruss' AND unread = true  
+May 01, 2018 6:59:37 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications   FETCH FIRST 1 ROWS ONLY 
+May 01, 2018 6:59:37 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications WHERE username = 'kyleruss' AND unread = true  
+May 01, 2018 7:00:05 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM admin_announcements   FETCH FIRST 1 ROWS ONLY 
+May 01, 2018 7:00:05 PM engine.core.loggers.MainLogger log
+FINE: INSERT INTO admin_announcements (TITLE, CONTENT, ANNOUNCER) VALUES ('Test Announcement', 'Hello!', 'kyleruss')
+May 01, 2018 7:00:05 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM admin_announcements   FETCH FIRST 1 ROWS ONLY 
+May 01, 2018 7:00:05 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM admin_announcements   
+May 01, 2018 7:00:07 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications   FETCH FIRST 1 ROWS ONLY 
+May 01, 2018 7:00:07 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications WHERE username = 'kyleruss' AND unread = true  
+May 01, 2018 7:00:37 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications   FETCH FIRST 1 ROWS ONLY 
+May 01, 2018 7:00:37 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications WHERE username = 'kyleruss' AND unread = true  
+May 01, 2018 7:01:07 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications   FETCH FIRST 1 ROWS ONLY 
+May 01, 2018 7:01:07 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications WHERE username = 'kyleruss' AND unread = true  
+May 01, 2018 7:01:37 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications   FETCH FIRST 1 ROWS ONLY 
+May 01, 2018 7:01:37 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications WHERE username = 'kyleruss' AND unread = true  
+May 01, 2018 7:01:55 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM department   FETCH FIRST 1 ROWS ONLY 
+May 01, 2018 7:01:55 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM department   
+May 01, 2018 7:02:07 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications   FETCH FIRST 1 ROWS ONLY 
+May 01, 2018 7:02:07 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications WHERE username = 'kyleruss' AND unread = true  
+May 01, 2018 7:02:15 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM department   FETCH FIRST 1 ROWS ONLY 
+May 01, 2018 7:02:15 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM department   
+May 01, 2018 7:02:20 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM class_enrolments   FETCH FIRST 1 ROWS ONLY 
+May 01, 2018 7:02:20 PM engine.core.loggers.MainLogger log
+FINE: SELECT class_enrolments.id AS enrol_id, users.username AS "User ID", users.firstname AS "First name", users.lastname AS "Last name", users.contact_email AS Email, class_enrolments.semester_num AS semester, classes.name AS class_name FROM class_enrolments  INNER JOIN users ON class_enrolments.user_id = users.username  and  class_id = 1 INNER JOIN classes ON class_enrolments.class_id = classes.id   
+May 01, 2018 7:02:24 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM class_enrolments   FETCH FIRST 1 ROWS ONLY 
+May 01, 2018 7:02:24 PM engine.core.loggers.MainLogger log
+FINE: SELECT class_enrolments.id AS enrol_id, users.username AS "User ID", users.firstname AS "First name", users.lastname AS "Last name", users.contact_email AS Email, class_enrolments.semester_num AS semester, classes.name AS class_name FROM class_enrolments  INNER JOIN users ON class_enrolments.user_id = users.username  and  class_id = 2 INNER JOIN classes ON class_enrolments.class_id = classes.id   
+May 01, 2018 7:02:26 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM class_enrolments   FETCH FIRST 1 ROWS ONLY 
+May 01, 2018 7:02:26 PM engine.core.loggers.MainLogger log
+FINE: SELECT class_enrolments.id AS enrol_id, users.username AS "User ID", users.firstname AS "First name", users.lastname AS "Last name", users.contact_email AS Email, class_enrolments.semester_num AS semester, classes.name AS class_name FROM class_enrolments  INNER JOIN users ON class_enrolments.user_id = users.username  and  class_id = 3 INNER JOIN classes ON class_enrolments.class_id = classes.id   
+May 01, 2018 7:02:28 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM class_enrolments   FETCH FIRST 1 ROWS ONLY 
+May 01, 2018 7:02:28 PM engine.core.loggers.MainLogger log
+FINE: SELECT class_enrolments.id AS enrol_id, users.username AS "User ID", users.firstname AS "First name", users.lastname AS "Last name", users.contact_email AS Email, class_enrolments.semester_num AS semester, classes.name AS class_name FROM class_enrolments  INNER JOIN users ON class_enrolments.user_id = users.username  and  class_id = 1 INNER JOIN classes ON class_enrolments.class_id = classes.id   
+May 01, 2018 7:02:32 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM class_enrolments   FETCH FIRST 1 ROWS ONLY 
+May 01, 2018 7:02:32 PM engine.core.loggers.MainLogger log
+FINE: SELECT class_enrolments.id AS enrol_id, users.username AS "User ID", users.firstname AS "First name", users.lastname AS "Last name", users.contact_email AS Email, class_enrolments.semester_num AS semester, classes.name AS class_name FROM class_enrolments  INNER JOIN users ON class_enrolments.user_id = users.username  and  class_id = 1 INNER JOIN classes ON class_enrolments.class_id = classes.id   
+May 01, 2018 7:02:37 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications   FETCH FIRST 1 ROWS ONLY 
+May 01, 2018 7:02:37 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications WHERE username = 'kyleruss' AND unread = true  
+May 01, 2018 7:03:07 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications   FETCH FIRST 1 ROWS ONLY 
+May 01, 2018 7:03:07 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications WHERE username = 'kyleruss' AND unread = true  
+May 01, 2018 7:03:37 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications   FETCH FIRST 1 ROWS ONLY 
+May 01, 2018 7:03:37 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications WHERE username = 'kyleruss' AND unread = true  
+May 01, 2018 7:04:07 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications   FETCH FIRST 1 ROWS ONLY 
+May 01, 2018 7:04:07 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications WHERE username = 'kyleruss' AND unread = true  
+May 01, 2018 7:04:37 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications   FETCH FIRST 1 ROWS ONLY 
+May 01, 2018 7:04:37 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications WHERE username = 'kyleruss' AND unread = true  
+May 01, 2018 7:05:07 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications   FETCH FIRST 1 ROWS ONLY 
+May 01, 2018 7:05:07 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications WHERE username = 'kyleruss' AND unread = true  
+May 01, 2018 7:05:37 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications   FETCH FIRST 1 ROWS ONLY 
+May 01, 2018 7:05:37 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications WHERE username = 'kyleruss' AND unread = true  
+May 01, 2018 7:06:07 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications   FETCH FIRST 1 ROWS ONLY 
+May 01, 2018 7:06:07 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications WHERE username = 'kyleruss' AND unread = true  
+May 01, 2018 7:06:37 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications   FETCH FIRST 1 ROWS ONLY 
+May 01, 2018 7:06:37 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications WHERE username = 'kyleruss' AND unread = true  
+May 01, 2018 7:07:07 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications   FETCH FIRST 1 ROWS ONLY 
+May 01, 2018 7:07:08 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications WHERE username = 'kyleruss' AND unread = true  
+May 01, 2018 7:07:38 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications   FETCH FIRST 1 ROWS ONLY 
+May 01, 2018 7:07:38 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications WHERE username = 'kyleruss' AND unread = true  
+May 01, 2018 7:08:08 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications   FETCH FIRST 1 ROWS ONLY 
+May 01, 2018 7:08:08 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications WHERE username = 'kyleruss' AND unread = true  
+May 01, 2018 7:08:38 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications   FETCH FIRST 1 ROWS ONLY 
+May 01, 2018 7:08:38 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications WHERE username = 'kyleruss' AND unread = true  
+May 01, 2018 7:09:08 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications   FETCH FIRST 1 ROWS ONLY 
+May 01, 2018 7:09:08 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications WHERE username = 'kyleruss' AND unread = true  
+May 01, 2018 7:09:38 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications   FETCH FIRST 1 ROWS ONLY 
+May 01, 2018 7:09:38 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications WHERE username = 'kyleruss' AND unread = true  
+May 01, 2018 7:10:08 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications   FETCH FIRST 1 ROWS ONLY 
+May 01, 2018 7:10:08 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications WHERE username = 'kyleruss' AND unread = true  
+May 01, 2018 7:10:38 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications   FETCH FIRST 1 ROWS ONLY 
+May 01, 2018 7:10:38 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications WHERE username = 'kyleruss' AND unread = true  
+May 01, 2018 7:11:08 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications   FETCH FIRST 1 ROWS ONLY 
+May 01, 2018 7:11:08 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications WHERE username = 'kyleruss' AND unread = true  
+May 01, 2018 7:11:38 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications   FETCH FIRST 1 ROWS ONLY 
+May 01, 2018 7:11:38 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications WHERE username = 'kyleruss' AND unread = true  
+May 01, 2018 7:12:08 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications   FETCH FIRST 1 ROWS ONLY 
+May 01, 2018 7:12:08 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications WHERE username = 'kyleruss' AND unread = true  
+May 01, 2018 7:12:38 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications   FETCH FIRST 1 ROWS ONLY 
+May 01, 2018 7:12:38 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications WHERE username = 'kyleruss' AND unread = true  
+May 01, 2018 7:13:08 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications   FETCH FIRST 1 ROWS ONLY 
+May 01, 2018 7:13:08 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications WHERE username = 'kyleruss' AND unread = true  
+May 01, 2018 7:13:38 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications   FETCH FIRST 1 ROWS ONLY 
+May 01, 2018 7:13:38 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications WHERE username = 'kyleruss' AND unread = true  
+May 01, 2018 7:14:08 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications   FETCH FIRST 1 ROWS ONLY 
+May 01, 2018 7:14:08 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications WHERE username = 'kyleruss' AND unread = true  
+May 01, 2018 7:14:38 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications   FETCH FIRST 1 ROWS ONLY 
+May 01, 2018 7:14:38 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications WHERE username = 'kyleruss' AND unread = true  
+May 01, 2018 7:15:08 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications   FETCH FIRST 1 ROWS ONLY 
+May 01, 2018 7:15:08 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications WHERE username = 'kyleruss' AND unread = true  
+May 01, 2018 7:15:38 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications   FETCH FIRST 1 ROWS ONLY 
+May 01, 2018 7:15:38 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications WHERE username = 'kyleruss' AND unread = true  
+May 01, 2018 7:16:08 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications   FETCH FIRST 1 ROWS ONLY 
+May 01, 2018 7:16:08 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications WHERE username = 'kyleruss' AND unread = true  
+May 01, 2018 7:16:38 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications   FETCH FIRST 1 ROWS ONLY 
+May 01, 2018 7:16:38 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications WHERE username = 'kyleruss' AND unread = true  
+May 01, 2018 7:17:08 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications   FETCH FIRST 1 ROWS ONLY 
+May 01, 2018 7:17:08 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications WHERE username = 'kyleruss' AND unread = true  
+May 01, 2018 7:17:38 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications   FETCH FIRST 1 ROWS ONLY 
+May 01, 2018 7:17:38 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications WHERE username = 'kyleruss' AND unread = true  
+May 01, 2018 7:18:08 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications   FETCH FIRST 1 ROWS ONLY 
+May 01, 2018 7:18:08 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications WHERE username = 'kyleruss' AND unread = true  
+May 01, 2018 7:18:38 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications   FETCH FIRST 1 ROWS ONLY 
+May 01, 2018 7:18:38 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications WHERE username = 'kyleruss' AND unread = true  
+May 01, 2018 7:19:08 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications   FETCH FIRST 1 ROWS ONLY 
+May 01, 2018 7:19:08 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications WHERE username = 'kyleruss' AND unread = true  
+May 01, 2018 7:19:18 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM users   FETCH FIRST 1 ROWS ONLY 
+May 01, 2018 7:19:18 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM users WHERE username = 'kyleruss'  
+May 01, 2018 7:19:18 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM department   FETCH FIRST 1 ROWS ONLY 
+May 01, 2018 7:19:18 PM engine.core.loggers.MainLogger log
+FINE: INSERT INTO department (NAME, DESCRIPTION, DEPT_HEAD) VALUES ('Science', 'Math, Science and Engineering', 'kyleruss')
+May 01, 2018 7:19:18 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM department   FETCH FIRST 1 ROWS ONLY 
+May 01, 2018 7:19:18 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM department   
+May 01, 2018 7:19:23 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM department   FETCH FIRST 1 ROWS ONLY 
+May 01, 2018 7:19:23 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM department WHERE id = 2  
+May 01, 2018 7:19:23 PM engine.core.loggers.MainLogger log
+FINE: DELETE FROM department WHERE id = 2
+May 01, 2018 7:19:38 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications   FETCH FIRST 1 ROWS ONLY 
+May 01, 2018 7:19:38 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications WHERE username = 'kyleruss' AND unread = true  
+May 01, 2018 7:20:08 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications   FETCH FIRST 1 ROWS ONLY 
+May 01, 2018 7:20:08 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications WHERE username = 'kyleruss' AND unread = true  
+May 01, 2018 7:20:38 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications   FETCH FIRST 1 ROWS ONLY 
+May 01, 2018 7:20:38 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications WHERE username = 'kyleruss' AND unread = true  
+May 01, 2018 7:21:08 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications   FETCH FIRST 1 ROWS ONLY 
+May 01, 2018 7:21:08 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications WHERE username = 'kyleruss' AND unread = true  
+May 01, 2018 7:21:10 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM users   FETCH FIRST 1 ROWS ONLY 
+May 01, 2018 7:21:10 PM engine.core.loggers.MainLogger log
+FINE: SELECT users.*, role.name AS role_name FROM users  INNER JOIN role ON users.role_id = role.id  and  username = 'kyleruss'  
+May 01, 2018 7:21:38 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications   FETCH FIRST 1 ROWS ONLY 
+May 01, 2018 7:21:39 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications WHERE username = 'kyleruss' AND unread = true  
+May 01, 2018 7:22:01 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM users   FETCH FIRST 1 ROWS ONLY 
+May 01, 2018 7:22:01 PM engine.core.loggers.MainLogger log
+FINE: SELECT users.*, medical.description AS medical_desc, medical.id AS medical_id, emergency_contact.firstname AS contact_firstname, emergency_contact.lastname AS contact_lastname, emergency_contact.contact_ph AS e_contact_ph, emergency_contact.contact_email AS e_contact_email, emergency_contact.relationship AS e_contact_relationship FROM users  INNER JOIN medical ON users.medical_id = medical.id  INNER JOIN emergency_contact ON medical.contact_id = emergency_contact.id  and  users.username = 'kyleruss'  
+May 01, 2018 7:22:09 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications   FETCH FIRST 1 ROWS ONLY 
+May 01, 2018 7:22:09 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications WHERE username = 'kyleruss' AND unread = true  
+May 01, 2018 7:22:39 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications   FETCH FIRST 1 ROWS ONLY 
+May 01, 2018 7:22:39 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications WHERE username = 'kyleruss' AND unread = true  
+May 01, 2018 7:22:55 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM class_enrolments   FETCH FIRST 1 ROWS ONLY 
+May 01, 2018 7:22:55 PM engine.core.loggers.MainLogger log
+FINE: SELECT class_enrolments.*, classes.name AS class_name, classes.description AS class_desc, classes.id AS class_id FROM class_enrolments  INNER JOIN classes ON class_enrolments.class_id = classes.id  and  user_id = 'kyleruss'  
+May 01, 2018 7:22:55 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM users   FETCH FIRST 1 ROWS ONLY 
+May 01, 2018 7:22:55 PM engine.core.loggers.MainLogger log
+FINE: SELECT role.name FROM users  INNER JOIN role ON users.role_id = role.id  and  users.username = 'kyleruss'  
+May 01, 2018 7:22:55 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM class_enrolments   FETCH FIRST 1 ROWS ONLY 
+May 01, 2018 7:22:55 PM engine.core.loggers.MainLogger log
+FINE: SELECT class_enrolments.*, classes.name AS class_name, classes.description AS class_desc, classes.id AS class_id FROM class_enrolments  INNER JOIN classes ON class_enrolments.class_id = classes.id  and  user_id = 'kyleruss'  
+May 01, 2018 7:22:55 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM users   FETCH FIRST 1 ROWS ONLY 
+May 01, 2018 7:22:55 PM engine.core.loggers.MainLogger log
+FINE: SELECT role.name FROM users  INNER JOIN role ON users.role_id = role.id  and  users.username = 'kyleruss'  
+May 01, 2018 7:22:59 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM users   FETCH FIRST 1 ROWS ONLY 
+May 01, 2018 7:22:59 PM engine.core.loggers.MainLogger log
+FINE: SELECT department.* FROM users  INNER JOIN department ON users.dept_id = department.id  and  username = 'kyleruss'  
+May 01, 2018 7:22:59 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM dept_announcements   FETCH FIRST 1 ROWS ONLY 
+May 01, 2018 7:22:59 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM dept_announcements WHERE dept_id = 2  
+May 01, 2018 7:22:59 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM department   FETCH FIRST 1 ROWS ONLY 
+May 01, 2018 7:22:59 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM department WHERE id = 2  
+May 01, 2018 7:23:09 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications   FETCH FIRST 1 ROWS ONLY 
+May 01, 2018 7:23:09 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications WHERE username = 'kyleruss' AND unread = true  
+May 01, 2018 7:23:14 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM users   FETCH FIRST 1 ROWS ONLY 
+May 01, 2018 7:23:14 PM engine.core.loggers.MainLogger log
+FINE: SELECT department.* FROM users  INNER JOIN department ON users.dept_id = department.id  and  username = 'kyleruss'  
+May 01, 2018 7:23:14 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM dept_announcements   FETCH FIRST 1 ROWS ONLY 
+May 01, 2018 7:23:14 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM dept_announcements WHERE dept_id = 2  
+May 01, 2018 7:23:14 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM department   FETCH FIRST 1 ROWS ONLY 
+May 01, 2018 7:23:14 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM department WHERE id = 2  
+May 01, 2018 7:23:39 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications   FETCH FIRST 1 ROWS ONLY 
+May 01, 2018 7:23:39 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications WHERE username = 'kyleruss' AND unread = true  
+May 01, 2018 7:24:09 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications   FETCH FIRST 1 ROWS ONLY 
+May 01, 2018 7:24:09 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications WHERE username = 'kyleruss' AND unread = true  
+May 01, 2018 7:24:39 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications   FETCH FIRST 1 ROWS ONLY 
+May 01, 2018 7:24:39 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications WHERE username = 'kyleruss' AND unread = true  
+May 01, 2018 7:25:09 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications   FETCH FIRST 1 ROWS ONLY 
+May 01, 2018 7:25:09 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications WHERE username = 'kyleruss' AND unread = true  
+May 01, 2018 7:25:39 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications   FETCH FIRST 1 ROWS ONLY 
+May 01, 2018 7:25:39 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications WHERE username = 'kyleruss' AND unread = true  
+May 01, 2018 7:26:03 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM users   FETCH FIRST 1 ROWS ONLY 
+May 01, 2018 7:26:03 PM engine.core.loggers.MainLogger log
+FINE: SELECT department.* FROM users  INNER JOIN department ON users.dept_id = department.id  and  username = 'kyleruss'  
+May 01, 2018 7:26:03 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM dept_announcements   FETCH FIRST 1 ROWS ONLY 
+May 01, 2018 7:26:03 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM dept_announcements WHERE dept_id = 2  
+May 01, 2018 7:26:03 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM department   FETCH FIRST 1 ROWS ONLY 
+May 01, 2018 7:26:03 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM department WHERE id = 2  
+May 01, 2018 7:26:09 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications   FETCH FIRST 1 ROWS ONLY 
+May 01, 2018 7:26:09 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications WHERE username = 'kyleruss' AND unread = true  
+May 01, 2018 7:26:39 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications   FETCH FIRST 1 ROWS ONLY 
+May 01, 2018 7:26:39 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications WHERE username = 'kyleruss' AND unread = true  
+May 01, 2018 7:27:02 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications   FETCH FIRST 1 ROWS ONLY 
+May 01, 2018 7:27:02 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications WHERE username = 'kyleruss'  
+May 01, 2018 7:27:08 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications   FETCH FIRST 1 ROWS ONLY 
+May 01, 2018 7:27:08 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications WHERE username = 'kyleruss'  
+May 01, 2018 7:27:09 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications   FETCH FIRST 1 ROWS ONLY 
+May 01, 2018 7:27:09 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications WHERE username = 'kyleruss' AND unread = true  
+May 01, 2018 7:27:26 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications   FETCH FIRST 1 ROWS ONLY 
+May 01, 2018 7:27:26 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications WHERE id = 1  
+May 01, 2018 7:27:26 PM engine.core.loggers.MainLogger log
+FINE: UPDATE notifications SET USERNAME = 'kyleruss', CONTENT = 'test notification', SENT_DATE = '2015-09-22', UNREAD = false  WHERE id = 1
+May 01, 2018 7:27:31 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications   FETCH FIRST 1 ROWS ONLY 
+May 01, 2018 7:27:31 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications WHERE id = 4  
+May 01, 2018 7:27:31 PM engine.core.loggers.MainLogger log
+FINE: UPDATE notifications SET USERNAME = 'kyleruss', CONTENT = 'test4', SENT_DATE = '2015-10-19', UNREAD = false  WHERE id = 4
+May 01, 2018 7:27:39 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications   FETCH FIRST 1 ROWS ONLY 
+May 01, 2018 7:27:39 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications WHERE username = 'kyleruss' AND unread = true  
+May 01, 2018 7:28:08 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM users   FETCH FIRST 1 ROWS ONLY 
+May 01, 2018 7:28:08 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM users WHERE username = 'kyleruss'  
+May 01, 2018 7:28:08 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications   FETCH FIRST 1 ROWS ONLY 
+May 01, 2018 7:28:08 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications WHERE username = 'kyleruss' AND unread = true  
+May 01, 2018 7:28:09 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM class_enrolments   FETCH FIRST 1 ROWS ONLY 
+May 01, 2018 7:28:09 PM engine.core.loggers.MainLogger log
+FINE: SELECT class_enrolments.*, classes.name AS class_name, classes.description AS class_desc, classes.id AS class_id FROM class_enrolments  INNER JOIN classes ON class_enrolments.class_id = classes.id  and  user_id = 'kyleruss'  
+May 01, 2018 7:28:09 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM users   FETCH FIRST 1 ROWS ONLY 
+May 01, 2018 7:28:09 PM engine.core.loggers.MainLogger log
+FINE: SELECT role.name FROM users  INNER JOIN role ON users.role_id = role.id  and  users.username = 'kyleruss'  
+May 01, 2018 7:29:13 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM users   FETCH FIRST 1 ROWS ONLY 
+May 01, 2018 7:29:13 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM users WHERE username = 'kyleruss'  
+May 01, 2018 7:29:13 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications   FETCH FIRST 1 ROWS ONLY 
+May 01, 2018 7:29:13 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications WHERE username = 'kyleruss' AND unread = true  
+May 01, 2018 7:29:15 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM class_enrolments   FETCH FIRST 1 ROWS ONLY 
+May 01, 2018 7:29:15 PM engine.core.loggers.MainLogger log
+FINE: SELECT class_enrolments.*, classes.name AS class_name, classes.description AS class_desc, classes.id AS class_id FROM class_enrolments  INNER JOIN classes ON class_enrolments.class_id = classes.id  and  user_id = 'kyleruss'  
+May 01, 2018 7:29:15 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM users   FETCH FIRST 1 ROWS ONLY 
+May 01, 2018 7:29:15 PM engine.core.loggers.MainLogger log
+FINE: SELECT role.name FROM users  INNER JOIN role ON users.role_id = role.id  and  users.username = 'kyleruss'  
+May 01, 2018 7:29:39 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications   FETCH FIRST 1 ROWS ONLY 
+May 01, 2018 7:29:39 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications WHERE username = 'kyleruss' AND unread = true  
+May 01, 2018 7:30:43 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM users   FETCH FIRST 1 ROWS ONLY 
+May 01, 2018 7:30:43 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM users WHERE username = 'kyleruss'  
+May 01, 2018 7:30:43 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications   FETCH FIRST 1 ROWS ONLY 
+May 01, 2018 7:30:43 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications WHERE username = 'kyleruss' AND unread = true  
+May 01, 2018 7:30:44 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM class_enrolments   FETCH FIRST 1 ROWS ONLY 
+May 01, 2018 7:30:44 PM engine.core.loggers.MainLogger log
+FINE: SELECT class_enrolments.*, classes.name AS class_name, classes.description AS class_desc, classes.id AS class_id FROM class_enrolments  INNER JOIN classes ON class_enrolments.class_id = classes.id  and  user_id = 'kyleruss'  
+May 01, 2018 7:30:44 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM users   FETCH FIRST 1 ROWS ONLY 
+May 01, 2018 7:30:44 PM engine.core.loggers.MainLogger log
+FINE: SELECT role.name FROM users  INNER JOIN role ON users.role_id = role.id  and  users.username = 'kyleruss'  
+May 01, 2018 7:31:07 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications   FETCH FIRST 1 ROWS ONLY 
+May 01, 2018 7:31:07 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications WHERE username = 'kyleruss' AND unread = true  
+May 01, 2018 7:31:37 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications   FETCH FIRST 1 ROWS ONLY 
+May 01, 2018 7:31:37 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications WHERE username = 'kyleruss' AND unread = true  
+May 01, 2018 7:32:07 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications   FETCH FIRST 1 ROWS ONLY 
+May 01, 2018 7:32:07 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications WHERE username = 'kyleruss' AND unread = true  
+May 01, 2018 7:32:37 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications   FETCH FIRST 1 ROWS ONLY 
+May 01, 2018 7:32:38 PM engine.core.loggers.MainLogger log
+FINE: SELECT * FROM notifications WHERE username = 'kyleruss' AND unread = true  
